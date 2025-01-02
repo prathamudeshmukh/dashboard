@@ -1,3 +1,10 @@
+# 1.0.0 (2025-01-02)
+
+
+### Features
+
+* initial commit on new-branch ([f51b3de](https://github.com/prathamudeshmukh/dashboard/commit/f51b3dee69846334131f769aca494a98ac56589d))
+
 ## [1.7.4](https://github.com/ixartz/SaaS-Boilerplate/compare/v1.7.3...v1.7.4) (2024-12-20)
 
 
