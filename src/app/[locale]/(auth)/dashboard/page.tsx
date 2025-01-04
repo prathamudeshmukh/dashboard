@@ -1,8 +1,9 @@
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
+import { Button } from '@/components/ui/button';
 import { MessageState } from '@/features/dashboard/MessageState';
 import { TitleBar } from '@/features/dashboard/TitleBar';
-import { SponsorLogos } from '@/features/sponsors/SponsorLogos';
 
 const DashboardIndexPage = () => {
   const t = useTranslations('DashboardIndex');
@@ -28,32 +29,10 @@ const DashboardIndexPage = () => {
           </svg>
         )}
         title={t('message_state_title')}
-        description={t.rich('message_state_description', {
-          code: chunks => (
-            <code className="bg-secondary text-secondary-foreground">
-              {chunks}
-            </code>
-          ),
-        })}
         button={(
-          <>
-            <div className="mt-2 text-xs font-light text-muted-foreground">
-              {t.rich('message_state_alternative', {
-                url: () => (
-                  <a
-                    className="text-blue-500 hover:text-blue-600"
-                    href="https://nextjs-boilerplate.com/pro-saas-starter-kit"
-                  >
-                    Next.js Boilerplate SaaS
-                  </a>
-                ),
-              })}
-            </div>
-
-            <div className="mt-7">
-              <SponsorLogos />
-            </div>
-          </>
+          <Link href="/dashboard/html-builder">
+            <Button>Create New Template</Button>
+          </Link>
         )}
       />
     </>
