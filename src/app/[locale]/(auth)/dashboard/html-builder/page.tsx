@@ -87,13 +87,14 @@ const HtmlBuilder = () => {
   return (
     <div>
       <StudioEditor
-        style={{ height: '500px' }}
+        style={{ height: '500px', width: '100%' }}
         onReady={onReady}
         options={{
           licenseKey: '',
           theme: 'light',
           pages: false,
           autoHeight: false,
+          settingsMenu: false,
           project: {
             type: 'web',
           },

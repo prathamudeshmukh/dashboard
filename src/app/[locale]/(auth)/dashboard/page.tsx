@@ -30,7 +30,7 @@ const DashboardIndexPage = () => {
         )}
         title={t('message_state_title')}
         button={(
-          <Link href="/dashboard/html-builder">
+          <Link href="/dashboard/template-dashboard">
             <Button>Create New Template</Button>
           </Link>
         )}
