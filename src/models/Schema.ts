@@ -1,10 +1,14 @@
+import { relations } from 'drizzle-orm';
 import {
   bigint,
+  integer,
+  jsonb,
   pgTable,
   serial,
   text,
   timestamp,
   uniqueIndex,
+  varchar,
 } from 'drizzle-orm/pg-core';
 
 // This file defines the structure of your database tables using the Drizzle ORM.
@@ -55,3 +59,35 @@ export const todoSchema = pgTable('todo', {
     .notNull(),
   createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
 });
+
+// Users Table
+export const users = pgTable('users', {
+  id: serial('id').primaryKey(),
+  username: varchar('username', { length: 255 }).notNull(),
+  email: varchar('email', { length: 255 }).notNull().unique(),
+});
+
+// Templates Table
+export const templates = pgTable('templates', {
+  id: serial('id').primaryKey(),
+  description: varchar('description', { length: 255 }).notNull(),
+  userId: integer('user_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  templateContent: text('template_content').notNull(), // Template content in string
+  templateSampleData: jsonb('template_sample_data').notNull(), // JSON format for sample data
+  templateStyle: text('template_style').notNull(), // Style in string format
+  assets: jsonb('assets'),
+});
+
+// Relations
+export const usersRelations = relations(users, ({ many }) => ({
+  templates: many(templates),
+}));
+
+export const templatesRelations = relations(templates, ({ one }) => ({
+  user: one(users, {
+    fields: [templates.userId],
+    references: [users.id],
+  }),
+}));

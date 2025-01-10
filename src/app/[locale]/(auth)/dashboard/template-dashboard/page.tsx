@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 
 import HandlebarsPlayground from '../handlebars-playground/page';
-import HtmlBuilder from '../html-builder/page';
+import HtmlBuilder from '../html-builder/html-builder';
 
 const TemplateDashboard = () => {
   const [activeTab, setActiveTab] = useState<'html' | 'handlebars'>('html');
