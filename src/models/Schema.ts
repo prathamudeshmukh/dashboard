@@ -8,6 +8,7 @@ import {
   text,
   timestamp,
   uniqueIndex,
+  uuid,
   varchar,
 } from 'drizzle-orm/pg-core';
 
@@ -69,7 +70,7 @@ export const users = pgTable('users', {
 
 // Templates Table
 export const templates = pgTable('templates', {
-  id: serial('id').primaryKey(),
+  id: uuid('id').primaryKey().defaultRandom(), // UUID with default value
   description: varchar('description', { length: 255 }).notNull(),
   userId: integer('user_id')
     .notNull()
