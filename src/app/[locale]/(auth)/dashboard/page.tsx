@@ -1,9 +1,6 @@
-import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
-import { Button } from '@/components/ui/button';
-import { MessageState } from '@/features/dashboard/MessageState';
-import TemplateTable from '@/features/dashboard/TemplateTable';
+import { DashboardContent } from '@/features/dashboard/DashboardContent';
 import { TitleBar } from '@/features/dashboard/TitleBar';
 
 const DashboardIndexPage = () => {
@@ -16,15 +13,7 @@ const DashboardIndexPage = () => {
         description={t('title_bar_description')}
       />
 
-      <MessageState
-        title={t('message_state_title')}
-        button={(
-          <Link href="/dashboard/template-dashboard">
-            <Button>Create New Template</Button>
-          </Link>
-        )}
-        table={(<TemplateTable />)}
-      />
+      <DashboardContent />
     </>
   );
 };

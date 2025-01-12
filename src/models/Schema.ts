@@ -1,13 +1,9 @@
 import { relations } from 'drizzle-orm';
 import {
-  bigint,
-  integer,
   jsonb,
+  pgEnum,
   pgTable,
-  serial,
   text,
-  timestamp,
-  uniqueIndex,
   uuid,
   varchar,
 } from 'drizzle-orm/pg-core';
@@ -22,48 +18,11 @@ import {
 // The migration is automatically applied during the next database interaction,
 // so there's no need to run it manually or restart the Next.js server.
 
-export const organizationSchema = pgTable(
-  'organization',
-  {
-    id: text('id').primaryKey(),
-    stripeCustomerId: text('stripe_customer_id'),
-    stripeSubscriptionId: text('stripe_subscription_id'),
-    stripeSubscriptionPriceId: text('stripe_subscription_price_id'),
-    stripeSubscriptionStatus: text('stripe_subscription_status'),
-    stripeSubscriptionCurrentPeriodEnd: bigint(
-      'stripe_subscription_current_period_end',
-      { mode: 'number' },
-    ),
-    updatedAt: timestamp('updated_at', { mode: 'date' })
-      .defaultNow()
-      .$onUpdate(() => new Date())
-      .notNull(),
-    createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
-  },
-  (table) => {
-    return {
-      stripeCustomerIdIdx: uniqueIndex('stripe_customer_id_idx').on(
-        table.stripeCustomerId,
-      ),
-    };
-  },
-);
-
-export const todoSchema = pgTable('todo', {
-  id: serial('id').primaryKey(),
-  ownerId: text('owner_id').notNull(),
-  title: text('title').notNull(),
-  message: text('message').notNull(),
-  updatedAt: timestamp('updated_at', { mode: 'date' })
-    .defaultNow()
-    .$onUpdate(() => new Date())
-    .notNull(),
-  createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
-});
+const templateTypeEnum = pgEnum('template_type', ['html-builder', 'handlebars-template']);
 
 // Users Table
 export const users = pgTable('users', {
-  id: serial('id').primaryKey(),
+  id: uuid('id').primaryKey().defaultRandom(),
   username: varchar('username', { length: 255 }).notNull(),
   email: varchar('email', { length: 255 }).notNull().unique(),
 });
@@ -72,13 +31,14 @@ export const users = pgTable('users', {
 export const templates = pgTable('templates', {
   id: uuid('id').primaryKey().defaultRandom(), // UUID with default value
   description: varchar('description', { length: 255 }).notNull(),
-  userId: integer('user_id')
+  userId: uuid('user_id')
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
   templateContent: text('template_content').notNull(), // Template content in string
   templateSampleData: jsonb('template_sample_data').notNull(), // JSON format for sample data
   templateStyle: text('template_style').notNull(), // Style in string format
   assets: jsonb('assets'),
+  templateType: templateTypeEnum('template_type').notNull(), // Add template_type column
 });
 
 // Relations

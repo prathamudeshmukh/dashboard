@@ -1,12 +1,22 @@
-export type SaveTemplate = {
+export enum TemplateType {
+  HTML_BUILDER = 'html-builder',
+  HANDLBARS_TEMPLATE = 'handlebars-template',
+}
+
+export type Template = {
   description: string;
-  userId: number;
+  userId: string;
   templateContent: string;
   templateSampleData: string;
   templateStyle: string;
   assets: string;
+  templateType: TemplateType;
 };
 
-export type FetchTemplates = {
-  userId: number;
+export type UpdateTemplateInput = {
+  templateId: string;
+  description?: string;
+  templateContent: string;
+  templateStyle: string;
+  templateSampleData: string;
 };

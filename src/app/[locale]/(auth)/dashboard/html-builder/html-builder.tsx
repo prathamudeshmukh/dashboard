@@ -2,21 +2,44 @@
 
 import '@grapesjs/studio-sdk/style';
 
-import StudioEditor, { StudioCommands, ToastVariant } from '@grapesjs/studio-sdk/react';
+import StudioEditor from '@grapesjs/studio-sdk/react';
 import type { Editor } from 'grapesjs';
-import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
-import { saveTemplate } from '@/libs/actions/templates';
+import { fetchTemplateById, saveTemplate, updateTemplate } from '@/libs/actions/templates';
+import { TemplateType } from '@/types/Template';
 
 const HtmlBuilder = () => {
   const [editor, setEditor] = useState<Editor>();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const templateId = searchParams.get('templateId'); // Get templateId from query params
+
+  useEffect(() => {
+    const loadTemplateData = async () => {
+      if (templateId) {
+        const response = await fetchTemplateById(templateId);
+        if (!response.success) {
+          return;
+        }
+        // Load the template data into the editor
+        editor?.setComponents(response.data?.templateContent as string);
+        editor?.setStyle(response.data?.templateStyle);
+      }
+    };
+
+    if (editor) {
+      loadTemplateData();
+    }
+  }, [editor, templateId]);
 
   const onReady = (editor: Editor) => {
     setEditor(editor);
-
+    if (!templateId) {
+      editor.Commands.run('core:canvas-clear'); // Clear the canvas
+    }
     // Block Manager
     const blockManager = editor.BlockManager;
 
@@ -30,43 +53,50 @@ const HtmlBuilder = () => {
   };
 
   const saveProject = async () => {
-    if (editor) {
-      const html = editor.getHtml();
-      const css = editor.getCss();
+    const html = editor?.getHtml();
+    const css = editor?.getCss();
 
-      // Sample input data for the server action
-      const templateSampleData = { key: 'value' }; // Example sample data
-      const assets = ['https://example.com/asset1.png', 'https://example.com/asset2.png'];
-
+    if (templateId) {
       try {
-        const response = await saveTemplate({
+        const response = await updateTemplate({
+          templateId,
           description: 'My HTML Template',
-          userId: 1,
-          templateContent: html,
-          templateSampleData: JSON.stringify(templateSampleData),
+          templateContent: html as string,
           templateStyle: css as string,
-          assets: JSON.stringify(assets),
+          templateSampleData: '',
         });
 
         if (response.success) {
-          await editor.runCommand(StudioCommands.toastAdd, {
-            id: 'save-success',
-            header: 'Save Successful',
-            content: 'Project saved successfully!',
-            variant: ToastVariant.Success,
-          });
           router.push('/dashboard');
         } else {
           throw new Error(response.error);
         }
       } catch (error: any) {
         console.error('Error saving template:', error);
-        editor.runCommand(StudioCommands.toastAdd, {
-          id: 'save-failed',
-          header: 'Save Failed',
-          content: `Failed to save project: ${error.message}`,
-          variant: ToastVariant.Error,
+      }
+    } else {
+      try {
+        // Sample input data for the server action
+        const templateSampleData = { key: 'value' }; // Example sample data
+        const assets = ['https://example.com/asset1.png', 'https://example.com/asset2.png'];
+
+        const response = await saveTemplate({
+          description: 'My HTML Template',
+          userId: 'c9ded72d-4cae-4fab-b86c-a084ec7f2ecc',
+          templateContent: html as string,
+          templateSampleData: JSON.stringify(templateSampleData),
+          templateStyle: css as string,
+          assets: JSON.stringify(assets),
+          templateType: TemplateType.HTML_BUILDER,
         });
+
+        if (response.success) {
+          router.push('/dashboard');
+        } else {
+          throw new Error(response.error);
+        }
+      } catch (error: any) {
+        console.error('Error saving template:', error);
       }
     }
   };
@@ -89,7 +119,7 @@ const HtmlBuilder = () => {
       />
       <div className="mr-4 mt-5 flex justify-end p-1">
         <Button className="mr-2 rounded border px-2" onClick={saveProject}>
-          Save Project
+          {templateId ? 'Update' : 'Save'}
         </Button>
       </div>
     </div>
