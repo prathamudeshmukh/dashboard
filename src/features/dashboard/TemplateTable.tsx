@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import React, { useEffect, useState } from 'react';
 
 import { deleteTemplate, fetchTemplates } from '@/libs/actions/templates';
@@ -9,6 +10,8 @@ import { TemplateType } from '@/types/Template';
 const TemplateTable = () => {
   const [templateData, setTempldateData] = useState<any>();
   const router = useRouter();
+
+  const t = useTranslations('TemplateTable');
 
   const fetchTemplateData = async () => {
     const userId = 'c9ded72d-4cae-4fab-b86c-a084ec7f2ecc'; // Example user ID
@@ -24,7 +27,7 @@ const TemplateTable = () => {
     if (templateType === TemplateType.HTML_BUILDER) {
       router.push(`/dashboard/html-builder?templateId=${templateId}`);
     } else {
-      router.push(`/dashboard/handlebars-playground?templateId=${templateId}`);
+      router.push(`/dashboard/handlebar-editor?templateId=${templateId}`);
     }
   };
 
@@ -49,24 +52,26 @@ const TemplateTable = () => {
       <table className="min-w-full table-auto border-collapse border border-gray-300">
         <thead>
           <tr className="bg-gray-200">
-            <th className="border border-gray-300 px-4 py-2">ID</th>
-            <th className="border border-gray-300 px-4 py-2">Description</th>
-            <th className="border border-gray-300 px-4 py-2">Type</th>
-            <th className="w-1/3 border border-gray-300 px-4 py-2">Actions</th>
+            <th className="border border-gray-300 px-4 py-2">{t('id')}</th>
+            <th className="border border-gray-300 px-4 py-2">{t('template_name')}</th>
+            <th className="border border-gray-300 px-4 py-2">{t('description')}</th>
+            <th className="border border-gray-300 px-4 py-2">{t('type')}</th>
+            <th className="w-1/3 border border-gray-300 px-4 py-2">{t('actions')}</th>
           </tr>
         </thead>
         <tbody>
           {templateData?.map((template: any) => (
             <tr key={template.id} className="hover:bg-gray-100">
               <td className="border border-gray-300 px-4 py-2">{template.id}</td>
+              <td className="border border-gray-300 px-4 py-2">{template.templateName}</td>
               <td className="border border-gray-300 px-4 py-2">{template.description}</td>
               <td className="border border-gray-300 px-4 py-2">{template.templateType}</td>
               <td className="flex items-center justify-center border border-gray-300 px-4 py-2">
                 <button onClick={() => handleEdit(template.id, template.templateType)} className="mr-2 rounded bg-blue-500 px-4 py-1 text-white hover:bg-blue-600">
-                  Edit
+                  {t('edit')}
                 </button>
                 <button onClick={() => handleDelete(template.id)} className="rounded bg-red-500 px-4 py-1 text-white hover:bg-red-600">
-                  Delete
+                  {t('delete')}
                 </button>
               </td>
             </tr>

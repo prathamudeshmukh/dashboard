@@ -1,9 +1,12 @@
 import { relations } from 'drizzle-orm';
 import {
+  bigint,
   jsonb,
   pgEnum,
   pgTable,
   text,
+  timestamp,
+  uniqueIndex,
   uuid,
   varchar,
 } from 'drizzle-orm/pg-core';
@@ -18,6 +21,33 @@ import {
 // The migration is automatically applied during the next database interaction,
 // so there's no need to run it manually or restart the Next.js server.
 
+export const organizationSchema = pgTable(
+  'organization',
+  {
+    id: text('id').primaryKey(),
+    stripeCustomerId: text('stripe_customer_id'),
+    stripeSubscriptionId: text('stripe_subscription_id'),
+    stripeSubscriptionPriceId: text('stripe_subscription_price_id'),
+    stripeSubscriptionStatus: text('stripe_subscription_status'),
+    stripeSubscriptionCurrentPeriodEnd: bigint(
+      'stripe_subscription_current_period_end',
+      { mode: 'number' },
+    ),
+    updatedAt: timestamp('updated_at', { mode: 'date' })
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
+    createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
+  },
+  (table) => {
+    return {
+      stripeCustomerIdIdx: uniqueIndex('stripe_customer_id_idx').on(
+        table.stripeCustomerId,
+      ),
+    };
+  },
+);
+
 const templateTypeEnum = pgEnum('template_type', ['html-builder', 'handlebars-template']);
 
 // Users Table
@@ -29,16 +59,17 @@ export const users = pgTable('users', {
 
 // Templates Table
 export const templates = pgTable('templates', {
-  id: uuid('id').primaryKey().defaultRandom(), // UUID with default value
+  id: uuid('id').primaryKey().defaultRandom(),
   description: varchar('description', { length: 255 }).notNull(),
+  templateName: varchar('templateName', { length: 255 }).notNull(),
   userId: uuid('user_id')
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
-  templateContent: text('template_content').notNull(), // Template content in string
-  templateSampleData: jsonb('template_sample_data').notNull(), // JSON format for sample data
-  templateStyle: text('template_style').notNull(), // Style in string format
+  templateContent: text('template_content').notNull(),
+  templateSampleData: jsonb('template_sample_data'),
+  templateStyle: text('template_style'),
   assets: jsonb('assets'),
-  templateType: templateTypeEnum('template_type').notNull(), // Add template_type column
+  templateType: templateTypeEnum('template_type').notNull(),
 });
 
 // Relations

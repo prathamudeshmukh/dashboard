@@ -3,58 +3,56 @@
 import { desc, eq } from 'drizzle-orm';
 
 import { templates } from '@/models/Schema';
-import type { Template, UpdateTemplateInput } from '@/types/Template';
 
 import { db } from '../DB';
 
-export async function saveTemplate({
+export async function UpsertTemplate({
+  templateId,
   description,
   userId,
+  templateName,
   templateContent,
   templateSampleData,
   templateStyle,
   assets,
   templateType,
-}: Template) {
-  try {
-    await db.insert(templates).values({
-      description,
-      userId, // FK reference to the users table
-      templateContent,
-      templateSampleData: JSON.parse(templateSampleData),
-      templateStyle,
-      assets: JSON.parse(assets),
-      templateType,
-    });
-    return { success: true, message: 'Template saved successfully' };
-  } catch (error: any) {
-    console.error('Error saving template:', error);
-    return { success: false, error: error.message };
+}: any) {
+  if (!description || !templateContent || !templateName) {
+    throw new Error('Missing required fields: description, templateContent or templateName.');
   }
-}
 
-export async function updateTemplate({
-  templateId,
-  description,
-  templateContent,
-  templateStyle,
-  templateSampleData,
-}: UpdateTemplateInput) {
   try {
-    await db
-      .update(templates)
-      .set({
-        ...(description && { description }), // Update only if provided
-        templateContent,
-        templateStyle,
-        templateSampleData,
-      })
-      .where(eq(templates.id, templateId));
+    if (templateId) {
+      // Perform update
+      await db
+        .update(templates)
+        .set({
+          ...(description && { description }),
+          templateContent,
+          templateStyle,
+          templateSampleData: templateSampleData ? JSON.parse(templateSampleData) : {},
+        })
+        .where(eq(templates.id, templateId));
 
-    return { success: true, message: 'Template updated successfully' };
+      return { success: true, message: 'Template updated successfully' };
+    } else {
+      // Perform insert
+      await db.insert(templates).values({
+        description,
+        userId,
+        templateName,
+        templateContent,
+        templateSampleData: templateSampleData ? JSON.parse(templateSampleData) : {},
+        templateStyle,
+        assets: assets ? JSON.parse(assets) : null,
+        templateType,
+      });
+
+      return { success: true, message: 'Template saved successfully' };
+    }
   } catch (error: any) {
-    console.error('Error updating template:', error);
-    return { success: false, error: error.message };
+    console.error(`Error ${templateId ? 'updating' : 'saving'} template:`, error);
+    throw new Error(`Failed to ${templateId ? 'update' : 'save'} template: ${error.message}`);
   }
 }
 

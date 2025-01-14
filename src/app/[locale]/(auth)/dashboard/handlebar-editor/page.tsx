@@ -1,11 +1,11 @@
 import React from 'react';
 
-import HandlebarsPlayground from './handlebars-playground';
+import HandlebarEditor from './handlebar-editor';
 
 const page = () => {
   return (
     <div>
-      <HandlebarsPlayground />
+      <HandlebarEditor />
     </div>
   );
 };
