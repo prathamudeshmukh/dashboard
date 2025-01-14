@@ -1,11 +1,11 @@
 import React from 'react';
 
-import HtmlBuilder from './html-builder';
+import HandlebarEditor from './handlebar-editor';
 
 const page = () => {
   return (
     <div>
-      <HtmlBuilder />
+      <HandlebarEditor />
     </div>
   );
 };

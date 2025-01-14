@@ -1,10 +1,14 @@
+import { relations } from 'drizzle-orm';
 import {
   bigint,
+  jsonb,
+  pgEnum,
   pgTable,
-  serial,
   text,
   timestamp,
   uniqueIndex,
+  uuid,
+  varchar,
 } from 'drizzle-orm/pg-core';
 
 // This file defines the structure of your database tables using the Drizzle ORM.
@@ -44,14 +48,38 @@ export const organizationSchema = pgTable(
   },
 );
 
-export const todoSchema = pgTable('todo', {
-  id: serial('id').primaryKey(),
-  ownerId: text('owner_id').notNull(),
-  title: text('title').notNull(),
-  message: text('message').notNull(),
-  updatedAt: timestamp('updated_at', { mode: 'date' })
-    .defaultNow()
-    .$onUpdate(() => new Date())
-    .notNull(),
-  createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
+const templateTypeEnum = pgEnum('template_type', ['html-builder', 'handlebars-template']);
+
+// Users Table
+export const users = pgTable('users', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  username: varchar('username', { length: 255 }).notNull(),
+  email: varchar('email', { length: 255 }).notNull().unique(),
 });
+
+// Templates Table
+export const templates = pgTable('templates', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  description: varchar('description', { length: 255 }).notNull(),
+  templateName: varchar('templateName', { length: 255 }).notNull(),
+  userId: uuid('user_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  templateContent: text('template_content').notNull(),
+  templateSampleData: jsonb('template_sample_data'),
+  templateStyle: text('template_style'),
+  assets: jsonb('assets'),
+  templateType: templateTypeEnum('template_type').notNull(),
+});
+
+// Relations
+export const usersRelations = relations(users, ({ many }) => ({
+  templates: many(templates),
+}));
+
+export const templatesRelations = relations(templates, ({ one }) => ({
+  user: one(users, {
+    fields: [templates.userId],
+    references: [users.id],
+  }),
+}));

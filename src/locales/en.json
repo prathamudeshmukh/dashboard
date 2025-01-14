@@ -162,5 +162,24 @@
     "message_title": "Message",
     "message_description": "Enter a detailed message for your todo.",
     "submit_button": "Submit"
+  },
+  "DashboardContent": {
+    "title": "Let's get Started",
+    "create_new_template": "Create New Template"
+  },
+  "TemplateTable": {
+    "id": "ID",
+    "template_name": "Template Name",
+    "description": "Description",
+    "type": "Type",
+    "actions": "Actions",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "handlebarEditor": {
+    "title": "Handlebars Editor",
+    "template": "Template",
+    "input_data": "Input Data (JSON)",
+    "preview": "Preview"
   }
 }

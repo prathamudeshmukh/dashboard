@@ -2,8 +2,8 @@
 
 import React, { useState } from 'react';
 
-import HandlebarsPlayground from '../handlebars-playground/page';
-import HtmlBuilder from '../html-builder/page';
+import HandlebarEditor from '../handlebar-editor/handlebar-editor';
+import HtmlBuilder from '../html-builder/html-builder';
 
 const TemplateDashboard = () => {
   const [activeTab, setActiveTab] = useState<'html' | 'handlebars'>('html');
@@ -35,7 +35,7 @@ const TemplateDashboard = () => {
       {/* Render Components Conditionally */}
       <div className="mt-6">
         {activeTab === 'html' && <HtmlBuilder />}
-        {activeTab === 'handlebars' && <HandlebarsPlayground />}
+        {activeTab === 'handlebars' && <HandlebarEditor />}
       </div>
     </div>
   );
