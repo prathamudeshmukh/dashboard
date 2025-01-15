@@ -1,6 +1,7 @@
 import hbs from 'handlebars';
 
-import { type JsonValue, TemplateType } from '@/types/Template';
+import type { JsonValue } from '@/types/Template';
+import { TemplateType } from '@/types/Template';
 
 type TemplateParams = {
   templateType: TemplateType;

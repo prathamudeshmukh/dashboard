@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from 'next/server';
 import PuppeteerHTMLPDF from 'puppeteer-html-pdf';
 
 import { fetchTemplateById } from '@/libs/actions/templates';
-import type { type JsonValue, TemplateType } from '@/types/Template';
+import type { JsonValue, TemplateType } from '@/types/Template';
 import generateTemplateContent from '@/utils/generateContent';
 
 type PDFRequest = {
