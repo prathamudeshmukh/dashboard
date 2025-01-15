@@ -9,7 +9,6 @@ const Page = () => {
   const { getToken } = useAuth(); // Get the session token
   const [templateId, setTemplateId] = useState<string>('');
   const [templateData, setTemplateData] = useState<string>('');
-  const [base64String, setBase64String] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -26,10 +25,10 @@ const Page = () => {
 
       const parsedData = templateData ? JSON.parse(templateData) : {};
 
-      const payload = JSON.stringify({ templateId, templateData: parsedData });
+      const payload = JSON.stringify({ templateData: parsedData });
 
       // Call the API
-      const response = await fetch('/api/template-to-pdf', {
+      const response = await fetch(`/api/convert?templateId=${templateId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -43,8 +42,16 @@ const Page = () => {
         throw new Error(errorData.error || 'Failed to generate PDF');
       }
 
-      const data = await response.json();
-      setBase64String(data.pdfBase64); // Set the Base64 string
+      // Create a Blob from the response
+      const blob = await response.blob();
+
+      // Create a link element to trigger the download
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'document.pdf';
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
     } catch (err: any) {
       setError(err.message || 'An unexpected error occurred.');
     } finally {
@@ -54,18 +61,23 @@ const Page = () => {
 
   return (
     <div className="p-6">
-      <Input
-        type="text"
-        placeholder="Enter Template ID"
-        value={templateId}
-        onChange={e => setTemplateId(e.target.value)}
-      />
-      <Input
-        type="text"
-        placeholder="Enter Template Data"
-        value={templateData}
-        onChange={e => setTemplateData(e.target.value)}
-      />
+      <div className="flex flex-row">
+        <Input
+          type="text"
+          placeholder="Enter Template ID"
+          value={templateId}
+          onChange={e => setTemplateId(e.target.value)}
+          className="mt-2"
+        />
+        <Input
+          type="text"
+          placeholder="Enter Template Data"
+          value={templateData}
+          onChange={e => setTemplateData(e.target.value)}
+          className="ml-2 mt-2"
+        />
+      </div>
+
       <Button
         className="mt-4"
         onClick={handleTemplateToPdfConvert}
@@ -74,11 +86,6 @@ const Page = () => {
         {loading ? 'Converting...' : 'Convert'}
       </Button>
       {error && <p className="mt-4 text-red-500">{error}</p>}
-      <span className="mt-4 block break-words text-gray-800">
-        <strong>Base64 String:</strong>
-        {' '}
-        {base64String}
-      </span>
     </div>
   );
 };
