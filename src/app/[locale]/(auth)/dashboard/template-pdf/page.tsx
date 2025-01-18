@@ -28,7 +28,7 @@ const Page = () => {
       const payload = JSON.stringify({ templateData: parsedData });
 
       // Call the API
-      const response = await fetch(`/api/convert?templateId=${templateId}`, {
+      const response = await fetch(`/api/convert/${templateId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

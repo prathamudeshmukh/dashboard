@@ -3,40 +3,32 @@ import PuppeteerHTMLPDF from 'puppeteer-html-pdf';
 
 import { fetchTemplateById } from '@/libs/actions/templates';
 import contentGenerator from '@/service/contentGenerator';
-import type { JsonValue, TemplateType } from '@/types/Template';
+import type { TemplateType } from '@/types/Template';
 
-type PDFRequest = {
-  templateId: string;
-  templateData: JsonValue;
-};
-
-export async function POST(req: NextRequest) {
+export async function POST(req: NextRequest, { params }: { params: { templateId: string } }) {
   try {
-    // Extract search parameters from the URL
-    const searchParams = req.nextUrl.searchParams;
-    const templateId = searchParams.get('templateId');
+    const { templateId } = params;
 
     if (!templateId) {
       return NextResponse.json(
-        { error: 'Template ID is missing in the query parameters' },
+        { error: 'Template ID is missing in the path' },
         { status: 400 },
       );
     }
 
-    // Parse the request body for additional data
-    const body: PDFRequest = await req.json();
+    // Parse the request body
+    const body = await req.json();
     const { templateData } = body;
 
     // Fetch the template by ID
     const template = await fetchTemplateById(templateId);
 
-    if (template.error) {
+    if (!template || template.error) {
       return NextResponse.json(
-        { error: template.error },
-        { status: 500 },
+        { error: template?.error || 'Template not found' },
+        { status: 404 },
       );
     }
-
     // Initialize PuppeteerHTMLPDF instance
     const htmlPdf = new PuppeteerHTMLPDF();
     htmlPdf.setOptions({
@@ -55,17 +47,16 @@ export async function POST(req: NextRequest) {
     const pdfBuffer = await htmlPdf.create(content);
 
     // Return the binary PDF file in the response
-    return new Response(pdfBuffer, {
-      status: 200,
+    return new NextResponse(pdfBuffer, {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': 'attachment; filename="document.pdf"',
       },
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error generating PDF:', error);
     return NextResponse.json(
-      { error: `Failed to generate PDF ${error}` },
+      { error: `Failed to generate PDF: ${error.message}` },
       { status: 500 },
     );
   }
