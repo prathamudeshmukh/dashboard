@@ -2,8 +2,8 @@ import { type NextRequest, NextResponse } from 'next/server';
 import PuppeteerHTMLPDF from 'puppeteer-html-pdf';
 
 import { fetchTemplateById } from '@/libs/actions/templates';
+import contentGenerator from '@/service/contentGenerator';
 import type { JsonValue, TemplateType } from '@/types/Template';
-import generateTemplateContent from '@/utils/generateContent';
 
 type PDFRequest = {
   templateId: string;
@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
       printBackground: true,
     });
 
-    const content = generateTemplateContent({
+    const content = await contentGenerator({
       templateType: template?.data?.templateType as TemplateType,
       templateContent: template?.data?.templateContent as string,
       templateStyle: template?.data?.templateStyle as string,
@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
     });
 
     // Generate the PDF
-    const pdfBuffer = await htmlPdf.create(content as string);
+    const pdfBuffer = await htmlPdf.create(content);
 
     // Return the binary PDF file in the response
     return new Response(pdfBuffer, {
@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error('Error generating PDF:', error);
     return NextResponse.json(
-      { error: 'Failed to generate PDF' },
+      { error: `Failed to generate PDF ${error}` },
       { status: 500 },
     );
   }
