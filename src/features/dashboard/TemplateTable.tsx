@@ -66,7 +66,7 @@ const TemplateTable = () => {
               <td className="border border-gray-300 px-4 py-2">{template.templateName}</td>
               <td className="border border-gray-300 px-4 py-2">{template.description}</td>
               <td className="border border-gray-300 px-4 py-2">{template.templateType}</td>
-              <td className="flex items-center justify-center border border-gray-300 px-4 py-2">
+              <td className="border border-gray-300 px-4 py-2">
                 <button onClick={() => handleEdit(template.id, template.templateType)} className="mr-2 rounded bg-blue-500 px-4 py-1 text-white hover:bg-blue-600">
                   {t('edit')}
                 </button>
