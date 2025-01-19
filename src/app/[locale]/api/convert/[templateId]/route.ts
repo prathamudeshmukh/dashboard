@@ -5,8 +5,16 @@ import { fetchTemplateById } from '@/libs/actions/templates';
 import contentGenerator from '@/service/contentGenerator';
 import type { TemplateType } from '@/types/Template';
 
+import { authenticateApi } from '../../authenticateApi';
+
 export async function POST(req: NextRequest, { params }: { params: { templateId: string } }) {
   try {
+    const isAuthenticated = await authenticateApi(req);
+
+    if (isAuthenticated !== true) {
+      return isAuthenticated; // Authentication failed
+    }
+
     const { templateId } = params;
 
     if (!templateId) {
