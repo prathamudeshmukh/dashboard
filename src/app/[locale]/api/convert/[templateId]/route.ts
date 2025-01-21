@@ -7,11 +7,11 @@ import type { TemplateType } from '@/types/Template';
 
 import { authenticateApi } from '../../authenticateApi';
 
-export async function POST(req: NextRequest, { params }: { params: { templateId: string } }) {
+export async function POST(req: NextRequest, { params }: { params: { templateId: string } }): Promise< NextResponse > {
   try {
     const isAuthenticated = await authenticateApi(req);
 
-    if (isAuthenticated !== true) {
+    if (!isAuthenticated) {
       return isAuthenticated; // Authentication failed
     }
 

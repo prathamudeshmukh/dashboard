@@ -1,8 +1,8 @@
-import bcrypt from 'bcrypt';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
 import { getClientById } from '@/libs/actions/user';
+import { decrypt } from '@/service/crypto';
 
 export async function authenticateApi(req: NextRequest): Promise<true | NextResponse> {
   // Extract `client_id` and `client_secret` from the headers
@@ -28,11 +28,11 @@ export async function authenticateApi(req: NextRequest): Promise<true | NextResp
     );
   }
 
-  // Compare the provided `clientSecret` with the hashed secret from the database
-  const isValidSecret = await bcrypt.compare(clientSecret, client?.data?.clientSecret as string);
+  // Decrypt the stored secret and compare
+  const decryptedSecret = decrypt(client?.clientSecret as string);
 
   // If the secret is invalid, return 401
-  if (!isValidSecret) {
+  if (clientSecret !== decryptedSecret) {
     return NextResponse.json(
       { error: 'Invalid client_secret' },
       { status: 401 },

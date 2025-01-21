@@ -1,12 +1,13 @@
 import crypto from 'node:crypto';
 
-import bcrypt from 'bcrypt';
+import { encrypt } from './crypto';
 
-const generateApiKeys = async () => {
-  const clientSecret = `sec_${crypto.randomBytes(32).toString('hex')}`;
-  const hashedSecret = await bcrypt.hash(clientSecret, 10);
+export const generateApiKeys = () => {
+  const clientId = `cid_${crypto.randomBytes(16).toString('hex')}`;
+  const clientSecret = `cs_${crypto.randomBytes(32).toString('hex')}`;
 
-  return { clientSecret, hashedSecret };
+  // Encrypt the client secret before storing
+  const encryptedSecret = encrypt(clientSecret);
+
+  return { clientId, clientSecret, encryptedSecret };
 };
-
-export default generateApiKeys;

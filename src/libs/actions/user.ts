@@ -1,7 +1,9 @@
+'use server';
+
 import { eq } from 'drizzle-orm';
 
 import { apikeys, users } from '@/models/Schema';
-import type { User } from '@/types/User';
+import type { ClientConfigs, User } from '@/types/User';
 
 import { db } from '../DB';
 
@@ -28,17 +30,24 @@ export async function saveUser(user: User) {
   }
 }
 
-export async function getClientById(clientId: string) {
+export async function getClientById(clientId: string): Promise<ClientConfigs> {
   try {
     if (!clientId) {
-      throw new Error ('Please provide clientId');
+      throw new Error('Please provide clientId');
     };
 
-    const client = await db.select().from(apikeys).where(eq(apikeys.clientId, clientId));
+    const client = await db
+      .select()
+      .from(apikeys)
+      .where(eq(apikeys.clientId, clientId))
+      .limit(1);
 
-    return { success: true, data: client[0] };
+    if (!client || client.length === 0) {
+      throw new Error(`Client with ID ${clientId} not found`);
+    }
+
+    return client[0] as ClientConfigs;
   } catch (error: any) {
-    console.error('Error saving user:', error);
-    return { success: false, error: error.message };
+    throw new Error(`Error fetching client: ${error.message}`);
   }
 }
