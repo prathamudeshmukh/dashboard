@@ -4,6 +4,7 @@ import { eq } from 'drizzle-orm';
 
 import { apikeys, users } from '@/models/Schema';
 import { decrypt } from '@/service/crypto';
+import { generateApiKeys } from '@/service/generateApiKeys';
 import type { ClientConfigs, User } from '@/types/User';
 
 import { db } from '../DB';
@@ -17,13 +18,23 @@ export async function saveUser(user: User) {
       throw new Error('Invalid data: username and email are required');
     }
 
-    // Save the user to the database
-    await db.insert(users).values({
-      email,
-      username,
-      clientId,
-    });
+    await db.transaction(async (tx) => {
+      // First insert: save user
+      await tx.insert(users).values({
+        email,
+        username,
+        clientId,
+      });
 
+      // Generate API key
+      const key = generateApiKeys();
+
+      // Second insert: save API key
+      await tx.insert(apikeys).values({
+        clientId,
+        clientSecret: key.encryptedSecret,
+      });
+    });
     return { success: true };
   } catch (error: any) {
     console.error('Error saving user:', error);
