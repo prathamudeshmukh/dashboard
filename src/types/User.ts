@@ -6,7 +6,7 @@ export type User = {
 
 export type ClientConfigs = {
   clientId: string;
-  id: string;
-  createdAt: Date;
+  id?: string;
+  createdAt?: Date;
   clientSecret: string;
 };

@@ -3,6 +3,7 @@
 import { eq } from 'drizzle-orm';
 
 import { apikeys, users } from '@/models/Schema';
+import { decrypt } from '@/service/crypto';
 import type { ClientConfigs, User } from '@/types/User';
 
 import { db } from '../DB';
@@ -37,17 +38,39 @@ export async function getClientById(clientId: string): Promise<ClientConfigs> {
     };
 
     const client = await db
-      .select()
-      .from(apikeys)
-      .where(eq(apikeys.clientId, clientId))
-      .limit(1);
+      .query.apikeys.findFirst({
+        where: eq(apikeys.clientId, clientId),
+      });
 
-    if (!client || client.length === 0) {
+    if (!client) {
       throw new Error(`Client with ID ${clientId} not found`);
     }
 
-    return client[0] as ClientConfigs;
+    return client as ClientConfigs;
   } catch (error: any) {
     throw new Error(`Error fetching client: ${error.message}`);
+  }
+}
+
+export async function getClientSecret(clientId: string): Promise<ClientConfigs> {
+  try {
+    if (!clientId) {
+      throw new Error('Please provide clientId');
+    }
+
+    const client = await getClientById(clientId);
+
+    if (!client || !client.clientSecret) {
+      throw new Error(`API Key with ID ${clientId} not found`);
+    }
+
+    const decryptedSecret = decrypt(client.clientSecret);
+
+    return {
+      clientId: client.clientId,
+      clientSecret: decryptedSecret,
+    };
+  } catch (error: any) {
+    throw new Error(`Error fetching client secret: ${error.message}`);
   }
 }
