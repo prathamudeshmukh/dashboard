@@ -1,5 +1,5 @@
 {
-  "id": "28dec3e4-c7d0-4ceb-b1dc-fa41906b1178",
+  "id": "76043c5c-6559-4a68-870c-559c52430e47",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -155,9 +155,9 @@
           "primaryKey": false,
           "notNull": true
         },
-        "user_id": {
-          "name": "user_id",
-          "type": "uuid",
+        "email": {
+          "name": "email",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": true
         },
@@ -195,15 +195,15 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "templates_user_id_users_id_fk": {
-          "name": "templates_user_id_users_id_fk",
+        "templates_email_users_email_fk": {
+          "name": "templates_email_users_email_fk",
           "tableFrom": "templates",
           "tableTo": "users",
           "columnsFrom": [
-            "user_id"
+            "email"
           ],
           "columnsTo": [
-            "id"
+            "email"
           ],
           "onDelete": "cascade",
           "onUpdate": "no action"

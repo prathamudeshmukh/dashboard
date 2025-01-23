@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS "templates" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"description" varchar(255) NOT NULL,
 	"templateName" varchar(255) NOT NULL,
-	"user_id" uuid NOT NULL,
+	"email" varchar NOT NULL,
 	"template_content" text NOT NULL,
 	"template_sample_data" jsonb,
 	"template_style" text,
@@ -46,7 +46,7 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "templates" ADD CONSTRAINT "templates_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
+ ALTER TABLE "templates" ADD CONSTRAINT "templates_email_users_email_fk" FOREIGN KEY ("email") REFERENCES "public"."users"("email") ON DELETE cascade ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

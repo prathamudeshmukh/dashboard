@@ -63,9 +63,9 @@ export const templates = pgTable('templates', {
   id: uuid('id').primaryKey().defaultRandom(),
   description: varchar('description', { length: 255 }).notNull(),
   templateName: varchar('templateName', { length: 255 }).notNull(),
-  userId: uuid('user_id')
+  email: varchar('email')
     .notNull()
-    .references(() => users.id, { onDelete: 'cascade' }),
+    .references(() => users.email, { onDelete: 'cascade' }),
   templateContent: text('template_content').notNull(),
   templateSampleData: jsonb('template_sample_data'),
   templateStyle: text('template_style'),
@@ -91,8 +91,8 @@ export const usersRelations = relations(users, ({ many }) => ({
 
 export const templatesRelations = relations(templates, ({ one }) => ({
   user: one(users, {
-    fields: [templates.userId],
-    references: [users.id],
+    fields: [templates.email],
+    references: [users.email],
   }),
 }));
 

@@ -9,10 +9,9 @@ import { authenticateApi } from '../../authenticateApi';
 
 export async function POST(req: NextRequest, { params }: { params: { templateId: string } }): Promise< NextResponse > {
   try {
-    const isAuthenticated = await authenticateApi(req);
-
-    if (!isAuthenticated) {
-      return isAuthenticated; // Authentication failed
+    const authResult = await authenticateApi(req);
+    if (authResult instanceof NextResponse) {
+      return authResult; // Authentication failed
     }
 
     const { templateId } = params;

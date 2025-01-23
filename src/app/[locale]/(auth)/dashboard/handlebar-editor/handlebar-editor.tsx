@@ -1,5 +1,6 @@
 'use client';
 
+import { useUser } from '@clerk/nextjs';
 import Handlebars from 'handlebars';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -12,6 +13,7 @@ import { fetchTemplateById, UpsertTemplate } from '@/libs/actions/templates';
 import { type JsonValue, TemplateType } from '@/types/Template';
 
 const HandlebarEditor = () => {
+  const { user } = useUser();
   const t = useTranslations('handlebarEditor');
   const [templateContent, setTemplateContent] = useState<string>('');
   const [description, setDescription] = useState<string>('');
@@ -74,11 +76,14 @@ const HandlebarEditor = () => {
   }, [templateId]);
 
   const handleSave = async () => {
+    if (!user) {
+      return;
+    }
     // Prepare template data
     const templateData = {
       templateId: templateId || undefined, // Insert or update based on templateId
       description,
-      userId: 'c9ded72d-4cae-4fab-b86c-a084ec7f2ecc', // Replace with dynamic userId
+      email: user?.emailAddresses[0]?.emailAddress, // Replace with dynamic userId
       templateName,
       templateContent,
       templateSampleData: inputData,

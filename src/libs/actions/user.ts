@@ -32,7 +32,7 @@ export async function saveUser(user: User) {
       // Second insert: save API key
       await tx.insert(apikeys).values({
         clientId,
-        clientSecret: key.encryptedSecret,
+        clientSecret: key,
       });
     });
     return { success: true };
