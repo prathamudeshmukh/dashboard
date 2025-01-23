@@ -13,7 +13,7 @@ export async function POST(req: Request) {
   }
 
   // Create a new Svix instance with your webhook secret
-  const wh = new Webhook(SIGNING_SECRET);
+  const webhook = new Webhook(SIGNING_SECRET);
 
   // Get the headers
   const headerPayload = await headers();
@@ -32,11 +32,11 @@ export async function POST(req: Request) {
   const payload = await req.json();
   const body = JSON.stringify(payload);
 
-  let evt: WebhookEvent;
+  let webhookEvent: WebhookEvent;
 
   // Verify the webhook
   try {
-    evt = wh.verify(body, {
+    webhookEvent = webhook.verify(body, {
       'svix-id': svix_id,
       'svix-timestamp': svix_timestamp,
       'svix-signature': svix_signature,
@@ -49,22 +49,21 @@ export async function POST(req: Request) {
   }
 
   // Handle the webhook
-  const eventType = evt.type;
+  const eventType = webhookEvent.type;
 
-  if (eventType === 'user.created') {
-    const { id, email_addresses, first_name } = evt.data;
-
-    try {
-      await saveUser({ clientId: id, email: email_addresses[0]?.email_address as string, username: first_name as string });
-      return NextResponse.json({ message: 'User created successfully' }, { status: 201 });
-    } catch (error) {
-      console.error('Error saving user to database:', error);
-      return NextResponse.json(
-        { error: 'Error saving user to database' },
-        { status: 500 },
-      );
-    }
+  if (eventType !== 'user.created') {
+    return;
   }
+  const { id, email_addresses, first_name } = webhookEvent.data;
 
-  return NextResponse.json({ message: 'Webhook received' }, { status: 200 });
+  try {
+    await saveUser({ clientId: id, email: email_addresses[0]?.email_address as string, username: first_name as string });
+    return NextResponse.json({ message: 'User created successfully' }, { status: 201 });
+  } catch (error) {
+    console.error('Error saving user to database:', error);
+    return NextResponse.json(
+      { error: 'Error saving user to database' },
+      { status: 500 },
+    );
+  }
 }
