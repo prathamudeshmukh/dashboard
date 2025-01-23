@@ -2,6 +2,7 @@
 
 import '@grapesjs/studio-sdk/style';
 
+import { useUser } from '@clerk/nextjs';
 import StudioEditor from '@grapesjs/studio-sdk/react';
 import type { Editor } from 'grapesjs';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -13,6 +14,7 @@ import { fetchTemplateById, UpsertTemplate } from '@/libs/actions/templates';
 import { TemplateType } from '@/types/Template';
 
 const HtmlBuilder = () => {
+  const { user } = useUser();
   const [editor, setEditor] = useState<Editor>();
   const [templateName, setTemplateName] = useState<string>('');
   const [description, setDescription] = useState<string>('');
@@ -67,11 +69,15 @@ const HtmlBuilder = () => {
       throw new Error('Editor content is missing');
     }
 
+    if (!user) {
+      return;
+    }
+
     // Prepare template data
     const templateData = {
       templateId: templateId || undefined, // Insert or update based on templateId
       description,
-      userId: 'c9ded72d-4cae-4fab-b86c-a084ec7f2ecc', // Replace with dynamic userId
+      email: user.emailAddresses[0]?.emailAddress, // Replace with dynamic userId
       templateName,
       templateContent: html,
       templateStyle: css,

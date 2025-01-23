@@ -32,7 +32,8 @@ const Page = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`, // Include the token
+          'client_id': 'user_2rWNWmW7eCWtkDDnyrMIAyV8r6o',
+          'client_secret': 'sec_33e756b23ef296ea272c1e988d382c7fc9352c22daaf5f0cd750be393f800e20',
         },
         body: payload,
       });

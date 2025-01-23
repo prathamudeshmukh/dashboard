@@ -9,7 +9,7 @@ import { db } from '../DB';
 export async function UpsertTemplate({
   templateId,
   description,
-  userId,
+  email,
   templateName,
   templateContent,
   templateSampleData,
@@ -39,7 +39,7 @@ export async function UpsertTemplate({
       // Perform insert
       await db.insert(templates).values({
         description,
-        userId,
+        email,
         templateName,
         templateContent,
         templateSampleData: templateSampleData ? JSON.parse(templateSampleData) : {},
@@ -56,12 +56,12 @@ export async function UpsertTemplate({
   }
 }
 
-export async function fetchTemplates(userId: string) {
+export async function fetchTemplates(email: string) {
   try {
     const userTemplates = await db
       .select()
       .from(templates)
-      .where(eq(templates.userId, userId))
+      .where(eq(templates.email, email))
       .orderBy(desc(templates.id));
     return { success: true, data: userTemplates };
   } catch (error: any) {

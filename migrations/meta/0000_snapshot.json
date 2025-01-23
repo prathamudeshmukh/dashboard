@@ -1,9 +1,60 @@
 {
-  "id": "279eacd0-526c-48a8-bfbc-81e9a3d5f568",
+  "id": "76043c5c-6559-4a68-870c-559c52430e47",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "public.apikeys": {
+      "name": "apikeys",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "client_id": {
+          "name": "client_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "client_secret": {
+          "name": "client_secret",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "apikeys_client_id_users_client_id_fk": {
+          "name": "apikeys_client_id_users_client_id_fk",
+          "tableFrom": "apikeys",
+          "tableTo": "users",
+          "columnsFrom": [
+            "client_id"
+          ],
+          "columnsTo": [
+            "client_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
     "public.organization": {
       "name": "organization",
       "schema": "",
@@ -104,9 +155,9 @@
           "primaryKey": false,
           "notNull": true
         },
-        "user_id": {
-          "name": "user_id",
-          "type": "uuid",
+        "email": {
+          "name": "email",
+          "type": "varchar",
           "primaryKey": false,
           "notNull": true
         },
@@ -144,15 +195,15 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "templates_user_id_users_id_fk": {
-          "name": "templates_user_id_users_id_fk",
+        "templates_email_users_email_fk": {
+          "name": "templates_email_users_email_fk",
           "tableFrom": "templates",
           "tableTo": "users",
           "columnsFrom": [
-            "user_id"
+            "email"
           ],
           "columnsTo": [
-            "id"
+            "email"
           ],
           "onDelete": "cascade",
           "onUpdate": "no action"
@@ -184,6 +235,12 @@
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
+        },
+        "client_id": {
+          "name": "client_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},
@@ -195,6 +252,13 @@
           "nullsNotDistinct": false,
           "columns": [
             "email"
+          ]
+        },
+        "users_client_id_unique": {
+          "name": "users_client_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "client_id"
           ]
         }
       },

@@ -1,5 +1,6 @@
 'use client';
 
+import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import React, { useEffect, useState } from 'react';
@@ -9,13 +10,17 @@ import { TemplateType } from '@/types/Template';
 
 const TemplateTable = () => {
   const [templateData, setTempldateData] = useState<any>();
+  const { user } = useUser();
   const router = useRouter();
 
   const t = useTranslations('TemplateTable');
 
   const fetchTemplateData = async () => {
-    const userId = 'c9ded72d-4cae-4fab-b86c-a084ec7f2ecc'; // Example user ID
-    const response = await fetchTemplates(userId);
+    if (!user) {
+      return;
+    }
+    const email = user?.emailAddresses[0]?.emailAddress; // Example user ID
+    const response = await fetchTemplates(email as string);
     setTempldateData(response.data);
   };
 

@@ -1,9 +1,16 @@
+import { useAuth } from '@clerk/nextjs';
 import { NextResponse } from 'next/server';
 
 import { saveUser } from '@/libs/actions/user';
+import type { User } from '@/types/User';
 
 export async function POST(req: Request) {
   const body = await req.json();
+  const { userId } = useAuth();
+
+  if (!userId) {
+    return;
+  }
 
   // Extract user data from the payload
   const user = body.data;
@@ -16,9 +23,10 @@ export async function POST(req: Request) {
     );
   }
 
-  const newUser = {
+  const newUser: User = {
     email: user.email_addresses[0]?.email_address,
     username: user.first_name,
+    clientId: userId,
   };
 
   try {

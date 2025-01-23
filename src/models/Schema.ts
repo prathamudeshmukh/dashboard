@@ -55,6 +55,7 @@ export const users = pgTable('users', {
   id: uuid('id').primaryKey().defaultRandom(),
   username: varchar('username', { length: 255 }).notNull(),
   email: varchar('email', { length: 255 }).notNull().unique(),
+  clientId: varchar('client_id', { length: 255 }).notNull().unique(), // Clerk user_id
 });
 
 // Templates Table
@@ -62,9 +63,9 @@ export const templates = pgTable('templates', {
   id: uuid('id').primaryKey().defaultRandom(),
   description: varchar('description', { length: 255 }).notNull(),
   templateName: varchar('templateName', { length: 255 }).notNull(),
-  userId: uuid('user_id')
+  email: varchar('email')
     .notNull()
-    .references(() => users.id, { onDelete: 'cascade' }),
+    .references(() => users.email, { onDelete: 'cascade' }),
   templateContent: text('template_content').notNull(),
   templateSampleData: jsonb('template_sample_data'),
   templateStyle: text('template_style'),
@@ -72,14 +73,32 @@ export const templates = pgTable('templates', {
   templateType: templateTypeEnum('template_type').notNull(),
 });
 
+// API Keys Table
+export const apikeys = pgTable('apikeys', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  clientId: varchar('client_id', { length: 255 })
+    .notNull()
+    .references(() => users.clientId, { onDelete: 'cascade' }), // Foreign key to users.clientId
+  clientSecret: varchar('client_secret', { length: 255 }).notNull(), // Hashed client secret
+  createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
-  templates: many(templates),
+  templates: many(templates), // One-to-many relation with templates
+  apikeys: many(apikeys), // One-to-many relation with apikeys
 }));
 
 export const templatesRelations = relations(templates, ({ one }) => ({
   user: one(users, {
-    fields: [templates.userId],
-    references: [users.id],
+    fields: [templates.email],
+    references: [users.email],
+  }),
+}));
+
+export const apikeysRelations = relations(apikeys, ({ one }) => ({
+  user: one(users, {
+    fields: [apikeys.clientId],
+    references: [users.clientId],
   }),
 }));
