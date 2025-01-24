@@ -6,8 +6,7 @@ export function encrypt(text: string): string {
   try {
     return CryptoJS.AES.encrypt(text, ENCRYPTION_KEY).toString();
   } catch (error) {
-    console.error('Encryption error:', error);
-    return text; // Fallback
+    throw new Error(`Encryption error: ${error}`);
   }
 }
 
@@ -15,7 +14,6 @@ export function decrypt(encryptedText: string): string {
   try {
     return CryptoJS.AES.decrypt(encryptedText, ENCRYPTION_KEY).toString(CryptoJS.enc.Utf8);
   } catch (error) {
-    console.error('Decryption error:', error);
-    return encryptedText; // Fallback
+    throw new Error(`Decryption error: ${error}`);
   }
 }
