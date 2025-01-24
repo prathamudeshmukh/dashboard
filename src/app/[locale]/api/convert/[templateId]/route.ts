@@ -6,8 +6,9 @@ import contentGenerator from '@/service/contentGenerator';
 import type { TemplateType } from '@/types/Template';
 
 import { authenticateApi } from '../../authenticateApi';
+import { withApiAuth } from '../../withApiAuth';
 
-export async function POST(req: NextRequest, { params }: { params: { templateId: string } }): Promise< NextResponse > {
+export const POST = withApiAuth(async (req: NextRequest, { params }: { params: { templateId: string } }): Promise<NextResponse> => {
   try {
     const authResult = await authenticateApi(req);
     if (authResult instanceof NextResponse) {
@@ -67,4 +68,4 @@ export async function POST(req: NextRequest, { params }: { params: { templateId:
       { status: 500 },
     );
   }
-}
+});
