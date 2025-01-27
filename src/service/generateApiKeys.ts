@@ -1,10 +1,8 @@
-import crypto from 'node:crypto';
+import CryptoJS from 'crypto-js';
 
 import { encrypt } from './crypto';
 
 export const generateApiKeys = () => {
-  const clientSecret = `cs_${crypto.randomBytes(32).toString('hex')}`;
-
-  // Encrypt the client secret before storing
+  const clientSecret = `cs_${CryptoJS.lib.WordArray.random(32).toString()}`;
   return encrypt(clientSecret);
 };
