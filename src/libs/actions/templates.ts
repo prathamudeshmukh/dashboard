@@ -2,7 +2,8 @@
 
 import { desc, eq } from 'drizzle-orm';
 
-import { templates } from '@/models/Schema';
+import { generated_templates, templates } from '@/models/Schema';
+import type { GeneratedTemplates } from '@/types/Template';
 
 import { db } from '../DB';
 
@@ -85,6 +86,26 @@ export async function fetchTemplateById(templateId: string) {
   } catch (error: any) {
     console.error('Error fetching template:', error);
     return { success: false, error: error.message };
+  }
+}
+
+export async function addGeneratedTemplateHistory({
+  templateId,
+  dataValue,
+}: GeneratedTemplates) {
+  if (!templateId) {
+    throw new Error('Missing templateId');
+  }
+
+  try {
+    await db.insert(generated_templates).values({
+      template_id: templateId,
+      data_value: dataValue || null,
+    });
+
+    return { message: 'History Added for Generated Template' };
+  } catch (error) {
+    throw new Error(`Failed to Create History: ${error}`);
   }
 }
 

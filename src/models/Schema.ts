@@ -73,6 +73,13 @@ export const templates = pgTable('templates', {
   templateType: templateTypeEnum('template_type').notNull(),
 });
 
+export const generated_templates = pgTable('generated_templates', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  generated_date: timestamp('generated_date', { mode: 'date' }).defaultNow().notNull(),
+  template_id: uuid('template_id').notNull().references(() => templates.id, { onDelete: 'cascade' }),
+  data_value: jsonb('data_value'),
+});
+
 // API Keys Table
 export const apikeys = pgTable('apikeys', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -89,11 +96,19 @@ export const usersRelations = relations(users, ({ many }) => ({
   apikeys: many(apikeys), // One-to-many relation with apikeys
 }));
 
-export const templatesRelations = relations(templates, ({ one }) => ({
+export const generatedTemplatesRelations = relations(generated_templates, ({ one }) => ({
+  template: one(templates, {
+    fields: [generated_templates.template_id],
+    references: [templates.id],
+  }),
+}));
+
+export const templatesRelations = relations(templates, ({ one, many }) => ({
   user: one(users, {
     fields: [templates.email],
     references: [users.email],
   }),
+  generated_templates: many(generated_templates),
 }));
 
 export const apikeysRelations = relations(apikeys, ({ one }) => ({
