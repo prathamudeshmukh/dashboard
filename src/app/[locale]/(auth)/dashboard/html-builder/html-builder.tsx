@@ -10,7 +10,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { fetchTemplateById, UpsertTemplate } from '@/libs/actions/templates';
+import { fetchTemplateById, PublishTemplateToProd, UpsertTemplate } from '@/libs/actions/templates';
 import { TemplateType } from '@/types/Template';
 
 const HtmlBuilder = () => {
@@ -93,6 +93,15 @@ const HtmlBuilder = () => {
     }
   };
 
+  const handlePublish = async () => {
+    // Call saveOrUpdateTemplate and let errors bubble up
+    const response = await PublishTemplateToProd(templateId as string);
+
+    if (response) {
+      router.push('/dashboard'); // Redirect after successful save
+    }
+  };
+
   return (
     <div>
       <div className="my-2 flex flex-row justify-between">
@@ -133,6 +142,14 @@ const HtmlBuilder = () => {
           {templateId ? 'Update' : 'Save'}
         </Button>
       </div>
+
+      {templateId && (
+        <div className="mr-4 mt-5 flex justify-end p-1">
+          <Button className="mr-2 rounded border px-2" onClick={handlePublish}>
+            Publish
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
