@@ -75,9 +75,9 @@ const HtmlBuilder = () => {
 
     // Prepare template data
     const templateData = {
-      templateId: templateId || undefined, // Insert or update based on templateId
+      templateId: templateId || undefined,
       description,
-      email: user.emailAddresses[0]?.emailAddress, // Replace with dynamic userId
+      email: user.emailAddresses[0]?.emailAddress,
       templateName,
       templateContent: html,
       templateStyle: css,
@@ -85,20 +85,18 @@ const HtmlBuilder = () => {
       templateType: TemplateType.HTML_BUILDER,
     };
 
-    // Call saveOrUpdateTemplate and let errors bubble up
     const response = await UpsertTemplate(templateData);
 
     if (response.success) {
-      router.push('/dashboard'); // Redirect after successful save
+      router.push('/dashboard');
     }
   };
 
   const handlePublish = async () => {
-    // Call saveOrUpdateTemplate and let errors bubble up
     const response = await PublishTemplateToProd(templateId as string);
 
     if (response) {
-      router.push('/dashboard'); // Redirect after successful save
+      router.push('/dashboard');
     }
   };
 
