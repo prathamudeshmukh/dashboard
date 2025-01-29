@@ -172,7 +172,7 @@ export async function addGeneratedTemplateHistory({
 
     return { message: 'History Added for Generated Template' };
   } catch (error) {
-    throw new Error(`Failed to Create History: ${error}`);
+    return console.error(`Failed to Create History: ${error}`);
   }
 }
 
