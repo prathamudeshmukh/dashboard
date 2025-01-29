@@ -1,0 +1,1 @@
+ALTER TABLE "templates" ADD COLUMN "template_id" uuid DEFAULT gen_random_uuid();

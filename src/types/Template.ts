@@ -15,6 +15,11 @@ export type Template = {
   templateType?: string;
 };
 
+export type GeneratedTemplates = {
+  templateId: string;
+  dataValue?: JsonValue;
+};
+
 export type JsonValue<K extends string | number | symbol = string, V = any> =
   | string
   | number

@@ -10,7 +10,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { fetchTemplateById, UpsertTemplate } from '@/libs/actions/templates';
+import { fetchTemplateById, PublishTemplateToProd, UpsertTemplate } from '@/libs/actions/templates';
 import { TemplateType } from '@/types/Template';
 
 const HtmlBuilder = () => {
@@ -75,9 +75,9 @@ const HtmlBuilder = () => {
 
     // Prepare template data
     const templateData = {
-      templateId: templateId || undefined, // Insert or update based on templateId
+      templateId: templateId || undefined,
       description,
-      email: user.emailAddresses[0]?.emailAddress, // Replace with dynamic userId
+      email: user.emailAddresses[0]?.emailAddress,
       templateName,
       templateContent: html,
       templateStyle: css,
@@ -85,11 +85,18 @@ const HtmlBuilder = () => {
       templateType: TemplateType.HTML_BUILDER,
     };
 
-    // Call saveOrUpdateTemplate and let errors bubble up
     const response = await UpsertTemplate(templateData);
 
     if (response.success) {
-      router.push('/dashboard'); // Redirect after successful save
+      router.push('/dashboard');
+    }
+  };
+
+  const handlePublish = async () => {
+    const response = await PublishTemplateToProd(templateId as string);
+
+    if (response) {
+      router.push('/dashboard');
     }
   };
 
@@ -133,6 +140,14 @@ const HtmlBuilder = () => {
           {templateId ? 'Update' : 'Save'}
         </Button>
       </div>
+
+      {templateId && (
+        <div className="mr-4 mt-5 flex justify-end p-1">
+          <Button className="mr-2 rounded border px-2" onClick={handlePublish}>
+            Publish
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

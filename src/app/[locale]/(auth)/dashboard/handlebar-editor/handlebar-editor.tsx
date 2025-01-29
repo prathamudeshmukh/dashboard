@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { TextArea } from '@/components/ui/text-area';
-import { fetchTemplateById, UpsertTemplate } from '@/libs/actions/templates';
+import { fetchTemplateById, PublishTemplateToProd, UpsertTemplate } from '@/libs/actions/templates';
 import { type JsonValue, TemplateType } from '@/types/Template';
 
 const HandlebarEditor = () => {
@@ -97,6 +97,14 @@ const HandlebarEditor = () => {
     }
   };
 
+  const handlePublish = async () => {
+    const response = await PublishTemplateToProd(templateId as string);
+
+    if (response) {
+      router.push('/dashboard');
+    }
+  };
+
   return (
     <div className="flex space-x-4 p-6">
 
@@ -151,6 +159,7 @@ const HandlebarEditor = () => {
           />
 
           <Button onClick={handleSave}>{templateId ? 'Update' : 'Save'}</Button>
+          {templateId && (<Button onClick={handlePublish}>Publish</Button>)}
         </div>
         <h2 className="mb-2 text-lg font-semibold">{t('preview')}</h2>
         <div className="rounded-md border bg-gray-50 p-4">
