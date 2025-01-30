@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import PuppeteerHTMLPDF from 'puppeteer-html-pdf';
 
-import { fetchTemplateById } from '@/libs/actions/templates';
+import { addGeneratedTemplateHistory, fetchTemplateById } from '@/libs/actions/templates';
 import contentGenerator from '@/service/contentGenerator';
 import type { TemplateType } from '@/types/Template';
 
@@ -24,12 +24,15 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
       );
     }
 
+    const searchParams = req.nextUrl.searchParams;
+    const dev_mode = searchParams.get('dev_mode') === 'true';
+
     // Parse the request body
     const body = await req.json();
-    const { templateData } = body;
+    const { templateData } = body; // Extract dev_mode from body with default false
 
     // Fetch the template by ID
-    const template = await fetchTemplateById(templateId);
+    const template = await fetchTemplateById(templateId, dev_mode);
 
     if (!template || template.error) {
       return NextResponse.json(
@@ -53,6 +56,8 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
 
     // Generate the PDF
     const pdfBuffer = await htmlPdf.create(content);
+
+    await addGeneratedTemplateHistory({ templateId: template.data?.id as string, dataValue: templateData });
 
     // Return the binary PDF file in the response
     return new NextResponse(pdfBuffer, {

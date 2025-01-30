@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX IF NOT EXISTS "unique_template_id_environment" ON "templates" USING btree ("template_id","environment");
