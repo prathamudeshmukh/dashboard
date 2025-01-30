@@ -1,6 +1,6 @@
 'use server';
 
-import { and, desc, eq } from 'drizzle-orm';
+import { and, desc, eq, sql } from 'drizzle-orm';
 
 import { generated_templates, templates } from '@/models/Schema';
 import type { GeneratedTemplates } from '@/types/Template';
@@ -23,25 +23,8 @@ export async function UpsertTemplate({
   }
 
   try {
-    if (templateId) {
-      // Perform update
-      await db
-        .update(templates)
-        .set({
-          ...(description && { description }),
-          templateContent,
-          templateStyle,
-          templateSampleData: templateSampleData ? JSON.parse(templateSampleData) : {},
-        })
-        .where(and(
-          eq(templates.templateId, templateId),
-          eq(templates.environment, 'dev'),
-        ));
-
-      return { success: true, message: 'Template updated successfully' };
-    } else {
-      // Perform insert
-      await db.insert(templates).values({
+    await db.insert(templates)
+      .values({
         description,
         email,
         templateName,
@@ -50,13 +33,28 @@ export async function UpsertTemplate({
         templateStyle,
         assets: assets ? JSON.parse(assets) : null,
         templateType,
+        templateId: templateId || undefined,
+        environment: 'dev',
+      })
+      .onConflictDoUpdate({
+        target: [templates.templateId, templates.environment],
+        set: {
+          description,
+          templateContent,
+          templateStyle,
+          templateSampleData: templateSampleData ? JSON.parse(templateSampleData) : {},
+          updatedAt: sql`now()`,
+        },
+        where: eq(templates.environment, 'dev'),
       });
 
-      return { success: true, message: 'Template saved successfully' };
-    }
+    return {
+      success: true,
+      message: templateId ? 'Template updated successfully' : 'Template saved successfully',
+    };
   } catch (error: any) {
-    console.error(`Error ${templateId ? 'updating' : 'saving'} template:`, error);
-    throw new Error(`Failed to ${templateId ? 'update' : 'save'} template: ${error.message}`);
+    console.error(`Error upserting template:`, error);
+    throw new Error(`Failed to upsert template: ${error.message}`);
   }
 }
 
@@ -74,46 +72,36 @@ export async function PublishTemplateToProd(templateId: string) {
       throw new Error('Development template not found');
     }
 
-    // Check if prod version exists
-    const prodTemplate = await db.query.templates.findFirst({
-      where: and(
-        eq(templates.templateId, devTemplate.templateId as string),
-        eq(templates.environment, 'prod'),
-      ),
-    });
+    await db.insert(templates)
+      .values({
+        templateId: devTemplate.templateId,
+        description: devTemplate.description,
+        templateName: devTemplate.templateName,
+        email: devTemplate.email,
+        templateContent: devTemplate.templateContent,
+        templateSampleData: devTemplate.templateSampleData,
+        templateStyle: devTemplate.templateStyle,
+        assets: devTemplate.assets,
+        templateType: devTemplate.templateType,
+        environment: 'prod' as const,
+      })
+      .onConflictDoUpdate({
+        target: [templates.templateId, templates.environment],
+        set: {
+          description: devTemplate.description,
+          templateName: devTemplate.templateName,
+          email: devTemplate.email,
+          templateContent: devTemplate.templateContent,
+          templateSampleData: devTemplate.templateSampleData,
+          templateStyle: devTemplate.templateStyle,
+          assets: devTemplate.assets,
+          templateType: devTemplate.templateType,
+          updatedAt: sql`now()`,
+        },
+        where: eq(templates.environment, 'prod'),
+      });
 
-    // Prepare the template data
-    const templateData = {
-      templateId: devTemplate.templateId,
-      description: devTemplate.description,
-      templateName: devTemplate.templateName,
-      email: devTemplate.email,
-      templateContent: devTemplate.templateContent,
-      templateSampleData: devTemplate.templateSampleData,
-      templateStyle: devTemplate.templateStyle,
-      assets: devTemplate.assets,
-      templateType: devTemplate.templateType,
-      environment: 'prod' as const,
-    };
-
-    if (prodTemplate) {
-      // Update existing prod template
-      await db.update(templates)
-        .set(templateData)
-        .where(
-          and(
-            eq(templates.templateId, devTemplate.templateId as string),
-            eq(templates.environment, 'prod'),
-          ),
-        );
-
-      return { message: 'Template published to production updated successfully' };
-    } else {
-      // Create new prod template
-      await db.insert(templates).values(templateData);
-
-      return { message: 'Template published to production successfully' };
-    }
+    return { message: 'Template published to production successfully' };
   } catch (error) {
     throw new Error(`Failed to publish template to production: ${error}`);
   }

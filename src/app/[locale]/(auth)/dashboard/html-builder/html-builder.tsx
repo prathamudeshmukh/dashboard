@@ -92,7 +92,7 @@ const HtmlBuilder = () => {
     }
   };
 
-  const handlePublish = async () => {
+  const publishTemplateToProd = async () => {
     const response = await PublishTemplateToProd(templateId as string);
 
     if (response) {
@@ -143,7 +143,7 @@ const HtmlBuilder = () => {
 
       {templateId && (
         <div className="mr-4 mt-5 flex justify-end p-1">
-          <Button className="mr-2 rounded border px-2" onClick={handlePublish}>
+          <Button className="mr-2 rounded border px-2" onClick={publishTemplateToProd}>
             Publish
           </Button>
         </div>

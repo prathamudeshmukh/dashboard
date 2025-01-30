@@ -97,7 +97,7 @@ const HandlebarEditor = () => {
     }
   };
 
-  const handlePublish = async () => {
+  const publishTemplateToProd = async () => {
     const response = await PublishTemplateToProd(templateId as string);
 
     if (response) {
@@ -159,7 +159,7 @@ const HandlebarEditor = () => {
           />
 
           <Button onClick={handleSave}>{templateId ? 'Update' : 'Save'}</Button>
-          {templateId && (<Button onClick={handlePublish}>Publish</Button>)}
+          {templateId && (<Button onClick={publishTemplateToProd}>Publish</Button>)}
         </div>
         <h2 className="mb-2 text-lg font-semibold">{t('preview')}</h2>
         <div className="rounded-md border bg-gray-50 p-4">
