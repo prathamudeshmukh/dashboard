@@ -26,7 +26,7 @@ const TemplateTable = () => {
 
   useEffect(() => {
     fetchTemplateData();
-  }, []);
+  }, [user]);
 
   const handleEdit = (templateId: string, templateType: string) => {
     if (templateType === TemplateType.HTML_BUILDER) {
@@ -67,15 +67,15 @@ const TemplateTable = () => {
         <tbody>
           {templateData?.map((template: any) => (
             <tr key={template.id} className="hover:bg-gray-100">
-              <td className="border border-gray-300 px-4 py-2">{template.id}</td>
+              <td className="border border-gray-300 px-4 py-2">{template.templateId}</td>
               <td className="border border-gray-300 px-4 py-2">{template.templateName}</td>
               <td className="border border-gray-300 px-4 py-2">{template.description}</td>
               <td className="border border-gray-300 px-4 py-2">{template.templateType}</td>
               <td className="border border-gray-300 px-4 py-2">
-                <button onClick={() => handleEdit(template.id, template.templateType)} className="mr-2 rounded bg-blue-500 px-4 py-1 text-white hover:bg-blue-600">
+                <button onClick={() => handleEdit(template.templateId, template.templateType)} className="mr-2 rounded bg-blue-500 px-4 py-1 text-white hover:bg-blue-600">
                   {t('edit')}
                 </button>
-                <button onClick={() => handleDelete(template.id)} className="rounded bg-red-500 px-4 py-1 text-white hover:bg-red-600">
+                <button onClick={() => handleDelete(template.templateId)} className="rounded bg-red-500 px-4 py-1 text-white hover:bg-red-600">
                   {t('delete')}
                 </button>
               </td>

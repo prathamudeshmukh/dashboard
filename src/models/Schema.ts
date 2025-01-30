@@ -50,6 +50,8 @@ export const organizationSchema = pgTable(
 
 const templateTypeEnum = pgEnum('template_type', ['html-builder', 'handlebars-template']);
 
+export const environmentEnum = pgEnum('environment', ['prod', 'dev']);
+
 // Users Table
 export const users = pgTable('users', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -61,6 +63,7 @@ export const users = pgTable('users', {
 // Templates Table
 export const templates = pgTable('templates', {
   id: uuid('id').primaryKey().defaultRandom(),
+  templateId: uuid('template_id').defaultRandom(),
   description: varchar('description', { length: 255 }).notNull(),
   templateName: varchar('templateName', { length: 255 }).notNull(),
   email: varchar('email')
@@ -71,7 +74,20 @@ export const templates = pgTable('templates', {
   templateStyle: text('template_style'),
   assets: jsonb('assets'),
   templateType: templateTypeEnum('template_type').notNull(),
-});
+  environment: environmentEnum('environment').notNull().default('dev'),
+  createdAt: timestamp('created_at', { mode: 'date' })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp('updated_at', { mode: 'date' })
+    .defaultNow()
+    .$onUpdateFn(() => new Date())
+    .notNull(),
+}, table => ({
+  templateEnvUnique: uniqueIndex('unique_template_id_environment').on(
+    table.templateId,
+    table.environment,
+  ),
+}));
 
 export const generated_templates = pgTable('generated_templates', {
   id: uuid('id').primaryKey().defaultRandom(),
