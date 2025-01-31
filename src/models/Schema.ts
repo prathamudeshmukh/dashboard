@@ -82,7 +82,12 @@ export const templates = pgTable('templates', {
     .defaultNow()
     .$onUpdateFn(() => new Date())
     .notNull(),
-});
+}, table => ({
+  templateEnvUnique: uniqueIndex('unique_template_id_environment').on(
+    table.templateId,
+    table.environment,
+  ),
+}));
 
 export const generated_templates = pgTable('generated_templates', {
   id: uuid('id').primaryKey().defaultRandom(),
