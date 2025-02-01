@@ -33,6 +33,12 @@ jobs:
           cache: npm
       - run: HUSKY=0 npm ci
 
+      # Run database migrations for production
+      - name: Run database migrations
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL_PRODUCTION }}
+        run: npm run db:migrate
+
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
