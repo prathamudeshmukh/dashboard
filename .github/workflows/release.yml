@@ -36,7 +36,7 @@ jobs:
       # Run database migrations for production
       - name: Run database migrations
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL_PRODUCTION }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: npm run db:migrate
 
       - name: Release

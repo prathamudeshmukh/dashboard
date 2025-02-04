@@ -1,9 +1,9 @@
 'use server';
 
-import { and, desc, eq, sql } from 'drizzle-orm';
+import { and, count, desc, eq, sql } from 'drizzle-orm';
 
 import { generated_templates, templates } from '@/models/Schema';
-import type { GeneratedTemplates } from '@/types/Template';
+import type { GeneratedTemplates, JsonObject, PaginatedResponse } from '@/types/Template';
 
 import { db } from '../DB';
 
@@ -161,6 +161,51 @@ export async function addGeneratedTemplateHistory({
     return { message: 'History Added for Generated Template' };
   } catch (error) {
     return console.error(`Failed to Create History: ${error}`);
+  }
+}
+
+export async function fetchUsageMetrics(
+  email: string,
+  page: number = 1,
+  pageSize: number = 10,
+): Promise<PaginatedResponse> {
+  try {
+    if (!email) {
+      throw new Error ('Please Provide email id');
+    }
+    const offset = (page - 1) * pageSize;
+
+    const totalRecords = await db
+      .select({ count: count() })
+      .from(generated_templates)
+      .innerJoin(templates, eq(generated_templates.template_id, templates.id))
+      .where(eq(templates.email, email))
+      .then(result => result[0]?.count ?? 0);
+
+    const metrics = await db
+      .select({
+        generatedDate: generated_templates.generated_date,
+        templateName: templates.templateName,
+        email: templates.email,
+        data: generated_templates.data_value as JsonObject,
+      })
+      .from(generated_templates)
+      .innerJoin(templates, eq(generated_templates.template_id, templates.id))
+      .where(eq(templates.email, email))
+      .limit(pageSize)
+      .offset(offset);
+
+    const totalPages = Math.ceil(totalRecords / pageSize);
+
+    return {
+      data: metrics,
+      total: totalRecords,
+      page,
+      pageSize,
+      totalPages,
+    };
+  } catch (error) {
+    throw new Error (`Failed to fetch usage metrics: ${error}`);
   }
 }
 

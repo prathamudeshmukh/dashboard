@@ -15,6 +15,21 @@ export type Template = {
   templateType?: string;
 };
 
+export type UsageMetric = {
+  generatedDate: Date;
+  templateName: string;
+  email: string;
+  data?: JsonObject;
+};
+
+export type PaginatedResponse = {
+  data: any;
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+};
+
 export type GeneratedTemplates = {
   templateId: string;
   dataValue?: JsonValue;
@@ -28,7 +43,7 @@ export type JsonValue<K extends string | number | symbol = string, V = any> =
   | JsonObject<K, V>
   | JsonArray<K, V>;
 
-type JsonObject<K extends string | number | symbol = string, V = any> = {
+export type JsonObject<K extends string | number | symbol = string, V = any> = {
   [key in K]?: V | JsonValue<K, V>;
 };
 
