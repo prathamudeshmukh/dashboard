@@ -1,8 +1,10 @@
 'use client';
 
+import { endOfDay } from 'date-fns';
 import { useTranslations } from 'next-intl';
 import React, { useEffect, useState } from 'react';
 
+import { Button } from '@/components/ui/button';
 import { TextArea } from '@/components/ui/text-area';
 import { fetchUsageMetrics } from '@/libs/actions/templates';
 import type { UsageMetric } from '@/types/Template';
@@ -12,6 +14,8 @@ const UsageMetrics = ({ email }: { email: string }) => {
   const [metrics, setMetrics] = useState<UsageMetric[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+  const [startDate, setStartDate] = useState<string>('');
+  const [endDate, setEndDate] = useState<string>('');
 
   useEffect(() => {
     const loadMetrics = async () => {
@@ -19,13 +23,18 @@ const UsageMetrics = ({ email }: { email: string }) => {
         return;
       }
 
-      const data = await fetchUsageMetrics(email, page);
+      const data = await fetchUsageMetrics({
+        email,
+        page,
+        startDate: startDate ? new Date(startDate) : undefined,
+        endDate: endDate ? endOfDay(new Date(endDate)) : undefined,
+      });
       setMetrics(data.data);
       setTotalPages(data.totalPages);
     };
 
     loadMetrics();
-  }, [email, page]);
+  }, [email, page, startDate, endDate]);
 
   const handleNextPage = () => {
     if (page < totalPages) {
@@ -39,6 +48,12 @@ const UsageMetrics = ({ email }: { email: string }) => {
     }
   };
 
+  const handleDateFilterReset = () => {
+    setStartDate('');
+    setEndDate('');
+    setPage(1);
+  };
+
   return (
     <div className="overflow-x-auto">
       <h2 className="mb-4 text-2xl font-bold">
@@ -46,6 +61,36 @@ const UsageMetrics = ({ email }: { email: string }) => {
         {' '}
         {email}
       </h2>
+
+      <div className="mb-4 flex items-center gap-4">
+        <div>
+          <label htmlFor="startDateLabel" className="block text-sm font-medium">Start Date: </label>
+          <input
+            type="date"
+            value={startDate}
+            onChange={e => setStartDate(e.target.value)}
+            className="w-full rounded border p-2"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="endDateLabel" className="block text-sm font-medium">End Date: </label>
+          <input
+            type="date"
+            value={endDate}
+            onChange={e => setEndDate(e.target.value)}
+            className="w-full rounded border p-2"
+          />
+        </div>
+
+        <Button
+          onClick={handleDateFilterReset}
+          className="self-end rounded bg-gray-500 px-4 py-2 text-white"
+        >
+          Reset Filters
+        </Button>
+      </div>
+
       {metrics.length === 0
         ? (
             <p>{t('table_fallback')}</p>
@@ -56,9 +101,9 @@ const UsageMetrics = ({ email }: { email: string }) => {
                 <thead>
                   <tr className="bg-gray-200">
                     <th className="border border-gray-300 p-2 px-4">{t('date_time')}</th>
-                    <th className="border border-gray-300 p-2 px-4">{t('templateName')}</th>
+                    <th className="border border-gray-300 p-2 px-4">{t('template_name')}</th>
                     <th className="border border-gray-300 p-2 px-4">{t('user')}</th>
-                    <th className="border border-gray-300 p-2 px-4">{t('data')}</th>
+                    <th className="border border-gray-300 p-2 px-4">{t('input_data')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -81,31 +126,31 @@ const UsageMetrics = ({ email }: { email: string }) => {
 
               {/* Pagination Controls */}
               <div className="mt-4 flex justify-between">
-                <button
-                  type="button"
+                <Button
                   onClick={handlePreviousPage}
                   disabled={page === 1}
-                  className={`rounded px-4 py-2 ${page === 1 ? 'cursor-not-allowed bg-gray-300' : 'bg-blue-500 text-white'
+                  className={`rounded px-4 py-2 ${page === 1 ? 'cursor-not-allowed bg-gray-300 text-black' : 'bg-blue-500 text-white'
                   }`}
                 >
                   Previous
-                </button>
+                </Button>
                 <span className="text-lg">
                   Page
+                  {' '}
                   {page}
                   {' '}
                   of
+                  {' '}
                   {totalPages}
                 </span>
-                <button
-                  type="button"
+                <Button
                   onClick={handleNextPage}
                   disabled={page === totalPages}
-                  className={`rounded px-4 py-2 ${page === totalPages ? 'cursor-not-allowed bg-gray-300' : 'bg-blue-500 text-white'
+                  className={`rounded px-4 py-2 ${page === totalPages ? 'cursor-not-allowed bg-gray-300 text-black' : 'bg-blue-500 text-white'
                   }`}
                 >
                   Next
-                </button>
+                </Button>
               </div>
             </>
           )}

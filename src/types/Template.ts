@@ -22,8 +22,16 @@ export type UsageMetric = {
   data?: JsonObject;
 };
 
+export type UsageMetricRequest = {
+  email: string;
+  page: number;
+  pageSize?: number;
+  startDate?: Date;
+  endDate?: Date;
+};
+
 export type PaginatedResponse = {
-  data: any;
+  data: UsageMetric[];
   total: number;
   page: number;
   pageSize: number;

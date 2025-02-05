@@ -186,8 +186,8 @@
     "title": "Usage Metrics for",
     "table_fallback": "No usage data found",
     "date_time": "Date & Time",
-    "templateName": "Template Name",
+    "template_name": "Template Name",
     "user": "User",
-    "data": "Data"
+    "input_data": "Input Data"
   }
 }

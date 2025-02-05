@@ -1,9 +1,9 @@
 'use server';
 
-import { and, count, desc, eq, sql } from 'drizzle-orm';
+import { and, desc, eq, gte, lte, sql } from 'drizzle-orm';
 
 import { generated_templates, templates } from '@/models/Schema';
-import type { GeneratedTemplates, JsonObject, PaginatedResponse } from '@/types/Template';
+import type { GeneratedTemplates, JsonObject, PaginatedResponse, UsageMetricRequest } from '@/types/Template';
 
 import { db } from '../DB';
 
@@ -164,23 +164,28 @@ export async function addGeneratedTemplateHistory({
   }
 }
 
-export async function fetchUsageMetrics(
-  email: string,
-  page: number = 1,
-  pageSize: number = 10,
-): Promise<PaginatedResponse> {
+export async function fetchUsageMetrics({
+  email,
+  page = 1,
+  pageSize = 10,
+  startDate,
+  endDate,
+}: UsageMetricRequest): Promise<PaginatedResponse> {
   try {
     if (!email) {
-      throw new Error ('Please Provide email id');
+      throw new Error('Please Provide email id');
     }
     const offset = (page - 1) * pageSize;
 
-    const totalRecords = await db
-      .select({ count: count() })
-      .from(generated_templates)
-      .innerJoin(templates, eq(generated_templates.template_id, templates.id))
-      .where(eq(templates.email, email))
-      .then(result => result[0]?.count ?? 0);
+    const conditions = [eq(templates.email, email)];
+
+    if (startDate) {
+      conditions.push(gte(generated_templates.generated_date, startDate));
+    }
+
+    if (endDate) {
+      conditions.push(lte(generated_templates.generated_date, endDate));
+    }
 
     const metrics = await db
       .select({
@@ -188,12 +193,15 @@ export async function fetchUsageMetrics(
         templateName: templates.templateName,
         email: templates.email,
         data: generated_templates.data_value as JsonObject,
+        totalRecords: sql<number>`COUNT(*) OVER()`,
       })
       .from(generated_templates)
       .innerJoin(templates, eq(generated_templates.template_id, templates.id))
-      .where(eq(templates.email, email))
+      .where(and(...conditions))
       .limit(pageSize)
       .offset(offset);
+
+    const totalRecords = metrics[0]?.totalRecords || 0;
 
     const totalPages = Math.ceil(totalRecords / pageSize);
 
@@ -205,7 +213,7 @@ export async function fetchUsageMetrics(
       totalPages,
     };
   } catch (error) {
-    throw new Error (`Failed to fetch usage metrics: ${error}`);
+    throw new Error(`Failed to fetch usage metrics: ${error}`);
   }
 }
 
