@@ -34,7 +34,7 @@ jobs:
 
       - run: npm run build
         env:
-          DATABASE_URL: ${{ secrects.DATABASE_URL }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
   test:
     strategy:
