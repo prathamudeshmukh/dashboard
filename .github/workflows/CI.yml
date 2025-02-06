@@ -32,7 +32,7 @@ jobs:
       - run: npm ci
 
       - name: Set Preview Environment Variables for PRs
-        if: github.event_name == 'pull_request' && github.base_ref == 'main'
+        if: github.event_name == 'pull_request' && github.base_ref == 'main' || github.event_name == 'push' && github.base_ref == 'develop'
         run: |
           echo "CLERK_SECRET_KEY=${{ secrets.PREVIEW_CLERK_SECRET_KEY }}" >> $GITHUB_ENV
           echo "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${{ secrets.PREVIEW_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}" >> $GITHUB_ENV
@@ -43,7 +43,7 @@ jobs:
 
       # TODO: Run database migration only on develop or main branch
       - name: Run databse migrations
-        if: github.ref == 'refs/heads/develop'
+        if: github.event_name == 'push'
         run: npm run db:migrate
 
       - run: npm run build
