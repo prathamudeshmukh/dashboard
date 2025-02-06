@@ -1,9 +1,10 @@
 'use client';
 
-import { endOfDay } from 'date-fns';
+import { endOfDay, startOfDay } from 'date-fns';
 import { useTranslations } from 'next-intl';
 import React, { useEffect, useState } from 'react';
 
+import PaginationControls from '@/components/PaginationControls';
 import { Button } from '@/components/ui/button';
 import { TextArea } from '@/components/ui/text-area';
 import { fetchUsageMetrics } from '@/libs/actions/templates';
@@ -26,7 +27,7 @@ const UsageMetrics = ({ email }: { email: string }) => {
       const data = await fetchUsageMetrics({
         email,
         page,
-        startDate: startDate ? new Date(startDate) : undefined,
+        startDate: startDate ? startOfDay(new Date(startDate)) : undefined,
         endDate: endDate ? endOfDay(new Date(endDate)) : undefined,
       });
       setMetrics(data.data);
@@ -125,33 +126,12 @@ const UsageMetrics = ({ email }: { email: string }) => {
               </table>
 
               {/* Pagination Controls */}
-              <div className="mt-4 flex justify-between">
-                <Button
-                  onClick={handlePreviousPage}
-                  disabled={page === 1}
-                  className={`rounded px-4 py-2 ${page === 1 ? 'cursor-not-allowed bg-gray-300 text-black' : 'bg-blue-500 text-white'
-                  }`}
-                >
-                  Previous
-                </Button>
-                <span className="text-lg">
-                  Page
-                  {' '}
-                  {page}
-                  {' '}
-                  of
-                  {' '}
-                  {totalPages}
-                </span>
-                <Button
-                  onClick={handleNextPage}
-                  disabled={page === totalPages}
-                  className={`rounded px-4 py-2 ${page === totalPages ? 'cursor-not-allowed bg-gray-300 text-black' : 'bg-blue-500 text-white'
-                  }`}
-                >
-                  Next
-                </Button>
-              </div>
+              <PaginationControls
+                page={page}
+                totalPages={totalPages}
+                onNext={handleNextPage}
+                onPrevious={handlePreviousPage}
+              />
             </>
           )}
     </div>
