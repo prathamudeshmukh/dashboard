@@ -66,6 +66,15 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: npm
       - run: npm ci
+      - name: Set Preview Environment Variables for PRs
+        if: github.event_name == 'pull_request' && github.base_ref == 'main' || github.event_name == 'push' && github.base_ref == 'develop'
+        run: |
+          echo "CLERK_SECRET_KEY=${{ secrets.PREVIEW_CLERK_SECRET_KEY }}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${{ secrets.PREVIEW_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}" >> $GITHUB_ENV
+          echo "CLERK_WEBHOOK_SECRET=${{ secrets.PREVIEW_CLERK_WEBHOOK_SECRET }}" >> $GITHUB_ENV
+          echo "ENCRYPTION_KEY=${{ secrets.PREVIEW_ENCRYPTION_KEY }}" >> $GITHUB_ENV
+          echo "GRAPE_STUDIO_KEY=${{ secrets.PREVIEW_GRAPE_STUDIO_KEY }}" >> $GITHUB_ENV
+          echo "DATABASE_URL=${{ secrets.PREVIEW_DATABASE_URL }}" >> $GITHUB_ENV
 
       - name: Build Next.js for E2E tests
         run: npm run build
