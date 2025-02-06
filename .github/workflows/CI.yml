@@ -4,8 +4,14 @@ on:
   push:
     branches: [main, develop]
   pull_request:
-    branches: [main, develop]
-
+    branches: [main]
+env:
+  CLERK_SECRET_KEY: ${{ secrets.PRODUCTION_CLERK_SECRET_KEY }}
+  NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.PRODUCTION_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
+  CLERK_WEBHOOK_SECRET: ${{ secrets.PRODUCTION_CLERK_WEBHOOK_SECRET }}
+  ENCRYPTION_KEY: ${{ secrets.PRODUCTION_ENCRYPTION_KEY }}
+  GRAPE_STUDIO_KEY: ${{ secrets.PRODUCTION_GRAPE_STUDIO_KEY }}
+  DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
 jobs:
   build:
     strategy:
@@ -25,18 +31,22 @@ jobs:
           cache: npm
       - run: npm ci
 
-      # Run database migration only on develop or main branch
+      - name: Set Preview Environment Variables for PRs
+        if: github.event_name == 'pull_request' && github.base_ref == 'main'
+        run: |
+          echo "CLERK_SECRET_KEY=${{ secrets.PREVIEW_CLERK_SECRET_KEY }}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${{ secrets.PREVIEW_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}" >> $GITHUB_ENV
+          echo "CLERK_WEBHOOK_SECRET=${{ secrets.PREVIEW_CLERK_WEBHOOK_SECRET }}" >> $GITHUB_ENV
+          echo "ENCRYPTION_KEY=${{ secrets.PREVIEW_ENCRYPTION_KEY }}" >> $GITHUB_ENV
+          echo "GRAPE_STUDIO_KEY=${{ secrets.PREVIEW_GRAPE_STUDIO_KEY }}" >> $GITHUB_ENV
+          echo "DATABASE_URL=${{ secrets.PREVIEW_DATABASE_URL }}" >> $GITHUB_ENV
+
+      # TODO: Run database migration only on develop or main branch
       - name: Run databse migrations
         if: github.ref == 'refs/heads/develop'
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: npm run db:migrate
 
-      - run: NEXT_DEBUG=true npm run build
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
-          CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
+      - run: npm run build
 
   test:
     strategy:
