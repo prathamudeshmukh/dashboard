@@ -39,7 +39,7 @@ export default withSentryConfig(
     // Only print logs for uploading source maps in CI
     silent: !process.env.CI,
 
-    // For all available options, see:
+    // For all available options,
     // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
 
     // Upload a larger set of source maps for prettier stack traces (increases build time)
