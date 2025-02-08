@@ -5,7 +5,7 @@
     "dev:spotlight": "spotlight-sidecar",
     "dev:next": "next dev",
     "dev": "run-p dev:*",
-    "build": "next build",
+    "build": "next build --debug",
     "start": "next start",
     "build-stats": "cross-env ANALYZE=true npm run build",
     "clean": "rimraf .next out coverage",
