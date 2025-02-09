@@ -62,7 +62,7 @@ const TemplateTable = () => {
       toast.success('Template Deleted Successfully');
       fetchTemplateData();
     } else {
-      toast.success(`Failed to delete template: ${response.error}`);
+      toast.error(`Failed to delete template: ${response.error}`);
     }
     setSelectedTemplateId(null);
   };
