@@ -181,5 +181,13 @@
     "template": "Template",
     "input_data": "Input Data (JSON)",
     "preview": "Preview"
+  },
+  "UsageMetrics": {
+    "title": "Usage Metrics for",
+    "table_fallback": "No usage data found",
+    "date_time": "Date & Time",
+    "template_name": "Template Name",
+    "user": "User",
+    "input_data": "Input Data"
   }
 }

@@ -119,10 +119,24 @@ const HtmlBuilder = () => {
           className="w-1/3 border border-gray-300"
         />
 
+        <div className="mr-4 flex justify-end p-1">
+          <Button className="mr-2 rounded border px-2" onClick={handleSave}>
+            {templateId ? 'Update' : 'Save'}
+          </Button>
+        </div>
+
+        {templateId && (
+          <div className="mr-4  flex justify-end p-1">
+            <Button className="mr-2 rounded border px-2" onClick={publishTemplateToProd}>
+              Publish
+            </Button>
+          </div>
+        )}
+
       </div>
 
       <StudioEditor
-        style={{ height: '500px', width: '100%' }}
+        style={{ height: '600px', width: '100%' }}
         onReady={onReady}
         options={{
           licenseKey: process.env.GRAPE_STUDIO_KEY as string,
@@ -135,19 +149,7 @@ const HtmlBuilder = () => {
           },
         }}
       />
-      <div className="mr-4 mt-5 flex justify-end p-1">
-        <Button className="mr-2 rounded border px-2" onClick={handleSave}>
-          {templateId ? 'Update' : 'Save'}
-        </Button>
-      </div>
 
-      {templateId && (
-        <div className="mr-4 mt-5 flex justify-end p-1">
-          <Button className="mr-2 rounded border px-2" onClick={publishTemplateToProd}>
-            Publish
-          </Button>
-        </div>
-      )}
     </div>
   );
 };
