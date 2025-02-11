@@ -146,6 +146,10 @@ const HtmlBuilder = () => {
           settingsMenu: false,
           project: {
             type: 'web',
+            id: user?.id,
+          },
+          identity: {
+            id: user?.id,
           },
         }}
       />
