@@ -1,9 +1,9 @@
 'use server';
 
-import { and, desc, eq, sql } from 'drizzle-orm';
+import { and, desc, eq, gte, lte, sql } from 'drizzle-orm';
 
 import { generated_templates, templates } from '@/models/Schema';
-import type { GeneratedTemplates } from '@/types/Template';
+import type { GeneratedTemplates, JsonObject, PaginatedResponse, UsageMetricRequest } from '@/types/Template';
 
 import { db } from '../DB';
 
@@ -161,6 +161,59 @@ export async function addGeneratedTemplateHistory({
     return { message: 'History Added for Generated Template' };
   } catch (error) {
     return console.error(`Failed to Create History: ${error}`);
+  }
+}
+
+export async function fetchUsageMetrics({
+  email,
+  page = 1,
+  pageSize = 10,
+  startDate,
+  endDate,
+}: UsageMetricRequest): Promise<PaginatedResponse> {
+  try {
+    if (!email) {
+      throw new Error('Please Provide email id');
+    }
+    const offset = (page - 1) * pageSize;
+
+    const conditions = [eq(templates.email, email)];
+
+    if (startDate) {
+      conditions.push(gte(generated_templates.generated_date, startDate));
+    }
+
+    if (endDate) {
+      conditions.push(lte(generated_templates.generated_date, endDate));
+    }
+
+    const metrics = await db
+      .select({
+        generatedDate: generated_templates.generated_date,
+        templateName: templates.templateName,
+        email: templates.email,
+        data: generated_templates.data_value as JsonObject,
+        totalRecords: sql<number>`COUNT(*) OVER()`,
+      })
+      .from(generated_templates)
+      .innerJoin(templates, eq(generated_templates.template_id, templates.id))
+      .where(and(...conditions))
+      .limit(pageSize)
+      .offset(offset);
+
+    const totalRecords = metrics[0]?.totalRecords || 0;
+
+    const totalPages = Math.ceil(totalRecords / pageSize);
+
+    return {
+      data: metrics,
+      total: totalRecords,
+      page,
+      pageSize,
+      totalPages,
+    };
+  } catch (error) {
+    throw new Error(`Failed to fetch usage metrics: ${error}`);
   }
 }
 

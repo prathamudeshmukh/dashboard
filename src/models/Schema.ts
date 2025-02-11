@@ -1,6 +1,7 @@
 import { relations } from 'drizzle-orm';
 import {
   bigint,
+  index,
   jsonb,
   pgEnum,
   pgTable,
@@ -87,6 +88,7 @@ export const templates = pgTable('templates', {
     table.templateId,
     table.environment,
   ),
+  emailIndex: index('template_email_idx').on(table.email),
 }));
 
 export const generated_templates = pgTable('generated_templates', {
@@ -94,7 +96,10 @@ export const generated_templates = pgTable('generated_templates', {
   generated_date: timestamp('generated_date', { mode: 'date' }).defaultNow().notNull(),
   template_id: uuid('template_id').notNull().references(() => templates.id, { onDelete: 'cascade' }),
   data_value: jsonb('data_value'),
-});
+}, table => ({
+  dateIndex: index('generated_templates_generated_date_idx').on(table.generated_date),
+  templateIdIndex: index('generated_templates_template_id_idx').on(table.template_id),
+}));
 
 // API Keys Table
 export const apikeys = pgTable('apikeys', {

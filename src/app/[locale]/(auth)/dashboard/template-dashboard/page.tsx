@@ -17,7 +17,7 @@ const TemplateDashboard = () => {
         <button
           onClick={() => setActiveTab('html')}
           className={`rounded-sm px-4 py-2 shadow-sm ${
-            activeTab === 'html' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'
+            activeTab === 'html' ? 'bg-primary text-white' : 'bg-gray-200 text-gray-800'
           }`}
         >
           HTML Builder
@@ -25,7 +25,7 @@ const TemplateDashboard = () => {
         <button
           onClick={() => setActiveTab('handlebars')}
           className={`rounded-sm px-4 py-2 shadow-sm ${
-            activeTab === 'handlebars' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'
+            activeTab === 'handlebars' ? 'bg-primary text-white' : 'bg-gray-200 text-gray-800'
           }`}
         >
           Handlebars Playground
