@@ -3,11 +3,15 @@
 import { useUser } from '@clerk/nextjs';
 import { Pencil2Icon, TrashIcon } from '@radix-ui/react-icons';
 import type { ColumnDef } from '@tanstack/react-table';
+import { endOfDay, startOfDay } from 'date-fns';
+import { debounce } from 'lodash';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import type { DateRange } from 'react-day-picker';
 import { toast } from 'sonner';
 
+import { DatePickerWithRange } from '@/components/DatePickerWithRange';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,29 +25,54 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/data-table';
+import { Input } from '@/components/ui/input';
 import { deleteTemplate, fetchTemplates } from '@/libs/actions/templates';
 import { type Template, TemplateType } from '@/types/Template';
 
 const TemplateTable = () => {
-  const [templateData, setTempldateData] = useState<any>([]);
+  const [templateData, setTemplateData] = useState<any>([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
   const { user } = useUser();
-  const router = useRouter(); //
+  const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState<string>('');
+
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({
+    from: undefined,
+    to: undefined,
+  });
 
   const t = useTranslations('TemplateTable');
 
-  const fetchTemplateData = async () => {
+  const debouncedFetchTemplates = useCallback(
+    debounce(async (email, page, searchQuery, dateRange) => {
+      if (!email) {
+        return;
+      }
+
+      const response = await fetchTemplates({
+        email,
+        page,
+        pageSize: 10,
+        searchQuery,
+        startDate: dateRange?.from ? startOfDay(dateRange.from) : undefined,
+        endDate: dateRange?.to ? endOfDay(dateRange.to) : undefined,
+      });
+
+      setTotalPages(response.totalPages);
+      setTemplateData(response.data);
+    }, 500),
+    [],
+  );
+
+  useEffect(() => {
     if (!user) {
       return;
     }
-    const email = user?.emailAddresses[0]?.emailAddress; // Example user ID
-    const response = await fetchTemplates(email as string);
-    setTempldateData(response.data);
-  };
-
-  useEffect(() => {
-    fetchTemplateData();
-  }, [user]);
+    const email = user?.emailAddresses[0]?.emailAddress;
+    debouncedFetchTemplates(email, page, searchQuery, dateRange);
+  }, [user, page, searchQuery, dateRange, debouncedFetchTemplates]);
 
   const handleEdit = (templateId: string, templateType: string) => {
     if (templateType === TemplateType.HTML_BUILDER) {
@@ -60,7 +89,7 @@ const TemplateTable = () => {
     const response = await deleteTemplate(selectedTemplateId);
     if (response.success) {
       toast.success('Template Deleted Successfully');
-      fetchTemplateData();
+      debouncedFetchTemplates(user?.emailAddresses[0]?.emailAddress, page, searchQuery, dateRange);
     } else {
       toast.error(`Failed to delete template: ${response.error}`);
     }
@@ -148,14 +177,40 @@ const TemplateTable = () => {
 
   ];
 
+  const handleDateFilterReset = () => {
+    setDateRange({ from: undefined, to: undefined });
+    setPage(1);
+  };
+
   return (
     <div className="container mx-auto py-10">
+      <div className="mb-4 flex items-center gap-4">
+        <Input
+          type="text"
+          value={searchQuery}
+          onChange={e => setSearchQuery(e.target.value)}
+          placeholder="Search templates..."
+          className="w-1/3 rounded-md border p-2"
+        />
+
+        <DatePickerWithRange
+          date={dateRange}
+          onDateChange={setDateRange}
+        />
+
+        <Button
+          onClick={handleDateFilterReset}
+        >
+          Reset Filters
+        </Button>
+      </div>
+
       <DataTable
         data={templateData}
         columns={columns}
-        page={1}
-        pageCount={1}
-        onPageChange={num => num}
+        page={page}
+        pageCount={totalPages}
+        onPageChange={setPage}
       />
     </div>
   );

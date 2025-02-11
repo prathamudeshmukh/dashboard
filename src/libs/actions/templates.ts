@@ -1,9 +1,9 @@
 'use server';
 
-import { and, desc, eq, gte, lte, sql } from 'drizzle-orm';
+import { and, desc, eq, gte, ilike, lte, sql } from 'drizzle-orm';
 
 import { generated_templates, templates } from '@/models/Schema';
-import type { GeneratedTemplates, JsonObject, PaginatedResponse, UsageMetricRequest } from '@/types/Template';
+import type { FetchTemplateResponse, FetchTemplatesRequest, GeneratedTemplates, JsonObject, PaginatedResponse, UsageMetric, UsageMetricRequest } from '@/types/Template';
 
 import { db } from '../DB';
 
@@ -107,20 +107,65 @@ export async function PublishTemplateToProd(templateId: string) {
   }
 }
 
-export async function fetchTemplates(email: string) {
+export async function fetchTemplates({
+  email,
+  page = 1,
+  pageSize = 10,
+  startDate,
+  endDate,
+  searchQuery = '',
+}: FetchTemplatesRequest): Promise<PaginatedResponse<FetchTemplateResponse>> {
   try {
+    if (!email) {
+      throw new Error('Please provide email id');
+    }
+
+    const offest = (page - 1) * pageSize;
+
+    const conditions = [
+      eq(templates.email, email),
+      eq(templates.environment, 'dev'),
+    ];
+
+    if (startDate) {
+      conditions.push(gte(templates.createdAt, startDate));
+    }
+
+    if (endDate) {
+      conditions.push(lte(templates.createdAt, endDate));
+    }
+
+    if (searchQuery) {
+      conditions.push(ilike(templates.templateName, `%${searchQuery}%`));
+    }
+
     const userTemplates = await db
-      .select()
+      .select({
+        templateName: templates.templateName,
+        templateId: templates.templateId,
+        description: templates.description!,
+        templateType: templates.templateType,
+        totalRecords: sql<number>`COALESCE(COUNT(*) OVER(), 0)`,
+      })
       .from(templates)
-      .where(and(
-        eq(templates.email, email),
-        eq(templates.environment, 'dev'),
-      ))
+      .where(and(...conditions))
+      .limit(pageSize)
+      .offset(offest)
       .orderBy(desc(templates.id));
-    return { success: true, data: userTemplates };
+
+    const totalRecords = userTemplates[0]?.totalRecords || 0;
+
+    const totalPages = Math.ceil(totalRecords / pageSize);
+    return {
+      data: userTemplates,
+      total: totalRecords,
+      page,
+      pageSize,
+      totalPages,
+    };
   } catch (error: any) {
     console.error('Error fetching templates:', error);
-    return { success: false, error: error.message };
+    throw new Error('Failed to fetch Template');
   }
 }
 
@@ -170,7 +215,7 @@ export async function fetchUsageMetrics({
   pageSize = 10,
   startDate,
   endDate,
-}: UsageMetricRequest): Promise<PaginatedResponse> {
+}: UsageMetricRequest): Promise<PaginatedResponse<UsageMetric>> {
   try {
     if (!email) {
       throw new Error('Please Provide email id');
