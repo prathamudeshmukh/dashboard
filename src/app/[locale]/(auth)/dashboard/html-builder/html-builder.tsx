@@ -7,6 +7,7 @@ import StudioEditor from '@grapesjs/studio-sdk/react';
 import type { Editor } from 'grapesjs';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -146,7 +147,7 @@ const HtmlBuilder = () => {
           settingsMenu: false,
           project: {
             type: 'web',
-            id: user?.id,
+            id: uuidv4(),
           },
           identity: {
             id: user?.id,
