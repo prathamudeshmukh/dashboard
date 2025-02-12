@@ -140,7 +140,7 @@ const HtmlBuilder = () => {
         style={{ height: '600px', width: '100%' }}
         onReady={onReady}
         options={{
-          licenseKey: process.env.GRAPE_STUDIO_KEY as string,
+          licenseKey: process.env.NEXT_PUBLIC_GRAPE_STUDIO_KEY as string,
           theme: 'light',
           pages: false,
           autoHeight: false,
