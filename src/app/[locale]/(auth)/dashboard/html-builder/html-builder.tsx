@@ -7,6 +7,7 @@ import StudioEditor from '@grapesjs/studio-sdk/react';
 import type { Editor } from 'grapesjs';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -139,13 +140,17 @@ const HtmlBuilder = () => {
         style={{ height: '600px', width: '100%' }}
         onReady={onReady}
         options={{
-          licenseKey: process.env.GRAPE_STUDIO_KEY as string,
+          licenseKey: process.env.NEXT_PUBLIC_GRAPE_STUDIO_KEY as string,
           theme: 'light',
           pages: false,
           autoHeight: false,
           settingsMenu: false,
           project: {
             type: 'web',
+            id: uuidv4(),
+          },
+          identity: {
+            id: user?.id,
           },
         }}
       />

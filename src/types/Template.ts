@@ -15,6 +15,22 @@ export type Template = {
   templateType?: string;
 };
 
+export type FetchTemplateResponse = {
+  templateName: string;
+  templateId: string | null;
+  description?: string;
+  templateType: string;
+};
+
+export type FetchTemplatesRequest = {
+  email: string;
+  page: number;
+  pageSize: number;
+  startDate?: Date;
+  endDate?: Date;
+  searchQuery?: string;
+};
+
 export type UsageMetric = {
   generatedDate: Date;
   templateName: string;
@@ -30,8 +46,8 @@ export type UsageMetricRequest = {
   endDate?: Date;
 };
 
-export type PaginatedResponse = {
-  data: UsageMetric[];
+export type PaginatedResponse<T> = {
+  data: T[];
   total: number;
   page: number;
   pageSize: number;
