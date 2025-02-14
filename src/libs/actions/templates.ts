@@ -1,9 +1,11 @@
 'use server';
 
 import { and, desc, eq, gte, ilike, lte, sql } from 'drizzle-orm';
+import PuppeteerHTMLPDF from 'puppeteer-html-pdf';
 
 import { generated_templates, templates } from '@/models/Schema';
-import type { FetchTemplateResponse, FetchTemplatesRequest, GeneratedTemplates, JsonObject, PaginatedResponse, UsageMetric, UsageMetricRequest } from '@/types/Template';
+import contentGenerator from '@/service/contentGenerator';
+import type { FetchTemplateResponse, FetchTemplatesRequest, GeneratedTemplates, GeneratePdfRequest, JsonObject, PaginatedResponse, TemplateType, UsageMetric, UsageMetricRequest } from '@/types/Template';
 
 import { db } from '../DB';
 
@@ -186,6 +188,72 @@ export async function fetchTemplateById(templateId: string, isDev: boolean = tru
   } catch (error: any) {
     console.error('Error fetching template:', error);
     return { success: false, error: error.message };
+  }
+}
+
+export async function generatePdf({
+  templateId,
+  templateType,
+  templateContent,
+  templateStyle = '',
+  templateData = {},
+  dev_mode = false,
+}: GeneratePdfRequest): Promise<{ pdf?: string; error?: string }> {
+  try {
+    let template;
+
+    // If templateId is provided fetch existing template
+    if (templateId) {
+      template = await fetchTemplateById(templateId, dev_mode);
+
+      if (!template || template.error) {
+        return { error: template?.error || 'Template not found' };
+      }
+    } else {
+      // If creating a new template
+      if (!templateType || !templateContent) {
+        return { error: 'Missing required fields: templateType and templateContent' };
+      }
+
+      template = {
+        data: {
+          templateType,
+          templateContent,
+          templateStyle,
+        },
+      };
+    }
+
+    const content = await contentGenerator({
+      templateType: template?.data?.templateType as TemplateType,
+      templateContent: template?.data?.templateContent as string,
+      templateStyle: template?.data?.templateStyle || '',
+      templateData,
+    });
+
+    const htmlPdf = new PuppeteerHTMLPDF();
+    htmlPdf.setOptions({
+      format: 'A4',
+      printBackground: true,
+    });
+
+    const pdf = await htmlPdf.create(content);
+
+    // TODO - how to save history in case user is creating a new template and click on preview.
+    // this below code is only for saved templates
+    if (template.data?.id) {
+      await addGeneratedTemplateHistory({
+        templateId: template.data.id,
+        dataValue: templateData,
+      });
+    }
+
+    const pdfBase64 = pdf.toString('base64');
+
+    return { pdf: pdfBase64 };
+  } catch (error: any) {
+    console.error('Error generating PDF:', error);
+    return { error: `Failed to generate PDF: ${error.message}` };
   }
 }
 

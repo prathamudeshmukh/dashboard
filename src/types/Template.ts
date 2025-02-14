@@ -54,6 +54,15 @@ export type PaginatedResponse<T> = {
   totalPages: number;
 };
 
+export type GeneratePdfRequest = {
+  templateId?: string;
+  templateType?: TemplateType;
+  templateContent?: string;
+  templateStyle?: string;
+  templateData?: JsonObject;
+  dev_mode?: boolean;
+};
+
 export type GeneratedTemplates = {
   templateId: string;
   dataValue?: JsonValue;

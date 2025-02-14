@@ -5,12 +5,14 @@ import Handlebars from 'handlebars';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { TextArea } from '@/components/ui/text-area';
-import { fetchTemplateById, PublishTemplateToProd, UpsertTemplate } from '@/libs/actions/templates';
+import { fetchTemplateById, generatePdf, PublishTemplateToProd, UpsertTemplate } from '@/libs/actions/templates';
 import { type JsonValue, TemplateType } from '@/types/Template';
+import { downloadPDF } from '@/utils/DownloadPDF';
 
 const HandlebarEditor = () => {
   const { user } = useUser();
@@ -79,6 +81,11 @@ const HandlebarEditor = () => {
     if (!user) {
       return;
     }
+
+    if (!templateContent || !inputData) {
+      toast.error('Handlbar Content is Missing');
+      return;
+    }
     // Prepare template data
     const templateData = {
       templateId: templateId || undefined, // Insert or update based on templateId
@@ -102,6 +109,29 @@ const HandlebarEditor = () => {
 
     if (response) {
       router.push('/dashboard');
+    }
+  };
+
+  const handlePreview = async () => {
+    if (!templateContent || !inputData) {
+      toast.error('Handlebar content is missing!');
+      return;
+    }
+
+    try {
+      const response = await generatePdf({
+        templateType: TemplateType.HANDLBARS_TEMPLATE,
+        templateContent,
+        templateData: JSON.parse(inputData),
+      });
+
+      if (response.error) {
+        throw new Error(response.error);
+      }
+
+      downloadPDF(response.pdf as string);
+    } catch (error: any) {
+      toast.error(`Failed to generate PDF: ${error.message}`);
     }
   };
 
@@ -141,7 +171,7 @@ const HandlebarEditor = () => {
 
       {/* Preview Section */}
       <div className="mt-2 w-2/3">
-        <div className="flex flex-row items-end justify-between">
+        <div className="flex flex-row items-end justify-between gap-2">
           <Input
             name="templateName"
             value={templateName}
@@ -158,8 +188,21 @@ const HandlebarEditor = () => {
             className="w-1/3 border border-gray-300"
           />
 
-          <Button onClick={handleSave}>{templateId ? 'Update' : 'Save'}</Button>
-          {templateId && (<Button onClick={publishTemplateToProd}>Publish</Button>)}
+          <Button onClick={handleSave}>
+            {templateId ? 'Update' : 'Save'}
+          </Button>
+
+          {templateId && (
+            <Button onClick={publishTemplateToProd}>
+              Publish
+            </Button>
+          )}
+
+          <div>
+            <Button onClick={handlePreview}>
+              Preview PDF
+            </Button>
+          </div>
         </div>
         <h2 className="mb-2 text-lg font-semibold">{t('preview')}</h2>
         <div className="rounded-md border bg-gray-50 p-4">

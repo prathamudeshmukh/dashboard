@@ -7,12 +7,14 @@ import StudioEditor from '@grapesjs/studio-sdk/react';
 import type { Editor } from 'grapesjs';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { fetchTemplateById, PublishTemplateToProd, UpsertTemplate } from '@/libs/actions/templates';
+import { fetchTemplateById, generatePdf, PublishTemplateToProd, UpsertTemplate } from '@/libs/actions/templates';
 import { TemplateType } from '@/types/Template';
+import { downloadPDF } from '@/utils/DownloadPDF';
 
 const HtmlBuilder = () => {
   const { user } = useUser();
@@ -67,7 +69,7 @@ const HtmlBuilder = () => {
     const css = editor?.getCss();
 
     if (!html || !css) {
-      throw new Error('Editor content is missing');
+      toast.error('Editor content is missing');
     }
 
     if (!user) {
@@ -101,6 +103,33 @@ const HtmlBuilder = () => {
     }
   };
 
+  const handlePreview = async () => {
+    const html = editor?.getHtml();
+    const css = editor?.getCss();
+
+    if (!html || !css) {
+      toast.error('Editor content is missing!');
+      return;
+    }
+
+    try {
+      const response = await generatePdf({
+        templateType: TemplateType.HTML_BUILDER,
+        templateContent: html,
+        templateStyle: css,
+        templateData: {},
+      });
+
+      if (response.error) {
+        throw new Error(response.error);
+      }
+
+      downloadPDF(response.pdf as string);
+    } catch (error: any) {
+      toast.error(`Failed to generate PDF: ${error.message}`);
+    }
+  };
+
   return (
     <div>
       <div className="my-2 flex flex-row justify-between">
@@ -121,18 +150,24 @@ const HtmlBuilder = () => {
         />
 
         <div className="mr-4 flex justify-end p-1">
-          <Button className="mr-2 rounded border px-2" onClick={handleSave}>
+          <Button onClick={handleSave}>
             {templateId ? 'Update' : 'Save'}
           </Button>
         </div>
 
         {templateId && (
           <div className="mr-4  flex justify-end p-1">
-            <Button className="mr-2 rounded border px-2" onClick={publishTemplateToProd}>
+            <Button onClick={publishTemplateToProd}>
               Publish
             </Button>
           </div>
         )}
+
+        <div className="mr-4 flex justify-end p-1">
+          <Button onClick={handlePreview}>
+            Preview PDF
+          </Button>
+        </div>
 
       </div>
 
