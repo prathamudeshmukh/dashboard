@@ -198,6 +198,7 @@ export async function generatePdf({
   templateStyle = '',
   templateData = {},
   dev_mode = false,
+  isApi = false,
 }: GeneratePdfRequest): Promise<{ pdf?: string; error?: string }> {
   try {
     let template;
@@ -239,9 +240,7 @@ export async function generatePdf({
 
     const pdf = await htmlPdf.create(content);
 
-    // TODO - how to save history in case user is creating a new template and click on preview.
-    // this below code is only for saved templates
-    if (template.data?.id) {
+    if (template.data?.id && isApi) {
       await addGeneratedTemplateHistory({
         templateId: template.data.id,
         dataValue: templateData,

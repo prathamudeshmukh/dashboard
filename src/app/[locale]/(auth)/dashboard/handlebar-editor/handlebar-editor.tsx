@@ -2,6 +2,7 @@
 
 import { useUser } from '@clerk/nextjs';
 import Handlebars from 'handlebars';
+import { Loader2 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import React, { useEffect, useState } from 'react';
@@ -21,6 +22,9 @@ const HandlebarEditor = () => {
   const [description, setDescription] = useState<string>('');
   const [templateName, setTemplateName] = useState<string>('');
   const [inputData, setInputData] = useState<string>(''); // to render on the input we need this state
+  const [isSaving, setIsSaving] = useState(false);
+  const [isPublishing, setIsPublishing] = useState(false);
+  const [isPreviewing, setIsPreviewing] = useState(false);
 
   const [output, setOutput] = useState<string>(''); // Rendered HTML
   const [error, setError] = useState<string | null>(null); // Error messages
@@ -78,47 +82,61 @@ const HandlebarEditor = () => {
   }, [templateId]);
 
   const handleSave = async () => {
-    if (!user) {
-      return;
-    }
+    setIsSaving(true);
+    try {
+      if (!user) {
+        return;
+      }
 
-    if (!templateContent || !inputData) {
-      toast.error('Handlbar Content is Missing');
-      return;
-    }
-    // Prepare template data
-    const templateData = {
-      templateId: templateId || undefined, // Insert or update based on templateId
-      description,
-      email: user?.emailAddresses[0]?.emailAddress, // Replace with dynamic userId
-      templateName,
-      templateContent,
-      templateSampleData: inputData,
-      templateType: TemplateType.HANDLBARS_TEMPLATE,
-    };
+      if (!templateContent || !inputData) {
+        toast.error('Handlbar Content is Missing');
+        return;
+      }
+      // Prepare template data
+      const templateData = {
+        templateId: templateId || undefined, // Insert or update based on templateId
+        description,
+        email: user?.emailAddresses[0]?.emailAddress, // Replace with dynamic userId
+        templateName,
+        templateContent,
+        templateSampleData: inputData,
+        templateType: TemplateType.HANDLBARS_TEMPLATE,
+      };
 
-    const response = await UpsertTemplate(templateData);
+      const response = await UpsertTemplate(templateData);
 
-    if (response.success) {
-      router.push('/dashboard'); // Redirect after successful save
+      if (response.success) {
+        router.push('/dashboard'); // Redirect after successful save
+      }
+    } catch (error) {
+      toast.error(`${error}`);
+    } finally {
+      setIsSaving(false);
     }
   };
 
   const publishTemplateToProd = async () => {
-    const response = await PublishTemplateToProd(templateId as string);
+    setIsPublishing(true);
+    try {
+      const response = await PublishTemplateToProd(templateId as string);
 
-    if (response) {
-      router.push('/dashboard');
+      if (response) {
+        router.push('/dashboard');
+      }
+    } catch (error) {
+      toast.error(`${error}`);
+    } finally {
+      setIsPublishing(false);
     }
   };
 
   const handlePreview = async () => {
-    if (!templateContent || !inputData) {
-      toast.error('Handlebar content is missing!');
-      return;
-    }
-
+    setIsPreviewing(true);
     try {
+      if (!templateContent || !inputData) {
+        toast.error('Handlebar content is missing!');
+        return;
+      }
       const response = await generatePdf({
         templateType: TemplateType.HANDLBARS_TEMPLATE,
         templateContent,
@@ -130,8 +148,10 @@ const HandlebarEditor = () => {
       }
 
       downloadPDF(response.pdf as string);
-    } catch (error: any) {
-      toast.error(`Failed to generate PDF: ${error.message}`);
+    } catch (error) {
+      toast.error(`${error}`);
+    } finally {
+      setIsPreviewing(false);
     }
   };
 
@@ -188,18 +208,21 @@ const HandlebarEditor = () => {
             className="w-1/3 border border-gray-300"
           />
 
-          <Button onClick={handleSave}>
+          <Button onClick={handleSave} disabled={isSaving}>
+            {isSaving && (<Loader2 className="animate-spin" />)}
             {templateId ? 'Update' : 'Save'}
           </Button>
 
           {templateId && (
-            <Button onClick={publishTemplateToProd}>
+            <Button onClick={publishTemplateToProd} disabled={isPublishing}>
+              {isPublishing && (<Loader2 className="animate-spin" />)}
               Publish
             </Button>
           )}
 
           <div>
-            <Button onClick={handlePreview}>
+            <Button onClick={handlePreview} disabled={isPreviewing}>
+              {isPreviewing && (<Loader2 className="animate-spin" />)}
               Preview PDF
             </Button>
           </div>

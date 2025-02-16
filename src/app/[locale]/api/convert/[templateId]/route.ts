@@ -30,7 +30,12 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
     const body = await req.json();
     const { templateData } = body; // Extract dev_mode from body with default false
 
-    const response = await generatePdf({ dev_mode, templateId, templateData });
+    const response = await generatePdf({
+      dev_mode,
+      templateId,
+      templateData,
+      isApi: true,
+    });
 
     if (response.error) {
       return NextResponse.json({ error: response.error }, { status: 400 });
