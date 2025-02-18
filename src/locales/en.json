@@ -180,7 +180,18 @@
     "title": "Handlebars Editor",
     "template": "Template",
     "input_data": "Input Data (JSON)",
-    "preview": "Preview"
+    "preview": "Preview",
+    "publish": "Publish",
+    "save": "Save",
+    "update": "Update",
+    "missing_content": "Handlebar Content is missing"
+  },
+  "htmlEditor": {
+    "preview": "Preview",
+    "publish": "Publish",
+    "save": "Save",
+    "update": "Update",
+    "missing_content": "HTML Content is missing"
   },
   "UsageMetrics": {
     "title": "Usage Metrics for",
