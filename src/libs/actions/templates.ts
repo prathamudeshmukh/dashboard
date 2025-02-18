@@ -197,7 +197,7 @@ export async function generatePdf({
   templateContent,
   templateStyle = '',
   templateData = {},
-  dev_mode = false,
+  devMode = true,
   isApi = false,
 }: GeneratePdfRequest): Promise<{ pdf?: string; error?: string }> {
   try {
@@ -205,31 +205,22 @@ export async function generatePdf({
 
     // If templateId is provided fetch existing template
     if (templateId) {
-      template = await fetchTemplateById(templateId, dev_mode);
+      template = await fetchTemplateById(templateId, devMode);
 
       if (!template || template.error) {
         return { error: template?.error || 'Template not found' };
       }
-    } else {
-      // If creating a new template
-      if (!templateType || !templateContent) {
-        return { error: 'Missing required fields: templateType and templateContent' };
-      }
-
-      template = {
-        data: {
-          templateType,
-          templateContent,
-          templateStyle,
-        },
-      };
+    }
+    // If creating a new template
+    if (!templateType || !templateContent) {
+      return { error: 'Missing required fields: templateType and templateContent' };
     }
 
     const content = await contentGenerator({
-      templateType: template?.data?.templateType as TemplateType,
-      templateContent: template?.data?.templateContent as string,
-      templateStyle: template?.data?.templateStyle || '',
-      templateData,
+      templateType: (template?.data?.templateType || templateType) as TemplateType,
+      templateContent: (template?.data?.templateContent || templateContent) as string,
+      templateStyle: template?.data?.templateStyle || templateStyle,
+      templateData: template?.data?.templateSampleData || templateData,
     });
 
     const htmlPdf = new PuppeteerHTMLPDF();
@@ -240,7 +231,7 @@ export async function generatePdf({
 
     const pdf = await htmlPdf.create(content);
 
-    if (template.data?.id && isApi) {
+    if (template?.data?.id && isApi) {
       await addGeneratedTemplateHistory({
         templateId: template.data.id,
         dataValue: templateData,

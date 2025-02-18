@@ -60,7 +60,7 @@ export type GeneratePdfRequest = {
   templateContent?: string;
   templateStyle?: string;
   templateData?: JsonObject;
-  dev_mode?: boolean;
+  devMode?: boolean;
   isApi?: boolean;
 };
 

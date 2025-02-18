@@ -83,13 +83,12 @@ const HandlebarEditor = () => {
 
   const handleSave = async () => {
     setIsSaving(true);
+    if (!user) {
+      return;
+    }
     try {
-      if (!user) {
-        return;
-      }
-
-      if (!templateContent || !inputData) {
-        toast.error('Handlbar Content is Missing');
+      if (!templateContent) {
+        toast.error(t('missing_content'));
         return;
       }
       // Prepare template data
@@ -133,14 +132,15 @@ const HandlebarEditor = () => {
   const handlePreview = async () => {
     setIsPreviewing(true);
     try {
-      if (!templateContent || !inputData) {
-        toast.error('Handlebar content is missing!');
+      if (!templateContent) {
+        toast.error(t('missing_content'));
         return;
       }
       const response = await generatePdf({
         templateType: TemplateType.HANDLBARS_TEMPLATE,
         templateContent,
-        templateData: JSON.parse(inputData),
+        templateData: JSON.parse(inputData || '{}'),
+        devMode: true,
       });
 
       if (response.error) {
@@ -210,20 +210,20 @@ const HandlebarEditor = () => {
 
           <Button onClick={handleSave} disabled={isSaving}>
             {isSaving && (<Loader2 className="animate-spin" />)}
-            {templateId ? 'Update' : 'Save'}
+            {templateId ? `${t('update')}` : `${t('save')}`}
           </Button>
 
           {templateId && (
             <Button onClick={publishTemplateToProd} disabled={isPublishing}>
               {isPublishing && (<Loader2 className="animate-spin" />)}
-              Publish
+              {t('publish')}
             </Button>
           )}
 
           <div>
             <Button onClick={handlePreview} disabled={isPreviewing}>
               {isPreviewing && (<Loader2 className="animate-spin" />)}
-              Preview PDF
+              {t('preview')}
             </Button>
           </div>
         </div>

@@ -7,6 +7,7 @@ import StudioEditor from '@grapesjs/studio-sdk/react';
 import type { Editor } from 'grapesjs';
 import { Loader2 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
@@ -18,6 +19,7 @@ import { TemplateType } from '@/types/Template';
 import { downloadPDF } from '@/utils/DownloadPDF';
 
 const HtmlBuilder = () => {
+  const t = useTranslations('htmlEditor');
   const { user } = useUser();
   const [editor, setEditor] = useState<Editor>();
   const [templateName, setTemplateName] = useState<string>('');
@@ -70,16 +72,15 @@ const HtmlBuilder = () => {
 
   const handleSave = async () => {
     setIsSaving(true);
+    if (!user) {
+      return;
+    }
     try {
       const html = editor?.getHtml();
       const css = editor?.getCss();
 
-      if (!html || !css) {
-        toast.error('Editor content is missing');
-      }
-
-      if (!user) {
-        return;
+      if (!html) {
+        toast.error(t('missing_content'));
       }
 
       // Prepare template data
@@ -127,8 +128,8 @@ const HtmlBuilder = () => {
       const html = editor?.getHtml();
       const css = editor?.getCss();
 
-      if (!html || !css) {
-        toast.error('Editor content is missing!');
+      if (!html) {
+        toast.error(t('missing_content'));
         return;
       }
 
@@ -136,7 +137,7 @@ const HtmlBuilder = () => {
         templateType: TemplateType.HTML_BUILDER,
         templateContent: html,
         templateStyle: css,
-        templateData: {},
+        devMode: true,
       });
 
       if (response.error) {
@@ -145,7 +146,7 @@ const HtmlBuilder = () => {
 
       downloadPDF(response.pdf as string);
     } catch (error: any) {
-      toast.error(`Failed to generate PDF: ${error.message}`);
+      toast.error(`${error.message}`);
     } finally {
       setIsPreviewing(false);
     }

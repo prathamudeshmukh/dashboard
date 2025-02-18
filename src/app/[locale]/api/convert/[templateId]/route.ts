@@ -24,14 +24,14 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
     }
 
     const searchParams = req.nextUrl.searchParams;
-    const dev_mode = searchParams.get('dev_mode') === 'true';
+    const devMode = searchParams.get('devMode') === 'true';
 
     // Parse the request body
     const body = await req.json();
     const { templateData } = body; // Extract dev_mode from body with default false
 
     const response = await generatePdf({
-      dev_mode,
+      devMode,
       templateId,
       templateData,
       isApi: true,
