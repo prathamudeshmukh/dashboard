@@ -9,6 +9,5 @@ config({ path: '.env' });
 const pool = new Pool({ connectionString: process.env.DATABASE_URL!, ssl: {
   rejectUnauthorized: false,
 } });
-const client = await pool.connect();
 
-export const db = drizzle(client, { schema });
+export const db = drizzle(pool, { schema });
