@@ -14,10 +14,11 @@
   },
   "Hero": {
     "follow_twitter": "Follow @Ixartz on Twitter",
-    "title": "The perfect <important>SaaS template</important> to build and scale your business with ease.",
-    "description": "A free and open-source landing page template for your SaaS business, built with React, TypeScript, Shadcn UI, and Tailwind CSS.",
-    "primary_button": "Get Started",
-    "secondary_button": "Star on GitHub"
+    "title": "<important>Templify</important> : Effortless PDF Generation for SaaS Applications",
+    "description1": "Scalable, API-first infrastructure that handles PDF generation for you",
+    "description2": "No huge dev effort needed for every new template",
+    "description3": "No more maintaining bulky PDF libraries",
+    "primary_button": "Get Started"
   },
   "Sponsors": {
     "title": "Sponsored by"
@@ -33,6 +34,60 @@
     "feature5_title": "Shadcn UI",
     "feature6_title": "ESLint",
     "feature_description": "A free and open-source landing page template for your SaaS business, built with React, TypeScript, Shadcn UI, and Tailwind CSS."
+  },
+  "Working": {
+    "section_subtitle": "Working",
+    "section_title": "How Templify Works",
+    "section_description": "A free and open-source landing page template for your SaaS business, built with React, TypeScript, Shadcn UI, and Tailwind CSS.",
+    "step1_title": "Step 1: Sign Up",
+    "step2_title": "Step 2: Create Your Template",
+    "step3_title": "Step 3: Get Your Template ID",
+    "step4_title": "Step 4: Integrate the API",
+    "step5_title": "Step 5: Get a Ready-to-Use PDF",
+    "step1_description": "Get started instantly with Google sign-in",
+    "step2_description": {
+      "description_1": "Drag & Drop HTML Builder – Create stunning templates without coding",
+      "description_2": "Handlebars Template Engine – Code-based templates with real-time previews & dynamic data suppor"
+    },
+    "step3_description": "Easily manage templates from your dashboard",
+    "step4_description": "Use the Template ID, along with your Client ID & Secret ID, to generate PDFs on demand",
+    "step5_description": "Receive the generated document instantly via API for use in your app"
+  },
+  "UseCase": {
+    "title": "Who Uses Templify",
+    "subtitle": "Use-case",
+    "useCase1": "Education",
+    "useCase2": "E-commerce",
+    "useCase3": "Healthcare",
+    "useCase4": "Legal",
+    "useCase1_description": " - Report card automation",
+    "useCase2_description": " - Instant invoice generation",
+    "useCase3_description": " - Billing & report creation",
+    "useCase4_description": " - Dynamic contract/document generation"
+  },
+  "Challenges": {
+    "title": "Why Is Dynamic PDF Generation So Hard?",
+    "subtitle": "Challenges",
+    "challenge1": "Maintaining complex PDF generation libraries that require frequent updates and fixes",
+    "challenge2": "Building new PDFs from scratch every time a new format is needed",
+    "challenge3": "Scaling PDF generation without slowing down application performance"
+  },
+  "Reviews": {
+    "review1": "Templify saved us weeks of dev effort—no more dealing with PDF libraries! Now we generate invoices in seconds.",
+    "review2": "The Handlebars engine + live preview is a game-changer. Dynamic table rows, real-time updates—it’s exactly what we needed!",
+    "review3": "We needed scalability for high-volume PDF generation, and Templify delivered. Seamless API, zero maintenance!"
+  },
+  "SecurityFeatures": {
+    "title": "Secure, Reliable, and Built for Scale",
+    "subtitle": "Security",
+    "feature1": "Security",
+    "feature2": "Reliability",
+    "feature3": "Support",
+    "feature4": "Scalability",
+    "feature1_description": "Secure API key authentication ensures only authorized users generate PDFs.",
+    "feature2_description": "99.9% uptime guarantee for uninterrupted service.",
+    "feature3_description": "Comprehensive API documentation + email support for developers.",
+    "feature4_description": "Auto-scaling infrastructure ensures high-speed PDF generation, even at peak loads."
   },
   "Pricing": {
     "section_subtitle": "Features",
@@ -61,9 +116,9 @@
     "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam aliquam enim dui, id consequat turpis ullamcorper ac. Mauris id quam dolor. Nullam eu egestas turpis. Proin risus elit, sollicitudin in mi a, accumsan euismod turpis. In euismod mi sed diam tristique hendrerit."
   },
   "CTA": {
-    "title": "You are ready?",
-    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    "button_text": "Star on GitHub"
+    "title": "Get Started with Templify Today",
+    "description": "Stop wasting time on PDF generation. Let Templify handle it for you.",
+    "button_text": "Sign up now and create your first template in minutes!"
   },
   "Footer": {
     "product": "Product",
