@@ -5,20 +5,28 @@ import '@grapesjs/studio-sdk/style';
 import { useUser } from '@clerk/nextjs';
 import StudioEditor from '@grapesjs/studio-sdk/react';
 import type { Editor } from 'grapesjs';
+import { Loader2 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { fetchTemplateById, PublishTemplateToProd, UpsertTemplate } from '@/libs/actions/templates';
+import { fetchTemplateById, generatePdf, PublishTemplateToProd, UpsertTemplate } from '@/libs/actions/templates';
 import { TemplateType } from '@/types/Template';
+import { downloadPDF } from '@/utils/DownloadPDF';
 
 const HtmlBuilder = () => {
+  const t = useTranslations('htmlEditor');
   const { user } = useUser();
   const [editor, setEditor] = useState<Editor>();
   const [templateName, setTemplateName] = useState<string>('');
   const [description, setDescription] = useState<string>('');
+  const [isSaving, setIsSaving] = useState(false);
+  const [isPublishing, setIsPublishing] = useState(false);
+  const [isPreviewing, setIsPreviewing] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
   const templateId = searchParams.get('templateId'); // Get templateId from query params
@@ -63,41 +71,84 @@ const HtmlBuilder = () => {
   };
 
   const handleSave = async () => {
-    const html = editor?.getHtml();
-    const css = editor?.getCss();
-
-    if (!html || !css) {
-      throw new Error('Editor content is missing');
-    }
-
+    setIsSaving(true);
     if (!user) {
       return;
     }
+    try {
+      const html = editor?.getHtml();
+      const css = editor?.getCss();
 
-    // Prepare template data
-    const templateData = {
-      templateId: templateId || undefined,
-      description,
-      email: user.emailAddresses[0]?.emailAddress,
-      templateName,
-      templateContent: html,
-      templateStyle: css,
-      assets: JSON.stringify(['https://example.com/asset1.png']),
-      templateType: TemplateType.HTML_BUILDER,
-    };
+      if (!html) {
+        toast.error(t('missing_content'));
+      }
 
-    const response = await UpsertTemplate(templateData);
+      // Prepare template data
+      const templateData = {
+        templateId: templateId || undefined,
+        description,
+        email: user.emailAddresses[0]?.emailAddress,
+        templateName,
+        templateContent: html,
+        templateStyle: css,
+        assets: JSON.stringify(['https://example.com/asset1.png']),
+        templateType: TemplateType.HTML_BUILDER,
+      };
 
-    if (response.success) {
-      router.push('/dashboard');
+      const response = await UpsertTemplate(templateData);
+
+      if (response.success) {
+        router.push('/dashboard');
+      }
+    } catch (error) {
+      toast.error(`${error}`);
+    } finally {
+      setIsSaving(false);
     }
   };
 
   const publishTemplateToProd = async () => {
-    const response = await PublishTemplateToProd(templateId as string);
+    setIsPublishing(true);
+    try {
+      const response = await PublishTemplateToProd(templateId as string);
 
-    if (response) {
-      router.push('/dashboard');
+      if (response) {
+        router.push('/dashboard');
+      }
+    } catch (error) {
+      toast.error(`${error}`);
+    } finally {
+      setIsPublishing(false);
+    }
+  };
+
+  const handlePreview = async () => {
+    setIsPreviewing(true);
+    try {
+      const html = editor?.getHtml();
+      const css = editor?.getCss();
+
+      if (!html) {
+        toast.error(t('missing_content'));
+        return;
+      }
+
+      const response = await generatePdf({
+        templateType: TemplateType.HTML_BUILDER,
+        templateContent: html,
+        templateStyle: css,
+        devMode: true,
+      });
+
+      if (response.error) {
+        throw new Error(response.error);
+      }
+
+      downloadPDF(response.pdf as string);
+    } catch (error: any) {
+      toast.error(`${error.message}`);
+    } finally {
+      setIsPreviewing(false);
     }
   };
 
@@ -121,18 +172,27 @@ const HtmlBuilder = () => {
         />
 
         <div className="mr-4 flex justify-end p-1">
-          <Button className="mr-2 rounded border px-2" onClick={handleSave}>
+          <Button onClick={handleSave} disabled={isSaving}>
+            {isSaving && (<Loader2 className="animate-spin" />)}
             {templateId ? 'Update' : 'Save'}
           </Button>
         </div>
 
         {templateId && (
           <div className="mr-4  flex justify-end p-1">
-            <Button className="mr-2 rounded border px-2" onClick={publishTemplateToProd}>
+            <Button onClick={publishTemplateToProd} disabled={isPublishing}>
+              {isPublishing && (<Loader2 className="animate-spin" />)}
               Publish
             </Button>
           </div>
         )}
+
+        <div className="mr-4 flex justify-end p-1">
+          <Button onClick={handlePreview} disabled={isPreviewing}>
+            {isPreviewing && (<Loader2 className="animate-spin" />)}
+            Preview PDF
+          </Button>
+        </div>
 
       </div>
 
