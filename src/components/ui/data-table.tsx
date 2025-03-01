@@ -43,6 +43,25 @@ export function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
   });
 
+  // Generate an array of page numbers (e.g., [1, 2, 3, 4, 5])
+  const generatePageNumbers = () => {
+    const maxVisiblePages = 5; // Number of visible page numbers
+    const pages: number[] = [];
+
+    let startPage = Math.max(1, page - Math.floor(maxVisiblePages / 2));
+    const endPage = Math.min(pageCount, startPage + maxVisiblePages - 1);
+
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+
+    return pages;
+  };
+
   return (
     <div>
       <div className="rounded-md border bg-white shadow-md">
@@ -93,30 +112,18 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       {/* Pagination Controls */}
-      <div className="mt-4 flex items-center justify-between">
-        <Button
-          onClick={() => onPageChange(page - 1)}
-          disabled={page === 1}
-        >
-          Previous
-        </Button>
+      <div className="mt-4 flex items-center justify-center space-x-1">
 
-        <span>
-          Page
-          {' '}
-          {page}
-          {' '}
-          of
-          {' '}
-          {pageCount}
-        </span>
-
-        <Button
-          onClick={() => onPageChange(page + 1)}
-          disabled={page >= pageCount}
-        >
-          Next
-        </Button>
+        {/* Page Numbers */}
+        {generatePageNumbers().map(pageNumber => (
+          <Button
+            key={pageNumber}
+            onClick={() => onPageChange(pageNumber)}
+            className={`px-3 py-1 ${page === pageNumber ? 'bg-primary text-white' : 'bg-gray-400'}`}
+          >
+            {pageNumber}
+          </Button>
+        ))}
       </div>
     </div>
   );

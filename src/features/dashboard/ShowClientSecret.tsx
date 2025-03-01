@@ -2,6 +2,7 @@
 
 import { CopyIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 import {
   AlertDialog,
@@ -21,7 +22,6 @@ export function ShowClientSecret({ clientId }: { clientId: string }) {
   const [error, setError] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [copied, setCopied] = useState<boolean>(false);
 
   const handleSecret = async () => {
     if (!clientId) {
@@ -54,8 +54,8 @@ export function ShowClientSecret({ clientId }: { clientId: string }) {
 
   const handleCopy = () => {
     navigator.clipboard.writeText(secret);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000); // Reset copied state after 2 seconds
+    toast.success('Client Secret copied to clipboard');
+    setIsOpen(false);
   };
 
   return (
@@ -86,7 +86,7 @@ export function ShowClientSecret({ clientId }: { clientId: string }) {
               className="flex items-center gap-2 rounded"
             >
               <CopyIcon />
-              {copied ? 'Copied' : 'Copy Secret'}
+              Copy Secret
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>

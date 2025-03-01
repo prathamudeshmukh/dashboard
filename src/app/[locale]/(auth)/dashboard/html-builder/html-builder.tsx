@@ -68,6 +68,23 @@ const HtmlBuilder = () => {
         blockManager.remove(blockId);
       }
     });
+
+    // Check if canvas is empty and add placeholder
+    if (editor.getComponents().length === 0) {
+      editor.setComponents(`
+          <div id="placeholder" style="text-align: center; padding: 50px; font-size: 18px; color: #aaa;">
+            ✨ Click on <strong>"+"</strong> to get started!
+          </div>
+        `);
+    }
+
+    // Listen for component add event to remove placeholder
+    editor.on('component:add', () => {
+      const placeholder = editor?.Components?.getWrapper()?.find('#placeholder');
+      if (placeholder?.length) {
+        placeholder[0]?.remove();
+      }
+    });
   };
 
   const handleSave = async () => {

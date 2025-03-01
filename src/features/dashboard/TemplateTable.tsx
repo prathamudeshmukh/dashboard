@@ -1,7 +1,7 @@
 'use client';
 
 import { useUser } from '@clerk/nextjs';
-import { Pencil2Icon, TrashIcon } from '@radix-ui/react-icons';
+import { CopyIcon, Pencil2Icon, TrashIcon } from '@radix-ui/react-icons';
 import type { ColumnDef } from '@tanstack/react-table';
 import { endOfDay, startOfDay } from 'date-fns';
 import { debounce } from 'lodash';
@@ -105,7 +105,23 @@ const TemplateTable = () => {
     {
       accessorKey: 'templateId',
       header: () => t('id'),
-      cell: info => info.getValue(),
+      cell: (info) => {
+        const templateId = info.getValue() as string;
+
+        const handleCopy = () => {
+          navigator.clipboard.writeText(templateId);
+          toast.success('Template ID copied to clipboard');
+        };
+
+        return (
+          <div className="flex items-center gap-2">
+            <span>{templateId}</span>
+            <Button variant="outline" onClick={handleCopy}>
+              <CopyIcon />
+            </Button>
+          </div>
+        );
+      },
     },
     {
       accessorKey: 'description',
@@ -136,8 +152,8 @@ const TemplateTable = () => {
         return (
           <div className="flex gap-2">
             <Button
+              variant="outline"
               onClick={() => handleEdit(template.templateId!, template.templateType!)}
-
             >
               <Pencil2Icon />
             </Button>
@@ -146,6 +162,7 @@ const TemplateTable = () => {
             <AlertDialog>
               <AlertDialogTrigger>
                 <Button
+                  variant="outline"
                   onClick={() => setSelectedTemplateId(template.templateId!)}
                 >
                   <TrashIcon />
