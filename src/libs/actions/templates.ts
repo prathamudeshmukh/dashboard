@@ -212,7 +212,7 @@ export async function generatePdf({
       }
     }
     // If creating a new template
-    if (!templateType || !templateContent) {
+    if ((!templateType || !templateContent) && !isApi) {
       return { error: 'Missing required fields: templateType and templateContent' };
     }
 
