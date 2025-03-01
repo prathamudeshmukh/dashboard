@@ -162,5 +162,43 @@
     "message_title": "Message",
     "message_description": "Entrez un message détaillé pour votre todo.",
     "submit_button": "Envoyer"
+  },
+  "DashboardContent": {
+    "title": "Commençons",
+    "create_new_template": "Créer un nouveau modèle"
+  },
+  "TemplateTable": {
+    "id": "ID",
+    "template_name": "Nom du modèle",
+    "description": "Description",
+    "type": "Type",
+    "actions": "Actions",
+    "edit": "Modifier",
+    "delete": "Supprimer"
+  },
+  "handlebarEditor": {
+    "title": "Éditeur Handlebars",
+    "template": "Modèle",
+    "input_data": "Données d'entrée (JSON)",
+    "preview": "Aperçu",
+    "publish": "Publier",
+    "save": "Enregistrer",
+    "update": "Mettre à jour",
+    "missing_content": "Le contenu Handlebar est manquant"
+  },
+  "htmlEditor": {
+    "preview": "Aperçu",
+    "publish": "Publier",
+    "save": "Enregistrer",
+    "update": "Mettre à jour",
+    "missing_content": "Le contenu HTML est manquant"
+  },
+  "UsageMetrics": {
+    "title": "Métriques d'utilisation pour",
+    "table_fallback": "Aucune donnée d'utilisation trouvée",
+    "date_time": "Date et heure",
+    "template_name": "Nom du modèle",
+    "user": "Utilisateur",
+    "input_data": "Données d'entrée"
   }
 }

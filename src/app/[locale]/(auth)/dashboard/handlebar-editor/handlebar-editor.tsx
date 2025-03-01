@@ -2,15 +2,18 @@
 
 import { useUser } from '@clerk/nextjs';
 import Handlebars from 'handlebars';
+import { Loader2 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { TextArea } from '@/components/ui/text-area';
-import { fetchTemplateById, PublishTemplateToProd, UpsertTemplate } from '@/libs/actions/templates';
+import { fetchTemplateById, generatePdf, PublishTemplateToProd, UpsertTemplate } from '@/libs/actions/templates';
 import { type JsonValue, TemplateType } from '@/types/Template';
+import { downloadPDF } from '@/utils/DownloadPDF';
 
 const HandlebarEditor = () => {
   const { user } = useUser();
@@ -19,6 +22,9 @@ const HandlebarEditor = () => {
   const [description, setDescription] = useState<string>('');
   const [templateName, setTemplateName] = useState<string>('');
   const [inputData, setInputData] = useState<string>(''); // to render on the input we need this state
+  const [isSaving, setIsSaving] = useState(false);
+  const [isPublishing, setIsPublishing] = useState(false);
+  const [isPreviewing, setIsPreviewing] = useState(false);
 
   const [output, setOutput] = useState<string>(''); // Rendered HTML
   const [error, setError] = useState<string | null>(null); // Error messages
@@ -76,32 +82,76 @@ const HandlebarEditor = () => {
   }, [templateId]);
 
   const handleSave = async () => {
+    setIsSaving(true);
     if (!user) {
       return;
     }
-    // Prepare template data
-    const templateData = {
-      templateId: templateId || undefined, // Insert or update based on templateId
-      description,
-      email: user?.emailAddresses[0]?.emailAddress, // Replace with dynamic userId
-      templateName,
-      templateContent,
-      templateSampleData: inputData,
-      templateType: TemplateType.HANDLBARS_TEMPLATE,
-    };
+    try {
+      if (!templateContent) {
+        toast.error(t('missing_content'));
+        return;
+      }
+      // Prepare template data
+      const templateData = {
+        templateId: templateId || undefined, // Insert or update based on templateId
+        description,
+        email: user?.emailAddresses[0]?.emailAddress, // Replace with dynamic userId
+        templateName,
+        templateContent,
+        templateSampleData: inputData,
+        templateType: TemplateType.HANDLBARS_TEMPLATE,
+      };
 
-    const response = await UpsertTemplate(templateData);
+      const response = await UpsertTemplate(templateData);
 
-    if (response.success) {
-      router.push('/dashboard'); // Redirect after successful save
+      if (response.success) {
+        router.push('/dashboard'); // Redirect after successful save
+      }
+    } catch (error) {
+      toast.error(`${error}`);
+    } finally {
+      setIsSaving(false);
     }
   };
 
   const publishTemplateToProd = async () => {
-    const response = await PublishTemplateToProd(templateId as string);
+    setIsPublishing(true);
+    try {
+      const response = await PublishTemplateToProd(templateId as string);
 
-    if (response) {
-      router.push('/dashboard');
+      if (response) {
+        router.push('/dashboard');
+      }
+    } catch (error) {
+      toast.error(`${error}`);
+    } finally {
+      setIsPublishing(false);
+    }
+  };
+
+  const handlePreview = async () => {
+    setIsPreviewing(true);
+    try {
+      if (!templateContent) {
+        toast.error(t('missing_content'));
+        return;
+      }
+      const response = await generatePdf({
+        templateType: TemplateType.HANDLBARS_TEMPLATE,
+        templateContent,
+        templateData: JSON.parse(inputData || '{}'),
+        devMode: true,
+      });
+
+      if (response.error) {
+        throw new Error(response.error);
+      }
+
+      downloadPDF(response.pdf as string);
+    } catch (error) {
+      toast.error(`${error}`);
+    } finally {
+      setIsPreviewing(false);
     }
   };
 
@@ -141,7 +191,7 @@ const HandlebarEditor = () => {
 
       {/* Preview Section */}
       <div className="mt-2 w-2/3">
-        <div className="flex flex-row items-end justify-between">
+        <div className="flex flex-row items-end justify-between gap-2">
           <Input
             name="templateName"
             value={templateName}
@@ -158,8 +208,24 @@ const HandlebarEditor = () => {
             className="w-1/3 border border-gray-300"
           />
 
-          <Button onClick={handleSave}>{templateId ? 'Update' : 'Save'}</Button>
-          {templateId && (<Button onClick={publishTemplateToProd}>Publish</Button>)}
+          <Button onClick={handleSave} disabled={isSaving}>
+            {isSaving && (<Loader2 className="animate-spin" />)}
+            {templateId ? `${t('update')}` : `${t('save')}`}
+          </Button>
+
+          {templateId && (
+            <Button onClick={publishTemplateToProd} disabled={isPublishing}>
+              {isPublishing && (<Loader2 className="animate-spin" />)}
+              {t('publish')}
+            </Button>
+          )}
+
+          <div>
+            <Button onClick={handlePreview} disabled={isPreviewing}>
+              {isPreviewing && (<Loader2 className="animate-spin" />)}
+              {t('preview')}
+            </Button>
+          </div>
         </div>
         <h2 className="mb-2 text-lg font-semibold">{t('preview')}</h2>
         <div className="rounded-md border bg-gray-50 p-4">

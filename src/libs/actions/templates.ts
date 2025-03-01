@@ -1,9 +1,11 @@
 'use server';
 
-import { and, desc, eq, sql } from 'drizzle-orm';
+import { and, desc, eq, gte, ilike, lte, sql } from 'drizzle-orm';
+import PuppeteerHTMLPDF from 'puppeteer-html-pdf';
 
 import { generated_templates, templates } from '@/models/Schema';
-import type { GeneratedTemplates } from '@/types/Template';
+import contentGenerator from '@/service/contentGenerator';
+import type { FetchTemplateResponse, FetchTemplatesRequest, GeneratedTemplates, GeneratePdfRequest, JsonObject, PaginatedResponse, TemplateType, UsageMetric, UsageMetricRequest } from '@/types/Template';
 
 import { db } from '../DB';
 
@@ -107,20 +109,65 @@ export async function PublishTemplateToProd(templateId: string) {
   }
 }
 
-export async function fetchTemplates(email: string) {
+export async function fetchTemplates({
+  email,
+  page = 1,
+  pageSize = 10,
+  startDate,
+  endDate,
+  searchQuery = '',
+}: FetchTemplatesRequest): Promise<PaginatedResponse<FetchTemplateResponse>> {
   try {
+    if (!email) {
+      throw new Error('Please provide email id');
+    }
+
+    const offest = (page - 1) * pageSize;
+
+    const conditions = [
+      eq(templates.email, email),
+      eq(templates.environment, 'dev'),
+    ];
+
+    if (startDate) {
+      conditions.push(gte(templates.createdAt, startDate));
+    }
+
+    if (endDate) {
+      conditions.push(lte(templates.createdAt, endDate));
+    }
+
+    if (searchQuery) {
+      conditions.push(ilike(templates.templateName, `%${searchQuery}%`));
+    }
+
     const userTemplates = await db
-      .select()
+      .select({
+        templateName: templates.templateName,
+        templateId: templates.templateId,
+        description: templates.description!,
+        templateType: templates.templateType,
+        totalRecords: sql<number>`COALESCE(COUNT(*) OVER(), 0)`,
+      })
       .from(templates)
-      .where(and(
-        eq(templates.email, email),
-        eq(templates.environment, 'dev'),
-      ))
+      .where(and(...conditions))
+      .limit(pageSize)
+      .offset(offest)
       .orderBy(desc(templates.id));
-    return { success: true, data: userTemplates };
+
+    const totalRecords = userTemplates[0]?.totalRecords || 0;
+
+    const totalPages = Math.ceil(totalRecords / pageSize);
+    return {
+      data: userTemplates,
+      total: totalRecords,
+      page,
+      pageSize,
+      totalPages,
+    };
   } catch (error: any) {
     console.error('Error fetching templates:', error);
-    return { success: false, error: error.message };
+    throw new Error('Failed to fetch Template');
   }
 }
 
@@ -144,6 +191,62 @@ export async function fetchTemplateById(templateId: string, isDev: boolean = tru
   }
 }
 
+export async function generatePdf({
+  templateId,
+  templateType,
+  templateContent,
+  templateStyle = '',
+  templateData = {},
+  devMode = true,
+  isApi = false,
+}: GeneratePdfRequest): Promise<{ pdf?: string; error?: string }> {
+  try {
+    let template;
+
+    // If templateId is provided fetch existing template
+    if (templateId) {
+      template = await fetchTemplateById(templateId, devMode);
+
+      if (!template || template.error) {
+        return { error: template?.error || 'Template not found' };
+      }
+    }
+    // If creating a new template
+    if ((!templateType || !templateContent) && !isApi) {
+      return { error: 'Missing required fields: templateType and templateContent' };
+    }
+
+    const content = await contentGenerator({
+      templateType: (template?.data?.templateType || templateType) as TemplateType,
+      templateContent: (template?.data?.templateContent || templateContent) as string,
+      templateStyle: template?.data?.templateStyle || templateStyle,
+      templateData: template?.data?.templateSampleData || templateData,
+    });
+
+    const htmlPdf = new PuppeteerHTMLPDF();
+    htmlPdf.setOptions({
+      format: 'A4',
+      printBackground: true,
+    });
+
+    const pdf = await htmlPdf.create(content);
+
+    if (template?.data?.id && isApi) {
+      await addGeneratedTemplateHistory({
+        templateId: template.data.id,
+        dataValue: templateData,
+      });
+    }
+
+    const pdfBase64 = pdf.toString('base64');
+
+    return { pdf: pdfBase64 };
+  } catch (error: any) {
+    console.error('Error generating PDF:', error);
+    return { error: `Failed to generate PDF: ${error.message}` };
+  }
+}
+
 export async function addGeneratedTemplateHistory({
   templateId,
   dataValue,
@@ -161,6 +264,59 @@ export async function addGeneratedTemplateHistory({
     return { message: 'History Added for Generated Template' };
   } catch (error) {
     return console.error(`Failed to Create History: ${error}`);
+  }
+}
+
+export async function fetchUsageMetrics({
+  email,
+  page = 1,
+  pageSize = 10,
+  startDate,
+  endDate,
+}: UsageMetricRequest): Promise<PaginatedResponse<UsageMetric>> {
+  try {
+    if (!email) {
+      throw new Error('Please Provide email id');
+    }
+    const offset = (page - 1) * pageSize;
+
+    const conditions = [eq(templates.email, email)];
+
+    if (startDate) {
+      conditions.push(gte(generated_templates.generated_date, startDate));
+    }
+
+    if (endDate) {
+      conditions.push(lte(generated_templates.generated_date, endDate));
+    }
+
+    const metrics = await db
+      .select({
+        generatedDate: generated_templates.generated_date,
+        templateName: templates.templateName,
+        email: templates.email,
+        data: generated_templates.data_value as JsonObject,
+        totalRecords: sql<number>`COUNT(*) OVER()`,
+      })
+      .from(generated_templates)
+      .innerJoin(templates, eq(generated_templates.template_id, templates.id))
+      .where(and(...conditions))
+      .limit(pageSize)
+      .offset(offset);
+
+    const totalRecords = metrics[0]?.totalRecords || 0;
+
+    const totalPages = Math.ceil(totalRecords / pageSize);
+
+    return {
+      data: metrics,
+      total: totalRecords,
+      page,
+      pageSize,
+      totalPages,
+    };
+  } catch (error) {
+    throw new Error(`Failed to fetch usage metrics: ${error}`);
   }
 }
 
