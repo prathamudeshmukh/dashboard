@@ -29,7 +29,7 @@ export async function generateMetadata(props: { params: { locale: string } }) {
       siteName: 'Templify Cloud',
       images: [
         {
-          url: `${getBaseUrl()}/og.png`,
+          url: `${getBaseUrl()}/opengraph-image.png`,
           width: 800,
           height: 600,
         },
@@ -39,7 +39,7 @@ export async function generateMetadata(props: { params: { locale: string } }) {
       card: 'summary_large_image',
       title: t('meta_title'),
       description: t('meta_description'),
-      images: [`${getBaseUrl()}/og.png`],
+      images: [`${getBaseUrl()}/twitter-image.png`],
     },
   };
 }
