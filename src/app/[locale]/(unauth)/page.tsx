@@ -2,14 +2,12 @@
 import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
 
 import { CTA } from '@/templates/CTA';
-import { DemoBanner } from '@/templates/DemoBanner';
-import { FAQ } from '@/templates/FAQ';
-import { Features } from '@/templates/Features';
 import { Footer } from '@/templates/Footer';
 import { Hero } from '@/templates/Hero';
+import { KeyFeatures } from '@/templates/KeyFeatures';
 import { Navbar } from '@/templates/Navbar';
-import { Pricing } from '@/templates/Pricing';
-import { Sponsors } from '@/templates/Sponsors';
+import { SecurityFeatures } from '@/templates/SecurityFeatures';
+import { Working } from '@/templates/Working';
 import { getBaseUrl } from '@/utils/Helpers';
 
 export async function generateMetadata(props: { params: { locale: string } }) {
@@ -58,23 +56,23 @@ const IndexPage = (props: { params: { locale: string } }) => {
   };
 
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <section>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </section>
-      <DemoBanner />
       <Navbar />
-      <Hero />
-      <Sponsors />
-      <Features />
-      <Pricing />
-      <FAQ />
-      <CTA />
-      <Footer />
-    </>
+      <main className="flex-1">
+        <Hero />
+        <KeyFeatures />
+        <Working />
+        <SecurityFeatures />
+        <CTA />
+        <Footer />
+      </main>
+    </div>
   );
 };
 

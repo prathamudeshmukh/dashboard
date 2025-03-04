@@ -173,6 +173,23 @@ const HandlebarEditor = () => {
             className="w-full"
           />
         </div>
+        <div className="flex flex-row items-end gap-2">
+          <Input
+            name="templateName"
+            value={templateName}
+            onChange={e => setTemplateName(e.target.value)}
+            placeholder="Enter Template name"
+            className="w-1/3 border border-gray-300"
+          />
+
+          <Input
+            name="description"
+            value={description}
+            onChange={e => setDescription(e.target.value)}
+            placeholder="Enter Description"
+            className="w-1/3 border border-gray-300"
+          />
+        </div>
 
         {/* JSON Data Input */}
         <div>
@@ -191,22 +208,7 @@ const HandlebarEditor = () => {
 
       {/* Preview Section */}
       <div className="mt-2 w-2/3">
-        <div className="flex flex-row items-end justify-between gap-2">
-          <Input
-            name="templateName"
-            value={templateName}
-            onChange={e => setTemplateName(e.target.value)}
-            placeholder="Enter Template name"
-            className="w-1/3 border border-gray-300"
-          />
-
-          <Input
-            name="description"
-            value={description}
-            onChange={e => setDescription(e.target.value)}
-            placeholder="Enter Description"
-            className="w-1/3 border border-gray-300"
-          />
+        <div className="flex flex-row items-end justify-end gap-2">
 
           <Button onClick={handleSave} disabled={isSaving}>
             {isSaving && (<Loader2 className="animate-spin" />)}
@@ -228,7 +230,7 @@ const HandlebarEditor = () => {
           </div>
         </div>
         <h2 className="mb-2 text-lg font-semibold">{t('preview')}</h2>
-        <div className="rounded-md border bg-gray-50 p-4">
+        <div className="h-full rounded-md border bg-gray-50 p-4">
           <div
             className="mt-2 text-gray-800"
             dangerouslySetInnerHTML={{ __html: output }}
