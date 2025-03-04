@@ -1,13 +1,11 @@
 import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
 
-import { Challenges } from '@/templates/Challenges';
 import { CTA } from '@/templates/CTA';
 import { Footer } from '@/templates/Footer';
 import { Hero } from '@/templates/Hero';
+import { KeyFeatures } from '@/templates/KeyFeatures';
 import { Navbar } from '@/templates/Navbar';
 import { SecurityFeatures } from '@/templates/SecurityFeatures';
-import { Testimonials } from '@/templates/Testimonials';
-import { UseCase } from '@/templates/UseCase';
 import { Working } from '@/templates/Working';
 
 export async function generateMetadata(props: { params: { locale: string } }) {
@@ -26,17 +24,17 @@ const IndexPage = (props: { params: { locale: string } }) => {
   unstable_setRequestLocale(props.params.locale);
 
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <Navbar />
-      <Hero />
-      <Challenges />
-      <Working />
-      <UseCase />
-      <Testimonials />
-      <SecurityFeatures />
-      <CTA />
-      <Footer />
-    </>
+      <main className="flex-1">
+        <Hero />
+        <Working />
+        <KeyFeatures />
+        <SecurityFeatures />
+        <CTA />
+        <Footer />
+      </main>
+    </div>
   );
 };
 

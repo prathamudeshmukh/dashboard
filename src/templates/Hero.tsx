@@ -1,52 +1,54 @@
-import { CircleCheckBig } from 'lucide-react';
+import { ArrowRight, CheckCircle2 } from 'lucide-react';
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
-import { buttonVariants } from '@/components/ui/buttonVariants';
-import { CenteredHero } from '@/features/landing/CenteredHero';
-import { Section } from '@/features/landing/Section';
+import { Button } from '@/components/ui/button';
+import { HeroSection } from '@/features/landing/HeroSection';
 
 export const Hero = () => {
   const t = useTranslations('Hero');
 
   return (
-    <Section className="py-36">
-      <CenteredHero
-        title={t.rich('title', {
-          important: chunks => (
-            <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
-              {chunks}
-            </span>
-          ),
-        })}
-        description={(
-          <div className="flex items-center justify-center">
-            <ul className="mt-4 space-y-2">
-              <li className="flex items-center gap-2">
-                <CircleCheckBig className="text-purple-500" />
-                <span>{t('description1')}</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <CircleCheckBig className="text-purple-500" />
-                <span>{t('description2')}</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <CircleCheckBig className="text-purple-500" />
-                <span>{t('description3')}</span>
-              </li>
-            </ul>
+    <HeroSection
+      title={t.rich('title', {
+        important: chunks => (
+          <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+            {chunks}
+          </span>
+        ),
+      })}
+      subtitle={t.rich('subtitle', {
+        important: chunks => (
+          <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text font-bold text-transparent">
+            {chunks}
+          </span>
+        ),
+      })}
+      description={(
+        <>
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="size-5 text-primary" />
+            <p className="font-medium">{t('description1')}</p>
           </div>
-        )}
-        buttons={(
-          <>
-            <a
-              className={buttonVariants({ size: 'lg' })}
-              href="https://github.com/ixartz/SaaS-Boilerplate"
-            >
-              {t('primary_button')}
-            </a>
-          </>
-        )}
-      />
-    </Section>
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="size-5 text-primary" />
+            <p className="font-medium">{t('description2')}</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="size-5 text-primary" />
+            <p className="font-medium">{t('description3')}</p>
+          </div>
+        </>
+      )}
+      button={(
+        <Link href="/sign-up">
+          <Button size="lg" className="gap-1">
+            {t('primary_button')}
+            {' '}
+            <ArrowRight className="size-4" />
+          </Button>
+        </Link>
+      )}
+    />
   );
 };
