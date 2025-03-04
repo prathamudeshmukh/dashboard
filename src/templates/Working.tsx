@@ -90,19 +90,8 @@ export const Working = () => {
                 </>
               )}
               icon={<Server className="size-8 text-muted-foreground" />}
-            />
-
-            <StepCard
-              stepNumber={5}
-              title={t('step5_title')}
-              description={(
-                <>
-                  {t('step5_description')}
-                </>
-              )}
-              icon={<FileText className="size-8 text-muted-foreground" />}
               label={(
-                <div className="mt-4 w-full max-w-md">
+                <div className="max-w-s mt-4 w-1/12">
                   <pre className="overflow-x-auto rounded-md bg-muted p-4 text-sm">
                     <code>
                       curl -X POST https://api.templify.com/generate-pdf \ -H "Content-Type: application/json" \ -H
@@ -119,6 +108,17 @@ export const Working = () => {
                   </pre>
                 </div>
               )}
+            />
+
+            <StepCard
+              stepNumber={5}
+              title={t('step5_title')}
+              description={(
+                <>
+                  {t('step5_description')}
+                </>
+              )}
+              icon={<FileText className="size-8 text-muted-foreground" />}
             />
 
           </div>

@@ -57,16 +57,15 @@ export const KeyFeatures = () => {
               title={t('feature6_title')}
               description={t('feature6_description')}
             />
-
-            <div className="flex items-center justify-center">
-              <CardContent className="p-6">
-                <Button size="lg" className="w-full gap-1">
-                  {t('primary_button')}
-                  {' '}
-                  <ArrowRight className="size-4" />
-                </Button>
-              </CardContent>
-            </div>
+          </div>
+          <div className="flex items-center justify-center">
+            <CardContent className="p-6">
+              <Button size="lg" className="w-full gap-1">
+                {t('primary_button')}
+                {' '}
+                <ArrowRight className="size-4" />
+              </Button>
+            </CardContent>
           </div>
         </div>
       </Section>

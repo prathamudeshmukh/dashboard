@@ -66,8 +66,8 @@ const IndexPage = (props: { params: { locale: string } }) => {
       <Navbar />
       <main className="flex-1">
         <Hero />
-        <Working />
         <KeyFeatures />
+        <Working />
         <SecurityFeatures />
         <CTA />
         <Footer />
