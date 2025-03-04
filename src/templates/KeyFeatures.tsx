@@ -1,5 +1,6 @@
 import {
   ArrowRight,
+  ChartNetwork,
   Database,
   MousePointer,
   RefreshCw,
@@ -10,7 +11,7 @@ import { useTranslations } from 'next-intl';
 import React from 'react';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { CardContent } from '@/components/ui/card';
 import { FeaturesCard } from '@/features/landing/FeaturesCard';
 import { Section } from '@/features/landing/Section';
 
@@ -51,8 +52,13 @@ export const KeyFeatures = () => {
               title={t('feature5_title')}
               description={t('feature5_description')}
             />
+            <FeaturesCard
+              icon={<ChartNetwork className="size-8 text-white" />}
+              title={t('feature6_title')}
+              description={t('feature6_description')}
+            />
 
-            <Card className="flex items-center justify-center">
+            <div className="flex items-center justify-center">
               <CardContent className="p-6">
                 <Button size="lg" className="w-full gap-1">
                   {t('primary_button')}
@@ -60,7 +66,7 @@ export const KeyFeatures = () => {
                   <ArrowRight className="size-4" />
                 </Button>
               </CardContent>
-            </Card>
+            </div>
           </div>
         </div>
       </Section>

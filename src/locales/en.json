@@ -19,7 +19,7 @@
     "description1": "Scalable, API-first infrastructure that handles PDF generation for you",
     "description2": "No huge dev effort needed for every new template",
     "description3": "No more maintaining bulky PDF libraries",
-    "primary_button": "Sign Up Free"
+    "primary_button": "Sign Up For Free"
   },
   "Sponsors": {
     "title": "Sponsored by"
@@ -44,11 +44,13 @@
     "feature3_title": "Dynamic Content Support",
     "feature4_title": "Scalable & Fast",
     "feature5_title": "Secure & Reliable",
+    "feature6_title": "API Usage Insights",
     "feature1_description": "Drag & drop editor for non-devs, API-first for developers",
     "feature2_description": "See changes in real-time",
     "feature3_description": "Automate tables, lists, and form data",
     "feature4_description": "Built to handle high-volume PDF generation",
     "feature5_description": "Encrypted API keys, 99.9% uptime guarantee",
+    "feature6_description": "Track past API usage over time and review detailed invocation history for transparency and debugging",
     "primary_button": "Start Building Templates Now"
   },
   "Working": {

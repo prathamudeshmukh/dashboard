@@ -101,6 +101,24 @@ export const Working = () => {
                 </>
               )}
               icon={<FileText className="size-8 text-muted-foreground" />}
+              label={(
+                <div className="mt-4 w-full max-w-md">
+                  <pre className="overflow-x-auto rounded-md bg-muted p-4 text-sm">
+                    <code>
+                      curl -X POST https://api.templify.com/generate-pdf \ -H "Content-Type: application/json" \ -H
+                      "Authorization: Bearer YOUR_API_KEY" \ -d '
+                      {'{'}
+                      "template_id": "TEMPLATE_ID", "data":
+                      {' '}
+                      {'{'}
+                      "name": "John Doe", "amount": 1000.00
+                      {'}'}
+                      {'}'}
+                      '
+                    </code>
+                  </pre>
+                </div>
+              )}
             />
 
           </div>

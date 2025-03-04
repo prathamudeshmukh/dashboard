@@ -1,4 +1,7 @@
-import { FileText } from 'lucide-react';
+import { Columns, Image, List, Type } from 'lucide-react';
+
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 type HeroSectionProps = {
   title: React.ReactNode;
@@ -25,7 +28,7 @@ export const HeroSection = ({ title, subtitle, description, button }: HeroSectio
 
             <p className="text-lg font-medium">
               Start generating PDFs in
-              <strong>minutes</strong>
+              <strong> minutes</strong>
               , not weeks.
             </p>
 
@@ -35,36 +38,81 @@ export const HeroSection = ({ title, subtitle, description, button }: HeroSectio
             </div>
           </div>
 
-          {/* Right Section - UI Mockup */}
           <div className="flex items-center justify-center">
-            <div className="relative w-full max-w-sm">
+            <div className="relative w-full max-w-lg">
               <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-primary to-primary/50 opacity-75 blur-xl"></div>
-              <div className="relative overflow-hidden rounded-xl border bg-background p-8 shadow-lg">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <FileText className="size-5 text-primary" />
-                      <span className="font-medium">Invoice_Template.pdf</span>
+              <div className="relative overflow-hidden rounded-xl border bg-background p-6 shadow-lg">
+                <Tabs defaultValue="html-builder" className="w-full">
+                  <TabsList className="mb-4 grid w-full grid-cols-2">
+                    <TabsTrigger value="html-builder">HTML Builder</TabsTrigger>
+                    <TabsTrigger value="handlebars">Handlebars</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="html-builder">
+                    <div className="mb-4 flex items-center justify-between">
+                      <div className="text-lg font-semibold">HTML Builder</div>
+                      <Button size="sm" variant="outline">
+                        Preview
+                      </Button>
                     </div>
-                    <div className="text-xs text-muted-foreground">Generated</div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="h-2 w-full rounded-full bg-muted"></div>
-                    <div className="h-2 w-3/4 rounded-full bg-muted"></div>
-                    <div className="h-2 w-1/2 rounded-full bg-muted"></div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    <div className="rounded-md bg-muted p-2">
-                      <div className="h-12 rounded-md bg-muted-foreground/20"></div>
+                    <div className="grid grid-cols-4 gap-4">
+                      <div className="col-span-1 space-y-2">
+                        <div className="flex flex-col items-center justify-center rounded-md bg-muted p-2">
+                          <Columns className="size-6 text-muted-foreground" />
+                          <span className="mt-1 text-xs">Layout</span>
+                        </div>
+                        <div className="flex flex-col items-center justify-center rounded-md bg-muted p-2">
+                          <Type className="size-6 text-muted-foreground" />
+                          <span className="mt-1 text-xs">Text</span>
+                        </div>
+                        <div className="flex flex-col items-center justify-center rounded-md bg-muted p-2">
+                          <Image className="size-6 text-muted-foreground" />
+                          <span className="mt-1 text-xs">Image</span>
+                        </div>
+                        <div className="flex flex-col items-center justify-center rounded-md bg-muted p-2">
+                          <List className="size-6 text-muted-foreground" />
+                          <span className="mt-1 text-xs">List</span>
+                        </div>
+                      </div>
+                      <div className="col-span-3 rounded-md bg-muted p-4">
+                        <div className="mb-2 rounded-md bg-background p-2"></div>
+                        <div className="mb-2 w-3/4 rounded-md bg-background p-2"></div>
+                        <div className="mb-2 w-1/2 rounded-md bg-background p-2"></div>
+                        <div className="grid grid-cols-2 gap-2">
+                          <div className="rounded-md bg-background p-2"></div>
+                          <div className="rounded-md bg-background p-2"></div>
+                        </div>
+                      </div>
                     </div>
-                    <div className="rounded-md bg-muted p-2">
-                      <div className="h-12 rounded-md bg-muted-foreground/20"></div>
+                  </TabsContent>
+                  <TabsContent value="handlebars">
+                    <div className="mb-4 flex items-center justify-between">
+                      <div className="text-lg font-semibold">Handlebars Template</div>
+                      <Button size="sm" variant="outline">
+                        Preview
+                      </Button>
                     </div>
-                  </div>
-                  <div className="rounded-md bg-muted p-2">
-                    <div className="h-24 rounded-md bg-muted-foreground/20"></div>
-                  </div>
-                </div>
+                    <div className="space-y-4">
+                      <div className="rounded-md bg-muted p-4">
+                        <pre className="text-sm">
+                          <code>
+                            {
+                              '<h1>{{title}}</h1>\n<p>{{content}}</p>\n<ul>\n  {{#each items}}\n    <li>{{this}}</li>\n  {{/each}}\n</ul>'
+                            }
+                          </code>
+                        </pre>
+                      </div>
+                      <div className="rounded-md bg-muted p-4">
+                        <pre className="text-sm">
+                          <code>
+                            {
+                              '{\n  "title": "Welcome",\n  "content": "This is a sample template.",\n  "items": ["Item 1", "Item 2", "Item 3"]\n}'
+                            }
+                          </code>
+                        </pre>
+                      </div>
+                    </div>
+                  </TabsContent>
+                </Tabs>
               </div>
             </div>
           </div>
