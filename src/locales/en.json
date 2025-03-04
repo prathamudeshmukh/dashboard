@@ -1,7 +1,7 @@
 {
   "Index": {
-    "meta_title": "SaaS Template - The perfect SaaS template to build and scale your business with ease.",
-    "meta_description": "A free and open-source landing page template for your SaaS business, built with React, TypeScript, Shadcn UI, and Tailwind CSS."
+    "meta_title": "Templify - API-First & No-Code PDF Generation",
+    "meta_description": "Templify lets SaaS companies generate dynamic PDFs effortlessly using API and no-code templates. Fast, secure, and scalable document automation."
   },
   "Navbar": {
     "sign_in": "Sign In",
@@ -168,8 +168,8 @@
     "settings": "Settings"
   },
   "Dashboard": {
-    "meta_title": "SaaS Template Dashboard",
-    "meta_description": "A free and open-source landing page template for your SaaS business, built with Next.js, TypeScript, Shadcn UI, and Tailwind CSS."
+    "meta_title": "Templify - API-First & No-Code PDF Generation",
+    "meta_description": "Templify lets SaaS companies generate dynamic PDFs effortlessly using API and no-code templates. Fast, secure, and scalable document automation."
   },
   "TemplateDashboard": {
     "title": "Create New Template",
