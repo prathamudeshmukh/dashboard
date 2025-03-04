@@ -36,7 +36,7 @@ export const Working = () => {
   return (
     <div id="how-it-works">
       <Section
-        className="w-full bg-background py-12 md:py-24 lg:py-32"
+        className="w-full bg-muted py-12 md:py-24 lg:py-32"
         title="Step-by-Step Breakdown"
         subtitle="How it Works"
         description="Seamlessly integrates with any SaaS application in minutes."
@@ -90,24 +90,6 @@ export const Working = () => {
                 </>
               )}
               icon={<Server className="size-8 text-muted-foreground" />}
-              label={(
-                <div className="max-w-s mt-4 w-1/12">
-                  <pre className="overflow-x-auto rounded-md bg-muted p-4 text-sm">
-                    <code>
-                      curl -X POST https://api.templify.com/generate-pdf \ -H "Content-Type: application/json" \ -H
-                      "Authorization: Bearer YOUR_API_KEY" \ -d '
-                      {'{'}
-                      "template_id": "TEMPLATE_ID", "data":
-                      {' '}
-                      {'{'}
-                      "name": "John Doe", "amount": 1000.00
-                      {'}'}
-                      {'}'}
-                      '
-                    </code>
-                  </pre>
-                </div>
-              )}
             />
 
             <StepCard
