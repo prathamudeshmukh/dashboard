@@ -23,6 +23,7 @@ const OrganizationProfilePage = (props: { params: { locale: string } }) => {
         afterLeaveOrganizationUrl="/onboarding/organization-selection"
         appearance={{
           elements: {
+            navbar: 'hidden',
             rootBox: 'w-full',
             cardBox: 'w-full flex',
           },

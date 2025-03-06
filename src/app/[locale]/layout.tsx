@@ -4,7 +4,6 @@ import type { Metadata } from 'next';
 import { NextIntlClientProvider, useMessages } from 'next-intl';
 import { unstable_setRequestLocale } from 'next-intl/server';
 
-import { DemoBadge } from '@/components/DemoBadge';
 import { Toaster } from '@/components/ui/sonner';
 import { AllLocales } from '@/utils/AppConfig';
 
@@ -61,7 +60,6 @@ export default function RootLayout(props: {
         >
           {props.children}
 
-          <DemoBadge />
           <Toaster position="top-center" />
         </NextIntlClientProvider>
       </body>

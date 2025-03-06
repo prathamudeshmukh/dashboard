@@ -1,12 +1,12 @@
 'use server';
 
 import { and, desc, eq, gte, ilike, lte, sql } from 'drizzle-orm';
-import PuppeteerHTMLPDF from 'puppeteer-html-pdf';
 
 import { generated_templates, templates } from '@/models/Schema';
 import contentGenerator from '@/service/contentGenerator';
 import type { FetchTemplateResponse, FetchTemplatesRequest, GeneratedTemplates, GeneratePdfRequest, JsonObject, PaginatedResponse, TemplateType, UsageMetric, UsageMetricRequest } from '@/types/Template';
 
+import { LeanPuppeteerHTMLPDF } from '../../leanPuppeteerHtmlPDF/index';
 import { db } from '../DB';
 
 export async function UpsertTemplate({
@@ -223,7 +223,7 @@ export async function generatePdf({
       templateData: template?.data?.templateSampleData || templateData,
     });
 
-    const htmlPdf = new PuppeteerHTMLPDF();
+    const htmlPdf = new LeanPuppeteerHTMLPDF();
     htmlPdf.setOptions({
       format: 'A4',
       printBackground: true,
