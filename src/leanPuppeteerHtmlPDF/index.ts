@@ -5,6 +5,8 @@ import chromium from '@sparticuz/chromium';
 import type { Browser, Page, PDFOptions } from 'puppeteer-core';
 import puppeteer from 'puppeteer-core';
 
+process.env.CHROMIUM_PATH = '/tmp'; // Use a writable directory
+
 export type LeanPuppeteerHTMLPDFOptions = {
   args?: string[];
   headless?: boolean;
@@ -32,10 +34,14 @@ export class LeanPuppeteerHTMLPDF {
     }
 
     try {
+      process.env.PUPPETEER_CACHE_DIR = '/tmp'; // Fix for read-only systems
+      const tempPath = await chromium.executablePath();
+      /* eslint-disable no-console */
+      console.debug('path:', tempPath);
       this.browser = await puppeteer.launch({
-        args: chromium.args,
+        args: [...chromium.args, '--no-sandbox', '--disable-gpu'],
         defaultViewport: chromium.defaultViewport,
-        executablePath: await chromium.executablePath(),
+        executablePath: tempPath,
         headless: chromium.headless,
       });
 
