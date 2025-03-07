@@ -34,25 +34,47 @@ export class LeanPuppeteerHTMLPDF {
     }
 
     try {
-      process.env.PUPPETEER_CACHE_DIR = '/tmp'; // Fix for read-only systems
-      const tempPath = await chromium.executablePath();
-      /* eslint-disable no-console */
-      console.debug('path:', tempPath);
+      let executablePath: string;
+      let launchArgs: string[];
+      let headless: any;
+
+      // Detect environment
+      const isVercel = process.env.VERCEL === '1';
+
+      if (isVercel) {
+        // Vercel production settings
+        executablePath = await chromium.executablePath();
+        launchArgs = [
+          ...chromium.args,
+          '--disable-setuid-sandbox',
+          '--single-process',
+          '--no-zygote',
+        ];
+        headless = chromium.headless;
+      } else {
+        // Local development settings
+        const { Launcher } = await import('chrome-launcher');
+        executablePath = Launcher.getFirstInstallation()!;
+        launchArgs = [
+          '--disable-setuid-sandbox',
+          '--no-sandbox',
+          '--single-process',
+          '--no-zygote',
+        ];
+        headless = 'new';
+      }
+
+      // eslint-disable-next-line no-console
+      console.log('Using Chromium executable path:', executablePath);
+
       this.browser = await puppeteer.launch({
-        args: [...chromium.args, '--no-sandbox', '--disable-gpu'],
-        defaultViewport: chromium.defaultViewport,
-        executablePath: tempPath,
-        headless: chromium.headless,
-      });
-
-      this.browser.on('disconnected', () => {
-        this.browser = null;
-      });
-
-      this.browser.on('error', (error) => {
-        console.error('Browser error:', error);
+        args: launchArgs,
+        executablePath,
+        headless,
+        defaultViewport: { width: 1920, height: 1080 },
       });
     } catch (error: any) {
+      console.error('Browser launch failed:', error);
       throw new Error(`Failed to launch browser: ${error.message}`);
     }
   }
