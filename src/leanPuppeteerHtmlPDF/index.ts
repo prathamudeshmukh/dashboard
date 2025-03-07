@@ -1,11 +1,10 @@
 import { Buffer } from 'node:buffer';
 import fs from 'node:fs/promises';
+import path from 'node:path';
 
 import chromium from '@sparticuz/chromium';
 import type { Browser, Page, PDFOptions } from 'puppeteer-core';
 import puppeteer from 'puppeteer-core';
-
-process.env.CHROMIUM_PATH = '/tmp'; // Use a writable directory
 
 export type LeanPuppeteerHTMLPDFOptions = {
   args?: string[];
@@ -34,47 +33,35 @@ export class LeanPuppeteerHTMLPDF {
     }
 
     try {
-      let executablePath: string;
-      let launchArgs: string[];
-      let headless: any;
+      // Unified Chromium path resolution
+      const executablePath = process.env.CHROMIUM_PATH
+        || await chromium.executablePath()
+        || path.join(__dirname, '..', 'node_modules', '@sparticuz', 'chromium', 'bin', 'chromium');
 
-      // Detect environment
-      const isVercel = process.env.VERCEL === '1';
+      // Verify executable exists
+      await fs.access(executablePath, fs.constants.X_OK);
 
-      if (isVercel) {
-        // Vercel production settings
-        executablePath = await chromium.executablePath();
-        launchArgs = [
-          ...chromium.args,
-          '--disable-setuid-sandbox',
-          '--single-process',
-          '--no-zygote',
-        ];
-        headless = chromium.headless;
-      } else {
-        // Local development settings
-        const { Launcher } = await import('chrome-launcher');
-        executablePath = Launcher.getFirstInstallation()!;
-        launchArgs = [
-          '--disable-setuid-sandbox',
-          '--no-sandbox',
-          '--single-process',
-          '--no-zygote',
-        ];
-        headless = 'new';
-      }
-
-      // eslint-disable-next-line no-console
-      console.log('Using Chromium executable path:', executablePath);
+      const launchArgs = [
+        ...chromium.args,
+        '--disable-setuid-sandbox',
+        '--no-sandbox',
+        '--single-process',
+        '--no-zygote',
+        '--disable-dev-shm-usage',
+      ];
 
       this.browser = await puppeteer.launch({
         args: launchArgs,
         executablePath,
-        headless,
-        defaultViewport: { width: 1920, height: 1080 },
+        headless: chromium.headless,
+        defaultViewport: chromium.defaultViewport,
       });
     } catch (error: any) {
-      console.error('Browser launch failed:', error);
+      console.error('Browser initialization failed:', {
+        executablePath: await chromium.executablePath(),
+        envChromiumPath: process.env.CHROMIUM_PATH,
+        error: error.message,
+      });
       throw new Error(`Failed to launch browser: ${error.message}`);
     }
   }
