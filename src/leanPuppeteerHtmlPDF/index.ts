@@ -1,7 +1,7 @@
 import { Buffer } from 'node:buffer';
 import fs from 'node:fs/promises';
 
-import chromium from '@sparticuz/chromium';
+import chromium from '@sparticuz/chromium-min';
 import type { Browser, Page, PDFOptions } from 'puppeteer-core';
 import puppeteer from 'puppeteer-core';
 
@@ -48,21 +48,21 @@ export class LeanPuppeteerHTMLPDF {
       console.log('Fetched chromium path', executablePath);
 
       // Verify executable exists
-      await fs.access(executablePath, fs.constants.X_OK);
+      // await fs.access(executablePath, fs.constants.X_OK);
 
       // eslint-disable-next-line no-console
       console.log('Access to chromium path ok');
-      // eslint-disable-next-line no-console
-      console.log('File Permissions:', await fs.stat(executablePath));
-      if (executablePath) {
-        try {
-          // eslint-disable-next-line no-console
-          console.log('setting exe permission');
-          await fs.chmod(executablePath, '755'); // Give execute permission
-        } catch (err) {
-          console.error('Failed to set permissions for Chromium:', err);
-        }
-      }
+
+      // console.log('File Permissions:', await fs.stat(executablePath));
+      // if (executablePath) {
+      //   try {
+      //     // eslint-disable-next-line no-console
+      //     console.log('setting exe permission');
+      //     await fs.chmod(executablePath, '755'); // Give execute permission
+      //   } catch (err) {
+      //     console.error('Failed to set permissions for Chromium:', err);
+      //   }
+      // }
       const launchArgs = [
         ...chromium.args,
         '--disable-setuid-sandbox',
@@ -76,7 +76,9 @@ export class LeanPuppeteerHTMLPDF {
 
       this.browser = await puppeteer.launch({
         args: launchArgs,
-        executablePath,
+        executablePath: await chromium.executablePath(
+          `https://github.com/Sparticuz/chromium/releases/download/v133.0.0/chromium-v133.0.0-pack.tar`,
+        ),
         headless: chromium.headless,
         defaultViewport: chromium.defaultViewport,
       });
