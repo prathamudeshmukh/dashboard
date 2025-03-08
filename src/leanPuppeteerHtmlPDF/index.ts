@@ -1,6 +1,5 @@
 import { Buffer } from 'node:buffer';
 import fs from 'node:fs/promises';
-import path from 'node:path';
 
 import chromium from '@sparticuz/chromium';
 import type { Browser, Page, PDFOptions } from 'puppeteer-core';
@@ -33,12 +32,17 @@ export class LeanPuppeteerHTMLPDF {
     }
 
     try {
+      process.env.PUPPETEER_CACHE_DIR = '/tmp';
+      process.env.PUPPETEER_TMP_DIR = '/tmp';
+
       // eslint-disable-next-line no-console
       console.log('Fetching chromium path');
       // Unified Chromium path resolution
-      const executablePath = process.env.CHROMIUM_PATH
-        || await chromium.executablePath()
-        || path.join(__dirname, '..', 'node_modules', '@sparticuz', 'chromium', 'bin', 'chromium');
+      // const executablePath = process.env.CHROMIUM_PATH
+      //   || await chromium.executablePath()
+      //   || path.join(__dirname, '..', 'node_modules', '@sparticuz', 'chromium', 'bin', 'chromium');
+
+      const executablePath = await chromium.executablePath();
 
       // eslint-disable-next-line no-console
       console.log('Fetched chromium path', executablePath);
