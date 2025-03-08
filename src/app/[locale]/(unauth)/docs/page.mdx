@@ -1,0 +1,112 @@
+# Templify API Documentation
+
+
+## 1. Introduction
+Templify is an API-first SaaS that allows developers to create and manage templates and generate PDFs dynamically. This documentation provides the necessary details to integrate the Templify API seamlessly into your application.
+
+
+## 2. Authentication
+Templify API requires authentication using a **Client ID** and **Secret ID**. These credentials must be included in the request headers.
+
+**Authentication Headers:**
+```
+Authorization: Bearer YOUR_API_KEY
+Content-Type: application/json
+```
+
+To obtain your API key, sign in to your Templify account and navigate to the **API Keys** section.
+
+
+## 3. API Endpoints
+
+### **Generate PDF**
+
+**Endpoint:**
+```
+POST /api/v1/generate-pdf
+```
+
+**Headers:**
+```
+Authorization: Bearer YOUR_API_KEY
+Content-Type: application/json
+```
+
+**Request Body:**
+```json
+{
+  "template_id": "TEMPLATE_ID_HERE",
+  "data": {
+    "name": "John Doe",
+    "invoice_number": "INV-1001",
+    "items": [
+      { "description": "Item 1", "price": 20 },
+      { "description": "Item 2", "price": 30 }
+    ]
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "pdf_url": "https://templify.com/generated_pdfs/invoice_1001.pdf"
+}
+```
+
+## 4. Request & Response Examples
+
+**cURL Example:**
+```
+curl -X POST "https://api.templify.com/api/v1/generate-pdf" \
+     -H "Authorization: Bearer YOUR_API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "template_id": "TEMPLATE_ID_HERE",
+       "data": {
+         "name": "John Doe",
+         "invoice_number": "INV-1001",
+         "items": [
+           { "description": "Item 1", "price": 20 },
+           { "description": "Item 2", "price": 30 }
+         ]
+       }
+     }'
+```
+
+
+## 5. Error Handling
+
+Templify API returns standard HTTP status codes.
+
+| Status Code | Meaning | Description |
+|------------|---------|-------------|
+| 200 | OK | Request successful. |
+| 400 | Bad Request | Missing required parameters. |
+| 401 | Unauthorized | Invalid API key. |
+| 404 | Not Found | Template ID does not exist. |
+| 500 | Server Error | An internal server error occurred. |
+
+Example error response:
+```json
+{
+  "success": false,
+  "error": "Template ID not found"
+}
+```
+
+
+## 6. Security & Best Practices
+* Always **store API keys securely** and do not expose them in front-end code.
+* Use **HTTPS** for all API requests to ensure encryption.
+* Implement **rate limiting** to prevent abuse.
+* Regularly **rotate API keys** for security.
+
+
+## 7. Contact & Support
+For any queries or issues, contact our support team:
+* **Email:** support@templify.com
+* **API Status:** https://status.templify.com
+
+Happy coding! 🚀

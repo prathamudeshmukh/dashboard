@@ -1,6 +1,7 @@
 import { fileURLToPath } from 'node:url';
 
 import withBundleAnalyzer from '@next/bundle-analyzer';
+import createMDX from '@next/mdx';
 import { withSentryConfig } from '@sentry/nextjs';
 import createJiti from 'jiti';
 import withNextIntl from 'next-intl/plugin';
@@ -15,19 +16,26 @@ const bundleAnalyzer = withBundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
 });
 
+const withMDX = createMDX({
+  extension: /\.mdx?$/,
+});
+
 /** @type {import('next').NextConfig} */
-export default withSentryConfig(
-  bundleAnalyzer(
-    withNextIntlConfig({
-      eslint: {
-        dirs: ['.'],
-      },
-      poweredByHeader: false,
-      reactStrictMode: true,
-      experimental: {
-        serverComponentsExternalPackages: ['@electric-sql/pglite'],
-      },
-    }),
+const NextConfig = withSentryConfig(
+  withMDX(
+    bundleAnalyzer(
+      withNextIntlConfig({
+        eslint: {
+          dirs: ['.'],
+        },
+        poweredByHeader: false,
+        reactStrictMode: true,
+        experimental: {
+          serverComponentsExternalPackages: ['@electric-sql/pglite'],
+        },
+        pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
+      }),
+    ),
   ),
   {
     // For all available options, see:
@@ -67,3 +75,5 @@ export default withSentryConfig(
     telemetry: false,
   },
 );
+
+export default NextConfig;
