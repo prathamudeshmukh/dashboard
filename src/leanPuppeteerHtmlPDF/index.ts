@@ -33,14 +33,21 @@ export class LeanPuppeteerHTMLPDF {
     }
 
     try {
+      // eslint-disable-next-line no-console
+      console.log('Fetching chromium path');
       // Unified Chromium path resolution
       const executablePath = process.env.CHROMIUM_PATH
         || await chromium.executablePath()
         || path.join(__dirname, '..', 'node_modules', '@sparticuz', 'chromium', 'bin', 'chromium');
 
+      // eslint-disable-next-line no-console
+      console.log('Fetched chromium path', executablePath);
+
       // Verify executable exists
       await fs.access(executablePath, fs.constants.X_OK);
 
+      // eslint-disable-next-line no-console
+      console.log('Access to chromium path ok');
       const launchArgs = [
         ...chromium.args,
         '--disable-setuid-sandbox',
@@ -49,6 +56,8 @@ export class LeanPuppeteerHTMLPDF {
         '--no-zygote',
         '--disable-dev-shm-usage',
       ];
+      // eslint-disable-next-line no-console
+      console.log('Launch pupeteer');
 
       this.browser = await puppeteer.launch({
         args: launchArgs,
