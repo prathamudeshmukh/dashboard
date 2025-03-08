@@ -42,12 +42,9 @@ export class LeanPuppeteerHTMLPDF {
       //   || await chromium.executablePath()
       //   || path.join(__dirname, '..', 'node_modules', '@sparticuz', 'chromium', 'bin', 'chromium');
 
-      const executablePath = await chromium.executablePath(
-        `https://github.com/Sparticuz/chromium/releases/download/v133.0.0/chromium-v133.0.0-pack.tar`,
-      );
+      const executablePath = `https://github.com/Sparticuz/chromium/releases/download/v133.0.0/chromium-v133.0.0-pack.tar`;
 
-      // eslint-disable-next-line no-console
-      console.log('Fetched chromium path', executablePath);
+      // console.log('Fetched chromium path', executablePath);
 
       // Verify executable exists
       // await fs.access(executablePath, fs.constants.X_OK);
