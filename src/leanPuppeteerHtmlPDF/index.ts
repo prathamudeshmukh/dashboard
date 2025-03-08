@@ -80,11 +80,11 @@ export class LeanPuppeteerHTMLPDF {
         defaultViewport: chromium.defaultViewport,
       });
     } catch (error: any) {
-      console.error('Browser initialization failed:', {
-        executablePath: await chromium.executablePath(),
-        envChromiumPath: process.env.CHROMIUM_PATH,
-        error: error.message,
-      });
+      // console.error('Browser initialization failed:', {
+      //   executablePath: await chromium.executablePath(),
+      //   envChromiumPath: process.env.CHROMIUM_PATH,
+      //   error: error.message,
+      // });
       throw new Error(`Failed to launch browser: ${error.message}`);
     }
   }
