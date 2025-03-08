@@ -52,6 +52,15 @@ export class LeanPuppeteerHTMLPDF {
 
       // eslint-disable-next-line no-console
       console.log('Access to chromium path ok');
+      // eslint-disable-next-line no-console
+      console.log('File Permissions:', await fs.stat(executablePath));
+      if (executablePath) {
+        try {
+          await fs.chmod(executablePath, '755'); // Give execute permission
+        } catch (err) {
+          console.error('Failed to set permissions for Chromium:', err);
+        }
+      }
       const launchArgs = [
         ...chromium.args,
         '--disable-setuid-sandbox',
