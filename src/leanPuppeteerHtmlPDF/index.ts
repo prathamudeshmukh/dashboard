@@ -56,6 +56,8 @@ export class LeanPuppeteerHTMLPDF {
       console.log('File Permissions:', await fs.stat(executablePath));
       if (executablePath) {
         try {
+          // eslint-disable-next-line no-console
+          console.log('setting exe permission');
           await fs.chmod(executablePath, '755'); // Give execute permission
         } catch (err) {
           console.error('Failed to set permissions for Chromium:', err);
