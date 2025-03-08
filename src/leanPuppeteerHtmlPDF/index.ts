@@ -42,7 +42,9 @@ export class LeanPuppeteerHTMLPDF {
       //   || await chromium.executablePath()
       //   || path.join(__dirname, '..', 'node_modules', '@sparticuz', 'chromium', 'bin', 'chromium');
 
-      const executablePath = await chromium.executablePath();
+      const executablePath = await chromium.executablePath(
+        `https://github.com/Sparticuz/chromium/releases/download/v133.0.0/chromium-v133.0.0-pack.tar`,
+      );
 
       // eslint-disable-next-line no-console
       console.log('Fetched chromium path', executablePath);
@@ -76,9 +78,7 @@ export class LeanPuppeteerHTMLPDF {
 
       this.browser = await puppeteer.launch({
         args: launchArgs,
-        executablePath: await chromium.executablePath(
-          `https://github.com/Sparticuz/chromium/releases/download/v133.0.0/chromium-v133.0.0-pack.tar`,
-        ),
+        executablePath,
         headless: chromium.headless,
         defaultViewport: chromium.defaultViewport,
       });
