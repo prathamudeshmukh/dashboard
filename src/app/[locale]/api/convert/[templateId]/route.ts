@@ -7,7 +7,6 @@ import { generatePdf } from '@/libs/actions/templates';
 import { authenticateApi } from '../../authenticateApi';
 import { withApiAuth } from '../../withApiAuth';
 
-export const maxDuration = 60;
 export const POST = withApiAuth(async (req: NextRequest, { params }: { params: { templateId: string } }): Promise<NextResponse> => {
   try {
     const authResult = await authenticateApi(req);
