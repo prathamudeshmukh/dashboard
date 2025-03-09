@@ -48,20 +48,23 @@ export class LeanPuppeteerHTMLPDF {
       console.log('Fetched chromium path', executablePath);
 
       // Verify executable exists
-      // await fs.access(executablePath, fs.constants.X_OK);
+      await fs.access(executablePath, fs.constants.X_OK);
 
-      // console.log('Access to chromium path ok');
+      // eslint-disable-next-line no-console
+      console.log('Access to chromium path ok');
 
       // console.log('File Permissions:', await fs.stat(executablePath));
-      // if (executablePath) {
-      //   try {
-      //     // eslint-disable-next-line no-console
-      //     console.log('setting exe permission');
-      //     await fs.chmod(executablePath, '755'); // Give execute permission
-      //   } catch (err) {
-      //     console.error('Failed to set permissions for Chromium:', err);
-      //   }
-      // }
+      if (executablePath) {
+        try {
+          // eslint-disable-next-line no-console
+          console.log('setting exe permission');
+          await fs.chmod(executablePath, '755'); // Give execute permission
+          // eslint-disable-next-line no-console
+          console.log('exe permission granted');
+        } catch (err) {
+          console.error('Failed to set permissions for Chromium:', err);
+        }
+      }
       const launchArgs = [
         ...chromium.args,
         '--disable-setuid-sandbox',
