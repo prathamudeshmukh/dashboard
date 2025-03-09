@@ -281,5 +281,19 @@
     "template_name": "Template Name",
     "user": "User",
     "input_data": "Input Data"
+  },
+  "TemplifyDocSidebar": {
+    "templify_docs": "Templify Docs",
+    "introduction": "Introduction",
+    "authentication": "Authentication",
+    "api_endpoint": "API Endpoints",
+    "request_response": "Request & Response Examples",
+    "error_handling": "Error Handling",
+    "security": "Security & Best Practices",
+    "contact": "Contact & Support"
+  },
+  "DocsIntroduction": {
+    "title": "1. Introduction",
+    "description": "Templify is an API-first SaaS that allows developers to create and manage templates and generate PDFs dynamically. This documentation provides the necessary details to integrate the Templify API seamlessly into your application."
   }
 }
