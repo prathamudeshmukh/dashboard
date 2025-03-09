@@ -65,6 +65,9 @@ export class LeanPuppeteerHTMLPDF {
           console.error('Failed to set permissions for Chromium:', err);
         }
       }
+      // eslint-disable-next-line no-console
+      console.log('File Permissions:', await fs.stat(executablePath));
+
       const launchArgs = [
         ...chromium.args,
         '--disable-setuid-sandbox',
