@@ -5,6 +5,7 @@ import createMDX from '@next/mdx';
 import { withSentryConfig } from '@sentry/nextjs';
 import createJiti from 'jiti';
 import withNextIntl from 'next-intl/plugin';
+import remarkGfm from 'remark-gfm';
 
 const jiti = createJiti(fileURLToPath(import.meta.url));
 
@@ -18,6 +19,9 @@ const bundleAnalyzer = withBundleAnalyzer({
 
 const withMDX = createMDX({
   extension: /\.mdx?$/,
+  options: {
+    remarkPlugins: [remarkGfm],
+  },
 });
 
 /** @type {import('next').NextConfig} */

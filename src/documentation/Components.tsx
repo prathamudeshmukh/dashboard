@@ -68,6 +68,32 @@ export const li = ({ children }: { children?: React.ReactNode }) => (
   </li>
 );
 
+export const table = ({ children }: { children?: React.ReactNode }) => (
+  <div className="mb-8 overflow-x-auto rounded-lg border">
+    <table className="w-full">{children}</table>
+  </div>
+);
+
+export const thead = ({ children }: { children?: React.ReactNode }) => (
+  <thead className="bg-muted">{children}</thead>
+);
+
+export const tbody = ({ children }: { children?: React.ReactNode }) => (
+  <tbody>{children}</tbody>
+);
+
+export const tr = ({ children }: { children?: React.ReactNode }) => (
+  <tr className="border-b transition-colors hover:bg-muted/50">{children}</tr>
+);
+
+export const th = ({ children }: { children?: React.ReactNode }) => (
+  <th className="px-4 py-3 text-left font-medium">{children}</th>
+);
+
+export const td = ({ children }: { children?: React.ReactNode }) => (
+  <td className="px-4 py-3">{children}</td>
+);
+
 export const a = ({ href, children }: { href?: string; children?: React.ReactNode }) => (
   <a href={href} className="font-medium text-primary hover:underline">
     {children}

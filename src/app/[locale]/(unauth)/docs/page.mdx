@@ -10,7 +10,6 @@ Templify API requires authentication using a **Client ID** and **Secret ID**. Th
 
 **Authentication Headers:**
 ```
-Authorization: Bearer YOUR_API_KEY
 Content-Type: application/json
 ```
 
@@ -23,19 +22,18 @@ To obtain your API key, sign in to your Templify account and navigate to the **A
 
 **Endpoint:**
 ```
-POST /api/v1/generate-pdf
+POST /api/convert/TEMPLATE_ID_HERE
 ```
 
 **Headers:**
 ```
-Authorization: Bearer YOUR_API_KEY
-Content-Type: application/json
+client_id: CLIENT_ID_HERE
+client_secret: CLIENT_SECRET_HERE
 ```
 
 **Request Body:**
 ```json
 {
-  "template_id": "TEMPLATE_ID_HERE",
   "data": {
     "name": "John Doe",
     "invoice_number": "INV-1001",
@@ -50,8 +48,7 @@ Content-Type: application/json
 **Response:**
 ```json
 {
-  "success": true,
-  "pdf_url": "https://templify.com/generated_pdfs/invoice_1001.pdf"
+  data:PDF_DOC_IN_BYTE_ARRAY
 }
 ```
 
@@ -59,12 +56,13 @@ Content-Type: application/json
 
 **cURL Example:**
 ```
-curl -X POST "https://api.templify.com/api/v1/generate-pdf" \
-     -H "Authorization: Bearer YOUR_API_KEY" \
-     -H "Content-Type: application/json" \
-     -d '{
-       "template_id": "TEMPLATE_ID_HERE",
-       "data": {
+curl --location 'https://templify.cloud/api/convert/YOUR_TEMPLATE_ID_HERE' \
+--header 'client_id: USER_ID_HERE' \
+--header 'client_secret: CLIENT_SECRET_HERE' \
+--header 'Content-Type: application/json' \
+--header 'Cookie: NEXT_LOCALE=en' \
+--data '{
+  "templateData": {
          "name": "John Doe",
          "invoice_number": "INV-1001",
          "items": [
@@ -80,30 +78,17 @@ curl -X POST "https://api.templify.com/api/v1/generate-pdf" \
 
 Templify API returns standard HTTP status codes.
 
-- **✅ 200 - OK**  
-  **Meaning:** Request successful.  
-  **Description:** The request was successfully processed.
-
-- **⚠️ 400 - Bad Request**  
-  **Meaning:** Missing required parameters.  
-  **Description:** The request failed due to missing or invalid data.
-
-- **🔒 401 - Unauthorized**  
-  **Meaning:** Invalid API key.  
-  **Description:** Authentication failed due to incorrect credentials.
-
-- **🔍 404 - Not Found**  
-  **Meaning:** Template ID does not exist.  
-  **Description:** The requested template could not be found in the system.
-
-- **🛑 500 - Server Error**  
-  **Meaning:** An internal server error occurred.  
-  **Description:** Something went wrong on our server. Please try again later.
+| Status Code | Meaning      | Description |
+|------------ |--------------|-------------|
+| 200         | OK           | Request successful. |
+| 400         | Bad Request  | Missing required parameters. |
+| 401         | Unauthorized | Invalid API key. |
+| 404         | Not Found    | Template ID does not exist. |
+| 500         | Server Error | An internal server error occurred. |
 
 Example error response:
 ```json
 {
-  "success": false,
   "error": "Template ID not found"
 }
 ```
