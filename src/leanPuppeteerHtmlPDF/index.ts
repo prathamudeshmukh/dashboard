@@ -32,8 +32,8 @@ export class LeanPuppeteerHTMLPDF {
     }
 
     try {
-      process.env.PUPPETEER_CACHE_DIR = '/tmp';
-      process.env.PUPPETEER_TMP_DIR = '/tmp';
+      // process.env.PUPPETEER_CACHE_DIR = '/tmp';
+      // process.env.PUPPETEER_TMP_DIR = '/tmp';
 
       // eslint-disable-next-line no-console
       console.log('Fetching chromium path');
@@ -42,15 +42,15 @@ export class LeanPuppeteerHTMLPDF {
       //   || await chromium.executablePath()
       //   || path.join(__dirname, '..', 'node_modules', '@sparticuz', 'chromium', 'bin', 'chromium');
 
-      const executablePath = `https://github.com/Sparticuz/chromium/releases/download/v133.0.0/chromium-v133.0.0-pack.tar`;
+      const executablePath = await chromium.executablePath(`https://github.com/Sparticuz/chromium/releases/download/v133.0.0/chromium-v133.0.0-pack.tar`);
 
-      // console.log('Fetched chromium path', executablePath);
+      // eslint-disable-next-line no-console
+      console.log('Fetched chromium path', executablePath);
 
       // Verify executable exists
       // await fs.access(executablePath, fs.constants.X_OK);
 
-      // eslint-disable-next-line no-console
-      console.log('Access to chromium path ok');
+      // console.log('Access to chromium path ok');
 
       // console.log('File Permissions:', await fs.stat(executablePath));
       // if (executablePath) {
@@ -80,11 +80,11 @@ export class LeanPuppeteerHTMLPDF {
         defaultViewport: chromium.defaultViewport,
       });
     } catch (error: any) {
-      // console.error('Browser initialization failed:', {
-      //   executablePath: await chromium.executablePath(),
-      //   envChromiumPath: process.env.CHROMIUM_PATH,
-      //   error: error.message,
-      // });
+      console.error('Browser initialization failed:', {
+        executablePath: await chromium.executablePath(),
+        envChromiumPath: process.env.CHROMIUM_PATH,
+        error: error.message,
+      });
       throw new Error(`Failed to launch browser: ${error.message}`);
     }
   }
