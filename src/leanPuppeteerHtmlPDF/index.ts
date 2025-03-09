@@ -20,6 +20,7 @@ export class LeanPuppeteerHTMLPDF {
   private browser: Browser | null = null;
   private options: LeanPuppeteerHTMLPDFOptions | null = null;
   private autoCloseBrowser = true;
+  private chromiumPath = 'https://github.com/Sparticuz/chromium/releases/download/v133.0.0/chromium-v133.0.0-pack.tar';
 
   constructor(options: LeanPuppeteerHTMLPDFOptions) {
     this.options = options;
@@ -31,42 +32,15 @@ export class LeanPuppeteerHTMLPDF {
     }
 
     try {
-      // process.env.PUPPETEER_CACHE_DIR = '/tmp';
-      // process.env.PUPPETEER_TMP_DIR = '/tmp';
+      const executablePath = await chromium.executablePath(this.chromiumPath);
 
-      // eslint-disable-next-line no-console
-      console.log('Fetching chromium path');
-      // Unified Chromium path resolution
-      // const executablePath = process.env.CHROMIUM_PATH
-      //   || await chromium.executablePath()
-      //   || path.join(__dirname, '..', 'node_modules', '@sparticuz', 'chromium', 'bin', 'chromium');
-
-      const executablePath = await chromium.executablePath(`https://github.com/Sparticuz/chromium/releases/download/v133.0.0/chromium-v133.0.0-pack.tar`);
-
-      // eslint-disable-next-line no-console
-      console.log('Fetched chromium path', executablePath);
-
-      // Verify executable exists
-      await fs.access(executablePath, fs.constants.X_OK);
-
-      // eslint-disable-next-line no-console
-      console.log('Access to chromium path ok');
-
-      // console.log('File Permissions:', await fs.stat(executablePath));
       if (executablePath) {
         try {
-          // eslint-disable-next-line no-console
-          console.log('setting exe permission');
           await fs.chmod(executablePath, '755'); // Give execute permission
-          // eslint-disable-next-line no-console
-          console.log('exe permission granted');
         } catch (err) {
           console.error('Failed to set permissions for Chromium:', err);
         }
       }
-      // eslint-disable-next-line no-console
-      console.log('File Permissions:', await fs.stat(executablePath));
-
       const launchArgs = [
         ...chromium.args,
         '--disable-setuid-sandbox',
@@ -75,9 +49,6 @@ export class LeanPuppeteerHTMLPDF {
         '--no-zygote',
         '--disable-dev-shm-usage',
       ];
-      // eslint-disable-next-line no-console
-      console.log('Launch pupeteer');
-
       this.browser = await puppeteer.launch({
         args: launchArgs,
         executablePath,
@@ -86,8 +57,6 @@ export class LeanPuppeteerHTMLPDF {
       });
     } catch (error: any) {
       console.error('Browser initialization failed:', {
-        executablePath: await chromium.executablePath(),
-        envChromiumPath: process.env.CHROMIUM_PATH,
         error: error.message,
       });
       throw new Error(`Failed to launch browser: ${error.message}`);
