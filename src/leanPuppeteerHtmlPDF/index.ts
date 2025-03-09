@@ -21,9 +21,8 @@ export class LeanPuppeteerHTMLPDF {
   private options: LeanPuppeteerHTMLPDFOptions | null = null;
   private autoCloseBrowser = true;
 
-  async setOptions(options: LeanPuppeteerHTMLPDFOptions): Promise<void> {
+  constructor(options: LeanPuppeteerHTMLPDFOptions) {
     this.options = options;
-    await this.initializeBrowser();
   }
 
   async initializeBrowser(): Promise<void> {

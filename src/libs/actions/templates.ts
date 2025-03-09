@@ -223,8 +223,7 @@ export async function generatePdf({
       templateData: template?.data?.templateSampleData || templateData,
     });
 
-    const htmlPdf = new LeanPuppeteerHTMLPDF();
-    htmlPdf.setOptions({
+    const htmlPdf = new LeanPuppeteerHTMLPDF({
       format: 'A4',
       printBackground: true,
     });
