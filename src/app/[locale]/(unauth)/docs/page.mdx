@@ -80,13 +80,25 @@ curl -X POST "https://api.templify.com/api/v1/generate-pdf" \
 
 Templify API returns standard HTTP status codes.
 
-| Status Code | Meaning | Description |
-|------------|---------|-------------|
-| 200 | OK | Request successful. |
-| 400 | Bad Request | Missing required parameters. |
-| 401 | Unauthorized | Invalid API key. |
-| 404 | Not Found | Template ID does not exist. |
-| 500 | Server Error | An internal server error occurred. |
+- **✅ 200 - OK**  
+  **Meaning:** Request successful.  
+  **Description:** The request was successfully processed.
+
+- **⚠️ 400 - Bad Request**  
+  **Meaning:** Missing required parameters.  
+  **Description:** The request failed due to missing or invalid data.
+
+- **🔒 401 - Unauthorized**  
+  **Meaning:** Invalid API key.  
+  **Description:** Authentication failed due to incorrect credentials.
+
+- **🔍 404 - Not Found**  
+  **Meaning:** Template ID does not exist.  
+  **Description:** The requested template could not be found in the system.
+
+- **🛑 500 - Server Error**  
+  **Meaning:** An internal server error occurred.  
+  **Description:** Something went wrong on our server. Please try again later.
 
 Example error response:
 ```json
@@ -98,10 +110,10 @@ Example error response:
 
 
 ## 6. Security & Best Practices
-* Always **store API keys securely** and do not expose them in front-end code.
-* Use **HTTPS** for all API requests to ensure encryption.
-* Implement **rate limiting** to prevent abuse.
-* Regularly **rotate API keys** for security.
+- Always **store API keys securely** and do not expose them in front-end code.
+- Use **HTTPS** for all API requests to ensure encryption.
+- Implement **rate limiting** to prevent abuse.
+- Regularly **rotate API keys** for security.
 
 
 ## 7. Contact & Support

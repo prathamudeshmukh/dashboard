@@ -1,6 +1,6 @@
 'use client';
 
-import { AlertCircle, Check, Info } from 'lucide-react';
+import { Check } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 
@@ -68,61 +68,8 @@ export const li = ({ children }: { children?: React.ReactNode }) => (
   </li>
 );
 
-export const table = ({ children }: { children?: React.ReactNode }) => (
-  <div className="mb-8 overflow-x-auto rounded-lg border">
-    <table className="w-full">{children}</table>
-  </div>
-);
-
-export const thead = ({ children }: { children?: React.ReactNode }) => (
-  <thead className="bg-muted">{children}</thead>
-);
-
-export const tbody = ({ children }: { children?: React.ReactNode }) => (
-  <tbody>{children}</tbody>
-);
-
-export const tr = ({ children }: { children?: React.ReactNode }) => (
-  <tr className="border-b transition-colors hover:bg-muted/50">{children}</tr>
-);
-
-export const th = ({ children }: { children?: React.ReactNode }) => (
-  <th className="px-4 py-3 text-left font-medium">{children}</th>
-);
-
-export const td = ({ children }: { children?: React.ReactNode }) => (
-  <td className="px-4 py-3">{children}</td>
-);
-
 export const a = ({ href, children }: { href?: string; children?: React.ReactNode }) => (
   <a href={href} className="font-medium text-primary hover:underline">
     {children}
   </a>
 );
-
-export const Callout = ({
-  children,
-  type = 'info',
-}: {
-  children?: React.ReactNode;
-  type?: 'info' | 'warning' | 'success';
-}) => {
-  const icons = {
-    info: <Info className="size-5" />,
-    warning: <AlertCircle className="size-5" />,
-    success: <Check className="size-5" />,
-  };
-
-  const styles = {
-    info: 'bg-blue-50 border-blue-200 text-blue-800',
-    warning: 'bg-amber-50 border-amber-200 text-amber-800',
-    success: 'bg-green-50 border-green-200 text-green-800',
-  };
-
-  return (
-    <div className={`${styles[type]} mb-6 flex items-start rounded-lg border p-4`}>
-      <div className="mr-3 mt-1">{icons[type]}</div>
-      <div>{children}</div>
-    </div>
-  );
-};
