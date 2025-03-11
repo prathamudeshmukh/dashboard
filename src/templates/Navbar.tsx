@@ -39,6 +39,10 @@ export const Navbar = () => {
             <Link href="#security">Security</Link>
           </li>
 
+          <li>
+            <Link href="/docs">Docs</Link>
+          </li>
+
         </CenteredMenu>
       </section>
     </header>

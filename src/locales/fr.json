@@ -276,5 +276,150 @@
     "template_name": "Nom du modèle",
     "user": "Utilisateur",
     "input_data": "Données d'entrée"
+  },
+  "TemplifyDocSidebar": {
+    "templify_docs": "Documentation Templify",
+    "introduction": "Introduction",
+    "authentication": "Authentification",
+    "api_endpoint": "Points de terminaison API",
+    "request_response": "Exemples de requêtes et réponses",
+    "error_handling": "Gestion des erreurs",
+    "security": "Sécurité et bonnes pratiques",
+    "contact": "Contact et assistance"
+  },
+  "DocsIntroduction": {
+    "title": "1. Introduction",
+    "description": "Templify est un SaaS orienté API qui permet aux développeurs de créer et gérer des modèles et de générer des PDF dynamiquement. Cette documentation fournit les détails nécessaires pour intégrer l'API Templify de manière transparente dans votre application."
+  },
+  "Privacy": {
+    "title": "Politique de confidentialité",
+    "introduction": {
+      "title": "1. Introduction",
+      "content": "Chez Templify, nous priorisons la confidentialité et la sécurité de nos utilisateurs. Cette Politique de confidentialité explique comment nous collectons, utilisons et protégeons vos informations."
+    },
+    "information": {
+      "title": "2. Informations que nous collectons",
+      "content": {
+        "content1": "<important>Informations du compte :</important> Nom, email et identifiants de connexion.",
+        "content2": "<important>Données d'utilisation :</important> Journaux, interactions et utilisation du service.",
+        "content3": "<important>Informations de paiement :</important> Traitées en toute sécurité par des prestataires de paiement tiers."
+      }
+    },
+    "howWeUseData": {
+      "title": "3. Comment nous utilisons vos données",
+      "content": {
+        "content1": "Pour fournir, améliorer et maintenir nos services.",
+        "content2": "Pour communiquer des mises à jour, des offres et des informations relatives au support.",
+        "content3": "Pour assurer la sécurité et prévenir les activités frauduleuses."
+      }
+    },
+    "dataSharing": {
+      "title": "4. Partage de données",
+      "content": {
+        "content1": "Nous ne vendons ni ne louons vos données.",
+        "content2": "Nous pouvons partager des données avec des prestataires de services pour l'hébergement, l'analyse et le traitement des paiements.",
+        "content3": "Les données peuvent être divulguées pour se conformer aux obligations légales."
+      }
+    },
+    "security": {
+      "title": "5. Mesures de sécurité",
+      "content": {
+        "content1": "Nous mettons en œuvre des pratiques de sécurité conformes aux normes de l'industrie pour protéger les données des utilisateurs.",
+        "content2": "Des clés API cryptées et des mécanismes d'authentification sécurisés sont en place."
+      }
+    },
+    "retention": {
+      "title": "6. Conservation des données",
+      "content": {
+        "content1": "Nous conservons les données aussi longtemps que nécessaire pour le fonctionnement du service et la conformité.",
+        "content2": "Les utilisateurs peuvent demander la suppression des données à tout moment en contactant le support."
+      }
+    },
+    "rights": {
+      "title": "7. Droits des utilisateurs",
+      "content": {
+        "content1": "Accéder, mettre à jour ou supprimer les données personnelles.",
+        "content2": "Se désinscrire des communications marketing.",
+        "content3": "Demander une copie des données personnelles stockées."
+      }
+    },
+    "changes": {
+      "title": "8. Modifications de la politique de confidentialité",
+      "content": {
+        "content1": "Nous pouvons mettre à jour cette politique périodiquement et informer les utilisateurs des changements importants."
+      }
+    },
+    "contact": {
+      "title": "9. Contact",
+      "content": {
+        "content1": "Pour les questions relatives à la confidentialité, veuillez nous contacter."
+      }
+    }
+  },
+  "ToS": {
+    "title": "Conditions d'utilisation",
+    "introduction": {
+      "title": "1. Introduction",
+      "content": "Bienvenue sur Templify ! En accédant ou en utilisant notre plateforme, vous acceptez de vous conformer et d'être lié par ces Conditions d'utilisation. Si vous n'acceptez pas ces conditions, veuillez ne pas utiliser nos services."
+    },
+    "information": {
+      "title": "2. Définitions",
+      "content": {
+        "content1": "<important>Templify</important> désigne notre plateforme SaaS fournissant la gestion de modèles et la génération de PDF.",
+        "content2": "<important>Utilisateur</important> désigne toute personne accédant ou utilisant nos services.",
+        "content3": "<important>Service</important> désigne la plateforme Templify, y compris les API, les applications web et les services associés."
+      }
+    },
+    "userAccounts": {
+      "title": "3. Comptes utilisateurs",
+      "content": {
+        "content1": "Vous devez fournir des informations exactes et complètes lors du processus d'inscription.",
+        "content2": "Vous êtes responsable du maintien de la confidentialité de vos identifiants de compte.",
+        "content3": "Templify se réserve le droit de suspendre ou de résilier les comptes qui violent ces conditions."
+      }
+    },
+    "useOfService": {
+      "title": "4. Utilisation des services",
+      "content": {
+        "content1": "Vous ne pouvez pas utiliser Templify à des fins illégales ou non autorisées.",
+        "content2": "Vous ne devez pas interférer avec ou perturber la fonctionnalité de la plateforme.",
+        "content3": "L'utilisation de l'API doit être conforme à notre politique d'utilisation équitable."
+      }
+    },
+    "payment": {
+      "title": "5. Paiement et abonnement",
+      "content": {
+        "content1": "Certaines fonctionnalités peuvent nécessiter un abonnement payant.",
+        "content2": "Les frais d'abonnement ne sont pas remboursables sauf indication contraire.",
+        "content3": "Templify se réserve le droit de mettre à jour les tarifs avec préavis."
+      }
+    },
+    "dataPrivacy": {
+      "title": "6. Confidentialité des données",
+      "content": {
+        "content1": "Vos données sont traitées conformément à notre Politique de confidentialité.",
+        "content2": "Nous ne vendons pas les données des utilisateurs à des tiers."
+      }
+    },
+    "limitation": {
+      "title": "7. Limitation de responsabilité",
+      "content": {
+        "content1": "Templify est fourni 'tel quel' sans aucune garantie.",
+        "content2": "Nous ne sommes pas responsables des dommages indirects, accessoires ou consécutifs résultant de l'utilisation du service."
+      }
+    },
+    "changes": {
+      "title": "8. Modifications des conditions",
+      "content": {
+        "content1": "Nous pouvons mettre à jour ces conditions à tout moment, avec préavis le cas échéant.",
+        "content2": "L'utilisation continue du service constitue l'acceptation des conditions révisées."
+      }
+    },
+    "contact": {
+      "title": "9. Contact",
+      "content": {
+        "content1": "Pour toute question concernant ces conditions, veuillez nous contacter."
+      }
+    }
   }
 }
