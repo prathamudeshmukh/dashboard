@@ -15,9 +15,11 @@
   "Hero": {
     "follow_twitter": "Suivez @Ixartz sur Twitter",
     "title": "Le parfait <important>SaaS template</important> pour construire et mettre à l'échelle votre entreprise en toute simplicité.",
-    "description": "Un template gratuit et open-source de landing page pour votre entreprise SaaS, construit avec React, TypeScript, Shadcn UI et Tailwind CSS.",
-    "primary_button": "Démarrer",
-    "secondary_button": "Mettez une étoile sur GitHub"
+    "subtitle": "Créer et gérer des modèles PDF ne devrait pas être un casse-tête. <important>Templify</important> vous permet de créer, de gérer et de générer des PDF sans effort, sans maintenir de bibliothèques complexes ni écrire de code personnalisé pour chaque nouveau modèle.",
+    "description1": "Infrastructure évolutive, axée sur l'API, qui gère la génération de PDF pour vous",
+    "description2": "Aucun effort de développement important n'est nécessaire pour chaque nouveau modèle",
+    "description3": "Plus besoin de maintenir des bibliothèques PDF volumineuses",
+    "primary_button": "Inscrivez-vous gratuitement"
   },
   "Sponsors": {
     "title": "Sponsorisé par"
@@ -42,11 +44,13 @@
     "feature3_title": "Prise en charge de contenu dynamique",
     "feature4_title": "Évolutif et rapide",
     "feature5_title": "Sécurisé et fiable",
+    "feature6_title": "Informations sur l'utilisation des API",
     "feature1_description": "Éditeur glisser-déposer pour non-développeurs, priorité API pour développeurs",
     "feature2_description": "Voir les changements en temps réel",
     "feature3_description": "Automatiser les tableaux, listes et données de formulaires",
     "feature4_description": "Conçu pour gérer la génération de PDF à haut volume",
     "feature5_description": "Clés API cryptées, garantie de disponibilité de 99,9%",
+    "feature6_description": "Suivez l'utilisation passée de l'API au fil du temps et examinez l'historique détaillé des appels pour plus de transparence et de débogage.",
     "primary_button": "Commencez à créer des modèles maintenant"
   },
   "Working": {
@@ -94,6 +98,7 @@
   "SecurityFeatures": {
     "title": "Sécurisé, fiable et conçu pour l'échelle",
     "subtitle": "Sécurité",
+    "description": "Vos données restent protégées et vos PDF sont générés instantanément, à chaque fois.",
     "feature1": "Sécurité",
     "feature2": "Fiabilité",
     "feature3": "Support",
