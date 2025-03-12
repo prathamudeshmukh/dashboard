@@ -1,11 +1,9 @@
 import { Buffer } from 'node:buffer';
 import fs from 'node:fs/promises';
 
-import chromium from '@sparticuz/chromium';
+import chromium from '@sparticuz/chromium-min';
 import type { Browser, Page, PDFOptions } from 'puppeteer-core';
 import puppeteer from 'puppeteer-core';
-
-process.env.CHROMIUM_PATH = '/tmp'; // Use a writable directory
 
 export type LeanPuppeteerHTMLPDFOptions = {
   args?: string[];
@@ -22,10 +20,10 @@ export class LeanPuppeteerHTMLPDF {
   private browser: Browser | null = null;
   private options: LeanPuppeteerHTMLPDFOptions | null = null;
   private autoCloseBrowser = true;
+  private chromiumPath = 'https://github.com/Sparticuz/chromium/releases/download/v133.0.0/chromium-v133.0.0-pack.tar';
 
-  async setOptions(options: LeanPuppeteerHTMLPDFOptions): Promise<void> {
+  constructor(options: LeanPuppeteerHTMLPDFOptions) {
     this.options = options;
-    await this.initializeBrowser();
   }
 
   async initializeBrowser(): Promise<void> {
@@ -34,25 +32,33 @@ export class LeanPuppeteerHTMLPDF {
     }
 
     try {
-      process.env.PUPPETEER_CACHE_DIR = '/tmp'; // Fix for read-only systems
-      const tempPath = await chromium.executablePath();
-      /* eslint-disable no-console */
-      console.debug('path:', tempPath);
+      const executablePath = await chromium.executablePath(this.chromiumPath);
+
+      if (executablePath) {
+        try {
+          await fs.chmod(executablePath, '755'); // Give execute permission
+        } catch (err) {
+          console.error('Failed to set permissions for Chromium:', err);
+        }
+      }
+      const launchArgs = [
+        ...chromium.args,
+        '--disable-setuid-sandbox',
+        '--no-sandbox',
+        '--single-process',
+        '--no-zygote',
+        '--disable-dev-shm-usage',
+      ];
       this.browser = await puppeteer.launch({
-        args: [...chromium.args, '--no-sandbox', '--disable-gpu'],
-        defaultViewport: chromium.defaultViewport,
-        executablePath: tempPath,
+        args: launchArgs,
+        executablePath,
         headless: chromium.headless,
-      });
-
-      this.browser.on('disconnected', () => {
-        this.browser = null;
-      });
-
-      this.browser.on('error', (error) => {
-        console.error('Browser error:', error);
+        defaultViewport: chromium.defaultViewport,
       });
     } catch (error: any) {
+      console.error('Browser initialization failed:', {
+        error: error.message,
+      });
       throw new Error(`Failed to launch browser: ${error.message}`);
     }
   }
