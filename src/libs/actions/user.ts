@@ -73,7 +73,7 @@ export async function deductCredit(clientId: string) {
       .where(eq(users.clientId, clientId))
       .limit(1);
 
-    if (!user.length || user[0]?.remainingBalance as number <= 0) {
+    if (!user.length || (user[0]?.remainingBalance as number) <= 0) {
       return { error: 'Insufficient credits.' };
     }
 
