@@ -13,10 +13,10 @@ export const Footer = () => {
           <span>Templify</span>
         </div>
         <nav className="flex gap-4 sm:gap-6">
-          <Link href="#" className="text-sm font-medium text-muted-foreground hover:underline">
+          <Link href="/privacy" className="text-sm font-medium text-muted-foreground hover:underline">
             {t('privacy_policy')}
           </Link>
-          <Link href="#" className="text-sm font-medium text-muted-foreground hover:underline">
+          <Link href="/terms" className="text-sm font-medium text-muted-foreground hover:underline">
             {t('terms_of_service')}
           </Link>
           <Link href="#" className="text-sm font-medium text-muted-foreground hover:underline">
