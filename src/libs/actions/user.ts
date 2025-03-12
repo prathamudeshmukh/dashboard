@@ -2,7 +2,7 @@
 
 import { eq } from 'drizzle-orm';
 
-import { apikeys, users } from '@/models/Schema';
+import { apikeys, creditTransactions, users } from '@/models/Schema';
 import { decrypt } from '@/service/crypto';
 import { generateApiKeys } from '@/service/generateApiKeys';
 import type { ClientConfigs, User } from '@/types/User';
@@ -39,6 +39,54 @@ export async function saveUser(user: User) {
   } catch (error: any) {
     console.error('Error saving user:', error);
     return { success: false, error: error.message };
+  }
+}
+
+export async function creditUser(clientId: string) {
+  try {
+    await db.transaction(async (tx) => {
+      await tx.insert(creditTransactions).values({
+        clientId,
+        credits: 150,
+        paymentId: null,
+      });
+
+      // Update user's remaining balance
+      await tx
+        .update(users)
+        .set({ remainingBalance: 150 })
+        .where(eq(users.clientId, clientId));
+    });
+    return { success: true };
+  } catch (error) {
+    console.error('Error crediting new user:', error);
+    return { error: 'Failed to credit user.' };
+  }
+}
+
+export async function deductCredit(clientId: string) {
+  try {
+    // Fetch user's current balance
+    const user = await db
+      .select({ remainingBalance: users.remainingBalance })
+      .from(users)
+      .where(eq(users.clientId, clientId))
+      .limit(1);
+
+    if (!user.length || user[0]?.remainingBalance as number <= 0) {
+      return { error: 'Insufficient credits.' };
+    }
+
+    // Deduct 1 credit
+    await db
+      .update(users)
+      .set({ remainingBalance: user[0]?.remainingBalance as number - 1 })
+      .where(eq(users.clientId, clientId));
+
+    return { success: true };
+  } catch (error) {
+    console.error('Error deducting credit:', error);
+    return { error: 'Failed to deduct credit.' };
   }
 }
 

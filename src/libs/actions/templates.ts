@@ -8,6 +8,7 @@ import contentGenerator from '@/service/contentGenerator';
 import type { FetchTemplateResponse, FetchTemplatesRequest, GeneratedTemplates, GeneratePdfRequest, JsonObject, PaginatedResponse, TemplateType, UsageMetric, UsageMetricRequest } from '@/types/Template';
 
 import { db } from '../DB';
+import { deductCredit } from './user';
 
 export async function UpsertTemplate({
   templateId,
@@ -199,6 +200,7 @@ export async function generatePdf({
   templateData = {},
   devMode = true,
   isApi = false,
+  clientId = '',
 }: GeneratePdfRequest): Promise<{ pdf?: string; error?: string }> {
   try {
     let template;
@@ -232,6 +234,11 @@ export async function generatePdf({
     const pdf = await htmlPdf.create(content);
 
     if (template?.data?.id && isApi) {
+      const creditResponse = await deductCredit(clientId);
+      if (!creditResponse.success) {
+        return { error: creditResponse.error };
+      }
+
       await addGeneratedTemplateHistory({
         templateId: template.data.id,
         dataValue: templateData,

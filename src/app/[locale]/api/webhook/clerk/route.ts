@@ -3,7 +3,7 @@ import { headers } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { Webhook } from 'svix';
 
-import { saveUser } from '@/libs/actions/user';
+import { creditUser, saveUser } from '@/libs/actions/user';
 
 export async function POST(req: Request) {
   const SIGNING_SECRET = process.env.CLERK_WEBHOOK_SECRET;
@@ -58,6 +58,8 @@ export async function POST(req: Request) {
 
   try {
     await saveUser({ clientId: id, email: email_addresses[0]?.email_address as string, username: first_name as string });
+    // credit 150 for new user
+    await creditUser(id);
     return NextResponse.json({ message: 'User created successfully' }, { status: 201 });
   } catch (error) {
     console.error('Error saving user to database:', error);
