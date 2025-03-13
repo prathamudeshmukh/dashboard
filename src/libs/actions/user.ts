@@ -86,7 +86,7 @@ export async function deductCredit(clientId: string) {
     return { success: true };
   } catch (error) {
     console.error('Error deducting credit:', error);
-    return { error: 'Failed to deduct credit.' };
+    return { error: `Failed to deduct credit : ${error}` };
   }
 }
 
