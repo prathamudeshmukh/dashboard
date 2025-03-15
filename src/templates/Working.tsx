@@ -3,6 +3,7 @@ import {
   FileText,
   LayoutTemplate,
   Server,
+  Zap,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
@@ -39,6 +40,7 @@ export const Working = () => {
         className="w-full bg-muted py-12 md:py-24 lg:py-32"
         title="Step-by-Step Breakdown"
         subtitle="How it Works"
+        icon={Zap}
         description="Seamlessly integrates with any SaaS application in minutes."
       >
 

@@ -109,10 +109,13 @@
     "feature4_description": "Auto-scaling infrastructure ensures high-speed PDF generation, even at peak loads."
   },
   "Pricing": {
-    "section_subtitle": "Features",
-    "section_title": "Unlock the Full Potential of the SaaS Template",
-    "section_description": "A free and open-source landing page template for your SaaS business, built with React, TypeScript, Shadcn UI, and Tailwind CSS.",
-    "button_text": "Get Started"
+    "title": "Simple & Transparent Pricing for the MVP Version",
+    "subtitle": "Pricing & Payment",
+    "description": "Get started with 150 free credits when you sign up!",
+    "pricing_label1": "Each PDF generation API call deducts 1 credit from your balance.",
+    "pricing_label2": "Once your credits are exhausted, you can contact us at support@templify.cloud to replenish your balance.",
+    "pricing_label3": " No hidden fees, no complicated pricing – just pay as you go.",
+    "cta": "Sign up now and start generating PDFs with 150 free credits!"
   },
   "PricingPlan": {
     "free_plan_name": "Free",
@@ -131,8 +134,28 @@
     "next_renew_date": "Your subscription renews on {date}"
   },
   "FAQ": {
-    "question": "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
-    "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam aliquam enim dui, id consequat turpis ullamcorper ac. Mauris id quam dolor. Nullam eu egestas turpis. Proin risus elit, sollicitudin in mi a, accumsan euismod turpis. In euismod mi sed diam tristique hendrerit."
+    "title": "Frequently Asked Questions",
+    "subtitle": "Support",
+    "description": "Everything you need to know about Templify",
+    "question_1": "What is Templify?",
+    "answer_1": "Templify is an API-first SaaS that enables users to create and manage templates and dynamically generate PDFs without the need for complex PDF libraries or extensive development effort.",
+    "question_2": "How do I integrate Templify into my application?",
+    "answer_2": "Integration is simple! Sign up, create a template, obtain the Template ID, and call our API with your Client ID & Secret ID to generate PDFs instantly.",
+    "question_3": "What types of templates can I create?",
+    "answer_3": {
+      "1": "You can create:",
+      "2": "Drag & Drop HTML Builder (for non-developers)",
+      "3": "Handlebars Template Engine (for developers needing dynamic template generation)"
+    },
+    "question_4": "Is my data secure with Templify?",
+    "answer_4": "Yes! We use secure API key authentication and enforce encryption measures to keep your data protected.",
+    "question_5": "Can I track my past API usage?",
+    "answer_5": "Absolutely! Templify provides a time-series view of your past API calls and a detailed API invocation history for monitoring and debugging.",
+    "question_6": "What kind of support do you provide?",
+    "answer_6": "We offer comprehensive API documentation and email support to assist with any integration or usage issues.",
+    "question_7": "Is Templify scalable for high-volume PDF generation?",
+    "answer_7": "Yes! Our auto-scaling infrastructure ensures that even large-scale applications can generate PDFs quickly and reliably.",
+    "cta": "Get Started with Templify"
   },
   "CTA": {
     "title": "Stop wasting time on PDF generation.",

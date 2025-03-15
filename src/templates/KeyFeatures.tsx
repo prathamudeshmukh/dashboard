@@ -23,6 +23,7 @@ export const KeyFeatures = () => {
         className="w-full bg-background py-12 md:py-24 lg:py-32"
         title={t('section_title')}
         subtitle={t('section_subtitle')}
+        icon={Zap}
       >
         <div className="container px-4 md:px-6">
           <div className="mx-auto grid max-w-5xl gap-6 py-12 lg:grid-cols-3">
