@@ -1,4 +1,4 @@
-import { Book, Code, FileText, LifeBuoy, Lock, Server, Shield } from 'lucide-react';
+import { Book, Code, FileText, LifeBuoy, Lock, Server, Shield, TriangleAlertIcon } from 'lucide-react';
 import Link from 'next/link';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -27,7 +27,7 @@ const navItems = [
   {
     id: 'error-handling',
     title: 'Error Handling',
-    icon: Shield,
+    icon: TriangleAlertIcon,
   },
   {
     id: 'security-best-practices',
