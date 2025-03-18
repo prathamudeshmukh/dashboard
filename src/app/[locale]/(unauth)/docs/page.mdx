@@ -1,10 +1,11 @@
 # Templify API Documentation
 
-
+<div id='introduction'>
 ## 1. Introduction
 Templify is an API-first SaaS that allows developers to create and manage templates and generate PDFs dynamically. This documentation provides the necessary details to integrate the Templify API seamlessly into your application.
+</div>
 
-
+<div id='authentication'>
 ## 2. Authentication
 Templify API requires authentication using a **Client ID** and **Secret ID**. These credentials must be included in the request headers.
 
@@ -14,8 +15,9 @@ Content-Type: application/json
 ```
 
 To obtain your API key, sign in to your Templify account and navigate to the **API Keys** section.
+</div>
 
-
+<div id='api-endpoints'>
 ## 3. API Endpoints
 
 ### **Generate PDF**
@@ -51,7 +53,9 @@ client_secret: CLIENT_SECRET_HERE
   data:PDF_DOC_IN_BYTE_ARRAY
 }
 ```
+</div>
 
+<div id='request-response-examples'>
 ## 4. Request & Response Examples
 
 **cURL Example:**
@@ -72,8 +76,9 @@ curl --location 'https://templify.cloud/api/convert/YOUR_TEMPLATE_ID_HERE' \
        }
      }'
 ```
+</div>
 
-
+<div id='error-handling'>
 ## 5. Error Handling
 
 Templify API returns standard HTTP status codes.
@@ -92,18 +97,21 @@ Example error response:
   "error": "Template ID not found"
 }
 ```
+</div>
 
-
+<div id='security-best-practices'>
 ## 6. Security & Best Practices
 - Always **store API keys securely** and do not expose them in front-end code.
 - Use **HTTPS** for all API requests to ensure encryption.
 - Implement **rate limiting** to prevent abuse.
-- Regularly **rotate API keys** for security.
 
+</div>
 
+<div id='contact-support'>
 ## 7. Contact & Support
 For any queries or issues, contact our support team:
-* **Email:** support@templify.com
+* **Email:** support@templify.cloud
 * **API Status:** https://status.templify.com
+</div>
 
 Happy coding! 🚀
