@@ -1,9 +1,11 @@
 import { fileURLToPath } from 'node:url';
 
 import withBundleAnalyzer from '@next/bundle-analyzer';
+import createMDX from '@next/mdx';
 import { withSentryConfig } from '@sentry/nextjs';
 import createJiti from 'jiti';
 import withNextIntl from 'next-intl/plugin';
+import remarkGfm from 'remark-gfm';
 
 const jiti = createJiti(fileURLToPath(import.meta.url));
 
@@ -15,19 +17,29 @@ const bundleAnalyzer = withBundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
 });
 
+const withMDX = createMDX({
+  extension: /\.mdx?$/,
+  options: {
+    remarkPlugins: [remarkGfm],
+  },
+});
+
 /** @type {import('next').NextConfig} */
-export default withSentryConfig(
-  bundleAnalyzer(
-    withNextIntlConfig({
-      eslint: {
-        dirs: ['.'],
-      },
-      poweredByHeader: false,
-      reactStrictMode: true,
-      experimental: {
-        serverComponentsExternalPackages: ['@electric-sql/pglite', 'puppeteer-core', '@sparticuz/chromium'],
-      },
-    }),
+const NextConfig = withSentryConfig(
+  withMDX(
+    bundleAnalyzer(
+      withNextIntlConfig({
+        eslint: {
+          dirs: ['.'],
+        },
+        poweredByHeader: false,
+        reactStrictMode: true,
+        experimental: {
+          serverComponentsExternalPackages: ['@electric-sql/pglite', 'puppeteer-core', '@sparticuz/chromium'],
+        },
+        pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
+      }),
+    ),
   ),
   {
     // For all available options, see:
@@ -67,3 +79,5 @@ export default withSentryConfig(
     telemetry: false,
   },
 );
+
+export default NextConfig;
