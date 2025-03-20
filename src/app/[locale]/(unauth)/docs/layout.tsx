@@ -2,6 +2,7 @@ import { Book, Code, FileText, LifeBuoy, Lock, Server, Shield, TriangleAlertIcon
 import Link from 'next/link';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Footer } from '@/templates/Footer';
 
 const navItems = [
   {
@@ -76,6 +77,7 @@ export default function DocsLayout({
         <div className="container p-12">
           {children}
         </div>
+        <Footer />
       </main>
     </div>
   );

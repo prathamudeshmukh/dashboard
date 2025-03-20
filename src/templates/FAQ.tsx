@@ -1,4 +1,4 @@
-import { ArrowRight, FileText } from 'lucide-react';
+import { FileText } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { Accordion } from '@/components/ui/accordion';
@@ -54,7 +54,6 @@ export const FAQ = () => {
         title={t('title')}
         subtitle={t('subtitle')}
         icon={FileText}
-        description={t('description')}
       >
         <div className="container px-4 md:px-6">
           <div className="mx-auto mt-8 max-w-3xl space-y-4">
@@ -66,8 +65,6 @@ export const FAQ = () => {
             <div className="mt-8 flex justify-center">
               <Button size="lg" className="gap-1">
                 {t('cta')}
-                {' '}
-                <ArrowRight className="size-4" />
               </Button>
             </div>
           </div>

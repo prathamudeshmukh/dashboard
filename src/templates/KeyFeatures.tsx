@@ -1,5 +1,4 @@
 import {
-  ArrowRight,
   ChartNetwork,
   Database,
   MousePointer,
@@ -63,8 +62,6 @@ export const KeyFeatures = () => {
             <CardContent className="p-6">
               <Button size="lg" className="w-full gap-1">
                 {t('primary_button')}
-                {' '}
-                <ArrowRight className="size-4" />
               </Button>
             </CardContent>
           </div>

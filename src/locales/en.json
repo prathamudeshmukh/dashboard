@@ -109,13 +109,13 @@
     "feature4_description": "Auto-scaling infrastructure ensures high-speed PDF generation, even at peak loads."
   },
   "Pricing": {
-    "title": "Simple & Transparent Pricing for the MVP Version",
+    "title": "Simple & Transparent Pricing For The MVP Version",
     "subtitle": "Pricing & Payment",
     "description": "Get started with 150 free credits when you sign up!",
     "pricing_label1": "Each PDF generation API call deducts 1 credit from your balance.",
     "pricing_label2": "Once your credits are exhausted, you can contact us at support@templify.cloud to replenish your balance.",
     "pricing_label3": " No hidden fees, no complicated pricing – just pay as you go.",
-    "cta": "Sign up now and start generating PDFs with 150 free credits!"
+    "cta": "Sign up today and claim 150 free PDF credits!"
   },
   "PricingPlan": {
     "free_plan_name": "Free",
@@ -158,7 +158,7 @@
     "cta": "Get Started with Templify"
   },
   "CTA": {
-    "title": "Stop wasting time on PDF generation.",
+    "title": "Stop Wasting Time On PDF Generation.",
     "description": "Let Templify handle it for you",
     "button_text": "Sign up now and create your first template in minutes!"
   },

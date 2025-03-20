@@ -1,4 +1,4 @@
-import { ArrowRight, CheckCircle2, CreditCard } from 'lucide-react';
+import { CheckCircle2, CreditCard } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import React from 'react';
 
@@ -39,8 +39,6 @@ const Pricing = () => {
             <div className="flex justify-center">
               <Button size="lg" className="gap-1">
                 {t('cta')}
-                {' '}
-                <ArrowRight className="size-4" />
               </Button>
             </div>
           </div>

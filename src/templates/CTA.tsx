@@ -1,6 +1,3 @@
-import {
-  ArrowRight,
-} from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
@@ -22,8 +19,6 @@ export const CTA = () => {
           <div className="mx-auto w-full max-w-sm space-y-2">
             <Button size="lg" variant="secondary" className="w-full gap-1">
               {t('button_text')}
-              {' '}
-              <ArrowRight className="size-4" />
             </Button>
           </div>
         </div>
