@@ -30,7 +30,9 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: npm
       - run: npm ci
-
+      - name: Print dynamic vars
+        run: |
+          echo "Triggered by event: ${{ github.event_name }}, ${{ github.base_ref }}"
       - name: Set Preview Environment Variables for PRs
         if: github.event_name == 'pull_request' && github.base_ref == 'main' || github.event_name == 'push' && github.base_ref == 'develop'
         run: |
