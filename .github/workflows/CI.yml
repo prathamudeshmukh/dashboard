@@ -43,7 +43,7 @@ jobs:
       # TODO: Run database migration only on develop or main branch
       - name: Run databse migrations
         if: github.event_name == 'push'
-        run: dotenv -c $ENV -- drizzle-kit migrate
+        run: drizzle-kit migrate
 
       - run: npm run build
 
