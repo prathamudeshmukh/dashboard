@@ -35,7 +35,7 @@ const NextConfig = withSentryConfig(
         poweredByHeader: false,
         reactStrictMode: true,
         experimental: {
-          serverComponentsExternalPackages: ['@electric-sql/pglite'],
+          serverComponentsExternalPackages: ['@electric-sql/pglite', 'puppeteer-core', '@sparticuz/chromium'],
         },
         pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
       }),
