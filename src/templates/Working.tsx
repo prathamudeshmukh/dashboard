@@ -42,7 +42,7 @@ export const Working = () => {
       >
 
         <div className="container px-4 md:px-6">
-          <div className="mx-auto grid max-w-5xl items-start gap-6 py-12 md:grid-cols-5 md:gap-12">
+          <div className="mx-auto grid max-w-5xl items-start gap-6 py-12 md:grid-cols-2 lg:grid-cols-3">
 
             <StepCard
               stepNumber={1}

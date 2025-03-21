@@ -17,7 +17,7 @@ export const CTA = () => {
             </p>
           </div>
           <div className="mx-auto w-full max-w-sm space-y-2">
-            <Button size="lg" variant="secondary" className="w-full gap-1">
+            <Button size="lg" variant="link" className="w-full gap-1 text-primary-foreground">
               {t('button_text')}
             </Button>
           </div>
