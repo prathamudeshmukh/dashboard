@@ -45,18 +45,16 @@ export const Working = () => {
           <div className="mx-auto grid max-w-5xl items-start gap-6 py-12 md:grid-cols-2 lg:grid-cols-3">
 
             <StepCard
-              stepNumber={1}
               title={t('step1_title')}
               description={(
                 <>
                   {t('step1_description')}
                 </>
               )}
-              icon={<GoogleIcon className="size-8 text-muted-foreground" />}
+              icon={<GoogleIcon className="size-8 text-secondary" />}
             />
 
             <StepCard
-              stepNumber={2}
               title={t('step2_title')}
               description={(
                 <>
@@ -66,40 +64,37 @@ export const Working = () => {
 
                 </>
               )}
-              icon={<LayoutTemplate className="size-8 text-muted-foreground" />}
+              icon={<LayoutTemplate className="size-8 text-secondary" />}
             />
 
             <StepCard
-              stepNumber={3}
               title={t('step3_title')}
               description={(
                 <>
                   {t('step3_description')}
                 </>
               )}
-              icon={<Code className="size-8 text-muted-foreground" />}
+              icon={<Code className="size-8 text-secondary" />}
             />
 
             <StepCard
-              stepNumber={4}
               title={t('step4_title')}
               description={(
                 <>
                   {t('step4_description')}
                 </>
               )}
-              icon={<Server className="size-8 text-muted-foreground" />}
+              icon={<Server className="size-8 text-secondary" />}
             />
 
             <StepCard
-              stepNumber={5}
               title={t('step5_title')}
               description={(
                 <>
                   {t('step5_description')}
                 </>
               )}
-              icon={<FileText className="size-8 text-muted-foreground" />}
+              icon={<FileText className="size-8 text-secondary" />}
             />
 
           </div>
