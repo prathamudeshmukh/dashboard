@@ -60,6 +60,7 @@ export const Working = () => {
                 <>
                   <span>{t('step2_description.description_1')}</span>
                   <br />
+                  <br />
                   <span>{t('step2_description.description_2')}</span>
 
                 </>

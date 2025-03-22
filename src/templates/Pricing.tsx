@@ -21,17 +21,17 @@ const Pricing = () => {
             <Card>
               <CardContent className="p-6">
                 <ul className="space-y-4 text-muted-foreground">
-                  <li className="flex items-center">
-                    <CheckCircle2 className="mr-2 size-5 text-primary" />
-                    {t('pricing_label1')}
+                  <li className="flex items-start gap-2">
+                    <div className="flex"><CheckCircle2 className="mt-1 size-5 text-primary" /></div>
+                    <span>{t('pricing_label1')}</span>
                   </li>
-                  <li className="flex items-center">
-                    <CheckCircle2 className="mr-2 size-5 text-primary" />
-                    {t('pricing_label2')}
+                  <li className="flex items-start gap-2">
+                    <div className="flex"><CheckCircle2 className="mt-1 size-5 text-primary" /></div>
+                    <span className="">{t('pricing_label2')}</span>
                   </li>
-                  <li className="flex items-center">
-                    <CheckCircle2 className="mr-2 size-5 text-primary" />
-                    {t('pricing_label3')}
+                  <li className="flex items-start gap-2">
+                    <div className="flex"><CheckCircle2 className="mt-1 size-5 text-primary" /></div>
+                    <span>{t('pricing_label3')}</span>
                   </li>
                 </ul>
               </CardContent>

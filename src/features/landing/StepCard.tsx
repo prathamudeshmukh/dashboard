@@ -17,7 +17,7 @@ export function StepCard({ title, description, icon, className = '' }: StepCardP
           {icon}
         </div>
         <h3 className="text-xl font-bold">{title}</h3>
-        <div className="text-sm text-muted-foreground">
+        <div className="text-md text-muted-foreground">
           {description}
         </div>
       </CardContent>
