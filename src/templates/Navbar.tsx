@@ -36,6 +36,10 @@ export const Navbar = () => {
           </li>
 
           <li>
+            <Link href="#pricing">Pricing</Link>
+          </li>
+
+          <li>
             <Link href="#security">Security</Link>
           </li>
 

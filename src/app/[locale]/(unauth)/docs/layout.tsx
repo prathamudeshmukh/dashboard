@@ -1,7 +1,11 @@
+'use client';
+
 import { Book, Code, FileText, LifeBuoy, Lock, Server, Shield, TriangleAlertIcon } from 'lucide-react';
 import Link from 'next/link';
+import { useState } from 'react';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Footer } from '@/templates/Footer';
 
 const navItems = [
   {
@@ -41,11 +45,9 @@ const navItems = [
   },
 ];
 
-export default function DocsLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function DocsLayout({ children }: { children: React.ReactNode }) {
+  const [activeSection, setActiveSection] = useState<string>('introduction');
+
   return (
     <div className="flex min-h-screen bg-background">
 
@@ -62,9 +64,21 @@ export default function DocsLayout({
               <Link
                 key={item.id}
                 href={`#${item.id}`}
-                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors hover:bg-muted"
+                className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors 
+                  ${
+              activeSection === item.id
+                ? 'bg-primary text-white'
+                : 'hover:bg-muted'
+              }`}
+                onClick={() => setActiveSection(item.id)}
               >
-                <item.icon className="size-4 text-muted-foreground" />
+                <item.icon
+                  className={`size-4 ${
+                    activeSection === item.id
+                      ? 'text-white'
+                      : 'text-muted-foreground'
+                  }`}
+                />
                 <span>{item.title}</span>
               </Link>
             ))}
@@ -76,6 +90,7 @@ export default function DocsLayout({
         <div className="container p-12">
           {children}
         </div>
+        <Footer />
       </main>
     </div>
   );
