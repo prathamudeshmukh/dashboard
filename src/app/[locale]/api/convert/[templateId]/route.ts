@@ -23,7 +23,6 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
       );
     }
 
-    const clientId = req.headers.get('client_id');
     const searchParams = req.nextUrl.searchParams;
     const devMode = searchParams.get('devMode') === 'true';
 
@@ -36,7 +35,6 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
       templateId,
       templateData,
       isApi: true,
-      clientId: clientId as string,
     });
 
     if (response.error) {
