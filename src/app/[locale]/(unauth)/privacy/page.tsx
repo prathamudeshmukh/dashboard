@@ -1,6 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { PRIVACY_EMAIL } from 'templify.constants';
 
 import LegalPage from '@/features/legal/LegalPage';
 
@@ -121,6 +122,6 @@ export default function PrivacyPolicy() {
   ];
 
   return (
-    <LegalPage title={t('title')} sections={privacySections} contactEmail="privacy@templify.com" />
+    <LegalPage title={t('title')} sections={privacySections} contactEmail={PRIVACY_EMAIL} />
   );
 }
