@@ -4,7 +4,7 @@ import { and, desc, eq, gte, ilike, lte, sql } from 'drizzle-orm';
 
 import { generated_templates, templates, users } from '@/models/Schema';
 import contentGenerator from '@/service/contentGenerator';
-import type { FetchTemplateResponse, FetchTemplatesRequest, GeneratedTemplates, GeneratePdfRequest, JsonObject, PaginatedResponse, TemplateType, UsageMetric, UsageMetricRequest } from '@/types/Template';
+import type { FetchTemplateResponse, FetchTemplatesRequest, GeneratedTemplates, GeneratePdfRequest, JsonObject, JsonValue, PaginatedResponse, TemplateType, UsageMetric, UsageMetricRequest } from '@/types/Template';
 
 import { LeanPuppeteerHTMLPDF } from '../../leanPuppeteerHtmlPDF/index';
 import { db } from '../DB';
@@ -235,7 +235,7 @@ export async function generatePdf({
       templateType: (template?.data?.templateType || templateType) as TemplateType,
       templateContent: (template?.data?.templateContent || templateContent) as string,
       templateStyle: template?.data?.templateStyle || templateStyle,
-      templateData: template?.data?.templateSampleData || templateData,
+      templateData: templateData ? templateData as JsonValue : template?.data?.templateSampleData as JsonValue,
     });
 
     const htmlPdf = new LeanPuppeteerHTMLPDF({
