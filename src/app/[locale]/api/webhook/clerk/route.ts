@@ -59,7 +59,7 @@ export async function POST(req: Request) {
   try {
     await saveUser({ clientId: id, email: email_addresses[0]?.email_address as string, username: first_name as string });
     // credit 150 for new user
-    await creditUser(id);
+    await creditUser(id, 150);
     return NextResponse.json({ message: 'User created successfully' }, { status: 201 });
   } catch (error) {
     console.error('Error saving user to database:', error);

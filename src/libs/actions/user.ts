@@ -42,12 +42,12 @@ export async function saveUser(user: User) {
   }
 }
 
-export async function creditUser(clientId: string) {
+export async function creditUser(clientId: string, credit: number) {
   try {
     await db.transaction(async (tx) => {
       await tx.insert(creditTransactions).values({
         clientId,
-        credits: 150,
+        credits: credit,
         paymentId: null,
       });
 
