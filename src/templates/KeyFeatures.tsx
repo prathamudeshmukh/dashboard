@@ -21,7 +21,6 @@ export const KeyFeatures = () => {
       <Section
         className="w-full bg-background py-12 md:py-24 lg:py-32"
         title={t('section_title')}
-        subtitle={t('section_subtitle')}
         icon={Zap}
       >
         <div className="container px-4 md:px-6">

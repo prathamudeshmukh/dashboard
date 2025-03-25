@@ -12,7 +12,6 @@ export const SecurityFeatures = () => {
       <Section
         className="w-full bg-secondary py-12 md:py-24 lg:py-32"
         description={t('description')}
-        subtitle={t('subtitle')}
         icon={Lock}
         title={t('title')}
       >

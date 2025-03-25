@@ -61,6 +61,7 @@
     "css-validator": "^0.11.0",
     "date-fns": "^3.6.0",
     "drizzle-orm": "^0.35.3",
+    "embla-carousel-react": "^8.5.2",
     "grapesjs": "^0.22.4",
     "handlebars": "^4.7.8",
     "htmlhint": "^1.1.4",

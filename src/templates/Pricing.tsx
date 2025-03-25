@@ -12,7 +12,6 @@ const Pricing = () => {
     <div id="pricing">
       <Section
         title={t('title')}
-        subtitle={t('subtitle')}
         icon={CreditCard}
         description={t('description')}
       >

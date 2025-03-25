@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Card, CardContent } from '@/components/ui/card';
 
-type StepCardProps = {
+export type StepCardProps = {
   title: string;
   description: React.ReactNode;
   icon: React.ReactNode;

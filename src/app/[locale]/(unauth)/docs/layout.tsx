@@ -2,7 +2,7 @@
 
 import { Book, Code, FileText, LifeBuoy, Lock, Server, Shield, TriangleAlertIcon } from 'lucide-react';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Footer } from '@/templates/Footer';
@@ -47,6 +47,28 @@ const navItems = [
 
 export default function DocsLayout({ children }: { children: React.ReactNode }) {
   const [activeSection, setActiveSection] = useState<string>('introduction');
+
+  // Scroll Detection for Active Section
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleSection = entries.find(entry => entry.isIntersecting);
+        if (visibleSection) {
+          setActiveSection(visibleSection.target.id);
+        }
+      },
+      { threshold: 0.5 }, // Trigger when 50% of the section is visible
+    );
+
+    navItems.forEach((item) => {
+      const section = document.getElementById(item.id);
+      if (section) {
+        observer.observe(section);
+      }
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div className="flex min-h-screen bg-background">
