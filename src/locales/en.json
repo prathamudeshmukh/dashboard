@@ -19,7 +19,7 @@
     "description1": "Scalable, API-first infrastructure that handles PDF generation for you",
     "description2": "No huge dev effort needed for every new template",
     "description3": "No more maintaining bulky PDF libraries",
-    "primary_button": "Sign Up For Free"
+    "primary_button": "Sign up now!"
   },
   "Sponsors": {
     "title": "Sponsored by"
@@ -51,7 +51,7 @@
     "feature4_description": "Built to handle high-volume PDF generation",
     "feature5_description": "Encrypted API keys, 99.9% uptime guarantee",
     "feature6_description": "Track past API usage over time and review detailed invocation history for transparency and debugging",
-    "primary_button": "Start Building Templates Now"
+    "primary_button": "Build your first template"
   },
   "Working": {
     "section_subtitle": "Working",
@@ -96,7 +96,7 @@
     "review3": "We needed scalability for high-volume PDF generation, and Templify delivered. Seamless API, zero maintenance!"
   },
   "SecurityFeatures": {
-    "title": "Overcoming Hesitations",
+    "title": "Trustworthy and reliable",
     "subtitle": "Trust & Reliability",
     "description": "Your data stays protected, and your PDFs generate instantly – every time.",
     "feature1": "Security",
@@ -115,7 +115,7 @@
     "pricing_label1": "Each PDF generation API call deducts 1 credit from your balance.",
     "pricing_label2": "Once your credits are exhausted, you can contact us at support@templify.cloud to replenish your balance.",
     "pricing_label3": " No hidden fees, no complicated pricing – just pay as you go.",
-    "cta": "Sign up today and claim 150 free PDF credits!"
+    "cta": "Start now with 150 free credits!"
   },
   "PricingPlan": {
     "free_plan_name": "Free",

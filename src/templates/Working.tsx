@@ -135,7 +135,7 @@ export const Working = () => {
           </div>
 
           {/* Carousel */}
-          <div className="overflow-hidden" ref={emblaRef}>
+          <div ref={emblaRef}>
             <div className="flex">
               {steps.map((step, index) => (
                 <div key={index} className="relative flex-[0_0_75%] px-4">
