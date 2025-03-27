@@ -2,6 +2,7 @@ import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
 import { Section } from '@/features/landing/Section';
+import WaitlistForm from '@/features/landing/WaitListForm';
 
 export const CTA = () => {
   const t = useTranslations('CTA');
@@ -20,6 +21,12 @@ export const CTA = () => {
             <Button size="lg" variant="link" className="w-full gap-1 text-primary-foreground">
               {t('button_text')}
             </Button>
+          </div>
+
+          <div className="flex items-center justify-center ">
+            <div className="w-full space-y-2">
+              <WaitlistForm />
+            </div>
           </div>
         </div>
       </div>

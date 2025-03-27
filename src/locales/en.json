@@ -160,7 +160,8 @@
   "CTA": {
     "title": "Stop Wasting Time On PDF Generation.",
     "description": "Let Templify handle it for you",
-    "button_text": "Sign up now and create your first template in minutes!"
+    "button_text": "Sign up now and create your first template in minutes!",
+    "contact_label": "Still not convinced, get in touch with us"
   },
   "Footer": {
     "product": "Product",

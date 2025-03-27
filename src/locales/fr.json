@@ -157,7 +157,8 @@
   "CTA": {
     "title": "Arrêtez de perdre du temps sur la génération de PDF. Laissez Templify s'en occuper pour vous.",
     "description": "Laissez Templify s'en occuper pour vous",
-    "button_text": "Inscrivez-vous maintenant et créez votre premier modèle en quelques minutes !"
+    "button_text": "Inscrivez-vous maintenant et créez votre premier modèle en quelques minutes !",
+    "contact_label": "Toujours pas convaincu, contactez-nous"
   },
   "Footer": {
     "product": "Produit",
