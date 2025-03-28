@@ -254,11 +254,7 @@ export async function generatePdf({
     const pdf = await htmlPdf.create(content);
 
     if (template?.data?.id && isApi) {
-      const creditResponse = await deductCredit(template.data.user?.cliendId as string);
-      if (!creditResponse.success) {
-        return { error: creditResponse.error };
-      }
-
+      await deductCredit(template.data.user?.cliendId as string);
       await addGeneratedTemplateHistory({
         templateId: template.data.id,
         dataValue: templateData,
