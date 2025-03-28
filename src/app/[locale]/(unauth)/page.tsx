@@ -2,10 +2,12 @@
 import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
 
 import { CTA } from '@/templates/CTA';
+import { FAQ } from '@/templates/FAQ';
 import { Footer } from '@/templates/Footer';
 import { Hero } from '@/templates/Hero';
 import { KeyFeatures } from '@/templates/KeyFeatures';
 import { Navbar } from '@/templates/Navbar';
+import Pricing from '@/templates/Pricing';
 import { SecurityFeatures } from '@/templates/SecurityFeatures';
 import { Working } from '@/templates/Working';
 import { getBaseUrl } from '@/utils/Helpers';
@@ -68,7 +70,9 @@ const IndexPage = (props: { params: { locale: string } }) => {
         <Hero />
         <KeyFeatures />
         <Working />
+        <Pricing />
         <SecurityFeatures />
+        <FAQ />
         <CTA />
         <Footer />
       </main>

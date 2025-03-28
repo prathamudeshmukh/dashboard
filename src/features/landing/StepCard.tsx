@@ -1,26 +1,26 @@
 import React from 'react';
 
-type StepCardProps = {
-  stepNumber: number;
+import { Card, CardContent } from '@/components/ui/card';
+
+export type StepCardProps = {
   title: string;
   description: React.ReactNode;
   icon: React.ReactNode;
+  className?: string;
 };
 
-export const StepCard = ({ stepNumber, title, description, icon }: StepCardProps) => {
+export function StepCard({ title, description, icon, className = '' }: StepCardProps) {
   return (
-    <div className="flex flex-col items-center gap-2 text-center md:items-start md:text-left">
-      <div className="flex size-12 items-center justify-center rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-lg font-bold text-primary-foreground">
-        {stepNumber}
-      </div>
-
-      <h3 className="text-xl font-bold">{title}</h3>
-
-      <p className="text-md text-muted-foreground">{description}</p>
-
-      <div className="flex size-16 items-center justify-center rounded-full bg-muted">
-        {icon}
-      </div>
-    </div>
+    <Card className={`h-full bg-white ${className}`}>
+      <CardContent className="flex flex-col items-center gap-4 p-6 text-center">
+        <div className="mt-4 flex size-16 items-center justify-center rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
+          {icon}
+        </div>
+        <h3 className="text-xl font-bold">{title}</h3>
+        <div className="text-md text-muted-foreground">
+          {description}
+        </div>
+      </CardContent>
+    </Card>
   );
-};
+}

@@ -29,7 +29,6 @@ export const HeroSection = ({ title, subtitle, description, button }: HeroSectio
             <p className="text-lg font-medium">
               Start generating PDFs in
               <strong> minutes</strong>
-              , not weeks.
             </p>
 
             <div className="flex flex-col gap-2 min-[400px]:flex-row">

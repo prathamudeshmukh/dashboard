@@ -1,4 +1,4 @@
-import { ArrowRight, CheckCircle2 } from 'lucide-react';
+import { CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
@@ -34,18 +34,12 @@ export const Hero = () => {
             <CheckCircle2 className="size-5 text-primary" />
             <p className="font-medium">{t('description2')}</p>
           </div>
-          <div className="flex items-center gap-2">
-            <CheckCircle2 className="size-5 text-primary" />
-            <p className="font-medium">{t('description3')}</p>
-          </div>
         </>
       )}
       button={(
         <Link href="/sign-up">
           <Button size="lg" className="gap-1">
             {t('primary_button')}
-            {' '}
-            <ArrowRight className="size-4" />
           </Button>
         </Link>
       )}
