@@ -138,7 +138,7 @@ export const Working = () => {
           <div ref={emblaRef}>
             <div className="flex">
               {steps.map((step, index) => (
-                <div key={index} className="relative flex-[0_0_75%] px-4">
+                <div key={index} className="relative flex-[0_0_75%] px-4 sm:flex-[0_0_50%] md:flex-[0_0_30%] lg:flex-[0_0_25%]">
                   <StepCard
                     title={step.title}
                     description={step.description}

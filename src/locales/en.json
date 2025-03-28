@@ -38,7 +38,7 @@
   },
   "KeyFeatures": {
     "section_subtitle": "Key Features",
-    "section_title": "What Makes Templify Stand Out",
+    "section_title": "What makes Templify stand out",
     "feature1_title": "No-Code & Developer-Friendly",
     "feature2_title": "Live Template Preview",
     "feature3_title": "Dynamic Content Support",
@@ -55,13 +55,13 @@
   },
   "Working": {
     "section_subtitle": "Working",
-    "section_title": "How Templify Works",
+    "section_title": "How Templify works",
     "section_description": "A free and open-source landing page template for your SaaS business, built with React, TypeScript, Shadcn UI, and Tailwind CSS.",
-    "step1_title": "Step 1: Sign Up",
-    "step2_title": "Step 2: Create Your Template",
-    "step3_title": "Step 3: Get Your Template ID",
+    "step1_title": "Step 1: Sign up",
+    "step2_title": "Step 2: Create your template",
+    "step3_title": "Step 3: Get your template ID",
     "step4_title": "Step 4: Integrate the API",
-    "step5_title": "Step 5: Get a Ready-to-Use PDF",
+    "step5_title": "Step 5: Get a ready-to-Use PDF",
     "step1_description": "Get started instantly with Google sign-in",
     "step2_description": {
       "description_1": "Drag & Drop HTML Builder – Create stunning templates without coding",
@@ -109,7 +109,7 @@
     "feature4_description": "Auto-scaling infrastructure ensures high-speed PDF generation, even at peak loads."
   },
   "Pricing": {
-    "title": "Simple & Transparent Pricing For The MVP Version",
+    "title": "Simple & Transparent pricing for the MVP version",
     "subtitle": "Pricing & Payment",
     "description": "Get started with 150 free credits when you sign up!",
     "pricing_label1": "Each PDF generation API call deducts 1 credit from your balance.",
@@ -134,7 +134,7 @@
     "next_renew_date": "Your subscription renews on {date}"
   },
   "FAQ": {
-    "title": "Frequently Asked Questions",
+    "title": "Frequently asked questions",
     "subtitle": "Support",
     "description": "Everything you need to know about Templify",
     "question_1": "What is Templify?",
@@ -158,7 +158,7 @@
     "cta": "Get Started with Templify"
   },
   "CTA": {
-    "title": "Stop Wasting Time On PDF Generation.",
+    "title": "Stop wasting time on PDF generation.",
     "description": "Let Templify handle it for you",
     "button_text": "Sign up now and create your first template in minutes!",
     "contact_label": "Still not convinced, get in touch with us"
