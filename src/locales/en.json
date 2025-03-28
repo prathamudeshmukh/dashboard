@@ -295,5 +295,136 @@
   "DocsIntroduction": {
     "title": "1. Introduction",
     "description": "Templify is an API-first SaaS that allows developers to create and manage templates and generate PDFs dynamically. This documentation provides the necessary details to integrate the Templify API seamlessly into your application."
+  },
+  "Privacy": {
+    "title": "Privacy Policy",
+    "introduction": {
+      "title": "1. Introduction",
+      "content": "At Templify, we prioritize the privacy and security of our users. This Privacy Policy explains how we collect, use, and protect your information."
+    },
+    "information": {
+      "title": "2. Information We Collect",
+      "content": {
+        "content1": "<important>Account Information:</important>  Name, email, and login credentials.",
+        "content2": "<important>Usage Data:</important> Logs, interactions, and service usage.",
+        "content3": "<important>Payment Information:</important> Processed securely by third-party payment providers."
+      }
+    },
+    "howWeUseData": {
+      "title": "3. How We Use Your Data",
+      "content": {
+        "content1": "To provide, improve, and maintain our services.",
+        "content2": "To communicate updates, offers, and support-related information.",
+        "content3": "To ensure security and prevent fraudulent activities."
+      }
+    },
+    "dataSharing": {
+      "title": "4. Data Sharing",
+      "content": {
+        "content1": "We do not sell or rent your data.",
+        "content2": "We may share data with service providers for hosting, analytics, and payment processing.",
+        "content3": "Data may be disclosed to comply with legal obligations."
+      }
+    },
+    "security": {
+      "title": "5. Security Measures",
+      "content": {
+        "content1": "We implement industry-standard security practices to protect user data.",
+        "content2": "Encrypted API keys and secure authentication mechanisms are in place."
+      }
+    },
+    "retention": {
+      "title": "6. Data Retention",
+      "content": {
+        "content1": "We retain data as long as necessary for service operation and compliance.",
+        "content2": "Users may request data deletion at any time by contacting support."
+      }
+    },
+    "rights": {
+      "title": "7. User Rights",
+      "content": {
+        "content1": "Access, update, or delete personal data.",
+        "content2": "Opt out of marketing communications",
+        "content3": "Request a copy of stored personal data."
+      }
+    },
+    "changes": {
+      "title": "8. Changes to Privacy Policy",
+      "content": {
+        "content1": "We may update this policy periodically and notify users of significant changes."
+      }
+    },
+    "contact": {
+      "title": "9. Contact",
+      "content": {
+        "content1": "For privacy-related inquiries, please contact us"
+      }
+    }
+  },
+  "ToS": {
+    "title": "Terms of Service",
+    "introduction": {
+      "title": "1. Introduction",
+      "content": "Welcome to Templify! By accessing or using our platform, you agree to comply with and be bound by these Terms of Service. If you do not agree with these terms, please do not use our services."
+    },
+    "information": {
+      "title": "2. Definitions",
+      "content": {
+        "content1": "<important>Templify</important>  refers to our SaaS platform providing template management and PDF generation.",
+        "content2": "<important>User</important> refers to anyone accessing or using our services.",
+        "content3": "<important>Service</important> refers to the Templify platform, including APIs, web applications, and related services."
+      }
+    },
+    "userAccounts": {
+      "title": "3. User Accounts",
+      "content": {
+        "content1": "You must provide accurate and complete information during the registration process.",
+        "content2": "You are responsible for maintaining the confidentiality of your account credentials.",
+        "content3": "Templify reserves the right to suspend or terminate accounts that violate these terms."
+      }
+    },
+    "useOfService": {
+      "title": "4. Use of Services",
+      "content": {
+        "content1": "You may not use Templify for any illegal or unauthorized purposes",
+        "content2": "You must not interfere with or disrupt the functionality of the platform.",
+        "content3": "API usage must comply with our fair use policy."
+      }
+    },
+    "payment": {
+      "title": "5. Payment and Subscription",
+      "content": {
+        "content1": "Certain features may require a paid subscription.",
+        "content2": "Subscription fees are non-refundable unless stated otherwise.",
+        "content3": "Templify reserves the right to update pricing with prior notice."
+      }
+    },
+    "dataPrivacy": {
+      "title": "6. Data Privacy",
+      "content": {
+        "content1": "Your data is processed in accordance with our Privacy Policy.",
+        "content2": "We do not sell user data to third parties."
+      }
+    },
+    "limitation": {
+      "title": "7. Limitation of Liability",
+      "content": {
+        "content1": "Templify is provided 'as is' without any warranties",
+        "content2": "We are not liable for any indirect, incidental, or consequential damages arising from service use"
+      }
+    },
+    "changes": {
+      "title": "8. Changes to Terms",
+      "content": {
+        "content1": "We may update these terms at any time, with prior notice where applicable.",
+        "content2": "Continued use of the service constitutes acceptance of revised terms."
+      }
+    },
+    "contact": {
+      "title": "9. Contact",
+      "content": {
+        "content1": "For any questions about these terms, please contact us."
+      }
+    }
   }
 }

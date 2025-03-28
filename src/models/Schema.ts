@@ -2,6 +2,7 @@ import { relations } from 'drizzle-orm';
 import {
   bigint,
   index,
+  integer,
   jsonb,
   pgEnum,
   pgTable,
@@ -59,6 +60,17 @@ export const users = pgTable('users', {
   username: varchar('username', { length: 255 }).notNull(),
   email: varchar('email', { length: 255 }).notNull().unique(),
   clientId: varchar('client_id', { length: 255 }).notNull().unique(), // Clerk user_id
+  remainingBalance: integer('remaining_balance').default(150).notNull(),
+});
+
+export const creditTransactions = pgTable('credit_transactions', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  clientId: varchar('client_id', { length: 255 })
+    .notNull()
+    .references(() => users.clientId, { onDelete: 'cascade' }),
+  credits: integer('credits').notNull(),
+  creditedAt: timestamp('credited_at', { mode: 'date' }).defaultNow().notNull(),
+  paymentId: varchar('payment_id', { length: 255 }), // Optional, only for paid credits
 });
 
 // Templates Table
@@ -115,6 +127,14 @@ export const apikeys = pgTable('apikeys', {
 export const usersRelations = relations(users, ({ many }) => ({
   templates: many(templates), // One-to-many relation with templates
   apikeys: many(apikeys), // One-to-many relation with apikeys
+  creditTransactions: many(creditTransactions),
+}));
+
+export const creditTransactionsRelations = relations(creditTransactions, ({ one }) => ({
+  user: one(users, {
+    fields: [creditTransactions.clientId],
+    references: [users.clientId],
+  }),
 }));
 
 export const generatedTemplatesRelations = relations(generated_templates, ({ one }) => ({
