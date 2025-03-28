@@ -109,10 +109,13 @@
     "feature4_description": "L'infrastructure à mise à l'échelle automatique assure une génération de PDF à haute vitesse, même en période de pointe."
   },
   "Pricing": {
-    "section_subtitle": "Fonctionnalités",
-    "section_title": "Débloquer le plein potentiel du SaaS Template",
-    "section_description": "Un template gratuit et open-source de landing page pour votre entreprise SaaS, construit avec React, TypeScript, Shadcn UI et Tailwind CSS.",
-    "button_text": "Démarrer"
+    "title": "Tarification simple et transparente pour la version MVP",
+    "subtitle": "Tarification et paiement",
+    "description": "Commencez avec 150 crédits gratuits lors de votre inscription !",
+    "pricing_label1": "Chaque appel API de génération de PDF déduit 1 crédit de votre solde.",
+    "pricing_label2": "Une fois vos crédits épuisés, vous pouvez nous contacter à support@templify.cloud pour recharger votre solde.",
+    "pricing_label3": "Pas de frais cachés, pas de tarification compliquée – payez simplement à l'utilisation.",
+    "cta": "Inscrivez-vous maintenant et commencez à générer des PDF avec 150 crédits gratuits !"
   },
   "PricingPlan": {
     "free_plan_name": "Gratuit",
@@ -131,13 +134,31 @@
     "next_renew_date": "Votre abonnement sera renouvelé le {date}"
   },
   "FAQ": {
-    "question": "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
-    "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam aliquam enim dui, id consequat turpis ullamcorper ac. Mauris id quam dolor. Nullam eu egestas turpis. Proin risus elit, sollicitudin in mi a, accumsan euismod turpis. In euismod mi sed diam tristique hendrerit."
+    "question_1": "Qu'est-ce que Templify ?",
+    "answer_1": "Templify est un SaaS orienté API qui permet aux utilisateurs de créer et gérer des modèles et de générer dynamiquement des PDF sans avoir besoin de bibliothèques PDF complexes ou d'efforts de développement importants.",
+    "question_2": "Comment intégrer Templify dans mon application ?",
+    "answer_2": "L'intégration est simple ! Inscrivez-vous, créez un modèle, obtenez l'ID du modèle, et appelez notre API avec votre ID Client et ID Secret pour générer des PDF instantanément.",
+    "question_3": "Quels types de modèles puis-je créer ?",
+    "answer_3": {
+      "answer_3_1": "Vous pouvez créer :",
+      "answer_3_2": "Constructeur HTML par glisser-déposer (pour les non-développeurs)",
+      "answer_3_3": "Moteur de modèles Handlebars (pour les développeurs nécessitant une génération dynamique de modèles)"
+    },
+    "question_4": "Mes données sont-elles sécurisées avec Templify ?",
+    "answer_4": "Oui ! Nous utilisons une authentification sécurisée par clé API et appliquons des mesures de cryptage pour protéger vos données.",
+    "question_5": "Puis-je suivre mon utilisation passée de l'API ?",
+    "answer_5": "Absolument ! Templify fournit une vue chronologique de vos appels API passés et un historique détaillé des invocations API pour la surveillance et le débogage.",
+    "question_6": "Quel type de support proposez-vous ?",
+    "answer_6": "Nous offrons une documentation API complète et un support par email pour vous aider avec tout problème d'intégration ou d'utilisation.",
+    "question_7": "Templify est-il évolutif pour la génération de PDF à haut volume ?",
+    "answer_7": "Oui ! Notre infrastructure à mise à l'échelle automatique garantit que même les applications à grande échelle peuvent générer des PDF rapidement et de manière fiable.",
+    "cta": "Démarrer avec Templify"
   },
   "CTA": {
     "title": "Arrêtez de perdre du temps sur la génération de PDF. Laissez Templify s'en occuper pour vous.",
     "description": "Laissez Templify s'en occuper pour vous",
-    "button_text": "Inscrivez-vous maintenant et créez votre premier modèle en quelques minutes !"
+    "button_text": "Inscrivez-vous maintenant et créez votre premier modèle en quelques minutes !",
+    "contact_label": "Toujours pas convaincu, contactez-nous"
   },
   "Footer": {
     "product": "Produit",

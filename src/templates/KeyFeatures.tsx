@@ -1,5 +1,4 @@
 import {
-  ArrowRight,
   ChartNetwork,
   Database,
   MousePointer,
@@ -22,7 +21,7 @@ export const KeyFeatures = () => {
       <Section
         className="w-full bg-background py-12 md:py-24 lg:py-32"
         title={t('section_title')}
-        subtitle={t('section_subtitle')}
+        icon={Zap}
       >
         <div className="container px-4 md:px-6">
           <div className="mx-auto grid max-w-5xl gap-6 py-12 lg:grid-cols-3">
@@ -62,8 +61,6 @@ export const KeyFeatures = () => {
             <CardContent className="p-6">
               <Button size="lg" className="w-full gap-1">
                 {t('primary_button')}
-                {' '}
-                <ArrowRight className="size-4" />
               </Button>
             </CardContent>
           </div>

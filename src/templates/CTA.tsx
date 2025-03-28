@@ -1,10 +1,7 @@
-import {
-  ArrowRight,
-} from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
-import { Button } from '@/components/ui/button';
 import { Section } from '@/features/landing/Section';
+import WaitlistForm from '@/features/landing/WaitListForm';
 
 export const CTA = () => {
   const t = useTranslations('CTA');
@@ -19,12 +16,11 @@ export const CTA = () => {
               <strong>{t('description')}</strong>
             </p>
           </div>
-          <div className="mx-auto w-full max-w-sm space-y-2">
-            <Button size="lg" variant="secondary" className="w-full gap-1">
-              {t('button_text')}
-              {' '}
-              <ArrowRight className="size-4" />
-            </Button>
+
+          <div className="flex items-center justify-center ">
+            <div className="w-full space-y-2">
+              <WaitlistForm />
+            </div>
           </div>
         </div>
       </div>

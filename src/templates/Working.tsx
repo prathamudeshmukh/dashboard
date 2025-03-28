@@ -1,3 +1,6 @@
+'use client';
+
+import useEmblaCarousel from 'embla-carousel-react';
 import {
   Code,
   FileText,
@@ -5,9 +8,10 @@ import {
   Server,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import React, { useCallback, useState } from 'react';
 
 import { Section } from '@/features/landing/Section';
-import { StepCard } from '@/features/landing/StepCard';
+import { StepCard, type StepCardProps } from '@/features/landing/StepCard';
 
 export const Working = () => {
   const t = useTranslations('Working');
@@ -33,76 +37,116 @@ export const Working = () => {
     );
   }
 
+  const steps: StepCardProps[] = [
+    {
+      title: t('step1_title'),
+      description: t('step1_description'),
+      icon: <GoogleIcon className="size-8 text-secondary" />,
+    },
+    {
+      title: t('step2_title'),
+      description:
+        <>
+          <span>{t('step2_description.description_1')}</span>
+          <br />
+          <br />
+          <span>{t('step2_description.description_2')}</span>
+
+        </>,
+      icon: <LayoutTemplate className="size-8 text-secondary" />,
+    },
+    {
+      title: t('step3_title'),
+      description: t('step3_description'),
+      icon: <Code className="size-8 text-secondary" />,
+    },
+    {
+      title: t('step4_title'),
+      description: t('step4_description'),
+      icon: <Server className="size-8 text-secondary" />,
+    },
+    {
+      title: t('step5_title'),
+      description: t('step5_description'),
+      icon: <FileText className="size-8 text-secondary" />,
+    },
+  ];
+
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: true,
+    align: 'center',
+    slidesToScroll: 1,
+    containScroll: 'trimSnaps',
+  });
+
+  const scrollTo = useCallback(
+    (index: number) => {
+      if (!emblaApi) {
+        return;
+      }
+      emblaApi.scrollTo(index);
+      setSelectedIndex(index);
+    },
+    [emblaApi],
+  );
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) {
+      return;
+    }
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
+
+  React.useEffect(() => {
+    if (!emblaApi) {
+      return;
+    }
+    onSelect();
+    emblaApi.on('select', onSelect);
+    return () => {
+      emblaApi.off('select', onSelect);
+    };
+  }, [emblaApi, onSelect]);
+
   return (
     <div id="how-it-works">
       <Section
         className="w-full bg-muted py-12 md:py-24 lg:py-32"
-        title="Step-by-Step Breakdown"
-        subtitle="How it Works"
+        title="Step-By-Step Breakdown"
         description="Seamlessly integrates with any SaaS application in minutes."
       >
 
-        <div className="container px-4 md:px-6">
-          <div className="mx-auto grid max-w-5xl items-start gap-6 py-12 md:grid-cols-5 md:gap-12">
+        <div className="relative">
 
-            <StepCard
-              stepNumber={1}
-              title={t('step1_title')}
-              description={(
-                <>
-                  {t('step1_description')}
-                </>
-              )}
-              icon={<GoogleIcon className="size-8 text-muted-foreground" />}
-            />
+          <div className="mb-8 flex justify-center gap-4">
+            {steps.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => scrollTo(index)}
+                className={`size-10 rounded-full border-2 font-medium transition-all
+              ${selectedIndex === index
+                ? 'border-indigo-500 bg-indigo-500 text-white'
+                : 'border-gray-300 bg-white text-gray-500 hover:border-indigo-300'}`}
+              >
+                {index + 1}
+              </button>
+            ))}
+          </div>
 
-            <StepCard
-              stepNumber={2}
-              title={t('step2_title')}
-              description={(
-                <>
-                  <span>{t('step2_description.description_1')}</span>
-                  <br />
-                  <span>{t('step2_description.description_2')}</span>
-
-                </>
-              )}
-              icon={<LayoutTemplate className="size-8 text-muted-foreground" />}
-            />
-
-            <StepCard
-              stepNumber={3}
-              title={t('step3_title')}
-              description={(
-                <>
-                  {t('step3_description')}
-                </>
-              )}
-              icon={<Code className="size-8 text-muted-foreground" />}
-            />
-
-            <StepCard
-              stepNumber={4}
-              title={t('step4_title')}
-              description={(
-                <>
-                  {t('step4_description')}
-                </>
-              )}
-              icon={<Server className="size-8 text-muted-foreground" />}
-            />
-
-            <StepCard
-              stepNumber={5}
-              title={t('step5_title')}
-              description={(
-                <>
-                  {t('step5_description')}
-                </>
-              )}
-              icon={<FileText className="size-8 text-muted-foreground" />}
-            />
-
+          {/* Carousel */}
+          <div ref={emblaRef}>
+            <div className="flex">
+              {steps.map((step, index) => (
+                <div key={index} className="relative flex-[0_0_75%] px-4 sm:flex-[0_0_50%] md:flex-[0_0_30%] lg:flex-[0_0_25%]">
+                  <StepCard
+                    title={step.title}
+                    description={step.description}
+                    icon={step.icon}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </Section>

@@ -10,9 +10,9 @@ export const SecurityFeatures = () => {
   return (
     <div id="security">
       <Section
-        className="w-full bg-background py-12 md:py-24 lg:py-32"
+        className="w-full bg-secondary py-12 md:py-24 lg:py-32"
         description={t('description')}
-        subtitle={t('subtitle')}
+        icon={Lock}
         title={t('title')}
       >
         <div className="container px-4 md:px-6">

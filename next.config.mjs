@@ -5,6 +5,7 @@ import createMDX from '@next/mdx';
 import { withSentryConfig } from '@sentry/nextjs';
 import createJiti from 'jiti';
 import withNextIntl from 'next-intl/plugin';
+import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 
 const jiti = createJiti(fileURLToPath(import.meta.url));
@@ -21,6 +22,7 @@ const withMDX = createMDX({
   extension: /\.mdx?$/,
   options: {
     remarkPlugins: [remarkGfm],
+    rehypePlugins: [rehypeSlug],
   },
 });
 
