@@ -11,6 +11,7 @@ const Pricing = () => {
   return (
     <div id="pricing">
       <Section
+        className="w-full bg-background py-12 md:py-24 lg:py-32"
         title={t('title')}
         icon={CreditCard}
         description={t('description')}

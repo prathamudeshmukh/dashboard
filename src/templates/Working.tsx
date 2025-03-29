@@ -135,7 +135,7 @@ export const Working = () => {
           </div>
 
           {/* Carousel */}
-          <div ref={emblaRef} className="overflow-hidden xl:overflow-visible">
+          <div ref={emblaRef} className="overflow-hidden xl:overflow-visible 2xl:overflow-visible">
             <div className="flex touch-pan-y items-stretch">
               {steps.map((step, index) => (
                 <div key={index} className="relative flex-[0_0_75%] px-4 sm:flex-[0_0_50%] md:flex-[0_0_30%] lg:flex-[0_0_25%]">
