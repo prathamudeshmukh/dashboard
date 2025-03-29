@@ -1,7 +1,8 @@
+import { ClerkProvider, SignInButton, SignUpButton } from '@clerk/nextjs';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
-import { buttonVariants } from '@/components/ui/buttonVariants';
+import { Button } from '@/components/ui/button';
 import { CenteredMenu } from '@/features/landing/CenteredMenu';
 
 import { Logo } from './Logo';
@@ -15,16 +16,18 @@ export const Navbar = () => {
         <CenteredMenu
           logo={<Logo />}
           rightMenu={(
-            <>
+            <ClerkProvider>
               <li className="ml-1 mr-2.5" data-fade>
-                <Link className={buttonVariants({ size: 'sm', variant: 'outline' })} href="/sign-in">{t('sign_in')}</Link>
+                <SignInButton mode="modal" forceRedirectUrl="/dashboard">
+                  <Button size="sm" variant="outline">{t('sign_in')}</Button>
+                </SignInButton>
               </li>
               <li>
-                <Link className={buttonVariants({ size: 'sm' })} href="/sign-up">
-                  {t('sign_up')}
-                </Link>
+                <SignUpButton mode="modal" forceRedirectUrl="/dashboard">
+                  <Button size="sm">{t('sign_up')}</Button>
+                </SignUpButton>
               </li>
-            </>
+            </ClerkProvider>
           )}
         >
           <li>

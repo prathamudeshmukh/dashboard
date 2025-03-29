@@ -38,7 +38,7 @@ export default function WaitlistForm() {
         },
         body: JSON.stringify({
           email: data.email,
-          waitlist_id: Number(process.env.WAITLIST_ID),
+          waitlist_id: 26668,
           referral_link: window.location.href,
         }),
       });
