@@ -374,12 +374,6 @@
       "content": {
         "content1": "Nous pouvons mettre à jour cette politique périodiquement et informer les utilisateurs des changements importants."
       }
-    },
-    "contact": {
-      "title": "9. Contact",
-      "content": {
-        "content1": "Pour les questions relatives à la confidentialité, veuillez nous contacter."
-      }
     }
   },
   "ToS": {
@@ -439,12 +433,6 @@
       "content": {
         "content1": "Nous pouvons mettre à jour ces conditions à tout moment, avec préavis le cas échéant.",
         "content2": "L'utilisation continue du service constitue l'acceptation des conditions révisées."
-      }
-    },
-    "contact": {
-      "title": "9. Contact",
-      "content": {
-        "content1": "Pour toute question concernant ces conditions, veuillez nous contacter."
       }
     }
   }

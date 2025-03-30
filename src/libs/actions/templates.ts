@@ -2,9 +2,9 @@
 
 import { and, desc, eq, gte, ilike, lte, sql } from 'drizzle-orm';
 
-import { generated_templates, templates } from '@/models/Schema';
+import { generated_templates, templates, users } from '@/models/Schema';
 import contentGenerator from '@/service/contentGenerator';
-import type { FetchTemplateResponse, FetchTemplatesRequest, GeneratedTemplates, GeneratePdfRequest, JsonObject, PaginatedResponse, TemplateType, UsageMetric, UsageMetricRequest } from '@/types/Template';
+import type { FetchTemplateResponse, FetchTemplatesRequest, GeneratedTemplates, GeneratePdfRequest, JsonObject, JsonValue, PaginatedResponse, TemplateType, UsageMetric, UsageMetricRequest } from '@/types/Template';
 
 import { LeanPuppeteerHTMLPDF } from '../../leanPuppeteerHtmlPDF/index';
 import { db } from '../DB';
@@ -174,18 +174,32 @@ export async function fetchTemplates({
 
 export async function fetchTemplateById(templateId: string, isDev: boolean = true) {
   try {
-    const template = await db.query.templates.findFirst({
-      where: and(
-        eq(templates.templateId, templateId),
-        eq(templates.environment, isDev ? 'dev' : 'prod'),
-      ),
-    });
+    const result = await db.select({
+      templateData: templates,
+      user: {
+        id: users.id,
+        email: users.email,
+        cliendId: users.clientId,
+        remainingBalance: users.remainingBalance,
+      },
+    })
+      .from(templates)
+      .innerJoin(users, eq(templates.email, users.email))
+      .where(
+        and(
+          eq(templates.templateId, templateId),
+          eq(templates.environment, isDev ? 'dev' : 'prod'),
+        ),
+      ).limit(1);
 
-    if (!template) {
+    if (result.length === 0) {
       throw new Error('Template not found');
     }
 
-    return { success: true, data: template };
+    const template = result[0]?.templateData;
+    const userData = result[0]?.user;
+
+    return { success: true, data: { ...template, user: userData } };
   } catch (error: any) {
     console.error('Error fetching template:', error);
     return { success: false, error: error.message };
@@ -200,7 +214,6 @@ export async function generatePdf({
   templateData = {},
   devMode = true,
   isApi = false,
-  clientId = '',
 }: GeneratePdfRequest): Promise<{ pdf?: string; error?: string }> {
   try {
     let template;
@@ -222,7 +235,7 @@ export async function generatePdf({
       templateType: (template?.data?.templateType || templateType) as TemplateType,
       templateContent: (template?.data?.templateContent || templateContent) as string,
       templateStyle: template?.data?.templateStyle || templateStyle,
-      templateData: template?.data?.templateSampleData || templateData,
+      templateData: templateData ? templateData as JsonValue : template?.data?.templateSampleData as JsonValue,
     });
 
     const htmlPdf = new LeanPuppeteerHTMLPDF({
@@ -230,14 +243,18 @@ export async function generatePdf({
       printBackground: true,
     });
 
+    // check for balance
+    if (
+      isApi
+      && (!template?.data?.user || template?.data?.user?.remainingBalance == null || template?.data?.user?.remainingBalance <= 0)
+    ) {
+      return { error: 'Insufficient credits.' };
+    }
+
     const pdf = await htmlPdf.create(content);
 
     if (template?.data?.id && isApi) {
-      const creditResponse = await deductCredit(clientId);
-      if (!creditResponse.success) {
-        return { error: creditResponse.error };
-      }
-
+      await deductCredit(template.data.user?.cliendId as string);
       await addGeneratedTemplateHistory({
         templateId: template.data.id,
         dataValue: templateData,
