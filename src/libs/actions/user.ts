@@ -1,6 +1,6 @@
 'use server';
 
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 
 import { apikeys, creditTransactions, users } from '@/models/Schema';
 import { decrypt } from '@/service/crypto';
@@ -54,13 +54,12 @@ export async function creditUser(clientId: string, credit: number) {
       // Update user's remaining balance
       await tx
         .update(users)
-        .set({ remainingBalance: 150 })
+        .set({ remainingBalance: sql`${users.remainingBalance} + ${credit}` })
         .where(eq(users.clientId, clientId));
     });
-    return { success: true };
   } catch (error) {
     console.error('Error crediting new user:', error);
-    return { error: 'Failed to credit user.' };
+    throw new Error('Failed to credit user.');
   }
 }
 
@@ -74,7 +73,7 @@ export async function deductCredit(clientId: string) {
       .limit(1);
 
     if (!user.length || (user[0]?.remainingBalance as number) <= 0) {
-      return { error: 'Insufficient credits.' };
+      throw new Error ('Insufficient credits.');
     }
 
     // Deduct 1 credit
@@ -82,11 +81,9 @@ export async function deductCredit(clientId: string) {
       .update(users)
       .set({ remainingBalance: user[0]?.remainingBalance as number - 1 })
       .where(eq(users.clientId, clientId));
-
-    return { success: true };
   } catch (error) {
     console.error('Error deducting credit:', error);
-    return { error: `Failed to deduct credit : ${error}` };
+    throw new Error (`Failed to deduct credit : ${error}`);
   }
 }
 

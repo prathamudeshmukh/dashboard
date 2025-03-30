@@ -1,6 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { SUPPORT_EMAIL } from 'templify.constants';
 
 import LegalPage from '@/features/legal/LegalPage';
 
@@ -113,6 +114,6 @@ export default function TermsOfService() {
   ];
 
   return (
-    <LegalPage title={t('title')} sections={termsSections} contactEmail="support@templify.com" />
+    <LegalPage title={t('title')} sections={termsSections} contactEmail={SUPPORT_EMAIL} />
   );
 }
