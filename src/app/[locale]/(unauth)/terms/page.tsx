@@ -110,15 +110,6 @@ export default function TermsOfService() {
         </ul>
       ),
     },
-    {
-      id: 'contact',
-      title: t('contact.title'),
-      content: (
-        <ul className="list-disc space-y-3 pl-6">
-          <li>{t('contact.content.content1')}</li>
-        </ul>
-      ),
-    },
   ];
 
   return (

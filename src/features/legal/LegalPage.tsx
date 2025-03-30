@@ -26,9 +26,16 @@ export default function LegalPage({
   sections,
   contactEmail,
 }: LegalPageProps) {
+  const menuList = [
+    { link: '##features', name: 'Feature' },
+    { link: '##how-it-works', name: 'How it Works' },
+    { link: '##pricing', name: 'Pricing' },
+    { link: '##security', name: 'Security' },
+    { link: 'docs', name: 'Docs' },
+  ];
   return (
     <div className="flex min-h-screen flex-col">
-      <Navbar />
+      <Navbar menuList={menuList} basePath="/" />
       <main className="flex-1 bg-background">
         <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
           <div className="space-y-8">

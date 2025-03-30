@@ -377,12 +377,6 @@
       "content": {
         "content1": "We may update this policy periodically and notify users of significant changes."
       }
-    },
-    "contact": {
-      "title": "9. Contact",
-      "content": {
-        "content1": "For privacy-related inquiries, please contact us"
-      }
     }
   },
   "ToS": {
@@ -442,12 +436,6 @@
       "content": {
         "content1": "We may update these terms at any time, with prior notice where applicable.",
         "content2": "Continued use of the service constitutes acceptance of revised terms."
-      }
-    },
-    "contact": {
-      "title": "9. Contact",
-      "content": {
-        "content1": "For any questions about these terms, please contact us."
       }
     }
   }
