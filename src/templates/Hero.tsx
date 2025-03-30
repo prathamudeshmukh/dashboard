@@ -27,11 +27,11 @@ export const Hero = () => {
       description={(
         <>
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="size-5 text-primary" />
+            <div><CheckCircle2 className="size-5 text-primary" /></div>
             <p className="font-medium">{t('description1')}</p>
           </div>
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="size-5 text-primary" />
+            <div><CheckCircle2 className="size-5 text-primary" /></div>
             <p className="font-medium">{t('description2')}</p>
           </div>
         </>

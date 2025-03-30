@@ -12,11 +12,11 @@ type HeroSectionProps = {
 
 export const HeroSection = ({ title, subtitle, description, button }: HeroSectionProps) => {
   return (
-    <section className="w-full bg-gradient-to-b from-background to-muted p-12 md:py-24 lg:py-32 xl:py-48">
+    <section className="w-full bg-gradient-to-b from-background to-muted p-4 md:py-24 lg:py-32 xl:py-48">
       <div className="container px-4 md:px-6">
         <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
 
-          <div className="flex flex-col justify-center space-y-4">
+          <div className="mb-16 flex flex-col justify-center space-y-4">
             <div className="space-y-2">
               <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
                 {title}
@@ -40,9 +40,9 @@ export const HeroSection = ({ title, subtitle, description, button }: HeroSectio
           <div className="flex items-center justify-center">
             <div className="relative w-full max-w-lg">
               <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-primary to-primary/50 opacity-75 blur-xl"></div>
-              <div className="relative overflow-hidden rounded-xl border bg-background p-6 shadow-lg">
+              <div className="relative mx-auto min-h-[550px] overflow-hidden rounded-xl border bg-background p-6 shadow-lg md:min-h-[500px]">
                 <Tabs defaultValue="html-builder" className="w-full">
-                  <TabsList className="mb-4 grid w-full grid-cols-2">
+                  <TabsList className="mb-4 flex flex-wrap justify-center gap-2 sm:grid sm:grid-cols-2">
                     <TabsTrigger value="html-builder">HTML Builder</TabsTrigger>
                     <TabsTrigger value="handlebars">Handlebars</TabsTrigger>
                   </TabsList>
@@ -53,8 +53,8 @@ export const HeroSection = ({ title, subtitle, description, button }: HeroSectio
                         Preview
                       </Button>
                     </div>
-                    <div className="grid grid-cols-4 gap-4">
-                      <div className="col-span-1 space-y-2">
+                    <div className="grid gap-4 md:grid-cols-4">
+                      <div className="flex justify-center gap-2 md:flex-col md:space-y-2">
                         <div className="flex flex-col items-center justify-center rounded-md bg-muted p-2">
                           <Columns className="size-6 text-muted-foreground" />
                           <span className="mt-1 text-xs">Layout</span>
@@ -91,8 +91,8 @@ export const HeroSection = ({ title, subtitle, description, button }: HeroSectio
                       </Button>
                     </div>
                     <div className="space-y-4">
-                      <div className="rounded-md bg-muted p-4">
-                        <pre className="text-sm">
+                      <div className="overflow-auto rounded-md bg-muted p-4">
+                        <pre className="whitespace-pre-wrap break-words text-sm">
                           <code>
                             {
                               '<h1>{{title}}</h1>\n<p>{{content}}</p>\n<ul>\n  {{#each items}}\n    <li>{{this}}</li>\n  {{/each}}\n</ul>'
@@ -100,8 +100,8 @@ export const HeroSection = ({ title, subtitle, description, button }: HeroSectio
                           </code>
                         </pre>
                       </div>
-                      <div className="rounded-md bg-muted p-4">
-                        <pre className="text-sm">
+                      <div className="overflow-auto rounded-md bg-muted p-4">
+                        <pre className="whitespace-pre-wrap break-words text-sm">
                           <code>
                             {
                               '{\n  "title": "Welcome",\n  "content": "This is a sample template.",\n  "items": ["Item 1", "Item 2", "Item 3"]\n}'
