@@ -57,6 +57,14 @@ const IndexPage = (props: { params: { locale: string } }) => {
     'operatingSystem': 'Cloud-based',
   };
 
+  const menuList = [
+    { link: '#features', name: 'Feature' },
+    { link: '#how-it-works', name: 'How it Works' },
+    { link: '#pricing', name: 'Pricing' },
+    { link: '#security', name: 'Security' },
+    { link: '/docs', name: 'Docs' },
+  ];
+
   return (
     <div className="flex min-h-screen flex-col">
       <section>
@@ -65,7 +73,7 @@ const IndexPage = (props: { params: { locale: string } }) => {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </section>
-      <Navbar />
+      <Navbar menuList={menuList} />
       <main className="flex-1 overflow-hidden">
         <Hero />
         <KeyFeatures />
