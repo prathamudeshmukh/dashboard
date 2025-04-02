@@ -1,11 +1,12 @@
 'use client';
 
-import { Copy, Eye, EyeOff, Info, Loader2 } from 'lucide-react';
+import { Copy, Eye, EyeOff, Info, Key, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import { getClientSecret } from '@/libs/actions/user';
 
 export default function APIKeys({ clientId }: { clientId: string }) {
@@ -120,76 +121,82 @@ export default function APIKeys({ clientId }: { clientId: string }) {
           </div>
         </Card>
 
-        <div className="space-y-4">
-          <h2 className="break-words text-2xl font-semibold">Client ID</h2>
-          <p className="break-words text-muted-foreground">
-            This ID should be used in your frontend code. It can be safely shared and does not need to be kept secret.
-          </p>
-
-          <Card className="p-4 sm:p-6">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <h3 className="font-semibold">Client ID</h3>
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Key className="size-5" />
+              {' '}
+              Client ID
+            </CardTitle>
+            <CardDescription>
+              Use this ID to identify your application when making API requests.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-2">
+              <div className="relative flex-1">
+                <Input value={clientId} readOnly className="bg-muted/50 pr-10 font-mono text-sm" />
+              </div>
               <Button
                 variant="outline"
-                size="sm"
+                size="icon"
                 onClick={() =>
                   copyToClipboard(clientId)}
+                className="shrink-0"
               >
-                <Copy className="mr-2 size-4" />
-                Copy
+                <Copy className="size-4" />
               </Button>
             </div>
-            <p className="mt-2 break-all font-mono text-sm text-muted-foreground">
-              {clientId}
-            </p>
-          </Card>
-        </div>
-
-        <div className="space-y-4">
-          <h2 className="break-words text-2xl font-semibold">Client Secret</h2>
-          <p className="break-words text-muted-foreground">
-            Securely manage these sensitive keys. If compromised, create a new one and delete the old one.
-          </p>
-
-          <Card className="p-4 sm:p-6">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <div>
-                <h3 className="font-semibold">Client Secret</h3>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Key className="size-5" />
+              {' '}
+              Client Secret
+            </CardTitle>
+            <CardDescription>
+              Keep this secret safe. Do not share it publicly.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-2">
+              <div className="relative flex-1">
+                <Input
+                  value={showSecret ? clientSecret! : '••••••••••••••••••••••••••'}
+                  readOnly
+                  className="bg-muted/50 pr-10 font-mono text-sm"
+                />
               </div>
-              <div className="flex gap-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => toggleSecretVisibility(setShowSecret)}
-                >
-                  {loading
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => toggleSecretVisibility(setShowSecret)}
+              >
+                {loading
+                  ? (
+                      <Loader2 className="size-4 animate-spin" />
+                    )
+                  : showSecret
                     ? (
-                        <Loader2 className="size-4 animate-spin" />
+                        <EyeOff className="size-4" />
                       )
-                    : showSecret
-                      ? (
-                          <EyeOff className="size-4" />
-                        )
-                      : (
-                          <Eye className="size-4" />
-                        )}
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => copyToClipboard(clientSecret || '')}
-                  disabled={!clientSecret}
-                >
-                  <Copy className="mr-2 size-4" />
-                  Copy
-                </Button>
-              </div>
+                    : (
+                        <Eye className="size-4" />
+                      )}
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => copyToClipboard(clientSecret || '')}
+                className="shrink-0"
+              >
+                <Copy className="size-4" />
+              </Button>
             </div>
-            <p className="mt-2 break-all font-mono text-sm text-muted-foreground">
-              {showSecret ? clientSecret || 'Loading...' : '••••••••••••••••••••••••••••••••••••••••••'}
-            </p>
-          </Card>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
