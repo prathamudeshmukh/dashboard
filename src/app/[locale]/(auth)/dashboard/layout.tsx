@@ -28,6 +28,10 @@ export default function DashboardLayout(props: { children: React.ReactNode }) {
                 href: '/dashboard',
                 label: t('home'),
               },
+              {
+                href: 'dashboard/settings',
+                label: 'Settings',
+              },
             ]}
           />
         </div>
