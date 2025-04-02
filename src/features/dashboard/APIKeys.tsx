@@ -197,6 +197,12 @@ export default function APIKeys({ clientId }: { clientId: string }) {
             </div>
           </CardContent>
         </Card>
+
+        <div>
+          <Button variant="outline" asChild>
+            <a href="/docs">View Full API Documentation</a>
+          </Button>
+        </div>
       </div>
     </div>
   );
