@@ -268,10 +268,6 @@
     "message_description": "Enter a detailed message for your todo.",
     "submit_button": "Submit"
   },
-  "DashboardContent": {
-    "title": "Let's get Started",
-    "create_new_template": "Create New Template"
-  },
   "TemplateTable": {
     "id": "ID",
     "template_name": "Template Name",

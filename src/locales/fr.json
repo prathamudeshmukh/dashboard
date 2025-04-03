@@ -265,10 +265,6 @@
     "message_description": "Entrez un message détaillé pour votre todo.",
     "submit_button": "Envoyer"
   },
-  "DashboardContent": {
-    "title": "Commençons",
-    "create_new_template": "Créer un nouveau modèle"
-  },
   "TemplateTable": {
     "id": "ID",
     "template_name": "Nom du modèle",

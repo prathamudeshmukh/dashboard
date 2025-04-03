@@ -5,6 +5,7 @@ import { CopyIcon, Pencil2Icon, TrashIcon } from '@radix-ui/react-icons';
 import type { ColumnDef } from '@tanstack/react-table';
 import { endOfDay, startOfDay } from 'date-fns';
 import { debounce } from 'lodash';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -199,36 +200,61 @@ const TemplateTable = () => {
     setPage(1);
   };
 
+  const handleCreateTemplate = () => {
+    router.push('/dashboard/template-dashboard');
+  };
+
   return (
     <div className="container mx-auto py-10">
-      <div className="mb-4 flex items-center gap-4">
-        <Input
-          type="text"
-          value={searchQuery}
-          onChange={e => setSearchQuery(e.target.value)}
-          placeholder="Search templates..."
-          className="w-1/3 rounded-md border p-2"
-        />
+      {templateData.length === 0
+        ? (
+            <div className="flex h-96 flex-col items-center justify-center text-center">
+              <h2 className="mb-2 text-2xl font-semibold">Welcome to Templify</h2>
+              <p className="mb-4 text-gray-600">
+                Your one-stop solution to your dynamic PDF generation needs.
+              </p>
+              <Button onClick={handleCreateTemplate} className="px-6 py-2">
+                Create your first template
+              </Button>
+            </div>
+          )
+        : (
+            <>
+              <div className="mt-5 flex items-end justify-end">
+                <Link href="/dashboard/template-dashboard">
+                  <Button>Create New Template</Button>
+                </Link>
+              </div>
+              <div className="mb-4 flex items-center gap-4">
+                <Input
+                  type="text"
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  placeholder="Search templates..."
+                  className="w-1/3 rounded-md border p-2"
+                />
 
-        <DatePickerWithRange
-          date={dateRange}
-          onDateChange={setDateRange}
-        />
+                <DatePickerWithRange
+                  date={dateRange}
+                  onDateChange={setDateRange}
+                />
 
-        <Button
-          onClick={handleDateFilterReset}
-        >
-          Reset Filters
-        </Button>
-      </div>
+                <Button
+                  onClick={handleDateFilterReset}
+                >
+                  Reset Filters
+                </Button>
+              </div>
 
-      <DataTable
-        data={templateData}
-        columns={columns}
-        page={page}
-        pageCount={totalPages}
-        onPageChange={setPage}
-      />
+              <DataTable
+                data={templateData}
+                columns={columns}
+                page={page}
+                pageCount={totalPages}
+                onPageChange={setPage}
+              />
+            </>
+          )}
     </div>
   );
 };
