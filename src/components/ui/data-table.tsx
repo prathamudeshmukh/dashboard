@@ -13,6 +13,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -63,63 +64,66 @@ export function DataTable<TData, TValue>({
   };
 
   return (
-    <div>
-      <div className="rounded-md border bg-white shadow-md">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map(headerGroup => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id} className="text-lg font-medium text-primary">
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length
-              ? (
-                  table.getRowModel().rows.map(row => (
-                    <TableRow
-                      key={row.id}
-                      data-state={row.getIsSelected() && 'selected'}
-                      className="text-base"
-                    >
-                      {row.getVisibleCells().map(cell => (
-                        <TableCell key={cell.id}>
-                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))
-                )
-              : (
-                  <TableRow>
-                    <TableCell colSpan={columns.length} className="h-24 text-center">
-                      No results.
-                    </TableCell>
+    <div className="container mx-auto py-6">
+      <Table>
+        <TableHeader>
+          {table.getHeaderGroups().map(headerGroup => (
+            <TableRow key={headerGroup.id}>
+              {headerGroup.headers.map(header => (
+                <TableHead key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                      header.column.columnDef.header,
+                      header.getContext(),
+                    )}
+                </TableHead>
+              ))}
+            </TableRow>
+          ))}
+        </TableHeader>
+        <TableBody>
+          {table.getRowModel().rows?.length
+            ? (
+                table.getRowModel().rows.map(row => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && 'selected'}
+                    className="text-base hover:bg-gray-100"
+                  >
+                    {row.getVisibleCells().map(cell => (
+                      <TableCell key={cell.id}>
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
+                    ))}
                   </TableRow>
-                )}
-          </TableBody>
-        </Table>
-      </div>
+                ))
+              )
+            : (
+                <TableRow>
+                  <TableCell colSpan={columns.length} className="h-24 text-gray-500">
+                    No results.
+                  </TableCell>
+                </TableRow>
+              )}
+        </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TableCell colSpan={columns.length} className="text-right font-semibold text-gray-700">
+              Total Records:
+              {' '}
+              {data.length}
+            </TableCell>
+          </TableRow>
+        </TableFooter>
+      </Table>
       {/* Pagination Controls */}
       <div className="mt-4 flex items-center justify-center space-x-1">
-
-        {/* Page Numbers */}
         {generatePageNumbers().map(pageNumber => (
           <Button
             key={pageNumber}
             onClick={() => onPageChange(pageNumber)}
-            className={`px-3 py-1 ${page === pageNumber ? 'bg-primary text-white' : 'bg-gray-400'}`}
+            className={`rounded-md px-3 py-1 ${page === pageNumber ? 'bg-primary text-white' : 'bg-gray-300 hover:bg-gray-400'}`}
           >
             {pageNumber}
           </Button>

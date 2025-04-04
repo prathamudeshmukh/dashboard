@@ -1,18 +1,14 @@
 'use client';
 
 import { useUser } from '@clerk/nextjs';
-import { CopyIcon, Pencil2Icon, TrashIcon } from '@radix-ui/react-icons';
 import type { ColumnDef } from '@tanstack/react-table';
-import { endOfDay, startOfDay } from 'date-fns';
-import { debounce } from 'lodash';
+import { Copy, MoreHorizontal, Plus, Search, SquarePen, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import React, { useCallback, useEffect, useState } from 'react';
-import type { DateRange } from 'react-day-picker';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-import { DatePickerWithRange } from '@/components/DatePickerWithRange';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,10 +18,10 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/data-table';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { deleteTemplate, fetchTemplates } from '@/libs/actions/templates';
 import { type Template, TemplateType } from '@/types/Template';
@@ -34,46 +30,29 @@ const TemplateTable = () => {
   const [templateData, setTemplateData] = useState<any>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
   const { user } = useUser();
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState<string>('');
-
-  const [dateRange, setDateRange] = useState<DateRange | undefined>({
-    from: undefined,
-    to: undefined,
-  });
+  const [openDialog, setOpenDialog] = useState(false);
+  const [searchTriggered, setSearchTriggered] = useState(false);
 
   const t = useTranslations('TemplateTable');
-
-  const debouncedFetchTemplates = useCallback(
-    debounce(async (email, page, searchQuery, dateRange) => {
-      if (!email) {
-        return;
-      }
-
-      const response = await fetchTemplates({
-        email,
-        page,
-        pageSize: 10,
-        searchQuery,
-        startDate: dateRange?.from ? startOfDay(dateRange.from) : undefined,
-        endDate: dateRange?.to ? endOfDay(dateRange.to) : undefined,
-      });
-
-      setTotalPages(response.totalPages);
-      setTemplateData(response.data);
-    }, 500),
-    [],
-  );
+  const fetchTemplateData = async (email: string, page: number, search: string) => {
+    if (!email) {
+      return;
+    }
+    const response = await fetchTemplates({ email, page, pageSize: 10, searchQuery: search });
+    setTotalPages(response.totalPages);
+    setTemplateData(response.data);
+  };
 
   useEffect(() => {
     if (!user) {
       return;
     }
-    const email = user?.emailAddresses[0]?.emailAddress;
-    debouncedFetchTemplates(email, page, searchQuery, dateRange);
-  }, [user, page, searchQuery, dateRange, debouncedFetchTemplates]);
+    const email = user?.emailAddresses[0]?.emailAddress as string;
+    fetchTemplateData(email, page, searchQuery);
+  }, [user, page]);
 
   const handleEdit = (templateId: string, templateType: string) => {
     if (templateType === TemplateType.HTML_BUILDER) {
@@ -83,25 +62,32 @@ const TemplateTable = () => {
     }
   };
 
-  const handleDelete = async () => {
-    if (!selectedTemplateId) {
+  const handleDelete = async (templateId: string) => {
+    if (!templateId) {
       return;
     }
-    const response = await deleteTemplate(selectedTemplateId);
+    const response = await deleteTemplate(templateId);
     if (response.success) {
       toast.success('Template Deleted Successfully');
-      debouncedFetchTemplates(user?.emailAddresses[0]?.emailAddress, page, searchQuery, dateRange);
+      const email = user?.emailAddresses[0]?.emailAddress as string;
+      fetchTemplateData(email, page, searchQuery);
     } else {
       toast.error(`Failed to delete template: ${response.error}`);
     }
-    setSelectedTemplateId(null);
   };
 
   const columns: ColumnDef<Template>[] = [
     {
       accessorKey: 'templateName',
       header: () => t('template_name'),
-      cell: info => info.getValue(),
+      cell: (info) => {
+        const templateName = info.getValue();
+        return (
+          <div className="font-medium">
+            {templateName as string}
+          </div>
+        );
+      },
     },
     {
       accessorKey: 'templateId',
@@ -117,8 +103,8 @@ const TemplateTable = () => {
         return (
           <div className="flex items-center gap-2">
             <span>{templateId}</span>
-            <Button variant="outline" onClick={handleCopy}>
-              <CopyIcon />
+            <Button variant="ghost" size="sm" onClick={handleCopy}>
+              <Copy />
             </Button>
           </div>
         );
@@ -150,26 +136,44 @@ const TemplateTable = () => {
       cell: ({ row }) => {
         const template = row.original;
 
+        const openDeleteDialog = () => {
+          setTimeout(() => {
+            setOpenDialog(true);
+          }, 100);
+        };
+
+        const closeDeleteDialog = () => {
+          setOpenDialog(false);
+        };
+
         return (
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              onClick={() => handleEdit(template.templateId!, template.templateType!)}
-            >
-              <Pencil2Icon />
-            </Button>
-
-            {/** Delete Confirmation Dialogue */}
-            <AlertDialog>
-              <AlertDialogTrigger>
-                <Button
-                  variant="outline"
-                  onClick={() => setSelectedTemplateId(template.templateId!)}
-                >
-                  <TrashIcon />
+          <>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <MoreHorizontal className="size-5" />
                 </Button>
-              </AlertDialogTrigger>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem
+                  onClick={() =>
+                    handleEdit(template.templateId!, template.templateType!)}
+                >
+                  <Button size="sm" variant="ghost">
+                    <SquarePen />
+                    Edit
+                  </Button>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={openDeleteDialog}>
+                  <Button size="sm" variant="ghost">
+                    <Trash2 />
+                    Delete
+                  </Button>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
 
+            <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
               <AlertDialogContent>
                 <AlertDialogHeader>
                   <AlertDialogTitle>Confirm Delete</AlertDialogTitle>
@@ -179,26 +183,27 @@ const TemplateTable = () => {
                 </AlertDialogHeader>
 
                 <AlertDialogFooter>
-                  <AlertDialogCancel onClick={() => setSelectedTemplateId(null)}>
+                  <AlertDialogCancel onClick={closeDeleteDialog}>
                     Cancel
                   </AlertDialogCancel>
-                  <AlertDialogAction onClick={handleDelete} className="bg-red-500 hover:bg-red-600">
+                  <AlertDialogAction
+                    onClick={() => {
+                      handleDelete(template.templateId as string);
+                      setOpenDialog(false);
+                    }}
+                    className="bg-red-500 hover:bg-red-600"
+                  >
                     Delete
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-          </div>
+          </>
         );
       },
     },
 
   ];
-
-  const handleDateFilterReset = () => {
-    setDateRange({ from: undefined, to: undefined });
-    setPage(1);
-  };
 
   const handleCreateTemplate = () => {
     router.push('/dashboard/template-dashboard');
@@ -206,7 +211,7 @@ const TemplateTable = () => {
 
   return (
     <div className="container mx-auto py-10">
-      {templateData.length === 0
+      {templateData.length === 0 && !searchTriggered && page === 1
         ? (
             <div className="flex h-96 flex-col items-center justify-center text-center">
               <h2 className="mb-2 text-2xl font-semibold">Welcome to Templify</h2>
@@ -222,7 +227,11 @@ const TemplateTable = () => {
             <>
               <div className="mt-5 flex items-end justify-end">
                 <Link href="/dashboard/template-dashboard">
-                  <Button>Create New Template</Button>
+                  <Button>
+                    <Plus />
+                    {' '}
+                    Create Template
+                  </Button>
                 </Link>
               </div>
               <div className="mb-4 flex items-center gap-4">
@@ -234,15 +243,18 @@ const TemplateTable = () => {
                   className="w-1/3 rounded-md border p-2"
                 />
 
-                <DatePickerWithRange
-                  date={dateRange}
-                  onDateChange={setDateRange}
-                />
-
                 <Button
-                  onClick={handleDateFilterReset}
+                  size="sm"
+                  variant="secondary"
+                  onClick={() => {
+                    setSearchTriggered(true);
+                    const email = user?.emailAddresses[0]?.emailAddress;
+                    if (email) {
+                      fetchTemplateData(email, page, searchQuery);
+                    }
+                  }}
                 >
-                  Reset Filters
+                  <Search />
                 </Button>
               </div>
 
