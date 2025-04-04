@@ -272,7 +272,7 @@
     "id": "ID",
     "template_name": "Template Name",
     "description": "Description",
-    "type": "Type",
+    "type": "Template Type",
     "actions": "Actions",
     "edit": "Edit",
     "delete": "Delete"
