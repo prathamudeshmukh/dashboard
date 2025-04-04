@@ -2,17 +2,13 @@
 
 import { useUser } from '@clerk/nextjs';
 import type { ColumnDef } from '@tanstack/react-table';
-import { endOfDay, startOfDay } from 'date-fns';
-import { debounce } from 'lodash';
-import { Copy, MoreHorizontal, SquarePen, Trash2 } from 'lucide-react';
+import { Copy, MoreHorizontal, Plus, Search, SquarePen, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import React, { useCallback, useEffect, useState } from 'react';
-import type { DateRange } from 'react-day-picker';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-import { DatePickerWithRange } from '@/components/DatePickerWithRange';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -38,41 +34,25 @@ const TemplateTable = () => {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [openDialog, setOpenDialog] = useState(false);
-  const [dateRange, setDateRange] = useState<DateRange | undefined>({
-    from: undefined,
-    to: undefined,
-  });
+  const [searchTriggered, setSearchTriggered] = useState(false);
 
   const t = useTranslations('TemplateTable');
-
-  const debouncedFetchTemplates = useCallback(
-    debounce(async (email, page, searchQuery, dateRange) => {
-      if (!email) {
-        return;
-      }
-
-      const response = await fetchTemplates({
-        email,
-        page,
-        pageSize: 10,
-        searchQuery,
-        startDate: dateRange?.from ? startOfDay(dateRange.from) : undefined,
-        endDate: dateRange?.to ? endOfDay(dateRange.to) : undefined,
-      });
-
-      setTotalPages(response.totalPages);
-      setTemplateData(response.data);
-    }, 500),
-    [],
-  );
+  const fetchTemplateData = async (email: string, page: number, search: string) => {
+    if (!email) {
+      return;
+    }
+    const response = await fetchTemplates({ email, page, pageSize: 10, searchQuery: search });
+    setTotalPages(response.totalPages);
+    setTemplateData(response.data);
+  };
 
   useEffect(() => {
     if (!user) {
       return;
     }
-    const email = user?.emailAddresses[0]?.emailAddress;
-    debouncedFetchTemplates(email, page, searchQuery, dateRange);
-  }, [user, page, searchQuery, dateRange, debouncedFetchTemplates]);
+    const email = user?.emailAddresses[0]?.emailAddress as string;
+    fetchTemplateData(email, page, searchQuery);
+  }, [user, page]);
 
   const handleEdit = (templateId: string, templateType: string) => {
     if (templateType === TemplateType.HTML_BUILDER) {
@@ -89,7 +69,8 @@ const TemplateTable = () => {
     const response = await deleteTemplate(templateId);
     if (response.success) {
       toast.success('Template Deleted Successfully');
-      debouncedFetchTemplates(user?.emailAddresses[0]?.emailAddress, page, searchQuery, dateRange);
+      const email = user?.emailAddresses[0]?.emailAddress as string;
+      fetchTemplateData(email, page, searchQuery);
     } else {
       toast.error(`Failed to delete template: ${response.error}`);
     }
@@ -224,18 +205,13 @@ const TemplateTable = () => {
 
   ];
 
-  const handleDateFilterReset = () => {
-    setDateRange({ from: undefined, to: undefined });
-    setPage(1);
-  };
-
   const handleCreateTemplate = () => {
     router.push('/dashboard/template-dashboard');
   };
 
   return (
     <div className="container mx-auto py-10">
-      {templateData.length === 0
+      {templateData.length === 0 && !searchTriggered && page === 1
         ? (
             <div className="flex h-96 flex-col items-center justify-center text-center">
               <h2 className="mb-2 text-2xl font-semibold">Welcome to Templify</h2>
@@ -251,7 +227,11 @@ const TemplateTable = () => {
             <>
               <div className="mt-5 flex items-end justify-end">
                 <Link href="/dashboard/template-dashboard">
-                  <Button>Create New Template</Button>
+                  <Button>
+                    <Plus />
+                    {' '}
+                    Create Template
+                  </Button>
                 </Link>
               </div>
               <div className="mb-4 flex items-center gap-4">
@@ -263,15 +243,18 @@ const TemplateTable = () => {
                   className="w-1/3 rounded-md border p-2"
                 />
 
-                <DatePickerWithRange
-                  date={dateRange}
-                  onDateChange={setDateRange}
-                />
-
                 <Button
-                  onClick={handleDateFilterReset}
+                  size="sm"
+                  variant="secondary"
+                  onClick={() => {
+                    setSearchTriggered(true);
+                    const email = user?.emailAddresses[0]?.emailAddress;
+                    if (email) {
+                      fetchTemplateData(email, page, searchQuery);
+                    }
+                  }}
                 >
-                  Reset Filters
+                  <Search />
                 </Button>
               </div>
 
