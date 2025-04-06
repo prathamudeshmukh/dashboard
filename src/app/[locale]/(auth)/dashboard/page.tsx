@@ -9,7 +9,6 @@ const DashboardIndexPage = () => {
     <>
       <TitleBar
         title={t('title_bar')}
-        description={t('title_bar_description')}
       />
 
       <DashboardContent />
