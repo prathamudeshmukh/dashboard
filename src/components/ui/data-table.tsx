@@ -65,7 +65,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="container mx-auto py-6">
-      <Table>
+      <Table className="min-h-72">
         <TableHeader>
           {table.getHeaderGroups().map(headerGroup => (
             <TableRow key={headerGroup.id}>
@@ -123,7 +123,7 @@ export function DataTable<TData, TValue>({
           <Button
             key={pageNumber}
             onClick={() => onPageChange(pageNumber)}
-            className={`rounded-md px-3 py-1 ${page === pageNumber ? 'bg-primary text-white' : 'bg-gray-300 hover:bg-gray-400'}`}
+            className={`mt-6 rounded-md px-4 py-3 ${page === pageNumber ? 'bg-primary text-white' : 'bg-gray-300 hover:bg-gray-400'}`}
           >
             {pageNumber}
           </Button>
