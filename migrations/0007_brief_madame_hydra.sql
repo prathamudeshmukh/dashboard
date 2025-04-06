@@ -1,0 +1,1 @@
+ALTER TABLE "users" ALTER COLUMN "remaining_balance" SET DEFAULT 0;
