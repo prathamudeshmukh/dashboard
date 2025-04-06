@@ -1,6 +1,6 @@
 'use client';
 
-import { Copy, Eye, EyeOff, Info, Key, Loader2 } from 'lucide-react';
+import { Copy, Eye, EyeOff, GlobeLock, Info, Key, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -152,7 +152,7 @@ export default function APIKeys({ clientId }: { clientId: string }) {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Key className="size-5" />
+              <GlobeLock className="size-5" />
               {' '}
               Client Secret
             </CardTitle>
@@ -198,8 +198,8 @@ export default function APIKeys({ clientId }: { clientId: string }) {
           </CardContent>
         </Card>
 
-        <div>
-          <Button variant="outline" asChild>
+        <div className="flex justify-end">
+          <Button variant="outline" className="bg-primary text-primary-foreground" asChild>
             <a href="/docs">View Full API Documentation</a>
           </Button>
         </div>

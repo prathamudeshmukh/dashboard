@@ -1,7 +1,8 @@
 'use client';
 
-import { Book, Code, FileText, LifeBuoy, Lock, Server, Shield, TriangleAlertIcon } from 'lucide-react';
+import { ArrowLeft, Book, Code, FileText, LifeBuoy, Lock, Server, Shield, TriangleAlertIcon } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -47,6 +48,7 @@ const navItems = [
 
 export default function DocsLayout({ children }: { children: React.ReactNode }) {
   const [activeSection, setActiveSection] = useState<string>('introduction');
+  const router = useRouter();
 
   // Scroll Detection for Active Section
   useEffect(() => {
@@ -74,7 +76,14 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
     <div className="flex min-h-screen bg-background">
 
       <aside className="sticky top-0 hidden h-screen w-72 border-r lg:block">
-        <div className="flex h-16 items-center border-b px-6">
+        <div className="flex h-16 items-center gap-2 border-b px-4">
+          <button
+            onClick={() => router.back()}
+            className="flex items-center justify-center rounded-md p-2 hover:bg-muted"
+          >
+            <ArrowLeft className="size-5 text-muted-foreground" />
+          </button>
+
           <Link href="/" className="flex items-center gap-2 font-semibold">
             <FileText className="size-6 text-primary" />
             <span className="text-lg">Templify Docs</span>
