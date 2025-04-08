@@ -25,7 +25,7 @@ import { Input } from '@/components/ui/input';
 import { deleteTemplate, fetchTemplates } from '@/libs/actions/templates';
 import { type Template, TemplateType } from '@/types/Template';
 
-import AsyncActionButton from './AsyncActionButton';
+import AsyncActionButton from '../../components/AsyncActionButton';
 
 const TemplateTable = () => {
   const [templateData, setTemplateData] = useState<any>([]);
