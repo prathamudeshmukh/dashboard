@@ -11,7 +11,6 @@ import { toast } from 'sonner';
 
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -25,6 +24,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Input } from '@/components/ui/input';
 import { deleteTemplate, fetchTemplates } from '@/libs/actions/templates';
 import { type Template, TemplateType } from '@/types/Template';
+
+import AsyncActionButton from '../../components/AsyncActionButton';
 
 const TemplateTable = () => {
   const [templateData, setTemplateData] = useState<any>([]);
@@ -186,15 +187,14 @@ const TemplateTable = () => {
                   <AlertDialogCancel onClick={closeDeleteDialog}>
                     Cancel
                   </AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={() => {
-                      handleDelete(template.templateId as string);
+                  <AsyncActionButton
+                    onClick={async () => {
+                      await handleDelete(template.templateId as string);
                       setOpenDialog(false);
                     }}
-                    className="bg-red-500 hover:bg-red-600"
                   >
                     Delete
-                  </AlertDialogAction>
+                  </AsyncActionButton>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
