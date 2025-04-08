@@ -60,7 +60,7 @@ export const users = pgTable('users', {
   username: varchar('username', { length: 255 }).notNull(),
   email: varchar('email', { length: 255 }).notNull().unique(),
   clientId: varchar('client_id', { length: 255 }).notNull().unique(), // Clerk user_id
-  remainingBalance: integer('remaining_balance').default(150).notNull(),
+  remainingBalance: integer('remaining_balance').default(0).notNull(),
 });
 
 export const creditTransactions = pgTable('credit_transactions', {
