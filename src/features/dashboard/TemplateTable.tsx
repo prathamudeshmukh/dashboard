@@ -210,7 +210,7 @@ const TemplateTable = () => {
   };
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="container mx-auto h-[450px] py-10">
       {templateData.length === 0 && !searchTriggered && page === 1
         ? (
             <div className="flex h-96 flex-col items-center justify-center text-center">
