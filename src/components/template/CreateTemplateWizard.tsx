@@ -39,7 +39,7 @@ export default function CreateTemplateWizard() {
   };
 
   return (
-    <div className="container max-w-5xl rounded-xl bg-card p-6 shadow-2xl">
+    <div className="h-[450px] px-10 py-12">
 
       {/* Wizard progress */}
       <Wizard
