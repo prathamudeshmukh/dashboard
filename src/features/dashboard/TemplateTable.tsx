@@ -206,7 +206,7 @@ const TemplateTable = () => {
   ];
 
   const handleCreateTemplate = () => {
-    router.push('/dashboard/template-dashboard');
+    router.push('/dashboard/create-template');
   };
 
   return (
@@ -226,7 +226,7 @@ const TemplateTable = () => {
         : (
             <>
               <div className="mt-5 flex items-end justify-end">
-                <Link href="/dashboard/template-dashboard">
+                <Link href="/dashboard/create-template">
                   <Button>
                     <Plus />
                     {' '}
