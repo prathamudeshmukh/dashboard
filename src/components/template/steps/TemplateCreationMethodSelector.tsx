@@ -3,16 +3,12 @@
 import { FileText, Upload } from 'lucide-react';
 
 import { Card, CardContent, CardTitle } from '@/components/ui/card';
+import type { TemplateCreationMethodSelectorProp } from '@/types/Template';
 
-type WizardStepSelectorProps = {
-  creationMethod: 'pdf' | 'gallery' | null;
-  setCreationMethod: (method: 'pdf' | 'gallery') => void;
-};
-
-export default function WizardStepSelector({
+export default function TemplateCreationMethodSelector({
   creationMethod,
   setCreationMethod,
-}: WizardStepSelectorProps) {
+}: TemplateCreationMethodSelectorProp) {
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
       <Card
