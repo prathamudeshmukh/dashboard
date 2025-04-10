@@ -65,7 +65,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="container mx-auto py-6">
-      <Table className="min-h-72">
+      <Table>
         <TableHeader>
           {table.getHeaderGroups().map(headerGroup => (
             <TableRow key={headerGroup.id}>
