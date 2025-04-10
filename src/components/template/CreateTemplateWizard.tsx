@@ -2,8 +2,9 @@
 
 import { useState } from 'react';
 
-import { Wizard, WizardNavigation } from '../Wizard';
-import WizardStepSelector from './steps/WizardStepSelector';
+import { Wizard } from '../Wizard';
+import { WizardNavigation } from '../WizardNavigation';
+import TemplateCreationMethodSelector from './steps/TemplateCreationMethodSelector';
 
 export default function CreateTemplateWizard() {
   const [currentStep, setCurrentStep] = useState(0);
@@ -27,7 +28,7 @@ export default function CreateTemplateWizard() {
     switch (currentStep) {
       case 0:
         return (
-          <WizardStepSelector
+          <TemplateCreationMethodSelector
             creationMethod={creationMethod}
             setCreationMethod={setCreationMethod}
           />
@@ -38,13 +39,7 @@ export default function CreateTemplateWizard() {
   };
 
   return (
-    <div className="container max-w-5xl bg-white p-6">
-      <div className="mb-8 flex items-center">
-        <div>
-          <h1 className="text-2xl font-bold">Create New Template</h1>
-          <p className="text-muted-foreground">Follow the steps to create your template</p>
-        </div>
-      </div>
+    <div className="container max-w-5xl rounded-xl bg-card p-6 shadow-2xl">
 
       {/* Wizard progress */}
       <Wizard

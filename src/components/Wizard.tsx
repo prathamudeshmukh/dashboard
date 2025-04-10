@@ -1,24 +1,10 @@
 'use client';
 
-import { Check, ChevronRight } from 'lucide-react';
+import { Check } from 'lucide-react';
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
-
-export type WizardStep = {
-  id: string;
-  title: string;
-  description?: string;
-  isCompleted?: boolean;
-  isActive?: boolean;
-};
-
-type WizardProps = {
-  steps: WizardStep[];
-  currentStep: number;
-  onStepClick?: (stepIndex: number) => void;
-  className?: string;
-};
+import type { WizardContentProps, WizardProps } from '@/types/Wizard';
 
 export function Wizard({ steps, currentStep, onStepClick, className }: WizardProps) {
   return (
@@ -73,77 +59,9 @@ export function Wizard({ steps, currentStep, onStepClick, className }: WizardPro
   );
 }
 
-export type WizardContentProps = {
-  step: number;
-  currentStep: number;
-  children: React.ReactNode;
-};
-
 export function WizardContent({ step, currentStep, children }: WizardContentProps) {
   if (step !== currentStep) {
     return null;
   }
   return <div className="mt-8">{children}</div>;
-}
-
-export type WizardNavigationProps = {
-  currentStep: number;
-  totalSteps: number;
-  onNext?: () => void;
-  onPrevious?: () => void;
-  onComplete?: () => void;
-  disableNext?: boolean;
-  disablePrevious?: boolean;
-  className?: string;
-  nextLabel?: string;
-  previousLabel?: string;
-  completeLabel?: string;
-};
-
-export function WizardNavigation({
-  currentStep,
-  totalSteps,
-  onNext,
-  onPrevious,
-  onComplete,
-  disableNext,
-  disablePrevious,
-  className,
-  nextLabel = 'Next',
-  previousLabel = 'Back',
-  completeLabel = 'Complete',
-}: WizardNavigationProps) {
-  const isLastStep = currentStep === totalSteps - 1;
-
-  return (
-    <div className={cn('flex justify-between mt-8', className)}>
-      <button
-        type="button"
-        onClick={onPrevious}
-        disabled={currentStep === 0 || disablePrevious}
-        className={cn(
-          'px-4 py-2 text-sm font-medium rounded-md',
-          currentStep === 0 || disablePrevious
-            ? 'text-muted-foreground cursor-not-allowed'
-            : 'text-primary hover:bg-primary/10',
-        )}
-      >
-        {previousLabel}
-      </button>
-      <button
-        type="button"
-        onClick={isLastStep ? onComplete : onNext}
-        disabled={disableNext}
-        className={cn(
-          'px-4 py-2 text-sm font-medium rounded-md flex items-center gap-1',
-          disableNext
-            ? 'bg-primary/50 text-primary-foreground cursor-not-allowed'
-            : 'bg-primary text-primary-foreground hover:bg-primary/90',
-        )}
-      >
-        {isLastStep ? completeLabel : nextLabel}
-        {!isLastStep && <ChevronRight className="size-4" />}
-      </button>
-    </div>
-  );
 }
