@@ -5,10 +5,12 @@ import { useState } from 'react';
 import { Wizard } from '../Wizard';
 import { WizardNavigation } from '../WizardNavigation';
 import TemplateCreationMethodSelector from './steps/TemplateCreationMethodSelector';
+import WizardSourceStep from './steps/WizardSourceStep';
 
 export default function CreateTemplateWizard() {
   const [currentStep, setCurrentStep] = useState(0);
   const [creationMethod, setCreationMethod] = useState<'pdf' | 'gallery' | null>('pdf');
+  const [extractedHtml, setExtractedHtml] = useState<string | null>(null);
 
   const handleNext = () => setCurrentStep(prev => prev + 1);
   const handlePrevious = () => setCurrentStep(prev => prev - 1);
@@ -33,18 +35,42 @@ export default function CreateTemplateWizard() {
             setCreationMethod={setCreationMethod}
           />
         );
+      case 1:
+        return (
+          <WizardSourceStep
+            creationMethod={creationMethod!}
+            extractedHtml={extractedHtml}
+            setExtractedHtml={setExtractedHtml}
+          />
+        );
       default:
         return null;
     }
   };
 
+  // Check if next button should be disabled
+  const isNextDisabled = () => {
+    switch (currentStep) {
+      case 0:
+        return !creationMethod;
+      default:
+        return false;
+    }
+  };
+
   return (
-    <div className="h-[450px] px-10 py-12">
+    <div className=" px-10 py-12">
 
       {/* Wizard progress */}
       <Wizard
         steps={steps}
         currentStep={currentStep}
+        onStepClick={(index) => {
+          // Only allow clicking on completed steps or the current step + 1
+          if (index <= currentStep || (index === currentStep + 1 && !isNextDisabled())) {
+            setCurrentStep(index);
+          }
+        }}
         className="mb-8"
       />
 
