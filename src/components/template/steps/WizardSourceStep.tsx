@@ -1,12 +1,8 @@
 'use client';
 
-import PDFExtractor from '../PDFExtractor';
+import type { WizardSourceStepProps } from '@/types/Wizard';
 
-type WizardSourceStepProps = {
-  creationMethod?: 'pdf' | 'gallery';
-  extractedHtml?: string | null;
-  setExtractedHtml?: (html: string) => void;
-};
+import PDFExtractor from '../PDFExtractor';
 
 export default function WizardSourceStep({
   creationMethod,

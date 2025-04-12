@@ -32,3 +32,7 @@ export type WizardNavigationProps = {
   previousLabel?: string;
   completeLabel?: string;
 };
+
+export type WizardSourceStepProps = {
+  creationMethod?: 'pdf' | 'gallery';
+};

@@ -10,7 +10,6 @@ import WizardSourceStep from './steps/WizardSourceStep';
 export default function CreateTemplateWizard() {
   const [currentStep, setCurrentStep] = useState(0);
   const [creationMethod, setCreationMethod] = useState<'pdf' | 'gallery' | null>('pdf');
-  const [extractedHtml, setExtractedHtml] = useState<string | null>(null);
 
   const handleNext = () => setCurrentStep(prev => prev + 1);
   const handlePrevious = () => setCurrentStep(prev => prev - 1);
@@ -39,8 +38,6 @@ export default function CreateTemplateWizard() {
         return (
           <WizardSourceStep
             creationMethod={creationMethod!}
-            extractedHtml={extractedHtml}
-            setExtractedHtml={setExtractedHtml}
           />
         );
       default:
