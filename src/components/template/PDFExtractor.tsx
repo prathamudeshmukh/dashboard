@@ -20,7 +20,7 @@ const PDFExtractor = () => {
       setUploadError(null);
       setProgress(0);
 
-      await axios.post('/api/upload', formData, {
+      const response = await axios.post('/api/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -31,6 +31,8 @@ const PDFExtractor = () => {
           }
         },
       });
+
+      console.log('RUN ID', response.data.runID);// eslint-disable-line no-console
     } catch (error: any) {
       setUploadError(`Upload failed. Please try again - ${error}`);
     } finally {

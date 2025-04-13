@@ -22,6 +22,6 @@ export async function uploadPdf(formData: FormData) {
   }
 
   return {
-    jobId: uuid,
+    pdfId: uuid,
   };
 }

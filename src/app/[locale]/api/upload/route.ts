@@ -1,6 +1,7 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
+import { inngest } from '@/inngest/client';
 import { uploadPdf } from '@/libs/actions/pdf';
 
 export async function POST(req: NextRequest) {
@@ -8,7 +9,15 @@ export async function POST(req: NextRequest) {
     const formData = await req.formData();
     const result = await uploadPdf(formData);
 
-    return NextResponse.json(result);
+    const { ids } = await inngest.send({
+      name: 'test/hello.world',
+      data: {
+        pdfId: result.pdfId,
+      },
+    });
+
+    const runID = ids[0];
+    return NextResponse.json({ result, runID });
   } catch (err: any) {
     throw new Error (`Something went wrong ${err}`);
   }
