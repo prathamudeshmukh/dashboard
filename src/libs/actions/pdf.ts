@@ -15,6 +15,7 @@ export async function uploadPdf(formData: FormData) {
   // Upload to Vercel Blob
   const blob = await put(blobPath, file, {
     access: 'public',
+    addRandomSuffix: false,
   });
 
   if (!blob) {

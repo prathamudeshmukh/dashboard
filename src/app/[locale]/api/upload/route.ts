@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
     const result = await uploadPdf(formData);
 
     const { ids } = await inngest.send({
-      name: 'test/hello.world',
+      name: 'test/extract.pdf',
       data: {
         pdfId: result.pdfId,
       },
