@@ -134,6 +134,9 @@
     "next_renew_date": "Votre abonnement sera renouvelé le {date}"
   },
   "FAQ": {
+    "title": "Questions fréquemment posées",
+    "subtitle": "Soutien",
+    "description": "Tout ce que vous devez savoir sur Templify",
     "question_1": "Qu'est-ce que Templify ?",
     "answer_1": "Templify est un SaaS orienté API qui permet aux utilisateurs de créer et gérer des modèles et de générer dynamiquement des PDF sans avoir besoin de bibliothèques PDF complexes ou d'efforts de développement importants.",
     "question_2": "Comment intégrer Templify dans mon application ?",
