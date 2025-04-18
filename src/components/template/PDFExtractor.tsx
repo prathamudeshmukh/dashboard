@@ -15,7 +15,7 @@ enum PdfExtractionStatusEnum {
   FAILED,
 }
 
-enum UploadStatus {
+enum PdfUploadStatusEnum {
   NOT_STARTED,
   IN_PROGRESS,
   COMPLETETD,
@@ -25,9 +25,10 @@ enum UploadStatus {
 const PDFExtractor = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [progress, setProgress] = useState<number>(0);
-  const [uploadingStatus, setuploadingStatus] = useState(UploadStatus.NOT_STARTED);
+  const [pdfUploadStatus, setPdfUploadStatus] = useState(PdfUploadStatusEnum.NOT_STARTED);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [pdfExtractionStatus, setpdfExtractionStatus] = useState<PdfExtractionStatusEnum>(PdfExtractionStatusEnum.NOT_STARTED);
+  const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB
 
   async function pollJobStatus(runID: string) {
     let status = await getStatus(runID);
@@ -49,7 +50,7 @@ const PDFExtractor = () => {
     formData.append('pdf', file);
 
     try {
-      setuploadingStatus(UploadStatus.IN_PROGRESS);
+      setPdfUploadStatus(PdfUploadStatusEnum.IN_PROGRESS);
       setUploadError(null);
       setProgress(0);
 
@@ -64,29 +65,47 @@ const PDFExtractor = () => {
           }
         },
       });
-      setuploadingStatus(UploadStatus.COMPLETETD);
+      setPdfUploadStatus(PdfUploadStatusEnum.COMPLETETD);
       setpdfExtractionStatus(PdfExtractionStatusEnum.IN_PROGRESS);
-      pollJobStatus(response.data.run_id);
+      pollJobStatus(response.data.runID);
     } catch (error: any) {
-      setuploadingStatus(UploadStatus.FAILED);
+      setPdfUploadStatus(PdfUploadStatusEnum.FAILED);
       setUploadError(`Upload failed. Please try again - ${error}`);
     } finally {
-      setuploadingStatus(UploadStatus.FAILED);
+      setPdfUploadStatus(PdfUploadStatusEnum.FAILED);
     }
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file && file.type === 'application/pdf') {
-      await uploadFile(file);
+    if (file) {
+      if (file.size > MAX_FILE_SIZE) {
+        setUploadError('File size should not exceed 4MB.');
+        return;
+      }
+
+      if (file.type === 'application/pdf') {
+        await uploadFile(file);
+      } else {
+        setUploadError('Only PDF files are supported.');
+      }
     }
   };
 
   const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const file = e.dataTransfer.files?.[0];
-    if (file && file.type === 'application/pdf') {
-      await uploadFile(file);
+    if (file) {
+      if (file.size > MAX_FILE_SIZE) {
+        setUploadError('File size should not exceed 4MB.');
+        return;
+      }
+
+      if (file.type === 'application/pdf') {
+        await uploadFile(file);
+      } else {
+        setUploadError('Only PDF files are supported.');
+      }
     }
   };
 
@@ -143,7 +162,7 @@ const PDFExtractor = () => {
             <p className="text-xs text-muted-foreground">Supported format: PDF (Max size: 4MB)</p>
           </div>
 
-          {uploadingStatus === UploadStatus.IN_PROGRESS && (
+          {pdfUploadStatus === PdfUploadStatusEnum.IN_PROGRESS && (
             <div className="mt-6">
               <Progress value={progress} className="h-2" />
               <p className="mt-1 text-sm text-muted-foreground">
@@ -154,7 +173,7 @@ const PDFExtractor = () => {
             </div>
           )}
 
-          {uploadingStatus === UploadStatus.FAILED && (
+          {pdfUploadStatus === PdfUploadStatusEnum.FAILED && (
             <p className="mt-2 text-center text-sm text-red-500">{uploadError}</p>
           )}
         </div>
