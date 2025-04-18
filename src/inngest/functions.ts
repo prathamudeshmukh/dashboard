@@ -54,7 +54,7 @@ export const extractPdfContent = inngest.createFunction(
         await PDFNet.runWithCleanup(main, process.env.PDFTRON_LICENSE_KEY as string);
       });
 
-      // Upload HTML back to blob storage
+      // To-do - Skip this for upload for now and convrt buffer to text and return
       const uploadedHtmlUrl = await step.run('upload-html', async () => {
         const htmlBuffer = fs.readFileSync(outputHtmlPath);
         const result = await put(`uploads/${pdfId}/output/out.html`, htmlBuffer, {

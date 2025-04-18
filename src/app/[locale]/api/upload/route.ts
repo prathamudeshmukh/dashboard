@@ -16,8 +16,8 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    const runID = ids[0];
-    return NextResponse.json({ result, runID });
+    const run_id = ids[0];
+    return NextResponse.json({ result, run_id });
   } catch (err: any) {
     throw new Error (`Something went wrong ${err}`);
   }

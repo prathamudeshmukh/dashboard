@@ -1,22 +1,55 @@
 import axios from 'axios';
-import { FileUp, TriangleAlert, Upload } from 'lucide-react';
+import { Check, FileUp, Loader2, TriangleAlert, Upload } from 'lucide-react';
 import React, { useRef, useState } from 'react';
 
+import { getStatus } from '@/libs/actions/pdf';
+
+import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 import { Button } from '../ui/button';
 import { Progress } from '../ui/progress';
+
+enum PdfExtractionStatusEnum {
+  NOT_STARTED,
+  IN_PROGRESS,
+  COMPLETED,
+  FAILED,
+}
+
+enum UploadStatus {
+  NOT_STARTED,
+  IN_PROGRESS,
+  COMPLETETD,
+  FAILED,
+}
 
 const PDFExtractor = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [progress, setProgress] = useState<number>(0);
-  const [isUploading, setIsUploading] = useState(false);
+  const [uploadingStatus, setuploadingStatus] = useState(UploadStatus.NOT_STARTED);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [pdfExtractionStatus, setpdfExtractionStatus] = useState<PdfExtractionStatusEnum>(PdfExtractionStatusEnum.NOT_STARTED);
+
+  async function pollJobStatus(runID: string) {
+    let status = await getStatus(runID);
+
+    while (status !== 'Completed') {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      status = await getStatus(runID);
+      if (status === 'Failed' || status === 'Cancelled') {
+        setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED);
+      }
+    }
+    if (status === 'Completed') {
+      setpdfExtractionStatus(PdfExtractionStatusEnum.COMPLETED);
+    }
+  }
 
   const uploadFile = async (file: File) => {
     const formData = new FormData();
     formData.append('pdf', file);
 
     try {
-      setIsUploading(true);
+      setuploadingStatus(UploadStatus.IN_PROGRESS);
       setUploadError(null);
       setProgress(0);
 
@@ -31,12 +64,14 @@ const PDFExtractor = () => {
           }
         },
       });
-
-      console.log('RUN ID', response.data.runID);// eslint-disable-line no-console
+      setuploadingStatus(UploadStatus.COMPLETETD);
+      setpdfExtractionStatus(PdfExtractionStatusEnum.IN_PROGRESS);
+      pollJobStatus(response.data.run_id);
     } catch (error: any) {
+      setuploadingStatus(UploadStatus.FAILED);
       setUploadError(`Upload failed. Please try again - ${error}`);
     } finally {
-      setIsUploading(false);
+      setuploadingStatus(UploadStatus.FAILED);
     }
   };
 
@@ -77,48 +112,99 @@ const PDFExtractor = () => {
         </div>
       </div>
 
-      <div
-        className="rounded-lg border-2 border-dashed border-primary/30 p-8 text-center"
-        onDrop={handleDrop}
-        onDragOver={handleDragOver}
-      >
-        <input
-          type="file"
-          accept=".pdf"
-          name="pdf"
-          onChange={handleFileChange}
-          className="hidden"
-          ref={fileInputRef}
-        />
+      {pdfExtractionStatus === PdfExtractionStatusEnum.NOT_STARTED && (
+        <div
+          className="rounded-lg border-2 border-dashed border-primary/30 p-8 text-center"
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+        >
+          <input
+            type="file"
+            accept=".pdf"
+            name="pdf"
+            onChange={handleFileChange}
+            className="hidden"
+            ref={fileInputRef}
+          />
 
-        <div className="flex flex-col items-center justify-center space-y-4">
-          <div className="rounded-full bg-primary/10 p-4">
-            <FileUp className="size-8 text-primary" />
+          {/* Default UI */}
+          <div className="flex flex-col items-center justify-center space-y-4">
+            <div className="rounded-full bg-primary/10 p-4">
+              <FileUp className="size-8 text-primary" />
+            </div>
+            <div>
+              <p className="text-lg font-medium">Drag & drop your PDF here</p>
+              <p className="text-sm text-muted-foreground">or</p>
+            </div>
+            <Button onClick={() => fileInputRef.current?.click()}>
+              <Upload className="mr-2 size-4" />
+              Browse Files
+            </Button>
+            <p className="text-xs text-muted-foreground">Supported format: PDF (Max size: 4MB)</p>
           </div>
-          <div>
-            <p className="text-lg font-medium">Drag & drop your PDF here</p>
-            <p className="text-sm text-muted-foreground">or</p>
-          </div>
-          <Button onClick={() => fileInputRef.current?.click()}>
-            <Upload className="mr-2 size-4" />
-            Browse Files
-          </Button>
-          <p className="text-xs text-muted-foreground">Supported format: PDF (Max size: 4MB)</p>
+
+          {uploadingStatus === UploadStatus.IN_PROGRESS && (
+            <div className="mt-6">
+              <Progress value={progress} className="h-2" />
+              <p className="mt-1 text-sm text-muted-foreground">
+                Uploading...
+                {progress}
+                %
+              </p>
+            </div>
+          )}
+
+          {uploadingStatus === UploadStatus.FAILED && (
+            <p className="mt-2 text-center text-sm text-red-500">{uploadError}</p>
+          )}
         </div>
+      )}
 
-        {isUploading && (
-          <div className="mt-6">
-            <Progress value={progress} className="h-2" />
-            <p className="mt-1 text-sm text-muted-foreground">
-              Uploading...
-              {progress}
-              %
-            </p>
+      {/* Dynamic status UI */}
+      <div className="mt-6 space-y-4">
+        {pdfExtractionStatus === PdfExtractionStatusEnum.IN_PROGRESS && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-center p-4">
+              <div className="flex flex-col items-center space-y-2">
+                <Loader2 className="size-8 animate-spin text-primary" />
+                <p className="text-sm font-medium">Processing PDF...</p>
+                <p className="text-xs text-muted-foreground">Extracting styles and structure</p>
+              </div>
+            </div>
           </div>
         )}
 
-        {uploadError && (
-          <p className="mt-2 text-center text-sm text-red-500">{uploadError}</p>
+        {pdfExtractionStatus === PdfExtractionStatusEnum.FAILED && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-center p-4">
+              <div className="flex flex-col items-center space-y-2">
+                <p className="text-sm font-medium">Processing Failed</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {pdfExtractionStatus === PdfExtractionStatusEnum.COMPLETED && (
+          <div className="space-y-4">
+            <Alert className="border-green-200 bg-green-50">
+              <Check className="size-4 text-green-600" />
+              <AlertTitle className="text-green-800">PDF Processed Successfully</AlertTitle>
+              <AlertDescription className="text-green-700">
+                We've extracted the template from your PDF. Continue to the next step to customize your template details.
+              </AlertDescription>
+            </Alert>
+
+            <div className="mt-4 border-t pt-4">
+              <div className="mt-2 flex items-center text-sm text-muted-foreground">
+                <Check className="mr-2 size-4 text-green-600" />
+                <span>HTML structure generated</span>
+              </div>
+              <div className="mt-2 flex items-center text-sm text-muted-foreground">
+                <Check className="mr-2 size-4 text-green-600" />
+                <span>Template ready for customization</span>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </div>
