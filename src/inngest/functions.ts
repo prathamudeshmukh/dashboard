@@ -43,7 +43,9 @@ export const extractPdfContent = inngest.createFunction(
       await step.run('convert-to-html', async () => {
         const main = async () => {
           await PDFNet.initialize();
-          const resourcePath = path.resolve('./Lib/Linux');
+          const resourcePath = path.resolve('./public/Lib/Linux');
+          // eslint-disable-next-line no-console
+          console.log('resourcePath:', resourcePath);
           await PDFNet.addResourceSearchPath(resourcePath);
           const htmlOutputOptions = new PDFNet.Convert.HTMLOutputOptions();
           htmlOutputOptions.setContentReflowSetting(PDFNet.Convert.HTMLOutputOptions.ContentReflowSetting.e_reflow_full);
