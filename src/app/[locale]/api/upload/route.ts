@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
     const result = await uploadPdf(formData);
 
     const { ids } = await inngest.send({
-      name: 'test/extract.pdf',
+      name: 'upload/extract.html',
       data: {
         pdfId: result.pdfId,
       },
@@ -19,6 +19,6 @@ export async function POST(req: NextRequest) {
     const runID = ids[0];
     return NextResponse.json({ result, runID });
   } catch (err: any) {
-    throw new Error (`Something went wrong ${err}`);
+    throw new Error (`PDF Extraction Failed ${err}`);
   }
 }
