@@ -12,6 +12,8 @@ export const extractPdfContent = inngest.createFunction(
   { id: 'extract-html' },
   { event: 'upload/extract.html' },
   async ({ event, step }) => {
+    process.env.LC_ALL = 'C';
+
     const pdfId = event.data.pdfId;
     const tmpBase = tmpdir();
     const inputDir = path.join(tmpBase, pdfId);
