@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { tmpdir } from 'node:os';
 import path from 'node:path';
 
 import { PDFNet } from '@pdftron/pdfnet-node';
@@ -12,7 +13,8 @@ export const extractPdfContent = inngest.createFunction(
   { event: 'upload/extract.html' },
   async ({ event, step }) => {
     const pdfId = event.data.pdfId;
-    const inputDir = path.resolve('tmp', pdfId);
+    const tmpBase = tmpdir();
+    const inputDir = path.join(tmpBase, pdfId);
     const outputDir = path.join(inputDir, 'output');
     const localPdfPath = path.join(inputDir, 'in.pdf');
     const outputHtmlPath = path.join(outputDir, 'output');
