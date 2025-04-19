@@ -13,7 +13,6 @@ env:
   GRAPE_STUDIO_KEY: ${{ secrets.PRODUCTION_GRAPE_STUDIO_KEY }}
   DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
   INNGEST_BASE_URL: https://api.inngest.com
-  PDFTRON_LICENSE_KEY: ${{ secrets.PRODUCTION_PDFTRON_LICENSE_KEY }}
 jobs:
   build:
     strategy:
@@ -42,8 +41,6 @@ jobs:
           echo "GRAPE_STUDIO_KEY=${{ secrets.PREVIEW_GRAPE_STUDIO_KEY }}" >> $GITHUB_ENV
           echo "DATABASE_URL=${{ secrets.PREVIEW_DATABASE_URL }}" >> $GITHUB_ENV
           echo "INNGEST_BASE_URL= https://api.inngest.com" >> $GITHUB_ENV
-          echo "PDFTRON_LICENSE_KEY=${{ secrets.PREVIEW_PDFTRON_LICENSE_KEY }}" >> $GITHUB_ENV
-
       # TODO: Run database migration only on develop or main branch
       - name: Run databse migrations
         if: github.event_name == 'push'
