@@ -42,20 +42,14 @@ export const extractPdfContent = inngest.createFunction(
 
       await step.run('convert-to-html', async () => {
         const main = async () => {
-          try {
-            await PDFNet.initialize();
-            const resourcePath = path.join(process.cwd(), 'node_modules/@pdftron/pdfnet-node/lib/Windows');
-            await PDFNet.addResourceSearchPath(resourcePath);
-            const htmlOutputOptions = new PDFNet.Convert.HTMLOutputOptions();
-            htmlOutputOptions.setContentReflowSetting(PDFNet.Convert.HTMLOutputOptions.ContentReflowSetting.e_reflow_full);
-            htmlOutputOptions.setEmbedImages(false);
-            await PDFNet.Convert.fileToHtml(localPdfPath, outputHtmlPath, htmlOutputOptions);
-          } catch (err) {
-            throw new Error(`Error in convert pdf to html:", ${err}`);
-          }
+          await PDFNet.initialize();
+          const resourcePath = path.resolve('./public/Lib/Linux');
+          await PDFNet.addResourceSearchPath(resourcePath);
+          const htmlOutputOptions = new PDFNet.Convert.HTMLOutputOptions();
+          htmlOutputOptions.setContentReflowSetting(PDFNet.Convert.HTMLOutputOptions.ContentReflowSetting.e_reflow_full);
+          htmlOutputOptions.setEmbedImages(false);
+          await PDFNet.Convert.fileToHtml(localPdfPath, outputHtmlPath, htmlOutputOptions);
         };
-        // eslint-disable-next-line no-console
-        console.info('PDFTRON_LICENSE_KEY', process.env.PDFTRON_LICENSE_KEY);
         await PDFNet.runWithCleanup(main, process.env.PDFTRON_LICENSE_KEY as string);
       });
 
