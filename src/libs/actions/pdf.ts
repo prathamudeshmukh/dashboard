@@ -36,9 +36,9 @@ export async function getStatus(runId: string) {
     },
   });
   const json = await response.json();
-  if (!json.data[0].status) {
+  if (!json?.data[0]?.status) {
     throw new Error(`No status found for this RUN ID - ${runId}`);
   }
 
-  return json.data[0].status;
+  return { status: json?.data[0]?.status, output: json?.data[0]?.output };
 }

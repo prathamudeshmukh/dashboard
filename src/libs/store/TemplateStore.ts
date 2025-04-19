@@ -1,6 +1,26 @@
 import { create } from 'zustand';
 
-export const useTemplateStore = create((set, get) => ({
+type TemplateStore = {
+
+  templateName: string;
+  templateDescription: string;
+  selectedTemplate: string | null;
+
+  htmlContent: string;
+  handlebarsCode: string;
+  handlebarsJson: string;
+
+  setTemplateName: (name: string) => void;
+  setTemplateDescription: (desc: string) => void;
+  selectTemplate: (templateId: string) => void;
+  setHtmlContent: (content: string) => void;
+  setHandlebarsCode: (code: string) => void;
+  setHandlebarsJson: (json: string) => void;
+
+  saveTemplate: () => void;
+};
+
+export const useTemplateStore = create<TemplateStore>((set, get) => ({
   // Template metadata
   templateName: '',
   templateDescription: '',

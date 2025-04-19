@@ -2,14 +2,14 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import { PDFNet } from '@pdftron/pdfnet-node';
-import { head, put } from '@vercel/blob';
+import { head } from '@vercel/blob';
 import axios from 'axios';
 
 import { inngest } from '@/inngest/client';
 
 export const extractPdfContent = inngest.createFunction(
-  { id: 'extract-pdf' },
-  { event: 'test/extract.pdf' },
+  { id: 'extract-html' },
+  { event: 'upload/extract.html' },
   async ({ event, step }) => {
     const pdfId = event.data.pdfId;
     const inputDir = path.resolve('tmp', pdfId);
@@ -47,24 +47,19 @@ export const extractPdfContent = inngest.createFunction(
             htmlOutputOptions.setEmbedImages(false);
             await PDFNet.Convert.fileToHtml(localPdfPath, outputHtmlPath, htmlOutputOptions);
           } catch (err) {
-            throw new Error(`Error in fileToHtml:", ${err}`);
+            throw new Error(`Error in convert pdf to html:", ${err}`);
           }
         };
 
         await PDFNet.runWithCleanup(main, process.env.PDFTRON_LICENSE_KEY as string);
       });
 
-      // To-do - Skip this for upload for now and convrt buffer to text and return
-      const uploadedHtmlUrl = await step.run('upload-html', async () => {
+      const htmlContent = await step.run('read-html', async () => {
         const htmlBuffer = fs.readFileSync(outputHtmlPath);
-        const result = await put(`uploads/${pdfId}/output/out.html`, htmlBuffer, {
-          access: 'public',
-          addRandomSuffix: false,
-        });
-        return result.url;
+        return htmlBuffer.toString(); // Convert buffer to string
       });
 
-      return { htmlUrl: uploadedHtmlUrl };
+      return { htmlContent };
     } catch (error: any) {
       throw new Error(`"Error during PDF processing", ${error}`);
     }

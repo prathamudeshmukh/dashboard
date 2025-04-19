@@ -3,6 +3,7 @@ import { Check, FileUp, Loader2, TriangleAlert, Upload } from 'lucide-react';
 import React, { useRef, useState } from 'react';
 
 import { getStatus } from '@/libs/actions/pdf';
+import { useTemplateStore } from '@/libs/store/TemplateStore';
 
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 import { Button } from '../ui/button';
@@ -29,19 +30,21 @@ const PDFExtractor = () => {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [pdfExtractionStatus, setpdfExtractionStatus] = useState<PdfExtractionStatusEnum>(PdfExtractionStatusEnum.NOT_STARTED);
   const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB
+  const { setHtmlContent } = useTemplateStore();
 
   async function pollJobStatus(runID: string) {
-    let status = await getStatus(runID);
+    let response = await getStatus(runID);
 
-    while (status !== 'Completed') {
+    while (response.status !== 'Completed') {
       await new Promise(resolve => setTimeout(resolve, 1000));
-      status = await getStatus(runID);
-      if (status === 'Failed' || status === 'Cancelled') {
+      response = await getStatus(runID);
+      if (response.status === 'Failed' || response.status === 'Cancelled') {
         setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED);
       }
     }
-    if (status === 'Completed') {
+    if (response.status === 'Completed') {
       setpdfExtractionStatus(PdfExtractionStatusEnum.COMPLETED);
+      setHtmlContent(response.output.htmlContent);
     }
   }
 
