@@ -52,7 +52,8 @@ export const extractPdfContent = inngest.createFunction(
             throw new Error(`Error in convert pdf to html:", ${err}`);
           }
         };
-
+        // eslint-disable-next-line no-console
+        console.info('PDFTRON_LICENSE_KEY', process.env.PDFTRON_LICENSE_KEY);
         await PDFNet.runWithCleanup(main, process.env.PDFTRON_LICENSE_KEY as string);
       });
 
