@@ -33,6 +33,13 @@ export type WizardNavigationProps = {
   completeLabel?: string;
 };
 
-export type WizardSourceStepProps = {
+export type TemplateSourceStepProps = {
   creationMethod?: 'pdf' | 'gallery';
+};
+
+export type TemplateDetailsStepProps = {
+  templateName: string;
+  setTemplateName: (name: string) => void;
+  templateDescription: string;
+  setTemplateDescription: (desc: string) => void;
 };
