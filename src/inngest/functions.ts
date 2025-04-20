@@ -4,8 +4,8 @@ import path from 'node:path';
 
 import { PDFNet } from '@pdftron/pdfnet-node';
 import { head } from '@vercel/blob';
-import AdmZip from 'adm-zip';
 import axios from 'axios';
+import * as tar from 'tar';
 
 import { inngest } from '@/inngest/client';
 
@@ -50,8 +50,10 @@ export const extractPdfContent = inngest.createFunction(
         const { size } = await fs.promises.stat(TMP_ZIP_PATH);
         // eslint-disable-next-line no-console
         console.log(`Downloaded file size: ${size} bytes`);
-        const zip = new AdmZip(TMP_ZIP_PATH);
-        zip.extractAllTo(TMP_EXTRACT_DIR, true);
+        await tar.x({
+          file: TMP_ZIP_PATH,
+          cwd: TMP_EXTRACT_DIR, // target folder
+        });
       });
 
       const metadata = await step.run('fetch-blob-metadata', async () => {
