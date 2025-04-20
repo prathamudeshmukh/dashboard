@@ -4,10 +4,15 @@ import path from 'node:path';
 
 import { PDFNet } from '@pdftron/pdfnet-node';
 import { head } from '@vercel/blob';
+import AdmZip from 'adm-zip';
 import axios from 'axios';
 
 import { inngest } from '@/inngest/client';
 
+const APPRYSE_MODULE_SDK_URL = 'https://www.pdftron.com/downloads/StructuredOutputLinuxArm64.tar.gz';
+const tmpBase = tmpdir();
+const TMP_ZIP_PATH = path.join(tmpBase, '/StructuredOutputLinuxArm64.tar.gz');
+const TMP_EXTRACT_DIR = path.join(tmpBase, '/StructuredOutputModule/');
 export const extractPdfContent = inngest.createFunction(
   { id: 'extract-html' },
   { event: 'upload/extract.html' },
@@ -15,7 +20,7 @@ export const extractPdfContent = inngest.createFunction(
     process.env.LC_ALL = 'C';
 
     const pdfId = event.data.pdfId;
-    const tmpBase = tmpdir();
+
     const inputDir = path.join(tmpBase, pdfId);
     const outputDir = path.join(inputDir, 'output');
     const localPdfPath = path.join(inputDir, 'in.pdf');
@@ -23,6 +28,28 @@ export const extractPdfContent = inngest.createFunction(
 
     try {
       fs.mkdirSync(outputDir, { recursive: true });
+
+      await step.run('download-pdf-html-module', async () => {
+        if (fs.existsSync(TMP_ZIP_PATH)) {
+          // eslint-disable-next-line no-console
+          console.log(`Module already found here : ${TMP_ZIP_PATH}`);
+          return;
+        }
+
+        const response = await axios.get(APPRYSE_MODULE_SDK_URL, {
+          responseType: 'stream',
+        });
+
+        await new Promise((resolve, reject) => {
+          const writer = fs.createWriteStream(TMP_ZIP_PATH);
+          response.data.pipe(writer);
+          writer.on('finish', () => resolve(null));
+          writer.on('error', reject);
+        });
+
+        const zip = new AdmZip(TMP_ZIP_PATH);
+        zip.extractAllTo(TMP_EXTRACT_DIR, true);
+      });
 
       const metadata = await step.run('fetch-blob-metadata', async () => {
         const blobPath = `uploads/${pdfId}/input/in.pdf`;
@@ -43,7 +70,7 @@ export const extractPdfContent = inngest.createFunction(
       await step.run('convert-to-html', async () => {
         const main = async () => {
           await PDFNet.initialize();
-          const resourcePath = path.resolve('./public/Lib/Linux');
+          const resourcePath = path.join(TMP_EXTRACT_DIR, '/Lib/Linux');
           // eslint-disable-next-line no-console
           console.log('resourcePath:', resourcePath);
           await PDFNet.addResourceSearchPath(resourcePath);
