@@ -1,12 +1,12 @@
 'use client';
 
-import type { WizardSourceStepProps } from '@/types/Wizard';
+import type { TemplateSourceStepProps } from '@/types/Wizard';
 
 import PDFExtractor from '../PDFExtractor';
 
-export default function WizardSourceStep({
+export default function TemplateSourceStep({
   creationMethod,
-}: WizardSourceStepProps) {
+}: TemplateSourceStepProps) {
   return (
     <div>
       {creationMethod === 'pdf'
