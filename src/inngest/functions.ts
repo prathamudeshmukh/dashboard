@@ -9,9 +9,9 @@ import * as tar from 'tar';
 
 import { inngest } from '@/inngest/client';
 
-const APPRYSE_MODULE_SDK_URL = 'https://www.pdftron.com/downloads/StructuredOutputLinuxArm64.tar.gz';
+const APPRYSE_MODULE_SDK_URL = 'https://www.pdftron.com/downloads/StructuredOutputLinux.tar.gz';
 const tmpBase = tmpdir();
-const TMP_ZIP_PATH = path.join(tmpBase, '/StructuredOutputLinuxArm64.tar.gz');
+const TMP_ZIP_PATH = path.join(tmpBase, '/StructuredOutputLinux.tar.gz');
 const TMP_EXTRACT_DIR = path.join(tmpBase, '/StructuredOutputModule/');
 export const extractPdfContent = inngest.createFunction(
   { id: 'extract-html' },
