@@ -47,6 +47,9 @@ export const extractPdfContent = inngest.createFunction(
           writer.on('error', reject);
         });
 
+        const { size } = await fs.promises.stat(TMP_ZIP_PATH);
+        // eslint-disable-next-line no-console
+        console.log(`Downloaded file size: ${size} bytes`);
         const zip = new AdmZip(TMP_ZIP_PATH);
         zip.extractAllTo(TMP_EXTRACT_DIR, true);
       });
