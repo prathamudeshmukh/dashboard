@@ -35,19 +35,7 @@ export async function getStatus(runId: string) {
       Authorization: `Bearer ${process.env.INNGEST_SIGNING_KEY}`,
     },
   });
-  const rawText = await response.text();
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch Inngest run status. HTTP ${response.status}: ${rawText}`);
-  }
-
-  let json;
-  try {
-    json = JSON.parse(rawText);
-  } catch (error) {
-    throw new Error(`Failed to parse JSON. Response: ${rawText}, Error : ${error}`);
-  }
-
+  const json = await response.json();
   if (!json?.data[0]?.status) {
     throw new Error(`No status found for this RUN ID - ${runId}`);
   }
