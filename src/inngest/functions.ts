@@ -9,9 +9,9 @@ import * as tar from 'tar';
 
 import { inngest } from '@/inngest/client';
 
-const APPRYSE_MODULE_SDK_URL = 'https://www.pdftron.com/downloads/StructuredOutputLinuxArm64.tar.gz';
+const APPRYSE_MODULE_SDK_URL = 'https://www.pdftron.com/downloads/StructuredOutputLinux.tar.gz';
 const tmpBase = tmpdir();
-const TMP_ZIP_PATH = path.join(tmpBase, '/StructuredOutputLinuxArm64.tar.gz');
+const TMP_ZIP_PATH = path.join(tmpBase, '/StructuredOutputLinux.tar.gz');
 const TMP_EXTRACT_DIR = path.join(tmpBase, '/StructuredOutputModule/');
 export const extractPdfContent = inngest.createFunction(
   { id: 'extract-html' },
@@ -28,8 +28,9 @@ export const extractPdfContent = inngest.createFunction(
 
     try {
       fs.mkdirSync(outputDir, { recursive: true });
+      fs.mkdirSync(TMP_EXTRACT_DIR, { recursive: true });
 
-      await step.run('download-pdf-html-module', async () => {
+      await step.run('download-appryse-module', async () => {
         if (fs.existsSync(TMP_ZIP_PATH)) {
           // eslint-disable-next-line no-console
           console.log(`Module already found here : ${TMP_ZIP_PATH}`);
@@ -46,10 +47,9 @@ export const extractPdfContent = inngest.createFunction(
           writer.on('finish', () => resolve(null));
           writer.on('error', reject);
         });
+      });
 
-        const { size } = await fs.promises.stat(TMP_ZIP_PATH);
-        // eslint-disable-next-line no-console
-        console.log(`Downloaded file size: ${size} bytes`);
+      await step.run('extract-appryse-module', async () => {
         await tar.x({
           file: TMP_ZIP_PATH,
           cwd: TMP_EXTRACT_DIR, // target folder
