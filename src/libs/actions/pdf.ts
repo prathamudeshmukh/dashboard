@@ -35,7 +35,8 @@ export async function getStatus(runId: string) {
       Authorization: `Bearer ${process.env.INNGEST_SIGNING_KEY}`,
     },
   });
-  const text = await response.text();
+  const clonedResponse = response.clone();
+  const text = await clonedResponse.text();
   // eslint-disable-next-line no-console
   console.log('Raw response:', text);
   const json = await response.json();
