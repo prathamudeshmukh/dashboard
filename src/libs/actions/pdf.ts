@@ -35,8 +35,6 @@ export async function getStatus(runId: string) {
       Authorization: `Bearer ${process.env.INNGEST_SIGNING_KEY}`,
     },
   });
-  // eslint-disable-next-line no-console
-  console.log('Inngest URL:', `${inngestBaseUrl}v1/events/${runId}/runs`);
   const rawText = await response.text();
 
   if (!response.ok) {
