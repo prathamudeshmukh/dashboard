@@ -35,6 +35,9 @@ export async function getStatus(runId: string) {
       Authorization: `Bearer ${process.env.INNGEST_SIGNING_KEY}`,
     },
   });
+  const text = await response.text();
+  // eslint-disable-next-line no-console
+  console.log('Raw response:', text);
   const json = await response.json();
   if (!json?.data[0]?.status) {
     throw new Error(`No status found for this RUN ID - ${runId}`);
