@@ -54,6 +54,8 @@ const templateTypeEnum = pgEnum('template_type', ['html-builder', 'handlebars-te
 
 export const environmentEnum = pgEnum('environment', ['prod', 'dev']);
 
+const creationMethodEnum = pgEnum('creation_method', ['EXTRACT_FROM_PDF', 'TEMPLATE_GALLERY', 'NEW_TEMPLATE']);
+
 // Users Table
 export const users = pgTable('users', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -73,6 +75,18 @@ export const creditTransactions = pgTable('credit_transactions', {
   paymentId: varchar('payment_id', { length: 255 }), // Optional, only for paid credits
 });
 
+export const templateGallery = pgTable('template_gallery', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  title: varchar('title', { length: 255 }).notNull(),
+  description: text('description'),
+  icon: varchar('icon', { length: 255 }),
+  color: varchar('color', { length: 255 }),
+  category: varchar('category', { length: 255 }),
+  htmlContent: text('html_content').notNull(),
+  handlebarContent: text('handlebar_content'),
+  style: text('style'),
+});
+
 // Templates Table
 export const templates = pgTable('templates', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -88,6 +102,8 @@ export const templates = pgTable('templates', {
   assets: jsonb('assets'),
   templateType: templateTypeEnum('template_type').notNull(),
   environment: environmentEnum('environment').notNull().default('dev'),
+  creationMethod: creationMethodEnum('creation_method').notNull(),
+  templateGeneratedFrom: uuid('template_generated_from').references(() => templateGallery.id),
   createdAt: timestamp('created_at', { mode: 'date' })
     .defaultNow()
     .notNull(),
@@ -150,6 +166,14 @@ export const templatesRelations = relations(templates, ({ one, many }) => ({
     references: [users.email],
   }),
   generated_templates: many(generated_templates),
+  generatedFrom: one(templateGallery, {
+    fields: [templates.templateGeneratedFrom],
+    references: [templateGallery.id],
+  }),
+}));
+
+export const templateGalleryRelations = relations(templateGallery, ({ many }) => ({
+  templates: many(templates),
 }));
 
 export const apikeysRelations = relations(apikeys, ({ one }) => ({
