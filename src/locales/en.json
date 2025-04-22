@@ -143,9 +143,9 @@
     "answer_2": "Integration is simple! Sign up, create a template, obtain the Template ID, and call our API with your Client ID & Secret ID to generate PDFs instantly.",
     "question_3": "What types of templates can I create?",
     "answer_3": {
-      "answer_3_1": "You can create:",
-      "answer_3_2": "Drag & Drop HTML Builder (for non-developers)",
-      "answer_3_3": "Handlebars Template Engine (for developers needing dynamic template generation)"
+      "answer_3.1": "You can create:",
+      "answer_3.2": "Drag & Drop HTML Builder (for non-developers)",
+      "answer_3.3": "Handlebars Template Engine (for developers needing dynamic template generation)"
     },
     "question_4": "Is my data secure with Templify?",
     "answer_4": "Yes! We use secure API key authentication and enforce encryption measures to keep your data protected.",
