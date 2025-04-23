@@ -20,6 +20,8 @@ export async function UpsertTemplate({
   templateStyle,
   assets,
   templateType,
+  templateGeneratedFrom,
+  creationMethod,
 }: any) {
   if (!description || !templateContent || !templateName) {
     throw new Error('Missing required fields: description, templateContent or templateName.');
@@ -38,6 +40,8 @@ export async function UpsertTemplate({
         templateType,
         templateId: templateId || undefined,
         environment: 'dev',
+        templateGeneratedFrom,
+        creationMethod,
       })
       .onConflictDoUpdate({
         target: [templates.templateId, templates.environment],
@@ -87,6 +91,8 @@ export async function PublishTemplateToProd(templateId: string) {
         assets: devTemplate.assets,
         templateType: devTemplate.templateType,
         environment: 'prod' as const,
+        creationMethod: devTemplate.creationMethod,
+        templateGeneratedFrom: devTemplate.templateGeneratedFrom,
       })
       .onConflictDoUpdate({
         target: [templates.templateId, templates.environment],
