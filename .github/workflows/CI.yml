@@ -12,7 +12,8 @@ env:
   ENCRYPTION_KEY: ${{ secrets.PRODUCTION_ENCRYPTION_KEY }}
   GRAPE_STUDIO_KEY: ${{ secrets.PRODUCTION_GRAPE_STUDIO_KEY }}
   DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
-  INNGEST_BASE_URL: 'https://api.inngest.com'
+  INNGEST_BASE_URL: https://api.inngest.com
+
 jobs:
   build:
     strategy:
@@ -40,7 +41,7 @@ jobs:
           echo "ENCRYPTION_KEY=${{ secrets.PREVIEW_ENCRYPTION_KEY }}" >> $GITHUB_ENV
           echo "GRAPE_STUDIO_KEY=${{ secrets.PREVIEW_GRAPE_STUDIO_KEY }}" >> $GITHUB_ENV
           echo "DATABASE_URL=${{ secrets.PREVIEW_DATABASE_URL }}" >> $GITHUB_ENV
-
+          echo "INNGEST_BASE_URL= https://api.inngest.com" >> $GITHUB_ENV
       # TODO: Run database migration only on develop or main branch
       - name: Run databse migrations
         if: github.event_name == 'push'
