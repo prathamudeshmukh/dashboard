@@ -143,9 +143,9 @@
     "answer_2": "L'intégration est simple ! Inscrivez-vous, créez un modèle, obtenez l'ID du modèle, et appelez notre API avec votre ID Client et ID Secret pour générer des PDF instantanément.",
     "question_3": "Quels types de modèles puis-je créer ?",
     "answer_3": {
-      "answer_3_1": "Vous pouvez créer :",
-      "answer_3_2": "Constructeur HTML par glisser-déposer (pour les non-développeurs)",
-      "answer_3_3": "Moteur de modèles Handlebars (pour les développeurs nécessitant une génération dynamique de modèles)"
+      "answer_3.1": "Vous pouvez créer :",
+      "answer_3.2": "Constructeur HTML par glisser-déposer (pour les non-développeurs)",
+      "answer_3.3": "Moteur de modèles Handlebars (pour les développeurs nécessitant une génération dynamique de modèles)"
     },
     "question_4": "Mes données sont-elles sécurisées avec Templify ?",
     "answer_4": "Oui ! Nous utilisons une authentification sécurisée par clé API et appliquons des mesures de cryptage pour protéger vos données.",

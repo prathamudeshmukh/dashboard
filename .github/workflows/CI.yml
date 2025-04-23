@@ -13,6 +13,7 @@ env:
   GRAPE_STUDIO_KEY: ${{ secrets.PRODUCTION_GRAPE_STUDIO_KEY }}
   DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
   INNGEST_BASE_URL: https://api.inngest.com
+
 jobs:
   build:
     strategy:

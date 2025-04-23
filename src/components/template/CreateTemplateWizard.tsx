@@ -2,15 +2,18 @@
 
 import { useState } from 'react';
 
+import { useTemplateStore } from '@/libs/store/TemplateStore';
+
 import { Wizard } from '../Wizard';
 import { WizardNavigation } from '../WizardNavigation';
 import TemplateCreationMethodSelector from './steps/TemplateCreationMethodSelector';
-import WizardSourceStep from './steps/WizardSourceStep';
+import TemplateDetailsStep from './steps/TemplateDetailsStep';
+import TemplateSourceStep from './steps/TemplateSourceStep';
 
 export default function CreateTemplateWizard() {
   const [currentStep, setCurrentStep] = useState(0);
   const [creationMethod, setCreationMethod] = useState<'pdf' | 'gallery' | null>('pdf');
-
+  const { templateName, templateDescription, htmlContent, setTemplateName, setTemplateDescription } = useTemplateStore();
   const handleNext = () => setCurrentStep(prev => prev + 1);
   const handlePrevious = () => setCurrentStep(prev => prev - 1);
 
@@ -36,8 +39,17 @@ export default function CreateTemplateWizard() {
         );
       case 1:
         return (
-          <WizardSourceStep
+          <TemplateSourceStep
             creationMethod={creationMethod!}
+          />
+        );
+      case 2:
+        return (
+          <TemplateDetailsStep
+            templateName={templateName}
+            setTemplateName={setTemplateName}
+            templateDescription={templateDescription}
+            setTemplateDescription={setTemplateDescription}
           />
         );
       default:
@@ -50,6 +62,10 @@ export default function CreateTemplateWizard() {
     switch (currentStep) {
       case 0:
         return !creationMethod;
+      case 1:
+        return !htmlContent;
+      case 2:
+        return (!templateName || !templateDescription);
       default:
         return false;
     }
@@ -79,6 +95,7 @@ export default function CreateTemplateWizard() {
           currentStep={currentStep}
           onNext={handleNext}
           onPrevious={handlePrevious}
+          disableNext={isNextDisabled()}
         />
       </div>
     </div>
