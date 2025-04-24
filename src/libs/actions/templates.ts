@@ -2,7 +2,7 @@
 
 import { and, desc, eq, gte, ilike, lte, sql } from 'drizzle-orm';
 
-import { generated_templates, templates, users } from '@/models/Schema';
+import { generated_templates, templateGallery, templates, users } from '@/models/Schema';
 import contentGenerator from '@/service/contentGenerator';
 import type { FetchTemplateResponse, FetchTemplatesRequest, GeneratedTemplates, GeneratePdfRequest, JsonObject, JsonValue, PaginatedResponse, TemplateType, UsageMetric, UsageMetricRequest } from '@/types/Template';
 
@@ -175,6 +175,19 @@ export async function fetchTemplates({
   } catch (error: any) {
     console.error('Error fetching templates:', error);
     throw new Error('Failed to fetch Template');
+  }
+}
+
+export async function fetchTemplatesFromGallery() {
+  try {
+    const templates = await db.select().from(templateGallery);
+    if (!templates) {
+      throw new Error ('Templates not found.');
+    };
+    return templates;
+  } catch (error) {
+    console.error('Error fetching template gallery:', error);
+    throw new Error('Failed to fetch template gallery');
   }
 }
 
