@@ -87,3 +87,15 @@ export type TemplateCreationMethodSelectorProp = {
   creationMethod: 'pdf' | 'gallery' | null;
   setCreationMethod: (method: 'pdf' | 'gallery') => void;
 };
+
+export type TemplateGalleryProps = {
+  color: string | null;
+  id: string;
+  style: string | null;
+  htmlContent: string;
+  title: string;
+  icon: string | null;
+  description: string | null;
+  category: string | null;
+  handlebarContent: string | null;
+};
