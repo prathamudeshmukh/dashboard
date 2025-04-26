@@ -3,6 +3,7 @@
 import type { TemplateSourceStepProps } from '@/types/Wizard';
 
 import PDFExtractor from '../PDFExtractor';
+import TemplateGallery from '../TemplateGallery';
 
 export default function TemplateSourceStep({
   creationMethod,
@@ -11,12 +12,10 @@ export default function TemplateSourceStep({
     <div>
       {creationMethod === 'pdf'
         ? (
-            <div>
-              <PDFExtractor />
-            </div>
+            <PDFExtractor />
           )
         : (
-            <div>template</div>
+            <TemplateGallery />
           )}
     </div>
   );
