@@ -111,7 +111,7 @@ export default function TemplateGallery() {
                     <CardHeader className="pb-2">
                       <div className="flex items-center gap-2">
                         <div className="flex size-8 items-center justify-center rounded-full">
-                          <DynamicLucideIcon name={template.icon as keyof typeof Icons} />
+                          <DynamicLucideIcon name={template.icon as keyof typeof Icons} color={`${template.color}`} />
                         </div>
                         <CardTitle className="text-base">{template.title}</CardTitle>
                       </div>
