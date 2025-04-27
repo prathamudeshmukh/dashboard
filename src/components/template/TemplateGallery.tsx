@@ -19,21 +19,34 @@ export default function TemplateGallery() {
   const {
     selectTemplate,
     selectedTemplate,
+    templateGallery,
     setTemplateName,
     setTemplateDescription,
     setHtmlContent,
+    setTemplateGallery,
   } = useTemplateStore();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setIsLoading(true);
-    fetchTemplatesFromGallery().then((data) => {
-      setTemplates(data);
-    })
-      .finally(() => {
+    const loadTemplates = async () => {
+      setIsLoading(true);
+      try {
+        // If gallery already exists in store, use it
+        if (templateGallery) {
+          setTemplates(templateGallery);
+        } else {
+          // Otherwise fetch and update both local + store
+          const data = await fetchTemplatesFromGallery();
+          setTemplates(data);
+          setTemplateGallery(data);
+        }
+      } finally {
         setIsLoading(false);
-      });
-  }, []);
+      }
+    };
+
+    loadTemplates();
+  }, [templateGallery, setTemplateGallery]);
 
   // Get unique categories
   const categories = ['All', ...new Set(templates.map(template => template.category))];

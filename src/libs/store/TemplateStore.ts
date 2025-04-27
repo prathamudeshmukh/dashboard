@@ -1,5 +1,7 @@
 import { create } from 'zustand';
 
+import type { TemplateGalleryProps } from '@/types/Template';
+
 type TemplateStore = {
 
   templateName: string;
@@ -9,6 +11,7 @@ type TemplateStore = {
   htmlContent: string;
   handlebarsCode: string;
   handlebarsJson: string;
+  templateGallery: TemplateGalleryProps[] | null;
 
   setTemplateName: (name: string) => void;
   setTemplateDescription: (desc: string) => void;
@@ -16,7 +19,7 @@ type TemplateStore = {
   setHtmlContent: (content: string) => void;
   setHandlebarsCode: (code: string) => void;
   setHandlebarsJson: (json: string) => void;
-
+  setTemplateGallery: (template: TemplateGalleryProps[]) => void;
   saveTemplate: () => void;
 };
 
@@ -30,6 +33,7 @@ export const useTemplateStore = create<TemplateStore>((set, get) => ({
   htmlContent: '',
   handlebarsCode: '',
   handlebarsJson: '{}',
+  templateGallery: null,
 
   // Setters
   setTemplateName: name => set({ templateName: name }),
@@ -40,6 +44,7 @@ export const useTemplateStore = create<TemplateStore>((set, get) => ({
   setHtmlContent: content => set({ htmlContent: content }),
   setHandlebarsCode: code => set({ handlebarsCode: code }),
   setHandlebarsJson: json => set({ handlebarsJson: json }),
+  setTemplateGallery: template => set({ templateGallery: template }),
 
   // Actions
   saveTemplate: () => {
