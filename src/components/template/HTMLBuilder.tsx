@@ -92,11 +92,8 @@ export default function HTMLBuilder() {
                   theme: 'light',
                   pages: false,
                   autoHeight: false,
-                  settingsMenu: { saveProject: false },
-                  gjsOptions: {
-                    showDevices: false,
-                    blockManager: { custom: true },
-                  },
+                  devices: { selected: 'desktop' },
+                  settingsMenu: false,
                   project: {
                     type: 'web',
                     id: uuidv4(),
