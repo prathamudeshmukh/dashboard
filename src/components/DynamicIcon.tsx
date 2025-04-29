@@ -4,16 +4,16 @@ import { cn } from '@/lib/utils'; // Optional, for className merging
 
 type DynamicLucideIconProps = {
   name: keyof typeof Icons;
-  className?: string;
   size?: number;
   strokeWidth?: number;
+  color: string;
 };
 
 export function DynamicLucideIcon({
   name,
-  className,
   size = 20,
   strokeWidth = 2,
+  color,
 }: DynamicLucideIconProps) {
   const LucideIcon = Icons[name] as React.FC<{
     size?: number;
@@ -22,12 +22,12 @@ export function DynamicLucideIcon({
   }>;
 
   if (!LucideIcon) {
-    return <span className="text-sm text-red-500">Invalid icon</span>;
+    return null;
   }
 
   return (
     <LucideIcon
-      className={cn('text-muted-foreground', className)}
+      className={cn(`text-muted-foreground ${color}`)}
       size={size}
       strokeWidth={strokeWidth}
     />
