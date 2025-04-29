@@ -35,7 +35,6 @@ export function JsonEditor({ json, onChange, error, isReady, isMaximized, onTogg
           value={json}
           onChange={onChange}
           language="json"
-          placeholder="Enter your JSON data here..."
           isReady={isReady}
         />
       </div>

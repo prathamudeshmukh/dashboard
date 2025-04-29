@@ -35,7 +35,6 @@ export function TemplateEditor({ code, onChange, error, isReady, isMaximized, on
           value={code}
           onChange={onChange}
           language="handlebars"
-          placeholder="Enter your Handlebars template here..."
           isReady={isReady}
         />
       </div>
