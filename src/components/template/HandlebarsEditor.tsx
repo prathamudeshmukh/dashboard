@@ -34,7 +34,6 @@ export default function HandlebarsEditor() {
   const [isEditorReady, setIsEditorReady] = useState(false);
   const [activeTab, setActiveTab] = useState('editor');
   const [renderCount, setRenderCount] = useState(0);
-  const [lastSaved, setLastSaved] = useState(null);
 
   // State for maximized panels
   const [maximizedPanel, setMaximizedPanel] = useState<PanelType>('none');
@@ -127,52 +126,6 @@ export default function HandlebarsEditor() {
     renderTemplate();
   }, [handlebarsCode, handlebarsJson, handlebarsStyles, isEditorReady]);
 
-  const formatCode = () => {
-    try {
-      // Format Handlebars code
-      const formattedCode = handlebarsService.formatHandlebarsCode(handlebarsCode);
-      setHandlebarsCode(formattedCode);
-
-      // Format JSON
-      const formattedJson = JSON.stringify(JSON.parse(handlebarsJson), null, 2);
-      setHandlebarsJson(formattedJson);
-
-      // Format CSS
-      // This is a simple formatter - in a real app, you'd use a proper CSS formatter
-      const formattedCss = handlebarsStyles
-        .split('}')
-        .map((block) => {
-          if (!block.trim()) {
-            return '';
-          }
-          const lines = block.split('{');
-          if (lines.length === 2) {
-            const selector = lines[0]?.trim();
-            const properties = lines[1]?.trim();
-            const formattedProperties = properties
-              ?.split(';')
-              .map(prop => prop.trim())
-              .filter(Boolean)
-              .map(prop => `  ${prop};`)
-              .join('\n');
-            return `${selector} {\n${formattedProperties}\n}`;
-          }
-          return block;
-        })
-        .filter(Boolean)
-        .join('\n\n');
-
-      setHandlebarsStyles(formattedCss);
-    } catch (error) {
-      console.error('Error formatting code:', error);
-    }
-  };
-
-  const generateTemplateWithAI = () => {
-    // In a real app, this would call an AI service
-
-  };
-
   // Function to handle maximizing/minimizing panels
   const toggleMaximize = (panel: PanelType) => {
     if (maximizedPanel === panel) {
@@ -191,11 +144,6 @@ export default function HandlebarsEditor() {
     }
   };
 
-  const saveTemplate = () => {
-    // Simulate saving
-    setLastSaved(null);
-  };
-
   const refreshPreview = async () => {
     setIsHandlebarsLoading(true);
     try {
@@ -207,14 +155,6 @@ export default function HandlebarsEditor() {
     } finally {
       setIsHandlebarsLoading(false);
     }
-  };
-
-  const runPreview = () => {
-    const previewPanel = document.getElementById('preview-panel');
-    if (previewPanel) {
-      previewPanel.scrollIntoView({ behavior: 'smooth' });
-    }
-    refreshPreview();
   };
 
   // Render different content based on active tab
@@ -330,11 +270,6 @@ export default function HandlebarsEditor() {
     <div className="flex h-[800px] flex-col overflow-hidden rounded-md border text-black">
       {/* Toolbar and Tabs */}
       <EditorToolbar
-        onFormatCode={formatCode}
-        onGenerateWithAI={generateTemplateWithAI}
-        onSave={saveTemplate}
-        onRunPreview={runPreview}
-        handlebarsCode={handlebarsCode}
         activeTab={activeTab}
         onTabChange={setActiveTab}
       />
@@ -343,7 +278,7 @@ export default function HandlebarsEditor() {
       <div className="flex-1">{renderTabContent()}</div>
 
       {/* Status Bar */}
-      <StatusBar lastSaved={lastSaved} />
+      <StatusBar />
     </div>
   );
 }
