@@ -24,7 +24,7 @@ export function JsonEditor({ json, onChange, error, isReady, isMaximized, onTogg
   return (
     <div className="flex h-full flex-col">
       <PanelHeader
-        title="DATA.JSON"
+        title="Sample Input JSON"
         icon={<Braces className="size-3.5 text-gray-400" />}
         isMaximized={isMaximized}
         onCopy={handleCopy}
