@@ -1,0 +1,62 @@
+{
+  "header": {
+    "title": "Service Agreement",
+    "subtitle": "This agreement is entered into as of the date of signing"
+  },
+  "parties": {
+    "sectionTitle": "1. Parties",
+    "provider": {
+      "title": "Service Provider",
+      "description": "Acme Professional Services, Inc., a corporation organized under the laws of the State of Delaware, with its principal place of business at 123 Business Avenue, San Francisco, CA 94107 (\"Provider\")."
+    },
+    "client": {
+      "title": "Client",
+      "description": "Client Corporation, a corporation organized under the laws of the State of New York, with its principal place of business at 456 Client Street, New York, NY 10001 (\"Client\")."
+    }
+  },
+  "sections": [
+    {
+      "title": "2. Services",
+      "paragraphs": [
+        "Provider agrees to perform the following services for Client (the \"Services\"):",
+        "Professional consulting services related to business strategy, operations optimization, and digital transformation, as further detailed in Exhibit A attached hereto and incorporated by reference.",
+        "Provider shall perform the Services in a professional and workmanlike manner, consistent with industry standards."
+      ]
+    },
+    {
+      "title": "3. Payment Terms",
+      "paragraphs": [
+        "In consideration for the Services, Client shall pay Provider according to the following terms:",
+        "a) Service Fee: $10,000 per month for the duration of this Agreement.",
+        "b) Payment Schedule: Client shall pay Provider on the first business day of each month.",
+        "c) Expenses: Client shall reimburse Provider for reasonable expenses incurred in connection with the Services, provided that such expenses are approved in advance by Client.",
+        "d) Late Payments: Any payment not received within fifteen (15) days of the due date shall accrue interest at a rate of 1.5% per month."
+      ]
+    },
+    {
+      "title": "4. Term and Termination",
+      "paragraphs": [
+        "This Agreement shall commence on the date of signing and shall continue for a period of twelve (12) months, unless earlier terminated as provided herein.",
+        "Either party may terminate this Agreement upon thirty (30) days' written notice to the other party."
+      ]
+    },
+    {
+      "title": "5. Confidentiality",
+      "paragraphs": [
+        "Each party acknowledges that it may receive confidential information from the other party. Each party agrees to maintain the confidentiality of such information and not to disclose it to any third party without the prior written consent of the disclosing party."
+      ]
+    }
+  ],
+  "signatures": {
+    "client": {
+      "title": "Client",
+      "nameField": "______________________",
+      "titleField": "______________________"
+    },
+    "provider": {
+      "title": "Provider",
+      "nameField": "______________________",
+      "titleField": "______________________"
+    }
+  }
+}

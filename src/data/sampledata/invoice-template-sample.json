@@ -1,0 +1,48 @@
+{
+  "title": "INVOICE",
+  "invoiceNumber": "#INV-001",
+  "invoiceDate": "March 29, 2025",
+  "from": {
+    "company": "Acme Corporation",
+    "address1": "123 Business Street",
+    "address2": "San Francisco, CA 94107",
+    "email": "billing@acmecorp.com"
+  },
+  "to": {
+    "company": "Client Company Inc.",
+    "address1": "456 Client Avenue",
+    "address2": "New York, NY 10001",
+    "email": "accounting@clientcompany.com"
+  },
+  "items": [
+    {
+      "description": "Web Development",
+      "quantity": "40",
+      "price": "$75.00",
+      "total": "$3,000.00"
+    },
+    {
+      "description": "Design Services",
+      "quantity": "20",
+      "price": "$85.00",
+      "total": "$1,700.00"
+    },
+    {
+      "description": "Consulting",
+      "quantity": "10",
+      "price": "$125.00",
+      "total": "$1,250.00"
+    }
+  ],
+  "totals": {
+    "subtotal": "$5,950.00",
+    "taxLabel": "Tax (8%)",
+    "tax": "$476.00",
+    "discount": null,
+    "grandTotal": "$6,426.00"
+  },
+  "footer": {
+    "thankYouMessage": "Thank you for your business!",
+    "paymentTerms": "Payment due within 30 days. Please make checks payable to Acme Corporation."
+  }
+}

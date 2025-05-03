@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      color: #333;
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+    }
+    .report-container {
+      max-width: 800px;
+      margin: 0 auto;
+      border: 1px solid #e0e0e0;
+      padding: 30px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .report-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .report-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .report-subtitle {
+      font-size: 16px;
+      color: #666;
+    }
+    .report-date {
+      font-size: 14px;
+      color: #888;
+      margin-top: 5px;
+    }
+    .divider {
+      height: 1px;
+      background-color: #e0e0e0;
+      margin: 15px 0;
+    }
+    .section {
+      margin-bottom: 25px;
+    }
+    .section-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #444;
+    }
+    .chart-container {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .chart-bar {
+      height: 150px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      flex: 1;
+    }
+    .bar {
+      width: 100%;
+      background-color: #4a86e8;
+      margin-bottom: 5px;
+    }
+    .bar-label {
+      font-size: 12px;
+      text-align: center;
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    .data-table th {
+      background-color: #f8f8f8;
+      text-align: left;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .data-table td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .recommendations {
+      background-color: #f9f9f9;
+      padding: 15px;
+      border-radius: 5px;
+    }
+    .recommendation-item {
+      margin-bottom: 10px;
+      display: flex;
+      align-items: flex-start;
+    }
+    .bullet {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background-color: #333;
+      border-radius: 50%;
+      margin-right: 10px;
+      margin-top: 8px;
+    }
+    .report-footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="report-container">
+    <div class="report-header">
+      <div class="report-title">QUARTERLY REPORT</div>
+      <div class="report-subtitle">Q1 2025 Business Performance</div>
+      <div class="report-date">April 15, 2025</div>
+    </div>
+    
+    <div class="divider"></div>
+    
+    <div class="section">
+      <div class="section-title">Executive Summary</div>
+      <p>This report provides an overview of our company's performance during the first quarter of 2025. Overall, we have seen significant growth in revenue and customer acquisition, while maintaining operational costs within budget.</p>
+      <p>Key highlights include a 15% increase in revenue compared to the previous quarter, successful launch of two new product features, and expansion into two new market segments.</p>
+    </div>
+    
+    <div class="section">
+      <div class="section-title">Financial Overview</div>
+      <div class="chart-container">
+        <div class="chart-bar">
+          <div class="bar" style="height: 40%;"></div>
+          <div class="bar-label">Q1 2024</div>
+        </div>
+        <div class="chart-bar">
+          <div class="bar" style="height: 55%;"></div>
+          <div class="bar-label">Q2 2024</div>
+        </div>
+        <div class="chart-bar">
+          <div class="bar" style="height: 65%;"></div>
+          <div class="bar-label">Q3 2024</div>
+        </div>
+        <div class="chart-bar">
+          <div class="bar" style="height: 75%;"></div>
+          <div class="bar-label">Q4 2024</div>
+        </div>
+        <div class="chart-bar">
+          <div class="bar" style="height: 90%;"></div>
+          <div class="bar-label">Q1 2025</div>
+        </div>
+      </div>
+      
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Q4 2024</th>
+            <th>Q1 2025</th>
+            <th>Change</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Revenue</td>
+            <td>$1,245,000</td>
+            <td>$1,432,000</td>
+            <td>+15%</td>
+          </tr>
+          <tr>
+            <td>Operating Expenses</td>
+            <td>$876,000</td>
+            <td>$912,000</td>
+            <td>+4%</td>
+          </tr>
+          <tr>
+            <td>Net Profit</td>
+            <td>$369,000</td>
+            <td>$520,000</td>
+            <td>+41%</td>
+          </tr>
+          <tr>
+            <td>Customer Acquisition</td>
+            <td>1,250</td>
+            <td>1,780</td>
+            <td>+42%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="section">
+      <div class="section-title">Recommendations</div>
+      <div class="recommendations">
+        <div class="recommendation-item">
+          <span class="bullet"></span>
+          <div>Increase marketing budget by 20% to capitalize on current growth momentum</div>
+        </div>
+        <div class="recommendation-item">
+          <span class="bullet"></span>
+          <div>Expand product line with three new offerings targeted at enterprise customers</div>
+        </div>
+        <div class="recommendation-item">
+          <span class="bullet"></span>
+          <div>Invest in additional customer success personnel to maintain high satisfaction rates</div>
+        </div>
+        <div class="recommendation-item">
+          <span class="bullet"></span>
+          <div>Explore partnership opportunities with complementary service providers</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="report-footer">
+      <p>Prepared by: Strategic Planning Team</p>
+      <p>For internal use only. Confidential.</p>
+    </div>
+  </div>
+</body>
+</html>

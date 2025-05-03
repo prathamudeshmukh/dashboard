@@ -64,6 +64,20 @@
       "when": 1745296974689,
       "tag": "0008_colorful_the_hand",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1746162560099,
+      "tag": "0009_remarkable_the_stranger",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1746245732913,
+      "tag": "0010_fuzzy_maria_hill",
+      "breakpoints": true
     }
   ]
 }
