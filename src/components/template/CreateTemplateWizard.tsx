@@ -8,6 +8,7 @@ import { Wizard } from '../Wizard';
 import { WizardNavigation } from '../WizardNavigation';
 import TemplateCreationMethodSelector from './steps/TemplateCreationMethodSelector';
 import TemplateDetailsStep from './steps/TemplateDetailsStep';
+import TemplateEditorStep from './steps/TemplateEditorStep';
 import TemplateSourceStep from './steps/TemplateSourceStep';
 
 export default function CreateTemplateWizard() {
@@ -51,6 +52,10 @@ export default function CreateTemplateWizard() {
             templateDescription={templateDescription}
             setTemplateDescription={setTemplateDescription}
           />
+        );
+      case 3:
+        return (
+          <TemplateEditorStep />
         );
       default:
         return null;

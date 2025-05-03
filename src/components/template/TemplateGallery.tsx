@@ -19,21 +19,34 @@ export default function TemplateGallery() {
   const {
     selectTemplate,
     selectedTemplate,
+    templateGallery,
     setTemplateName,
     setTemplateDescription,
     setHtmlContent,
+    setTemplateGallery,
   } = useTemplateStore();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setIsLoading(true);
-    fetchTemplatesFromGallery().then((data) => {
-      setTemplates(data);
-    })
-      .finally(() => {
+    const loadTemplates = async () => {
+      setIsLoading(true);
+      try {
+        // If gallery already exists in store, use it
+        if (templateGallery) {
+          setTemplates(templateGallery);
+        } else {
+          // Otherwise fetch and update both local + store
+          const data = await fetchTemplatesFromGallery();
+          setTemplates(data);
+          setTemplateGallery(data);
+        }
+      } finally {
         setIsLoading(false);
-      });
-  }, []);
+      }
+    };
+
+    loadTemplates();
+  }, [templateGallery, setTemplateGallery]);
 
   // Get unique categories
   const categories = ['All', ...new Set(templates.map(template => template.category))];
@@ -111,7 +124,7 @@ export default function TemplateGallery() {
                     <CardHeader className="pb-2">
                       <div className="flex items-center gap-2">
                         <div className="flex size-8 items-center justify-center rounded-full">
-                          <DynamicLucideIcon name={template.icon as keyof typeof Icons} />
+                          <DynamicLucideIcon name={template.icon as keyof typeof Icons} color={`${template.color}`} />
                         </div>
                         <CardTitle className="text-base">{template.title}</CardTitle>
                       </div>
