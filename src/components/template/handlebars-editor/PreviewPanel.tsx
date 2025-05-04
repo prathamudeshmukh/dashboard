@@ -7,15 +7,12 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 
 import { PREVIEW_STYLES_PREFIX, PREVIEW_STYLES_SUFFIX } from './constants';
 import { PanelHeader } from './PanelHeader';
-import { copyToClipboard } from './utils';
 
 type PreviewPanelProps = {
   preview: string;
-  styles: string;
+  styles?: string;
   isLoading: boolean;
   renderCount: number;
-  isMaximized: boolean;
-  onToggleMaximize: () => void;
   onRefresh: () => void;
   pageSettings?: {
     orientation: string;
@@ -35,15 +32,9 @@ export function PreviewPanel({
   styles,
   isLoading,
   renderCount,
-  isMaximized,
-  onToggleMaximize,
   onRefresh,
   pageSettings,
 }: PreviewPanelProps) {
-  const handleCopy = async () => {
-    await copyToClipboard(preview);
-  };
-
   // Generate additional CSS for page layout
   const pageLayoutStyles = pageSettings
     ? `
@@ -70,11 +61,8 @@ export function PreviewPanel({
   return (
     <div className="flex h-full flex-col">
       <PanelHeader
-        title="PREVIEW"
+        title="Preview"
         icon={<Eye className="size-3.5 text-gray-400" />}
-        isMaximized={isMaximized}
-        onCopy={handleCopy}
-        onToggleMaximize={onToggleMaximize}
         additionalInfo={
           !isLoading && (
             <span className="ml-2 text-xs text-gray-500">
