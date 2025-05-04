@@ -24,7 +24,7 @@ export function TemplateEditor({ code, onChange, error, isReady, isMaximized, on
   return (
     <div className="flex h-full flex-col">
       <PanelHeader
-        title="TEMPLATE.HBS"
+        title="Handlebars Template"
         icon={<FileCode className="size-3.5 text-gray-400" />}
         isMaximized={isMaximized}
         onCopy={handleCopy}

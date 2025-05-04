@@ -25,21 +25,21 @@ export function EditorToolbar({
           <TabsList className="h-9 w-full justify-start border-b border-gray-700 bg-transparent px-2">
             <TabsTrigger
               value="editor"
-              className="h-9 rounded-none px-4 data-[state=active]:border-x data-[state=active]:border-b-0 data-[state=active]:border-t data-[state=active]:border-gray-700 data-[state=active]:bg-[#1e1e1e]"
+              className="h-9 rounded-none px-4 data-[state=active]:border-x data-[state=active]:border-b-0 data-[state=active]:border-t data-[state=active]:border-gray-700 data-[state=active]:bg-[#1e1e1e] data-[state=active]:text-secondary"
             >
               <FileCode className="mr-2 size-4" />
               Editor
             </TabsTrigger>
             <TabsTrigger
               value="styles"
-              className="h-9 rounded-none px-4 data-[state=active]:border-x data-[state=active]:border-b-0 data-[state=active]:border-t data-[state=active]:border-gray-700 data-[state=active]:bg-[#1e1e1e]"
+              className="h-9 rounded-none px-4 data-[state=active]:border-x data-[state=active]:border-b-0 data-[state=active]:border-t data-[state=active]:border-gray-700 data-[state=active]:bg-[#1e1e1e] data-[state=active]:text-secondary"
             >
               <Paintbrush className="mr-2 size-4" />
               Styles
             </TabsTrigger>
             <TabsTrigger
               value="preview"
-              className="h-9 rounded-none px-4 data-[state=active]:border-x data-[state=active]:border-b-0 data-[state=active]:border-t data-[state=active]:border-gray-700 data-[state=active]:bg-[#1e1e1e]"
+              className="h-9 rounded-none px-4 data-[state=active]:border-x data-[state=active]:border-b-0 data-[state=active]:border-t data-[state=active]:border-gray-700 data-[state=active]:bg-[#1e1e1e] data-[state=active]:text-secondary"
             >
               <Eye className="mr-2 size-4" />
               Preview
