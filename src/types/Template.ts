@@ -1,4 +1,4 @@
-import type { CreationMethodEnum } from '@/components/template/CreateTemplateWizard';
+import type { CreationMethodEnum } from './Enum';
 
 export enum TemplateType {
   HTML_BUILDER = 'html-builder',
