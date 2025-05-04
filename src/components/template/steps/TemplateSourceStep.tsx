@@ -2,6 +2,7 @@
 
 import type { TemplateSourceStepProps } from '@/types/Wizard';
 
+import { CreationMethodEnum } from '../CreateTemplateWizard';
 import PDFExtractor from '../PDFExtractor';
 import TemplateGallery from '../TemplateGallery';
 
@@ -10,7 +11,7 @@ export default function TemplateSourceStep({
 }: TemplateSourceStepProps) {
   return (
     <div>
-      {creationMethod === 'pdf'
+      {creationMethod === CreationMethodEnum.EXTRACT_FROM_PDF
         ? (
             <PDFExtractor />
           )

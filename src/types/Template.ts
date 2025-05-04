@@ -1,3 +1,5 @@
+import type { CreationMethodEnum } from '@/components/template/CreateTemplateWizard';
+
 export enum TemplateType {
   HTML_BUILDER = 'html-builder',
   HANDLBARS_TEMPLATE = 'handlebars-template',
@@ -84,8 +86,8 @@ export type JsonObject<K extends string | number | symbol = string, V = any> = {
 type JsonArray<K extends string | number | symbol = string, V = any> = Array<JsonValue<K, V>>;
 
 export type TemplateCreationMethodSelectorProp = {
-  creationMethod: 'pdf' | 'gallery' | null;
-  setCreationMethod: (method: 'pdf' | 'gallery') => void;
+  creationMethod: CreationMethodEnum;
+  setCreationMethod: (method: CreationMethodEnum.EXTRACT_FROM_PDF | CreationMethodEnum.TEMPLATE_GALLERY | CreationMethodEnum.NEW_TEMPLATE) => void;
 };
 
 export type TemplateGalleryProps = {
@@ -98,4 +100,5 @@ export type TemplateGalleryProps = {
   description: string | null;
   category: string | null;
   handlebarContent: string | null;
+  sampleData: unknown;
 };

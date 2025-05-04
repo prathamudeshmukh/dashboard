@@ -33,11 +33,11 @@ export default function HandlebarsEditor() {
 
   // Set default template and data if none exists
   useEffect(() => {
-    if (!handlebarsCode || handlebarsCode.trim() === '') {
+    if (!handlebarsCode) {
       setHandlebarsCode(DEFAULT_TEMPLATE);
     }
 
-    if (!handlebarsJson || handlebarsJson.trim() === '{}') {
+    if (!handlebarsJson) {
       const defaultData = handlebarsService.getDatasetJson('default');
       setHandlebarsJson(JSON.stringify(defaultData, null, 2));
     }

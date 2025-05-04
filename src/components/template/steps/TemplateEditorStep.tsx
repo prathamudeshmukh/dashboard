@@ -2,11 +2,11 @@
 
 import { Code, ExternalLink, FileText } from 'lucide-react';
 import Link from 'next/link';
-import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useTemplateStore } from '@/libs/store/TemplateStore';
 
 import HandlebarsEditor from '../HandlebarsEditor';
 import HTMLBuilder from '../HTMLBuilder';
@@ -15,10 +15,15 @@ type TemplateEditorStepProps = {
   extractedTemplateId?: string;
 };
 
+export enum EditorTypeEnum {
+  VISUAL = 'visual',
+  HANDLEBARS = 'handlebar',
+}
+
 export default function TemplateEditorStep({
   extractedTemplateId,
 }: TemplateEditorStepProps) {
-  const [editorActiveTab, setEditorActiveTab] = useState('visual');
+  const { activeTab, setActiveTab } = useTemplateStore();
 
   return (
     <Card className="w-full border shadow-sm">
@@ -40,21 +45,21 @@ export default function TemplateEditorStep({
       </CardHeader>
 
       <CardContent className="p-0">
-        <Tabs value={editorActiveTab} onValueChange={setEditorActiveTab} className="w-full">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <div className="border-b px-4">
             <TabsList className="h-14 bg-transparent">
-              <TabsTrigger value="visual" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-muted/50">
+              <TabsTrigger value={EditorTypeEnum.VISUAL} className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-muted/50">
                 <FileText className="mr-2 size-4" />
                 Visual Editor
               </TabsTrigger>
-              <TabsTrigger value="handlebars" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-muted/50">
+              <TabsTrigger value={EditorTypeEnum.HANDLEBARS} className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-muted/50">
                 <Code className="mr-2 size-4" />
                 Handlebars Editor
               </TabsTrigger>
             </TabsList>
           </div>
 
-          <TabsContent value="visual" className="mt-0 border-0 p-0">
+          <TabsContent value={EditorTypeEnum.VISUAL} className="mt-0 border-0 p-0">
             <div className="border-b bg-muted/20 p-4">
               <InfoMessage text="Drag and drop elements to build your template visually. Changes here will not affect your Handlebars template." />
             </div>
@@ -65,7 +70,7 @@ export default function TemplateEditorStep({
             </div>
           </TabsContent>
 
-          <TabsContent value="handlebars" className="mt-0 border-0 p-0">
+          <TabsContent value={EditorTypeEnum.HANDLEBARS} className="mt-0 border-0 p-0">
             <div className="border-b bg-muted/20 p-4">
               <InfoMessage text="Create dynamic templates using Handlebars syntax. Use {{variable}} to insert dynamic content." />
             </div>

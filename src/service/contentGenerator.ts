@@ -3,7 +3,6 @@ import hbs from 'handlebars';
 import type { JsonValue } from '@/types/Template';
 import { TemplateType } from '@/types/Template';
 
-import lintCSS from './lintCSS';
 import lintHTML from './lintHTML';
 
 type TemplateParams = {
@@ -23,12 +22,6 @@ const contentGenerator = async ({
   const htmlErrors = lintHTML(templateContent);
   if (htmlErrors?.length > 0) {
     throw new Error(`HTML validation failed: ${htmlErrors.join(', ')}`);
-  }
-
-  // Lint CSS content
-  const cssErrors = await lintCSS(templateStyle);
-  if (cssErrors?.length > 0) {
-    throw new Error(`CSS validation failed: ${cssErrors.join(', ')}`);
   }
 
   // Compile and generate content for Handlebars templates
