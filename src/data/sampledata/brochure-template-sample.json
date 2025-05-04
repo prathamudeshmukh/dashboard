@@ -1,0 +1,148 @@
+{
+  "company": {
+    "name": "TechInnovate",
+    "logoUrl": null
+  },
+  "hero": {
+    "title": "Transforming Business Through Technology",
+    "subtitle": "Innovative solutions that drive growth, efficiency, and competitive advantage",
+    "ctaButton": {
+      "text": "Discover Our Solutions",
+      "url": "#products"
+    }
+  },
+  "features": {
+    "title": "Why Choose Us",
+    "subtitle": "We deliver exceptional value through our comprehensive approach",
+    "items": [
+      {
+        "icon": "ICON",
+        "title": "Cutting-Edge Technology",
+        "description": "We leverage the latest technologies to create solutions that keep you ahead of the competition."
+      },
+      {
+        "icon": "ICON",
+        "title": "Expert Team",
+        "description": "Our team of certified professionals brings decades of industry experience to every project."
+      },
+      {
+        "icon": "ICON",
+        "title": "Tailored Solutions",
+        "description": "We create customized solutions that address your specific business challenges and objectives."
+      },
+      {
+        "icon": "ICON",
+        "title": "Ongoing Support",
+        "description": "We provide comprehensive support to ensure your systems run smoothly and efficiently."
+      }
+    ]
+  },
+  "about": {
+    "title": "About TechInnovate",
+    "description": "Founded in 2015, TechInnovate has been at the forefront of digital transformation, helping businesses across industries leverage technology to achieve their strategic objectives. Our mission is to empower organizations with innovative solutions that drive growth, efficiency, and competitive advantage.",
+    "bulletPoints": [
+      "10+ years of industry experience",
+      "200+ successful projects delivered",
+      "98% client satisfaction rate",
+      "Global team of certified experts"
+    ],
+    "imageUrl": null
+  },
+  "testimonial": {
+    "quote": "TechInnovate transformed our operations with their innovative solutions. Their team's expertise and dedication to our success made all the difference. We've seen a 40% increase in efficiency since implementing their systems.",
+    "author": "Jennifer Martinez",
+    "company": "CEO, Global Enterprises"
+  },
+  "products": {
+    "title": "Our Solutions",
+    "subtitle": "Comprehensive technology solutions tailored to your business needs",
+    "items": [
+      {
+        "title": "Enterprise Cloud Platform",
+        "description": "Secure, scalable cloud infrastructure designed for enterprise workloads with 99.9% uptime guarantee.",
+        "price": "Starting at $499/month",
+        "buttonText": "Learn More",
+        "buttonUrl": "#cloud",
+        "imageUrl": null
+      },
+      {
+        "title": "Data Analytics Suite",
+        "description": "Advanced analytics tools that transform your data into actionable business insights.",
+        "price": "Starting at $299/month",
+        "buttonText": "Learn More",
+        "buttonUrl": "#analytics",
+        "imageUrl": null
+      },
+      {
+        "title": "Cybersecurity Services",
+        "description": "Comprehensive security solutions to protect your business from evolving threats.",
+        "price": "Starting at $199/month",
+        "buttonText": "Learn More",
+        "buttonUrl": "#security",
+        "imageUrl": null
+      }
+    ]
+  },
+  "contact": {
+    "title": "Get In Touch",
+    "subtitle": "We're here to answer your questions and help you succeed",
+    "methods": [
+      {
+        "icon": "ICON",
+        "title": "Call Us",
+        "detail": "+1 (555) 123-4567<br>Monday-Friday, 9am-5pm EST"
+      },
+      {
+        "icon": "ICON",
+        "title": "Email Us",
+        "detail": "info@techinnovate.com<br>We respond within 24 hours"
+      },
+      {
+        "icon": "ICON",
+        "title": "Visit Us",
+        "detail": "123 Tech Plaza, Suite 500<br>San Francisco, CA 94105"
+      }
+    ]
+  },
+  "socialLinks": [
+    {
+      "platform": "FB",
+      "url": "#facebook"
+    },
+    {
+      "platform": "TW",
+      "url": "#twitter"
+    },
+    {
+      "platform": "LI",
+      "url": "#linkedin"
+    },
+    {
+      "platform": "IG",
+      "url": "#instagram"
+    }
+  ],
+  "footerLinks": [
+    {
+      "text": "About Us",
+      "url": "#about"
+    },
+    {
+      "text": "Services",
+      "url": "#services"
+    },
+    {
+      "text": "Case Studies",
+      "url": "#case-studies"
+    },
+    {
+      "text": "Privacy Policy",
+      "url": "#privacy"
+    },
+    {
+      "text": "Terms of Service",
+      "url": "#terms"
+    }
+  ],
+  "copyright": "© 2025 TechInnovate. All rights reserved."
+}

@@ -257,25 +257,31 @@ export class HandlebarsService {
   }
 
   formatHandlebarsCode(code: string): string {
-    let formatted = '';
-    let indentLevel = 0;
-    const lines = code.split('\n');
+    const lines = code.split(/(\r?\n)/).join('').split(/(?<=>)/g); // Flatten & split by HTML tag ends
+    const tokens = lines.flatMap(line => line.split(/(?=\{\{|\}\})/g)); // Split by handlebars blocks
 
-    lines.forEach((line) => {
-      const trimmedLine = line.trim();
+    let indent = 0;
+    const indentString = '  ';
+    const output: string[] = [];
 
-      if (trimmedLine.startsWith('{{/')) {
-        indentLevel = Math.max(0, indentLevel - 1);
+    for (const token of tokens) {
+      const trimmed = token.trim();
+      if (!trimmed) {
+        continue;
       }
 
-      formatted += `${'  '.repeat(indentLevel) + trimmedLine}\n`;
-
-      if (trimmedLine.includes('{{#')) {
-        indentLevel++;
+      if (trimmed.match(/^\{\{\/(if|each|unless|with)\}\}/)) {
+        indent = Math.max(indent - 1, 0);
       }
-    });
 
-    return formatted;
+      output.push(indentString.repeat(indent) + trimmed);
+
+      if (trimmed.match(/^\{\{#(if|each|unless|with)(\s|\})/)) {
+        indent += 1;
+      }
+    }
+
+    return output.join('\n');
   }
 
   getDatasetJson(datasetId: string): any {

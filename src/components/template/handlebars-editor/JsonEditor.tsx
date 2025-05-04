@@ -12,11 +12,9 @@ type JsonEditorProps = {
   onChange: (json: string) => void;
   error: string;
   isReady: boolean;
-  isMaximized: boolean;
-  onToggleMaximize: () => void;
 };
 
-export function JsonEditor({ json, onChange, error, isReady, isMaximized, onToggleMaximize }: JsonEditorProps) {
+export function JsonEditor({ json, onChange, error, isReady }: JsonEditorProps) {
   const handleCopy = async () => {
     await copyToClipboard(json);
   };
@@ -26,9 +24,7 @@ export function JsonEditor({ json, onChange, error, isReady, isMaximized, onTogg
       <PanelHeader
         title="Sample Input JSON"
         icon={<Braces className="size-3.5 text-gray-400" />}
-        isMaximized={isMaximized}
         onCopy={handleCopy}
-        onToggleMaximize={onToggleMaximize}
       />
       <div className="relative flex-1 overflow-auto">
         <CodeEditorWrapper

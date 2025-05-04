@@ -1,5 +1,6 @@
 'use client';
 
+import { CreationMethodEnum } from '@/types/Enum';
 import type { TemplateSourceStepProps } from '@/types/Wizard';
 
 import PDFExtractor from '../PDFExtractor';
@@ -10,7 +11,7 @@ export default function TemplateSourceStep({
 }: TemplateSourceStepProps) {
   return (
     <div>
-      {creationMethod === 'pdf'
+      {creationMethod === CreationMethodEnum.EXTRACT_FROM_PDF
         ? (
             <PDFExtractor />
           )

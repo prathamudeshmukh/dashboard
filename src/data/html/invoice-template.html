@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      color: #333;
+      line-height: 1.5;
+      margin: 0;
+      padding: 20px;
+    }
+    .invoice-container {
+      max-width: 800px;
+      margin: 0 auto;
+      border: 1px solid #e0e0e0;
+      padding: 30px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .invoice-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+    }
+    .invoice-title {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+    }
+    .invoice-details {
+      text-align: right;
+    }
+    .invoice-id {
+      font-weight: bold;
+    }
+    .invoice-date {
+      font-size: 14px;
+      color: #666;
+    }
+    .divider {
+      height: 1px;
+      background-color: #e0e0e0;
+      margin: 15px 0;
+    }
+    .invoice-parties {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+    }
+    .invoice-from, .invoice-to {
+      width: 48%;
+    }
+    .party-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .invoice-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+    .invoice-table th {
+      background-color: #f8f8f8;
+      text-align: left;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .invoice-table th:nth-child(2),
+    .invoice-table th:nth-child(3),
+    .invoice-table th:nth-child(4) {
+      text-align: right;
+    }
+    .invoice-table td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .invoice-table td:nth-child(2),
+    .invoice-table td:nth-child(3),
+    .invoice-table td:nth-child(4) {
+      text-align: right;
+    }
+    .invoice-totals {
+      width: 300px;
+      margin-left: auto;
+    }
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+    .total-row.grand-total {
+      font-weight: bold;
+      margin-top: 10px;
+      border-top: 1px solid #ddd;
+      padding-top: 10px;
+    }
+    .invoice-footer {
+      margin-top: 40px;
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="invoice-container">
+    <div class="invoice-header">
+      <div class="invoice-title">INVOICE</div>
+      <div class="invoice-details">
+        <div class="invoice-id">#INV-001</div>
+        <div class="invoice-date">March 29, 2025</div>
+      </div>
+    </div>
+    
+    <div class="divider"></div>
+    
+    <div class="invoice-parties">
+      <div class="invoice-from">
+        <div class="party-title">From:</div>
+        <div>Acme Corporation</div>
+        <div>123 Business Street</div>
+        <div>San Francisco, CA 94107</div>
+        <div>billing@acmecorp.com</div>
+      </div>
+      <div class="invoice-to">
+        <div class="party-title">Bill To:</div>
+        <div>Client Company Inc.</div>
+        <div>456 Client Avenue</div>
+        <div>New York, NY 10001</div>
+        <div>accounting@clientcompany.com</div>
+      </div>
+    </div>
+    
+    <table class="invoice-table">
+      <thead>
+        <tr>
+          <th>Description</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Web Development</td>
+          <td>40</td>
+          <td>$75.00</td>
+          <td>$3,000.00</td>
+        </tr>
+        <tr>
+          <td>Design Services</td>
+          <td>20</td>
+          <td>$85.00</td>
+          <td>$1,700.00</td>
+        </tr>
+        <tr>
+          <td>Consulting</td>
+          <td>10</td>
+          <td>$125.00</td>
+          <td>$1,250.00</td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <div class="invoice-totals">
+      <div class="total-row">
+        <span>Subtotal:</span>
+        <span>$5,950.00</span>
+      </div>
+      <div class="total-row">
+        <span>Tax (8%):</span>
+        <span>$476.00</span>
+      </div>
+      <div class="total-row grand-total">
+        <span>Total:</span>
+        <span>$6,426.00</span>
+      </div>
+    </div>
+    
+    <div class="invoice-footer">
+      <p>Thank you for your business!</p>
+      <p>Payment due within 30 days. Please make checks payable to Acme Corporation.</p>
+    </div>
+  </div>
+</body>
+</html>

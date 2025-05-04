@@ -1,0 +1,423 @@
+{
+  "company": {
+    "name": "TechNova Enterprises Inc.",
+    "logoUrl": null,
+    "fiscalYear": "2025",
+    "reportPeriod": "Q2 (April - June 2025)",
+    "reportDate": "July 15, 2025"
+  },
+  "executiveSummary": {
+    "title": "Executive Summary",
+    "highlights": [
+      "Revenue increased by 18.5% compared to the same quarter last year",
+      "Operating margin improved to 24.3%, up from 21.7% in Q1",
+      "Successfully launched 2 new product lines, contributing $3.2M in new revenue",
+      "Expanded into 3 new international markets with positive initial performance",
+      "Completed strategic acquisition of DataSync Technologies for $45M"
+    ]
+  },
+  "financialHighlights": {
+    "title": "Financial Highlights",
+    "metrics": [
+      {
+        "name": "Revenue",
+        "current": "$78.5M",
+        "previous": "$66.2M",
+        "change": "+18.5%",
+        "trend": "up"
+      },
+      {
+        "name": "Gross Profit",
+        "current": "$42.3M",
+        "previous": "$34.8M",
+        "change": "+21.6%",
+        "trend": "up"
+      },
+      {
+        "name": "Operating Income",
+        "current": "$19.1M",
+        "previous": "$14.3M",
+        "change": "+33.6%",
+        "trend": "up"
+      },
+      {
+        "name": "Net Income",
+        "current": "$15.7M",
+        "previous": "$11.9M",
+        "change": "+31.9%",
+        "trend": "up"
+      },
+      {
+        "name": "EPS (Diluted)",
+        "current": "$1.24",
+        "previous": "$0.95",
+        "change": "+30.5%",
+        "trend": "up"
+      }
+    ]
+  },
+  "incomeStatement": {
+    "title": "Income Statement",
+    "subtitle": "For the three months ended June 30, 2025 (in thousands)",
+    "items": [
+      {
+        "category": "Revenue",
+        "amount": "$78,542",
+        "previousAmount": "$66,245",
+        "percentChange": "18.5%"
+      },
+      {
+        "category": "Cost of Revenue",
+        "amount": "$36,214",
+        "previousAmount": "$31,445",
+        "percentChange": "15.2%"
+      },
+      {
+        "category": "Gross Profit",
+        "amount": "$42,328",
+        "previousAmount": "$34,800",
+        "percentChange": "21.6%",
+        "isSubtotal": true
+      },
+      {
+        "category": "Research & Development",
+        "amount": "$8,640",
+        "previousAmount": "$7,950",
+        "percentChange": "8.7%"
+      },
+      {
+        "category": "Sales & Marketing",
+        "amount": "$9,425",
+        "previousAmount": "$8,612",
+        "percentChange": "9.4%"
+      },
+      {
+        "category": "General & Administrative",
+        "amount": "$5,163",
+        "previousAmount": "$3,938",
+        "percentChange": "31.1%"
+      },
+      {
+        "category": "Total Operating Expenses",
+        "amount": "$23,228",
+        "previousAmount": "$20,500",
+        "percentChange": "13.3%",
+        "isSubtotal": true
+      },
+      {
+        "category": "Operating Income",
+        "amount": "$19,100",
+        "previousAmount": "$14,300",
+        "percentChange": "33.6%",
+        "isSubtotal": true
+      },
+      {
+        "category": "Interest Income",
+        "amount": "$845",
+        "previousAmount": "$720",
+        "percentChange": "17.4%"
+      },
+      {
+        "category": "Interest Expense",
+        "amount": "($1,230)",
+        "previousAmount": "($980)",
+        "percentChange": "25.5%"
+      },
+      {
+        "category": "Other Income/(Expense)",
+        "amount": "$325",
+        "previousAmount": "($150)",
+        "percentChange": "N/A"
+      },
+      {
+        "category": "Income Before Taxes",
+        "amount": "$19,040",
+        "previousAmount": "$13,890",
+        "percentChange": "37.1%",
+        "isSubtotal": true
+      },
+      {
+        "category": "Income Tax Expense",
+        "amount": "$3,340",
+        "previousAmount": "$1,990",
+        "percentChange": "67.8%"
+      },
+      {
+        "category": "Net Income",
+        "amount": "$15,700",
+        "previousAmount": "$11,900",
+        "percentChange": "31.9%",
+        "isSubtotal": true
+      }
+    ]
+  },
+  "balanceSheet": {
+    "title": "Balance Sheet",
+    "subtitle": "As of June 30, 2025 (in thousands)",
+    "assets": [
+      {
+        "category": "Cash and Cash Equivalents",
+        "amount": "$42,350",
+        "previousAmount": "$38,750"
+      },
+      {
+        "category": "Short-term Investments",
+        "amount": "$25,600",
+        "previousAmount": "$22,400"
+      },
+      {
+        "category": "Accounts Receivable",
+        "amount": "$18,750",
+        "previousAmount": "$16,320"
+      },
+      {
+        "category": "Inventory",
+        "amount": "$12,430",
+        "previousAmount": "$11,870"
+      },
+      {
+        "category": "Other Current Assets",
+        "amount": "$5,870",
+        "previousAmount": "$4,660"
+      },
+      {
+        "category": "Total Current Assets",
+        "amount": "$105,000",
+        "previousAmount": "$94,000",
+        "isSubtotal": true
+      },
+      {
+        "category": "Property and Equipment",
+        "amount": "$48,750",
+        "previousAmount": "$45,320"
+      },
+      {
+        "category": "Goodwill",
+        "amount": "$32,450",
+        "previousAmount": "$12,450"
+      },
+      {
+        "category": "Intangible Assets",
+        "amount": "$28,800",
+        "previousAmount": "$18,230"
+      },
+      {
+        "category": "Other Long-term Assets",
+        "amount": "$7,500",
+        "previousAmount": "$6,500"
+      },
+      {
+        "category": "Total Assets",
+        "amount": "$222,500",
+        "previousAmount": "$176,500",
+        "isSubtotal": true
+      }
+    ],
+    "liabilities": [
+      {
+        "category": "Accounts Payable",
+        "amount": "$14,320",
+        "previousAmount": "$12,450"
+      },
+      {
+        "category": "Accrued Expenses",
+        "amount": "$8,750",
+        "previousAmount": "$7,650"
+      },
+      {
+        "category": "Short-term Debt",
+        "amount": "$5,000",
+        "previousAmount": "$5,000"
+      },
+      {
+        "category": "Deferred Revenue",
+        "amount": "$12,430",
+        "previousAmount": "$10,870"
+      },
+      {
+        "category": "Total Current Liabilities",
+        "amount": "$40,500",
+        "previousAmount": "$35,970",
+        "isSubtotal": true
+      },
+      {
+        "category": "Long-term Debt",
+        "amount": "$45,000",
+        "previousAmount": "$25,000"
+      },
+      {
+        "category": "Deferred Tax Liabilities",
+        "amount": "$7,250",
+        "previousAmount": "$5,780"
+      },
+      {
+        "category": "Other Long-term Liabilities",
+        "amount": "$4,500",
+        "previousAmount": "$3,200"
+      },
+      {
+        "category": "Total Liabilities",
+        "amount": "$97,250",
+        "previousAmount": "$69,950",
+        "isSubtotal": true
+      }
+    ],
+    "equity": [
+      {
+        "category": "Common Stock",
+        "amount": "$1,000",
+        "previousAmount": "$1,000"
+      },
+      {
+        "category": "Additional Paid-in Capital",
+        "amount": "$58,450",
+        "previousAmount": "$56,450"
+      },
+      {
+        "category": "Retained Earnings",
+        "amount": "$67,800",
+        "previousAmount": "$52,100"
+      },
+      {
+        "category": "Treasury Stock",
+        "amount": "($2,000)",
+        "previousAmount": "($3,000)"
+      },
+      {
+        "category": "Total Shareholders' Equity",
+        "amount": "$125,250",
+        "previousAmount": "$106,550",
+        "isSubtotal": true
+      },
+      {
+        "category": "Total Liabilities and Equity",
+        "amount": "$222,500",
+        "previousAmount": "$176,500",
+        "isSubtotal": true
+      }
+    ]
+  },
+  "cashFlow": {
+    "title": "Cash Flow Statement",
+    "subtitle": "For the three months ended June 30, 2025 (in thousands)",
+    "operations": [
+      {
+        "category": "Net Income",
+        "amount": "$15,700"
+      },
+      {
+        "category": "Depreciation and Amortization",
+        "amount": "$3,450"
+      },
+      {
+        "category": "Stock-based Compensation",
+        "amount": "$2,000"
+      },
+      {
+        "category": "Changes in Operating Assets and Liabilities",
+        "amount": "($1,800)"
+      },
+      {
+        "category": "Net Cash from Operating Activities",
+        "amount": "$19,350",
+        "isSubtotal": true
+      }
+    ],
+    "investing": [
+      {
+        "category": "Capital Expenditures",
+        "amount": "($4,500)"
+      },
+      {
+        "category": "Acquisition of DataSync Technologies",
+        "amount": "($45,000)"
+      },
+      {
+        "category": "Purchases of Investments",
+        "amount": "($8,000)"
+      },
+      {
+        "category": "Maturities of Investments",
+        "amount": "$4,800"
+      },
+      {
+        "category": "Net Cash used in Investing Activities",
+        "amount": "($52,700)",
+        "isSubtotal": true
+      }
+    ],
+    "financing": [
+      {
+        "category": "Proceeds from Issuance of Debt",
+        "amount": "$20,000"
+      },
+      {
+        "category": "Repurchase of Common Stock",
+        "amount": "$0"
+      },
+      {
+        "category": "Dividends Paid",
+        "amount": "($3,000)"
+      },
+      {
+        "category": "Net Cash from Financing Activities",
+        "amount": "$17,000",
+        "isSubtotal": true
+      }
+    ],
+    "summary": [
+      {
+        "category": "Net Increase/(Decrease) in Cash",
+        "amount": "($16,350)"
+      },
+      {
+        "category": "Cash at Beginning of Period",
+        "amount": "$58,700"
+      },
+      {
+        "category": "Cash at End of Period",
+        "amount": "$42,350",
+        "isSubtotal": true
+      }
+    ]
+  },
+  "segmentAnalysis": {
+    "title": "Segment Analysis",
+    "segments": [
+      {
+        "name": "Enterprise Solutions",
+        "revenue": "$42.3M",
+        "growth": "22.4%",
+        "operatingIncome": "$12.7M",
+        "margin": "30.0%"
+      },
+      {
+        "name": "Consumer Products",
+        "revenue": "$24.8M",
+        "growth": "14.7%",
+        "operatingIncome": "$5.2M",
+        "margin": "21.0%"
+      },
+      {
+        "name": "Cloud Services",
+        "revenue": "$11.4M",
+        "growth": "15.2%",
+        "operatingIncome": "$1.2M",
+        "margin": "10.5%"
+      }
+    ]
+  },
+  "outlook": {
+    "title": "Future Outlook",
+    "paragraphs": [
+      "Based on our strong performance in Q2 and current market conditions, we are raising our full-year revenue guidance to $320-330 million, representing 16-19% growth year-over-year.",
+      "We expect operating margins to remain in the 23-25% range as we continue to invest in R&D and our expansion into international markets.",
+      "The integration of DataSync Technologies is proceeding according to plan, and we expect to realize approximately $5 million in synergies by the end of the fiscal year.",
+      "Our product roadmap includes three major releases scheduled for the second half of the year, which we anticipate will further strengthen our competitive position in the enterprise market."
+    ]
+  },
+  "footer": {
+    "disclaimer": "This report contains forward-looking statements that involve risks and uncertainties. Actual results may differ materially from those indicated in such statements.",
+    "contactInfo": "For investor relations inquiries, please contact: ir@technova.com | (555) 789-1234"
+  }
+}

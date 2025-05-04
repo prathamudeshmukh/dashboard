@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      color: #333;
+      line-height: 1.5;
+      margin: 0;
+      padding: 20px;
+    }
+    .contract-container {
+      max-width: 800px;
+      margin: 0 auto;
+      border: 1px solid #e0e0e0;
+      padding: 40px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .contract-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .contract-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+    }
+    .contract-subtitle {
+      font-size: 16px;
+      color: #666;
+    }
+    .divider {
+      height: 1px;
+      background-color: #e0e0e0;
+      margin: 20px 0;
+    }
+    .section {
+      margin-bottom: 25px;
+    }
+    .section-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .section-content {
+      text-align: justify;
+    }
+    .contract-parties {
+      margin-bottom: 30px;
+    }
+    .party {
+      margin-bottom: 15px;
+    }
+    .party-title {
+      font-weight: bold;
+    }
+    .signature-section {
+      margin-top: 50px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .signature-block {
+      width: 45%;
+    }
+    .signature-line {
+      border-bottom: 1px solid #333;
+      margin-bottom: 5px;
+      height: 40px;
+    }
+    .signature-name {
+      font-weight: bold;
+    }
+    .signature-date {
+      margin-top: 15px;
+    }
+    .date-line {
+      border-bottom: 1px solid #333;
+      width: 100px;
+      display: inline-block;
+      margin: 0 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="contract-container">
+    <div class="contract-header">
+      <div class="contract-title">{{header.title}}</div>
+      <div class="contract-subtitle">{{header.subtitle}}</div>
+    </div>
+    
+    <div class="divider"></div>
+    
+    <div class="contract-parties">
+      <div class="section-title">{{parties.sectionTitle}}</div>
+      <div class="party">
+        <div class="party-title">{{parties.provider.title}}:</div>
+        <div>{{parties.provider.description}}</div>
+      </div>
+      <div class="party">
+        <div class="party-title">{{parties.client.title}}:</div>
+        <div>{{parties.client.description}}</div>
+      </div>
+    </div>
+    
+    {{#each sections}}
+    <div class="section">
+      <div class="section-title">{{title}}</div>
+      <div class="section-content">
+        {{#each paragraphs}}
+        <p>{{this}}</p>
+        {{/each}}
+      </div>
+    </div>
+    {{/each}}
+    
+    <div class="signature-section">
+      <div class="signature-block">
+        <div class="party-title">{{signatures.client.title}}:</div>
+        <div class="signature-line"></div>
+        <div class="signature-name">Name: {{signatures.client.nameField}}</div>
+        <div>Title: {{signatures.client.titleField}}</div>
+        <div class="signature-date">
+          Date: <span class="date-line"></span>/<span class="date-line"></span>/<span class="date-line"></span>
+        </div>
+      </div>
+      
+      <div class="signature-block">
+        <div class="party-title">{{signatures.provider.title}}:</div>
+        <div class="signature-line"></div>
+        <div class="signature-name">Name: {{signatures.provider.nameField}}</div>
+        <div>Title: {{signatures.provider.titleField}}</div>
+        <div class="signature-date">
+          Date: <span class="date-line"></span>/<span class="date-line"></span>/<span class="date-line"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

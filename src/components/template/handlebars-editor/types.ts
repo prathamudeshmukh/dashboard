@@ -1,13 +1,5 @@
 import type React from 'react';
 // Types for the Handlebars Editor components
-export type PanelType = 'none' | 'template' | 'json' | 'preview' | 'styles';
-
-export type PanelSizes = {
-  leftPanel: number;
-  templatePanel: number;
-  jsonPanel: number;
-  stylesPanel?: number;
-};
 
 export type EditorProps = {
   value: string;
@@ -20,9 +12,7 @@ export type EditorProps = {
 export type PanelHeaderProps = {
   title: string;
   icon: React.ReactNode;
-  isMaximized: boolean;
-  onCopy: () => void;
-  onToggleMaximize: () => void;
+  onCopy?: () => void;
   additionalInfo?: React.ReactNode;
 };
 

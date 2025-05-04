@@ -5,6 +5,8 @@ import { Loader2 } from 'lucide-react';
 import type React from 'react';
 import { useEffect, useRef } from 'react';
 
+import { HandlebarsService } from '@/libs/services/HandlebarService';
+
 export type MonacoEditorProps = {
   value: string;
   onChange: (value: string) => void;
@@ -27,6 +29,8 @@ export default function MonacoEditor({
   loading,
 }: MonacoEditorProps) {
   const editorRef = useRef<any>(null);
+
+  const handlebarService = new HandlebarsService();
 
   // Define Handlebars language if it's not already defined
   const defineHandlebarsLanguage = (monaco: any) => {
@@ -99,7 +103,8 @@ export default function MonacoEditor({
     defineHandlebarsLanguage(monaco);
 
     // Set initial value
-    editor.setValue(value || '');
+    const formattedCode = handlebarService.formatHandlebarsCode(value);
+    editor.setValue(formattedCode || '');
 
     // Focus the editor
     editor.focus();

@@ -30,7 +30,7 @@ const PDFExtractor = () => {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [pdfExtractionStatus, setpdfExtractionStatus] = useState<PdfExtractionStatusEnum>(PdfExtractionStatusEnum.NOT_STARTED);
   const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB
-  const { setHtmlContent } = useTemplateStore();
+  const { setHtmlContent, setHandlebarsCode } = useTemplateStore();
 
   async function pollJobStatus(runID: string) {
     let response = await getStatus(runID);
@@ -45,6 +45,7 @@ const PDFExtractor = () => {
     if (response.status === 'Completed') {
       setpdfExtractionStatus(PdfExtractionStatusEnum.COMPLETED);
       setHtmlContent(response.output.htmlContent);
+      setHandlebarsCode(response.output.htmlContent);
     }
   }
 

@@ -77,13 +77,14 @@ export const creditTransactions = pgTable('credit_transactions', {
 
 export const templateGallery = pgTable('template_gallery', {
   id: uuid('id').primaryKey().defaultRandom(),
-  title: varchar('title', { length: 255 }).notNull(),
+  title: varchar('title', { length: 255 }).notNull().unique(),
   description: text('description'),
   icon: varchar('icon', { length: 255 }),
   color: varchar('color', { length: 255 }),
   category: varchar('category', { length: 255 }),
   htmlContent: text('html_content').notNull(),
   handlebarContent: text('handlebar_content'),
+  sampleData: jsonb('sample_data'),
   style: text('style'),
 });
 

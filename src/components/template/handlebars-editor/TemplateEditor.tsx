@@ -12,11 +12,9 @@ type TemplateEditorProps = {
   onChange: (code: string) => void;
   error: string;
   isReady: boolean;
-  isMaximized: boolean;
-  onToggleMaximize: () => void;
 };
 
-export function TemplateEditor({ code, onChange, error, isReady, isMaximized, onToggleMaximize }: TemplateEditorProps) {
+export function TemplateEditor({ code, onChange, error, isReady }: TemplateEditorProps) {
   const handleCopy = async () => {
     await copyToClipboard(code);
   };
@@ -26,11 +24,9 @@ export function TemplateEditor({ code, onChange, error, isReady, isMaximized, on
       <PanelHeader
         title="Handlebars Template"
         icon={<FileCode className="size-3.5 text-gray-400" />}
-        isMaximized={isMaximized}
         onCopy={handleCopy}
-        onToggleMaximize={onToggleMaximize}
       />
-      <div className="relative flex-1 overflow-auto" style={{ minHeight: '200px' }}>
+      <div className="relative flex-1 overflow-auto">
         <CodeEditorWrapper
           value={code}
           onChange={onChange}

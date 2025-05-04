@@ -1,0 +1,51 @@
+{
+  "certificate": {
+    "type": "Certificate of Achievement",
+    "title": "Excellence in Leadership",
+    "logoUrl": null,
+    "borderColor": "#8a6d3b",
+    "accentColor": "#8a6d3b"
+  },
+  "recipient": {
+    "prefix": "Ms.",
+    "firstName": "Jennifer",
+    "lastName": "Martinez",
+    "fullName": "Jennifer Martinez"
+  },
+  "achievement": {
+    "description": "has successfully completed the",
+    "programName": "Executive Leadership Program",
+    "additionalText": "demonstrating exceptional skills in strategic planning, team management, and organizational development"
+  },
+  "details": {
+    "duration": "120 hours",
+    "completionDate": "May 12, 2025",
+    "location": "Global Leadership Institute, New York"
+  },
+  "issuer": {
+    "organization": "Global Leadership Institute",
+    "department": "Executive Education Division",
+    "website": "www.globalleadershipinstitute.org"
+  },
+  "signatures": [
+    {
+      "name": "Dr. Michael Chen",
+      "title": "Program Director",
+      "signatureImageUrl": null
+    },
+    {
+      "name": "Prof. Sarah Williams",
+      "title": "Chief Academic Officer",
+      "signatureImageUrl": null
+    }
+  ],
+  "verification": {
+    "id": "GLI-CERT-2025-0789",
+    "qrCodeUrl": null,
+    "verificationText": "This certificate can be verified at verify.globalleadershipinstitute.org using the certificate ID."
+  },
+  "footer": {
+    "address": "500 Education Avenue, New York, NY 10001",
+    "contact": "certificates@globalleadershipinstitute.org | (212) 555-7890"
+  }
+}
