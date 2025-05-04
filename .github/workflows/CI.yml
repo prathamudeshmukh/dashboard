@@ -45,7 +45,7 @@ jobs:
       # TODO: Run database migration only on develop or main branch
       - name: Run databse migrations
         if: github.event_name == 'push'
-        run: npm run db:migrate
+        run: npm run db:migrate && npm run db:seed
 
       - run: npm run build
 
