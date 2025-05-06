@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 
 import { EditorTypeEnum } from '@/components/template/steps/TemplateEditorStep';
+import { CreationMethodEnum } from '@/types/Enum';
 import type { TemplateGalleryProps } from '@/types/Template';
 
 type TemplateStore = {
@@ -15,6 +16,7 @@ type TemplateStore = {
   handlebarsJson: string;
   templateGallery: TemplateGalleryProps[] | null;
 
+  creationMethod: CreationMethodEnum;
   activeTab: string;
 
   setTemplateName: (name: string) => void;
@@ -26,7 +28,9 @@ type TemplateStore = {
   setHandlebarsJson: (json: string) => void;
   setTemplateGallery: (template: TemplateGalleryProps[]) => void;
   setActiveTab: (tab: string) => void;
+  setCreationMethod: (method: CreationMethodEnum) => void;
   saveTemplate: () => void;
+  resetTemplate: () => void;
 };
 
 export const useTemplateStore = create<TemplateStore>((set, get) => ({
@@ -43,6 +47,7 @@ export const useTemplateStore = create<TemplateStore>((set, get) => ({
   templateGallery: null,
 
   activeTab: EditorTypeEnum.VISUAL,
+  creationMethod: CreationMethodEnum.EXTRACT_FROM_PDF,
 
   // Setters
   setTemplateName: name => set({ templateName: name }),
@@ -56,6 +61,7 @@ export const useTemplateStore = create<TemplateStore>((set, get) => ({
   setHandlebarsJson: json => set({ handlebarsJson: json }),
   setTemplateGallery: template => set({ templateGallery: template }),
   setActiveTab: tab => set({ activeTab: tab }),
+  setCreationMethod: method => set({ creationMethod: method }),
 
   // Actions
   saveTemplate: () => {
@@ -63,4 +69,20 @@ export const useTemplateStore = create<TemplateStore>((set, get) => ({
     // API call
     alert(`Template "${state.templateName}" saved successfully!`); // eslint-disable-line no-alert
   },
+
+  resetTemplate: () =>
+    set({
+      templateName: '',
+      templateDescription: '',
+      selectedTemplate: null,
+
+      htmlContent: '',
+      htmlStyle: '',
+      handlebarsCode: '',
+      handlebarsJson: '{}',
+      templateGallery: null,
+
+      activeTab: EditorTypeEnum.VISUAL,
+      creationMethod: CreationMethodEnum.EXTRACT_FROM_PDF,
+    }),
 }));

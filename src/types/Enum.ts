@@ -1,7 +1,14 @@
 export type EnumValues<Type> = Type[keyof Type];
 
 export enum CreationMethodEnum {
-  EXTRACT_FROM_PDF = 'Extract From PDF',
-  TEMPLATE_GALLERY = 'Template Gallery',
-  NEW_TEMPLATE = 'New Template',
+  EXTRACT_FROM_PDF = 'EXTRACT_FROM_PDF',
+  TEMPLATE_GALLERY = 'TEMPLATE_GALLERY',
+  NEW_TEMPLATE = 'NEW_TEMPLATE',
+}
+
+export enum SaveStatusEnum {
+  IDLE,
+  SAVING,
+  SUCCESS,
+  ERROR,
 }
