@@ -2,19 +2,15 @@
 
 import { useEffect, useState } from 'react';
 
-import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 import { HandlebarsService } from '@/libs/services/HandlebarService';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 
-import { DEFAULT_STYLES, DEFAULT_TEMPLATE } from './handlebars-editor/constants';
+import { DEFAULT_TEMPLATE } from './handlebars-editor/constants';
 import { EditorToolbar } from './handlebars-editor/EditorToolbar';
 import { JsonEditor } from './handlebars-editor/JsonEditor';
 import { PreviewPanel } from './handlebars-editor/PreviewPanel';
 import { StatusBar } from './handlebars-editor/StatusBar';
-import { StyleEditor } from './handlebars-editor/StyleEditor';
 import { TemplateEditor } from './handlebars-editor/TemplateEditor';
-import type { PanelSizes, PanelType } from './handlebars-editor/types';
-import { readFileAsText } from './handlebars-editor/utils';
 
 export default function HandlebarsEditor() {
   // Get page settings from the store
@@ -26,54 +22,22 @@ export default function HandlebarsEditor() {
   } = useTemplateStore();
 
   const [handlebarsPreview, setHandlebarsPreview] = useState('');
-  const [handlebarsStyles, setHandlebarsStyles] = useState(DEFAULT_STYLES);
   const [jsonError, setJsonError] = useState('');
   const [templateError, setTemplateError] = useState('');
-  const [stylesError, setStylesError] = useState('');
   const [isHandlebarsLoading, setIsHandlebarsLoading] = useState(true);
   const [isEditorReady, setIsEditorReady] = useState(false);
   const [activeTab, setActiveTab] = useState('editor');
   const [renderCount, setRenderCount] = useState(0);
 
-  // State for maximized panels
-  const [maximizedPanel, setMaximizedPanel] = useState<PanelType>('none');
-
-  // Store previous panel sizes when maximizing
-  const [previousSizes, setPreviousSizes] = useState<PanelSizes>({
-    leftPanel: 60,
-    templatePanel: 50,
-    jsonPanel: 50,
-  });
-
   const handlebarsService = new HandlebarsService();
-
-  const handleFileUpload = async (event: any) => {
-    const file = event.target.files[0];
-    if (file) {
-      try {
-        const content = await readFileAsText(file);
-        setHandlebarsCode(content);
-      } catch (error) {
-        console.error('Error reading file:', error);
-      }
-    }
-  };
-
-  // Make the file upload handler available globally for the toolbar component
-  useEffect(() => {
-    ;(window as any).handleFileUpload = handleFileUpload;
-    return () => {
-      delete (window as any).handleFileUpload;
-    };
-  }, []);
 
   // Set default template and data if none exists
   useEffect(() => {
-    if (!handlebarsCode || handlebarsCode.trim() === '') {
+    if (!handlebarsCode) {
       setHandlebarsCode(DEFAULT_TEMPLATE);
     }
 
-    if (!handlebarsJson || handlebarsJson.trim() === '{}') {
+    if (!handlebarsJson) {
       const defaultData = handlebarsService.getDatasetJson('default');
       setHandlebarsJson(JSON.stringify(defaultData, null, 2));
     }
@@ -97,12 +61,10 @@ export default function HandlebarsEditor() {
         // Validate CSS
         try {
           const testElement = document.createElement('style');
-          testElement.textContent = handlebarsStyles;
           document.head.appendChild(testElement);
           document.head.removeChild(testElement);
-          setStylesError('');
         } catch (cssError) {
-          setStylesError(`CSS Error: ${cssError}`);
+          console.error(`CSS Error: ${cssError}`);
         }
 
         // Render Handlebars template with current data
@@ -124,25 +86,7 @@ export default function HandlebarsEditor() {
     };
 
     renderTemplate();
-  }, [handlebarsCode, handlebarsJson, handlebarsStyles, isEditorReady]);
-
-  // Function to handle maximizing/minimizing panels
-  const toggleMaximize = (panel: PanelType) => {
-    if (maximizedPanel === panel) {
-      // Restore previous layout
-      setMaximizedPanel('none');
-    } else {
-      // Save current layout before maximizing
-      setPreviousSizes({
-        leftPanel: maximizedPanel === 'none' ? 60 : previousSizes.leftPanel,
-        templatePanel: maximizedPanel === 'none' ? 50 : previousSizes.templatePanel,
-        jsonPanel: maximizedPanel === 'none' ? 50 : previousSizes.jsonPanel,
-      });
-
-      // Set the maximized panel
-      setMaximizedPanel(panel);
-    }
-  };
+  }, [handlebarsCode, handlebarsJson, isEditorReady]);
 
   const refreshPreview = async () => {
     setIsHandlebarsLoading(true);
@@ -162,88 +106,39 @@ export default function HandlebarsEditor() {
     switch (activeTab) {
       case 'editor':
         return (
-          <ResizablePanelGroup direction="horizontal" className="h-full">
-            {/* Left Panel - Editors */}
-            <ResizablePanel
-              id="left-panel"
-              defaultSize={60}
-              minSize={maximizedPanel === 'preview' ? 0 : 30}
+          <div className="flex h-full">
+            {/* Left section (Editors) */}
+            <div className="flex w-3/5 flex-col border-r border-gray-300">
+              {/* Template Editor (top half) */}
+              <div className="h-1/2 border-b border-gray-300">
+                <TemplateEditor
+                  code={handlebarsCode}
+                  onChange={setHandlebarsCode}
+                  error={templateError}
+                  isReady={isEditorReady}
+                />
+              </div>
 
-            >
-              <ResizablePanelGroup direction="vertical" className="h-full">
-                {/* Template Editor */}
-                <ResizablePanel
-                  id="template-panel"
-                  defaultSize={50}
-                  minSize={maximizedPanel === 'json' ? 0 : 20}
-                >
-                  <TemplateEditor
-                    code={handlebarsCode}
-                    onChange={setHandlebarsCode}
-                    error={templateError}
-                    isReady={isEditorReady}
-                    isMaximized={maximizedPanel === 'template'}
-                    onToggleMaximize={() => toggleMaximize('template')}
-                  />
-                </ResizablePanel>
+              {/* JSON Editor (bottom half) */}
+              <div className="h-1/2">
+                <JsonEditor
+                  json={handlebarsJson}
+                  onChange={setHandlebarsJson}
+                  error={jsonError}
+                  isReady={isEditorReady}
+                />
+              </div>
+            </div>
 
-                {maximizedPanel !== 'template' && maximizedPanel !== 'json' && (
-                  <ResizableHandle withHandle className="bg-gray-700 hover:bg-gray-600" />
-                )}
-
-                {/* JSON Editor */}
-                <ResizablePanel
-                  id="json-panel"
-                  defaultSize={50}
-                  minSize={maximizedPanel === 'template' ? 0 : 20}
-                >
-                  <JsonEditor
-                    json={handlebarsJson}
-                    onChange={setHandlebarsJson}
-                    error={jsonError}
-                    isReady={isEditorReady}
-                    isMaximized={maximizedPanel === 'json'}
-                    onToggleMaximize={() => toggleMaximize('json')}
-                  />
-                </ResizablePanel>
-              </ResizablePanelGroup>
-            </ResizablePanel>
-
-            {maximizedPanel !== 'template' && maximizedPanel !== 'json' && maximizedPanel !== 'preview' && (
-              <ResizableHandle withHandle className="bg-gray-700 hover:bg-gray-600" />
-            )}
-
-            {/* Right Panel - Preview */}
-            <ResizablePanel
-              id="preview-panel"
-              defaultSize={40}
-              minSize={maximizedPanel === 'template' || maximizedPanel === 'json' ? 0 : 30}
-
-            >
+            {/* Right section (Preview) */}
+            <div className="w-2/5">
               <PreviewPanel
                 preview={handlebarsPreview}
-                styles={handlebarsStyles}
                 isLoading={isHandlebarsLoading}
                 renderCount={renderCount}
-                isMaximized={maximizedPanel === 'preview'}
-                onToggleMaximize={() => toggleMaximize('preview')}
                 onRefresh={refreshPreview}
-
               />
-            </ResizablePanel>
-          </ResizablePanelGroup>
-        );
-      case 'styles':
-        return (
-          <div className="h-full">
-            <StyleEditor
-              styles={handlebarsStyles}
-              onChange={setHandlebarsStyles}
-              error={stylesError}
-              isReady={isEditorReady}
-              isMaximized={maximizedPanel === 'styles'}
-              onToggleMaximize={() => toggleMaximize('styles')}
-            />
+            </div>
           </div>
         );
       case 'preview':
@@ -251,11 +146,8 @@ export default function HandlebarsEditor() {
           <div className="h-full">
             <PreviewPanel
               preview={handlebarsPreview}
-              styles={handlebarsStyles}
               isLoading={isHandlebarsLoading}
               renderCount={renderCount}
-              isMaximized={true}
-              onToggleMaximize={() => {}}
               onRefresh={refreshPreview}
 
             />

@@ -8,18 +8,12 @@ import type { Editor } from 'grapesjs';
 import { useEffect, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
-
-import { TextArea } from '../ui/text-area';
 
 export default function HTMLBuilder() {
   const { user } = useUser();
   const [editor, setEditor] = useState<Editor>();
-  const { htmlContent, setHtmlContent } = useTemplateStore();
-  const [activeTab, setActiveTab] = useState('editor');
-
-  const [previewHtml, setPreviewHtml] = useState(htmlContent);
+  const { htmlContent, setHtmlContent, setHtmlStyle } = useTemplateStore();
 
   const containerRef = useRef(null);
 
@@ -44,8 +38,9 @@ export default function HTMLBuilder() {
     // Save HTML content when editor changes
     editor.on('update', () => {
       const html = editor.getHtml();
-      setPreviewHtml(html);
+      const css = editor.getCss();
       setHtmlContent(html);
+      setHtmlStyle(css as string);
     });
 
     // Block Manager
@@ -79,46 +74,31 @@ export default function HTMLBuilder() {
 
   return (
     <div className="flex w-full flex-col space-y-4">
-
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsContent value="editor" className="m-0 w-full rounded-md border p-0">
-          <div className="gjs-editor-cont w-full">
-            {/* GrapesJS StudioEditor container */}
-            <div ref={containerRef} className="h-[700px] w-full">
-              <StudioEditor
-                onReady={onReady}
-                options={{
-                  licenseKey: process.env.NEXT_PUBLIC_GRAPE_STUDIO_KEY as string,
-                  theme: 'light',
-                  pages: false,
-                  autoHeight: false,
-                  devices: { selected: 'desktop' },
-                  settingsMenu: false,
-                  project: {
-                    type: 'web',
-                    id: uuidv4(),
-                  },
-                  identity: {
-                    id: user?.id,
-                  },
-                }}
-              />
-            </div>
+      <div className="m-0 w-full rounded-md border p-0">
+        <div className="gjs-editor-cont w-full">
+          {/* GrapesJS StudioEditor container */}
+          <div ref={containerRef} className="h-[700px] w-full">
+            <StudioEditor
+              onReady={onReady}
+              options={{
+                licenseKey: process.env.NEXT_PUBLIC_GRAPE_STUDIO_KEY as string,
+                theme: 'light',
+                pages: false,
+                autoHeight: false,
+                devices: { selected: 'desktop' },
+                settingsMenu: false,
+                project: {
+                  type: 'web',
+                  id: uuidv4(),
+                },
+                identity: {
+                  id: user?.id,
+                },
+              }}
+            />
           </div>
-        </TabsContent>
-
-        <TabsContent value="preview" className="m-0 w-full rounded-md border">
-          <div className="min-h-[700px] w-full overflow-auto bg-white p-4">
-            <div dangerouslySetInnerHTML={{ __html: previewHtml }} />
-          </div>
-        </TabsContent>
-
-        <TabsContent value="code" className="m-0 w-full rounded-md border">
-          <div className="min-h-[700px] w-full p-4">
-            <TextArea value={previewHtml} readOnly className="size-full font-mono text-sm" />
-          </div>
-        </TabsContent>
-      </Tabs>
+        </div>
+      </div>
     </div>
   );
 }

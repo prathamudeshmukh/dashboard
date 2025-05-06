@@ -1,3 +1,5 @@
+import type { CreationMethodEnum } from '@/components/template/CreateTemplateWizard';
+
 export type WizardStep = {
   id: string;
   title: string;
@@ -34,7 +36,7 @@ export type WizardNavigationProps = {
 };
 
 export type TemplateSourceStepProps = {
-  creationMethod?: 'pdf' | 'gallery';
+  creationMethod?: CreationMethodEnum;
 };
 
 export type TemplateDetailsStepProps = {

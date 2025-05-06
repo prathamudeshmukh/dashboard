@@ -12,11 +12,9 @@ type StyleEditorProps = {
   onChange: (styles: string) => void;
   error: string;
   isReady: boolean;
-  isMaximized: boolean;
-  onToggleMaximize: () => void;
 };
 
-export function StyleEditor({ styles, onChange, error, isReady, isMaximized, onToggleMaximize }: StyleEditorProps) {
+export function StyleEditor({ styles, onChange, error, isReady }: StyleEditorProps) {
   const handleCopy = async () => {
     await copyToClipboard(styles);
   };
@@ -26,9 +24,7 @@ export function StyleEditor({ styles, onChange, error, isReady, isMaximized, onT
       <PanelHeader
         title="STYLES.CSS"
         icon={<Paintbrush className="size-3.5 text-gray-400" />}
-        isMaximized={isMaximized}
         onCopy={handleCopy}
-        onToggleMaximize={onToggleMaximize}
       />
       <div className="relative flex-1 overflow-auto">
         <CodeEditorWrapper

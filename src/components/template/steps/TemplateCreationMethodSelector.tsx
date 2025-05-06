@@ -5,6 +5,8 @@ import { FileText, Upload } from 'lucide-react';
 import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import type { TemplateCreationMethodSelectorProp } from '@/types/Template';
 
+import { CreationMethodEnum } from '../CreateTemplateWizard';
+
 export default function TemplateCreationMethodSelector({
   creationMethod,
   setCreationMethod,
@@ -13,9 +15,9 @@ export default function TemplateCreationMethodSelector({
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
       <Card
         className={`cursor-pointer transition-all hover:shadow-md ${
-          creationMethod === 'pdf' ? 'ring-2 ring-primary' : 'border'
+          creationMethod === CreationMethodEnum.EXTRACT_FROM_PDF ? 'ring-2 ring-primary' : 'border'
         }`}
-        onClick={() => setCreationMethod('pdf')}
+        onClick={() => setCreationMethod(CreationMethodEnum.EXTRACT_FROM_PDF)}
       >
         <CardContent className="flex flex-col items-center p-6 text-center">
           <div className="mb-4 rounded-full bg-primary/10 p-4">
@@ -30,9 +32,9 @@ export default function TemplateCreationMethodSelector({
 
       <Card
         className={`cursor-pointer transition-all hover:shadow-md ${
-          creationMethod === 'gallery' ? 'ring-2 ring-primary' : 'border'
+          creationMethod === CreationMethodEnum.TEMPLATE_GALLERY ? 'ring-2 ring-primary' : 'border'
         }`}
-        onClick={() => setCreationMethod('gallery')}
+        onClick={() => setCreationMethod(CreationMethodEnum.TEMPLATE_GALLERY)}
       >
         <CardContent className="flex flex-col items-center p-6 text-center">
           <div className="mb-4 rounded-full bg-primary/10 p-4">

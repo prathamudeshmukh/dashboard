@@ -23,6 +23,8 @@ export default function TemplateGallery() {
     setTemplateName,
     setTemplateDescription,
     setHtmlContent,
+    setHandlebarsCode,
+    setHandlebarsJson,
     setTemplateGallery,
   } = useTemplateStore();
   const [isLoading, setIsLoading] = useState(true);
@@ -70,6 +72,8 @@ export default function TemplateGallery() {
     setTemplateName(template.title);
     setTemplateDescription(template?.description as string);
     setHtmlContent(template.htmlContent);
+    setHandlebarsCode(template.handlebarContent as string);
+    setHandlebarsJson(JSON.stringify(template.sampleData as string, null, 2));
   }
 
   return (
