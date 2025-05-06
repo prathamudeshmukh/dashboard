@@ -102,9 +102,9 @@ export default function CreateTemplateWizard() {
         templateContent: activeTab === EditorTypeEnum.VISUAL ? htmlContent : handlebarsCode,
         templateSampleData: activeTab === EditorTypeEnum.HANDLEBARS ? handlebarsJson : '{}',
         templateStyle: activeTab === EditorTypeEnum.VISUAL ? htmlStyle : '',
-        templateType: activeTab === EditorTypeEnum.VISUAL ? TemplateType.HTML_BUILDER : TemplateType.HTML_BUILDER,
+        templateType: activeTab === EditorTypeEnum.VISUAL ? TemplateType.HTML_BUILDER : TemplateType.HANDLBARS_TEMPLATE,
         creationMethod,
-        templateGeneratedFrom: creationMethod === CreationMethodEnum.TEMPLATE_GALLERY ? selectedTemplate : '',
+        templateGeneratedFrom: creationMethod === CreationMethodEnum.TEMPLATE_GALLERY ? selectedTemplate : null,
       });
       setSaveStatus(SaveStatusEnum.SUCCESS);
       resetTemplate();
