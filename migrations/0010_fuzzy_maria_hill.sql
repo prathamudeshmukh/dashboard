@@ -1,0 +1,1 @@
+ALTER TABLE "template_gallery" ADD CONSTRAINT "template_gallery_title_unique" UNIQUE("title");

@@ -1,0 +1,35 @@
+{
+  "company": {
+    "name": "Quantum Technologies Inc.",
+    "tagline": "Pioneering the Future of Quantum Computing",
+    "logoUrl": null
+  },
+  "releaseInfo": {
+    "date": "September 15, 2025",
+    "embargo": "September 16, 2025, 9:00 AM EST"
+  },
+  "headline": "Quantum Technologies Inc. Announces Breakthrough in Quantum Computing Architecture",
+  "subheadline": "New Q-Core Processor Achieves 500-Qubit Stability, Setting New Industry Standard",
+  "dateline": "SAN FRANCISCO, CA — September 15, 2025",
+  "contentParagraphs": [
+    "Quantum Technologies Inc. (NASDAQ: QTEC), a leader in quantum computing solutions, today announced a significant breakthrough in quantum computing architecture with the development of their new Q-Core processor, achieving stable 500-qubit operations for the first time in the industry.",
+    "The Q-Core processor represents a major leap forward in quantum computing technology, solving the long-standing challenge of qubit stability at scale. This breakthrough enables complex quantum algorithms to run with unprecedented accuracy, opening new possibilities for applications in drug discovery, climate modeling, cryptography, and artificial intelligence.",
+    "Early tests demonstrate that the Q-Core processor can solve certain complex problems up to 100 times faster than the most advanced classical supercomputers, while maintaining error rates below 0.01 percent—an industry first for quantum systems of this scale."
+  ],
+  "quote": {
+    "text": "This breakthrough represents the culmination of five years of intensive research and development. The Q-Core processor will fundamentally change what's possible in quantum computing, enabling solutions to problems that were previously considered intractable.",
+    "attribution": "Dr. Eleanor Chen, Chief Technology Officer, Quantum Technologies Inc."
+  },
+  "additionalParagraphs": [
+    "Quantum Technologies will begin shipping the Q-Core to select research partners in Q4 2025, with commercial availability planned for early 2026. The company also announced a new cloud-based quantum computing service, allowing organizations to access Q-Core capabilities without investing in on-premises quantum hardware.",
+    "Industry analysts project that this advancement could accelerate the timeline for quantum advantage in multiple fields by 3-5 years, potentially generating economic value in excess of $100 billion annually by 2030."
+  ],
+  "companyDescription": "Quantum Technologies Inc. (NASDAQ: QTEC) is a global leader in the development of quantum computing hardware and software solutions. Founded in 2018, the company has pioneered multiple breakthroughs in quantum architecture, error correction, and algorithm development. With headquarters in San Francisco and research facilities in Zurich, Tokyo, and Boston, Quantum Technologies works with leading organizations across industries to harness the transformative power of quantum computing.",
+  "contact": {
+    "name": "Sarah Johnson",
+    "title": "Director of Communications",
+    "phone": "(415) 555-9876",
+    "email": "press@quantumtech.com",
+    "additionalInfo": "For interview requests and additional information, please visit www.quantumtech.com/press"
+  }
+}

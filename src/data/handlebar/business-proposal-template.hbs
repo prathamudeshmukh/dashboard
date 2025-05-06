@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    background-color: #f9f9f9;
+  }
+  .proposal-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+  }
+  .cover-page {
+    text-align: center;
+    padding: 40px 0;
+    margin-bottom: 40px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .company-logo {
+    margin-bottom: 30px;
+  }
+  .logo-placeholder {
+    display: inline-block;
+    width: 200px;
+    height: 60px;
+    background-color: #f0f0f0;
+    line-height: 60px;
+    text-align: center;
+    color: #666;
+    font-size: 16px;
+  }
+  .proposal-title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #2c5282;
+  }
+  .proposal-subtitle {
+    font-size: 18px;
+    color: #4a5568;
+    margin-bottom: 30px;
+  }
+  .proposal-meta {
+    margin-top: 40px;
+    font-size: 14px;
+  }
+  .meta-item {
+    margin-bottom: 5px;
+  }
+  .meta-label {
+    font-weight: bold;
+    color: #4a5568;
+  }
+  .section {
+    margin-bottom: 30px;
+  }
+  .section-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #2c5282;
+    color: #2c5282;
+  }
+  .subsection-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #4a5568;
+  }
+  .highlight-box {
+    background-color: #ebf8ff;
+    border-left: 4px solid #3182ce;
+    padding: 15px;
+    margin-bottom: 20px;
+  }
+  .highlight-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #2c5282;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  th {
+    background-color: #f7fafc;
+    font-weight: bold;
+    color: #4a5568;
+  }
+  tr:nth-child(even) {
+    background-color: #f7fafc;
+  }
+  .text-right {
+    text-align: right;
+  }
+  .timeline {
+    margin-bottom: 20px;
+  }
+  .timeline-item {
+    display: flex;
+    margin-bottom: 15px;
+  }
+  .timeline-date {
+    width: 120px;
+    font-weight: bold;
+    color: #2c5282;
+  }
+  .timeline-content {
+    flex: 1;
+  }
+  .team-members {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  .team-member {
+    width: calc(50% - 10px);
+    display: flex;
+    gap: 15px;
+    margin-bottom: 10px;
+  }
+  .member-photo {
+    width: 60px;
+    height: 60px;
+    background-color: #f0f0f0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-size: 12px;
+  }
+  .member-info {
+    flex: 1;
+  }
+  .member-name {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  .member-title {
+    font-size: 14px;
+    color: #4a5568;
+    margin-bottom: 5px;
+  }
+  .member-bio {
+    font-size: 14px;
+  }
+  .signature-section {
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .signature-block {
+    width: 45%;
+  }
+  .signature-line {
+    border-top: 1px solid #000;
+    margin-bottom: 5px;
+    padding-top: 5px;
+  }
+  .signature-name {
+    font-weight: bold;
+  }
+  .signature-title {
+    font-size: 14px;
+    color: #4a5568;
+  }
+  .signature-date {
+    margin-top: 10px;
+    font-size: 14px;
+  }
+  .footer {
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 1px solid #e2e8f0;
+    font-size: 12px;
+    color: #718096;
+    text-align: center;
+  }
+  .bullet-list {
+    margin-left: 20px;
+    padding-left: 0;
+  }
+  .bullet-item {
+    margin-bottom: 10px;
+    list-style-type: disc;
+  }
+</style>
+</head>
+<body>
+<div class="proposal-container">
+  <div class="cover-page">
+    <div class="company-logo">
+      {{#if company.logoUrl}}
+        <img src="{{company.logoUrl}}" alt="{{company.name}} Logo" height="60"/>
+      {{else}}
+        <div class="logo-placeholder">{{company.name}} LOGO</div>
+      {{/if}}
+    </div>
+    <div class="proposal-title">{{proposal.title}}</div>
+    <div class="proposal-subtitle">{{proposal.subtitle}}</div>
+    
+    <div class="proposal-meta">
+      <div class="meta-item">
+        <span class="meta-label">Prepared for:</span> {{client.name}}
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Prepared by:</span> {{company.name}}
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Date:</span> {{proposal.date}}
+      </div>
+      {{#if proposal.validUntil}}
+      <div class="meta-item">
+        <span class="meta-label">Valid until:</span> {{proposal.validUntil}}
+      </div>
+      {{/if}}
+    </div>
+  </div>
+  
+  <div class="section">
+    <div class="section-title">Executive Summary</div>
+    <p>{{executiveSummary}}</p>
+  </div>
+  
+  <div class="section">
+    <div class="section-title">Problem Statement</div>
+    <p>{{problemStatement}}</p>
+    
+    {{#if challenges}}
+    <div class="subsection-title">Key Challenges</div>
+    <ul class="bullet-list">
+      {{#each challenges}}
+      <li class="bullet-item">{{this}}</li>
+      {{/each}}
+    </ul>
+    {{/if}}
+  </div>
+  
+  <div class="section">
+    <div class="section-title">Proposed Solution</div>
+    <p>{{proposedSolution.description}}</p>
+    
+    {{#if proposedSolution.highlights}}
+    <div class="highlight-box">
+      <div class="highlight-title">Solution Highlights</div>
+      <ul class="bullet-list">
+        {{#each proposedSolution.highlights}}
+        <li class="bullet-item">{{this}}</li>
+        {{/each}}
+      </ul>
+    </div>
+    {{/if}}
+    
+    {{#if proposedSolution.components}}
+    <div class="subsection-title">Solution Components</div>
+    {{#each proposedSolution.components}}
+    <div class="subsection-title">{{title}}</div>
+    <p>{{description}}</p>
+    {{/each}}
+    {{/if}}
+  </div>
+  
+  <div class="section">
+    <div class="section-title">Benefits & ROI</div>
+    <p>{{benefits.description}}</p>
+    
+    {{#if benefits.items}}
+    <ul class="bullet-list">
+      {{#each benefits.items}}
+      <li class="bullet-item">{{this}}</li>
+      {{/each}}
+    </ul>
+    {{/if}}
+    
+    {{#if benefits.roi}}
+    <div class="highlight-box">
+      <div class="highlight-title">Return on Investment</div>
+      <p>{{benefits.roi}}</p>
+    </div>
+    {{/if}}
+  </div>
+  
+  <div class="section">
+    <div class="section-title">Pricing & Investment</div>
+    
+    {{#if pricing.table}}
+    <table>
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Description</th>
+          <th class="text-right">Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each pricing.table}}
+        <tr>
+          <td>{{item}}</td>
+          <td>{{description}}</td>
+          <td class="text-right">{{price}}</td>
+        </tr>
+        {{/each}}
+        <tr>
+          <td colspan="2"><strong>Total Investment</strong></td>
+          <td class="text-right"><strong>{{pricing.total}}</strong></td>
+        </tr>
+      </tbody>
+    </table>
+    {{/if}}
+    
+    {{#if pricing.notes}}
+    <p>{{pricing.notes}}</p>
+    {{/if}}
+    
+    {{#if pricing.paymentTerms}}
+    <div class="subsection-title">Payment Terms</div>
+    <p>{{pricing.paymentTerms}}</p>
+    {{/if}}
+  </div>
+  
+  <div class="section">
+    <div class="section-title">Timeline & Implementation</div>
+    
+    <div class="timeline">
+      {{#each timeline}}
+      <div class="timeline-item">
+        <div class="timeline-date">{{date}}</div>
+        <div class="timeline-content">
+          <div><strong>{{phase}}</strong></div>
+          <div>{{description}}</div>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+    
+    {{#if implementationNotes}}
+    <p>{{implementationNotes}}</p>
+    {{/if}}
+  </div>
+  
+  {{#if team}}
+  <div class="section">
+    <div class="section-title">Our Team</div>
+    
+    <div class="team-members">
+      {{#each team}}
+      <div class="team-member">
+        <div class="member-photo">Photo</div>
+        <div class="member-info">
+          <div class="member-name">{{name}}</div>
+          <div class="member-title">{{title}}</div>
+          <div class="member-bio">{{bio}}</div>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+  </div>
+  {{/if}}
+  
+  <div class="section">
+    <div class="section-title">Next Steps</div>
+    <p>{{nextSteps.description}}</p>
+    
+    {{#if nextSteps.items}}
+    <ol class="bullet-list">
+      {{#each nextSteps.items}}
+      <li class="bullet-item">{{this}}</li>
+      {{/each}}
+    </ol>
+    {{/if}}
+  </div>
+  
+  <div class="signature-section">
+    <div class="signature-block">
+      <div class="signature-line"></div>
+      <div class="signature-name">{{client.name}}</div>
+      <div class="signature-title">{{client.title}}</div>
+      <div class="signature-date">Date: ________________</div>
+    </div>
+    
+    <div class="signature-block">
+      <div class="signature-line"></div>
+      <div class="signature-name">{{company.representative.name}}</div>
+      <div class="signature-title">{{company.representative.title}}</div>
+      <div class="signature-date">Date: ________________</div>
+    </div>
+  </div>
+  
+  <div class="footer">
+    <p>{{footer}}</p>
+  </div>
+</div>
+</body>
+</html>

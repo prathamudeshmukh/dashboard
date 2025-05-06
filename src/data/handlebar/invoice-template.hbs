@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      color: #333;
+      line-height: 1.5;
+      margin: 0;
+      padding: 20px;
+    }
+    .invoice-container {
+      max-width: 800px;
+      margin: 0 auto;
+      border: 1px solid #e0e0e0;
+      padding: 30px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .invoice-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+    }
+    .invoice-title {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+    }
+    .invoice-details {
+      text-align: right;
+    }
+    .invoice-id {
+      font-weight: bold;
+    }
+    .invoice-date {
+      font-size: 14px;
+      color: #666;
+    }
+    .divider {
+      height: 1px;
+      background-color: #e0e0e0;
+      margin: 15px 0;
+    }
+    .invoice-parties {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+    }
+    .invoice-from, .invoice-to {
+      width: 48%;
+    }
+    .party-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .invoice-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+    .invoice-table th {
+      background-color: #f8f8f8;
+      text-align: left;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .invoice-table th:nth-child(2),
+    .invoice-table th:nth-child(3),
+    .invoice-table th:nth-child(4) {
+      text-align: right;
+    }
+    .invoice-table td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .invoice-table td:nth-child(2),
+    .invoice-table td:nth-child(3),
+    .invoice-table td:nth-child(4) {
+      text-align: right;
+    }
+    .invoice-totals {
+      width: 300px;
+      margin-left: auto;
+    }
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+    .total-row.grand-total {
+      font-weight: bold;
+      margin-top: 10px;
+      border-top: 1px solid #ddd;
+      padding-top: 10px;
+    }
+    .invoice-footer {
+      margin-top: 40px;
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="invoice-container">
+    <div class="invoice-header">
+      <div class="invoice-title">{{title}}</div>
+      <div class="invoice-details">
+        <div class="invoice-id">{{invoiceNumber}}</div>
+        <div class="invoice-date">{{invoiceDate}}</div>
+      </div>
+    </div>
+    
+    <div class="divider"></div>
+    
+    <div class="invoice-parties">
+      <div class="invoice-from">
+        <div class="party-title">From:</div>
+        <div>{{from.company}}</div>
+        <div>{{from.address1}}</div>
+        <div>{{from.address2}}</div>
+        <div>{{from.email}}</div>
+      </div>
+      <div class="invoice-to">
+        <div class="party-title">Bill To:</div>
+        <div>{{to.company}}</div>
+        <div>{{to.address1}}</div>
+        <div>{{to.address2}}</div>
+        <div>{{to.email}}</div>
+      </div>
+    </div>
+    
+    <table class="invoice-table">
+      <thead>
+        <tr>
+          <th>Description</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each items}}
+        <tr>
+          <td>{{description}}</td>
+          <td>{{quantity}}</td>
+          <td>{{price}}</td>
+          <td>{{total}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    
+    <div class="invoice-totals">
+      <div class="total-row">
+        <span>Subtotal:</span>
+        <span>{{totals.subtotal}}</span>
+      </div>
+      <div class="total-row">
+        <span>{{totals.taxLabel}}:</span>
+        <span>{{totals.tax}}</span>
+      </div>
+      {{#if totals.discount}}
+      <div class="total-row">
+        <span>Discount:</span>
+        <span>{{totals.discount}}</span>
+      </div>
+      {{/if}}
+      <div class="total-row grand-total">
+        <span>Total:</span>
+        <span>{{totals.grandTotal}}</span>
+      </div>
+    </div>
+    
+    <div class="invoice-footer">
+      <p>{{footer.thankYouMessage}}</p>
+      <p>{{footer.paymentTerms}}</p>
+    </div>
+  </div>
+</body>
+</html>
