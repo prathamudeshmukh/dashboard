@@ -15,8 +15,7 @@ import TemplateSourceStep from './steps/TemplateSourceStep';
 
 export default function CreateTemplateWizard() {
   const [currentStep, setCurrentStep] = useState(0);
-  const [creationMethod, setCreationMethod] = useState(CreationMethodEnum.EXTRACT_FROM_PDF);
-  const { templateName, templateDescription, htmlContent, setTemplateName, setTemplateDescription } = useTemplateStore();
+  const { creationMethod, setCreationMethod, templateName, templateDescription, htmlContent, setTemplateName, setTemplateDescription } = useTemplateStore();
   const handleNext = () => setCurrentStep(prev => prev + 1);
   const handlePrevious = () => setCurrentStep(prev => prev - 1);
 
