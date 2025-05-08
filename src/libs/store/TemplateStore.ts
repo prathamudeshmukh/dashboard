@@ -80,7 +80,6 @@ export const useTemplateStore = create<TemplateStore>((set, get) => ({
       htmlStyle: '',
       handlebarsCode: '',
       handlebarsJson: '{}',
-      templateGallery: null,
 
       activeTab: EditorTypeEnum.VISUAL,
       creationMethod: CreationMethodEnum.EXTRACT_FROM_PDF,

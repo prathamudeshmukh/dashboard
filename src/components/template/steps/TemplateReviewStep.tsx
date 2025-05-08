@@ -5,20 +5,13 @@ import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 import contentGenerator from '@/service/contentGenerator';
-import type { CreationMethodEnum } from '@/types/Enum';
 import { TemplateType } from '@/types/Template';
 
 import { EditorTypeEnum } from './TemplateEditorStep';
 
-type TemplateReviewStepProps = {
-  type: CreationMethodEnum;
-};
-
-export default function TemplateReviewStep({
-  type,
-}: TemplateReviewStepProps) {
+export default function TemplateReviewStep() {
   const [compiledHtml, setCompiledHtml] = useState<string>('');
-  const { templateName, templateDescription, htmlContent, htmlStyle, handlebarsCode, handlebarsJson, activeTab } = useTemplateStore();
+  const { creationMethod, templateName, templateDescription, htmlContent, htmlStyle, handlebarsCode, handlebarsJson, activeTab } = useTemplateStore();
 
   useEffect(() => {
     const generate = async () => {
@@ -65,7 +58,7 @@ export default function TemplateReviewStep({
             <p>
               <strong>Type:</strong>
               {' '}
-              {type}
+              {creationMethod}
             </p>
             <p>
               <strong>Description:</strong>

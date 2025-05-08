@@ -67,7 +67,7 @@ export default function CreateTemplateWizard() {
         );
       case 4:
         return (
-          <TemplateReviewStep type={creationMethod} />
+          <TemplateReviewStep />
         );
       default:
         return null;
