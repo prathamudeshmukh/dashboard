@@ -1,4 +1,4 @@
-import type { CreationMethodEnum } from '@/components/template/CreateTemplateWizard';
+import type { CreationMethodEnum } from './Enum';
 
 export type WizardStep = {
   id: string;

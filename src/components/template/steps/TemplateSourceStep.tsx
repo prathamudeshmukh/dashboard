@@ -1,8 +1,8 @@
 'use client';
 
+import { CreationMethodEnum } from '@/types/Enum';
 import type { TemplateSourceStepProps } from '@/types/Wizard';
 
-import { CreationMethodEnum } from '../CreateTemplateWizard';
 import PDFExtractor from '../PDFExtractor';
 import TemplateGallery from '../TemplateGallery';
 

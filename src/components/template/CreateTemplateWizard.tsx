@@ -3,24 +3,19 @@
 import { useState } from 'react';
 
 import { useTemplateStore } from '@/libs/store/TemplateStore';
+import { CreationMethodEnum } from '@/types/Enum';
 
 import { Wizard } from '../Wizard';
 import { WizardNavigation } from '../WizardNavigation';
 import TemplateCreationMethodSelector from './steps/TemplateCreationMethodSelector';
 import TemplateDetailsStep from './steps/TemplateDetailsStep';
 import TemplateEditorStep from './steps/TemplateEditorStep';
+import TemplateReviewStep from './steps/TemplateReviewStep';
 import TemplateSourceStep from './steps/TemplateSourceStep';
-
-export enum CreationMethodEnum {
-  EXTRACT_FROM_PDF = 'Extract From PDF',
-  TEMPLATE_GALLERY = 'Template Gallery',
-  NEW_TEMPLATE = 'New Template',
-}
 
 export default function CreateTemplateWizard() {
   const [currentStep, setCurrentStep] = useState(0);
-  const [creationMethod, setCreationMethod] = useState(CreationMethodEnum.EXTRACT_FROM_PDF);
-  const { templateName, templateDescription, htmlContent, setTemplateName, setTemplateDescription } = useTemplateStore();
+  const { creationMethod, setCreationMethod, templateName, templateDescription, htmlContent, setTemplateName, setTemplateDescription } = useTemplateStore();
   const handleNext = () => setCurrentStep(prev => prev + 1);
   const handlePrevious = () => setCurrentStep(prev => prev - 1);
 
@@ -62,6 +57,10 @@ export default function CreateTemplateWizard() {
       case 3:
         return (
           <TemplateEditorStep />
+        );
+      case 4:
+        return (
+          <TemplateReviewStep type={creationMethod} />
         );
       default:
         return null;

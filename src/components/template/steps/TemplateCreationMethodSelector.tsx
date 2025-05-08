@@ -3,9 +3,8 @@
 import { FileText, Upload } from 'lucide-react';
 
 import { Card, CardContent, CardTitle } from '@/components/ui/card';
+import { CreationMethodEnum } from '@/types/Enum';
 import type { TemplateCreationMethodSelectorProp } from '@/types/Template';
-
-import { CreationMethodEnum } from '../CreateTemplateWizard';
 
 export default function TemplateCreationMethodSelector({
   creationMethod,
