@@ -1,21 +1,28 @@
 'use client';
 
+import { useUser } from '@clerk/nextjs';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+import { UpsertTemplate } from '@/libs/actions/templates';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
-import { CreationMethodEnum } from '@/types/Enum';
+import { CreationMethodEnum, SaveStatusEnum } from '@/types/Enum';
+import { TemplateType } from '@/types/Template';
 
 import { Wizard } from '../Wizard';
 import { WizardNavigation } from '../WizardNavigation';
 import TemplateCreationMethodSelector from './steps/TemplateCreationMethodSelector';
 import TemplateDetailsStep from './steps/TemplateDetailsStep';
-import TemplateEditorStep from './steps/TemplateEditorStep';
+import TemplateEditorStep, { EditorTypeEnum } from './steps/TemplateEditorStep';
 import TemplateReviewStep from './steps/TemplateReviewStep';
 import TemplateSourceStep from './steps/TemplateSourceStep';
 
 export default function CreateTemplateWizard() {
+  const { user } = useUser();
+  const router = useRouter();
+  const [saveStatus, setSaveStatus] = useState<SaveStatusEnum>(SaveStatusEnum.IDLE);
   const [currentStep, setCurrentStep] = useState(0);
-  const { creationMethod, setCreationMethod, templateName, templateDescription, htmlContent, setTemplateName, setTemplateDescription } = useTemplateStore();
+  const { creationMethod, setCreationMethod, selectedTemplate, templateName, templateDescription, htmlContent, htmlStyle, handlebarsCode, activeTab, handlebarsJson, setTemplateName, setTemplateDescription, resetTemplate } = useTemplateStore();
   const handleNext = () => setCurrentStep(prev => prev + 1);
   const handlePrevious = () => setCurrentStep(prev => prev - 1);
 
@@ -60,7 +67,7 @@ export default function CreateTemplateWizard() {
         );
       case 4:
         return (
-          <TemplateReviewStep type={creationMethod} />
+          <TemplateReviewStep />
         );
       default:
         return null;
@@ -78,10 +85,35 @@ export default function CreateTemplateWizard() {
         return (!templateName || !templateDescription);
       case 3:
         return (!htmlContent);
+      case 4:
+        return (saveStatus === SaveStatusEnum.SAVING);
       default:
         return false;
     }
   };
+
+  async function handleTemplateSave() {
+    setSaveStatus(SaveStatusEnum.SAVING);
+    try {
+      await UpsertTemplate({
+        description: templateDescription,
+        email: user?.emailAddresses[0]?.emailAddress,
+        templateName,
+        templateContent: activeTab === EditorTypeEnum.VISUAL ? htmlContent : handlebarsCode,
+        templateSampleData: activeTab === EditorTypeEnum.HANDLEBARS ? handlebarsJson : '{}',
+        templateStyle: activeTab === EditorTypeEnum.VISUAL ? htmlStyle : '',
+        templateType: activeTab === EditorTypeEnum.VISUAL ? TemplateType.HTML_BUILDER : TemplateType.HANDLBARS_TEMPLATE,
+        creationMethod,
+        templateGeneratedFrom: creationMethod === CreationMethodEnum.TEMPLATE_GALLERY ? selectedTemplate : null,
+      });
+      setSaveStatus(SaveStatusEnum.SUCCESS);
+      resetTemplate();
+      router.push('/dashboard');
+    } catch (error) {
+      setSaveStatus(SaveStatusEnum.ERROR);
+      console.error('Error in saving Template', error);
+    }
+  }
 
   return (
     <div className=" px-10 py-12">
@@ -108,6 +140,7 @@ export default function CreateTemplateWizard() {
           onNext={handleNext}
           onPrevious={handlePrevious}
           disableNext={isNextDisabled()}
+          onComplete={handleTemplateSave}
         />
       </div>
     </div>

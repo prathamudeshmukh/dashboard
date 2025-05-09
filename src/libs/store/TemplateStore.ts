@@ -30,6 +30,7 @@ type TemplateStore = {
   setActiveTab: (tab: string) => void;
   setCreationMethod: (method: CreationMethodEnum) => void;
   saveTemplate: () => void;
+  resetTemplate: () => void;
 };
 
 export const useTemplateStore = create<TemplateStore>((set, get) => ({
@@ -68,4 +69,19 @@ export const useTemplateStore = create<TemplateStore>((set, get) => ({
     // API call
     alert(`Template "${state.templateName}" saved successfully!`); // eslint-disable-line no-alert
   },
+
+  resetTemplate: () =>
+    set({
+      templateName: '',
+      templateDescription: '',
+      selectedTemplate: null,
+
+      htmlContent: '',
+      htmlStyle: '',
+      handlebarsCode: '',
+      handlebarsJson: '{}',
+
+      activeTab: EditorTypeEnum.VISUAL,
+      creationMethod: CreationMethodEnum.EXTRACT_FROM_PDF,
+    }),
 }));
