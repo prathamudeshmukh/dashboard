@@ -1,10 +1,18 @@
 'use client';
 
+import { useUser } from '@clerk/nextjs';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
+import { fetchTemplateById, UpsertTemplate } from '@/libs/actions/templates';
 import { HandlebarsService } from '@/libs/services/HandlebarService';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
+import type { CreationMethodEnum } from '@/types/Enum';
+import { SaveStatusEnum } from '@/types/Enum';
+import { TemplateType } from '@/types/Template';
 
+import { Button } from '../ui/button';
 import { DEFAULT_TEMPLATE } from './handlebars-editor/constants';
 import { EditorToolbar } from './handlebars-editor/EditorToolbar';
 import { JsonEditor } from './handlebars-editor/JsonEditor';
@@ -15,10 +23,17 @@ import { TemplateEditor } from './handlebars-editor/TemplateEditor';
 export default function HandlebarsEditor() {
   // Get page settings from the store
   const {
+    templateName,
+    templateDescription,
     handlebarsCode,
-    setHandlebarsCode,
     handlebarsJson,
+    creationMethod,
+    setTemplateName,
+    setTemplateDescription,
+    setHandlebarsCode,
     setHandlebarsJson,
+    setCreationMethod,
+    resetTemplate,
   } = useTemplateStore();
 
   const [handlebarsPreview, setHandlebarsPreview] = useState('');
@@ -28,6 +43,11 @@ export default function HandlebarsEditor() {
   const [isEditorReady, setIsEditorReady] = useState(false);
   const [activeTab, setActiveTab] = useState('editor');
   const [renderCount, setRenderCount] = useState(0);
+  const [saveStatus, setSaveStatus] = useState<SaveStatusEnum>(SaveStatusEnum.IDLE);
+  const { user } = useUser();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const templateId = searchParams.get('templateId');
 
   const handlebarsService = new HandlebarsService();
 
@@ -44,6 +64,30 @@ export default function HandlebarsEditor() {
 
     setIsEditorReady(true);
   }, [handlebarsCode, handlebarsJson, setHandlebarsCode, setHandlebarsJson]);
+
+  useEffect(() => {
+    const fetchTemplate = async () => {
+      if (!templateId) {
+        return;
+      }
+      try {
+        const response = await fetchTemplateById(templateId);
+        if (!response?.data) {
+          return;
+        }
+
+        setTemplateName(response.data.templateName as string);
+        setTemplateDescription(response.data.description as string);
+        setCreationMethod(response.data.creationMethod as CreationMethodEnum);
+        setHandlebarsCode(response.data.templateContent as string);
+        setHandlebarsJson(JSON.stringify(response.data.templateSampleData));
+      } catch (error) {
+        console.error('Failed to load template for editing:', error);
+      }
+    };
+
+    fetchTemplate();
+  }, [templateId]);
 
   // Update the useEffect that renders the template to handle async rendering
   useEffect(() => {
@@ -158,19 +202,61 @@ export default function HandlebarsEditor() {
     }
   };
 
+  const handleSave = async () => {
+    setSaveStatus(SaveStatusEnum.SAVING);
+    try {
+      const templateData = {
+        templateId,
+        description: templateDescription,
+        email: user?.emailAddresses[0]?.emailAddress,
+        templateName,
+        templateContent: handlebarsCode,
+        templateSampleData: handlebarsJson,
+        templateType: TemplateType.HANDLBARS_TEMPLATE,
+        creationMethod,
+      };
+      const response = await UpsertTemplate(templateData);
+
+      if (!response) {
+        return;
+      }
+      toast.success('Template updated successfully');
+      router.push('/dashboard');
+      setSaveStatus(SaveStatusEnum.SUCCESS);
+      resetTemplate();
+    } catch (error) {
+      setSaveStatus(SaveStatusEnum.ERROR);
+      toast.error(`Error: ${error}`);
+    }
+  };
+
   return (
-    <div className="flex h-[800px] flex-col overflow-hidden rounded-md border text-black">
-      {/* Toolbar and Tabs */}
-      <EditorToolbar
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-      />
+    <>
+      {templateId && (
+        <div className="flex items-center justify-between px-4 py-2">
+          <h2 className="text-xl font-semibold">
+            Edit Template:
+            {' '}
+            {templateName || 'Unnamed'}
+          </h2>
+          <Button onClick={handleSave} disabled={saveStatus === SaveStatusEnum.SAVING}>
+            {saveStatus === SaveStatusEnum.SAVING ? 'Saving...' : 'Update'}
+          </Button>
+        </div>
+      )}
+      <div className="flex h-[800px] flex-col overflow-hidden rounded-md border text-black">
+        {/* Toolbar and Tabs */}
+        <EditorToolbar
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+        />
 
-      {/* Main Content based on active tab */}
-      <div className="flex-1">{renderTabContent()}</div>
+        {/* Main Content based on active tab */}
+        <div className="flex-1">{renderTabContent()}</div>
 
-      {/* Status Bar */}
-      <StatusBar />
-    </div>
+        {/* Status Bar */}
+        <StatusBar />
+      </div>
+    </>
   );
 }
