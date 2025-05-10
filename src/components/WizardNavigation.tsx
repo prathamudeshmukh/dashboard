@@ -1,6 +1,7 @@
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, Loader2 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
+import { SaveStatusEnum } from '@/types/Enum';
 import type { WizardNavigationProps } from '@/types/Wizard';
 
 export function WizardNavigation({
@@ -14,7 +15,8 @@ export function WizardNavigation({
   className,
   nextLabel = 'Next',
   previousLabel = 'Back',
-  completeLabel = 'Complete',
+  completeLabel = 'Submit',
+  saveStatus,
 }: WizardNavigationProps) {
   const isLastStep = currentStep === totalSteps - 1;
 
@@ -45,7 +47,7 @@ export function WizardNavigation({
         )}
       >
         {isLastStep ? completeLabel : nextLabel}
-        {!isLastStep && <ChevronRight className="size-4" />}
+        {!isLastStep ? <ChevronRight className="size-4" /> : saveStatus === SaveStatusEnum.SAVING && <Loader2 className="animate-spin" />}
       </button>
     </div>
   );
