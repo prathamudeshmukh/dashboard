@@ -61,9 +61,6 @@ export default function HTMLBuilder() {
       // No templateId → use current state
         if (htmlContent) {
           editor.setComponents(htmlContent);
-          if (htmlStyle) {
-            editor.setStyle(htmlStyle);
-          }
         }
       }
     };
