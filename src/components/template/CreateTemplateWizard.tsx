@@ -3,6 +3,7 @@
 import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 import { UpsertTemplate } from '@/libs/actions/templates';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
@@ -106,12 +107,13 @@ export default function CreateTemplateWizard() {
         creationMethod,
         templateGeneratedFrom: creationMethod === CreationMethodEnum.TEMPLATE_GALLERY ? selectedTemplate : null,
       });
+      toast.success('Template Saved Successfully');
       setSaveStatus(SaveStatusEnum.SUCCESS);
       resetTemplate();
       router.push('/dashboard');
     } catch (error) {
       setSaveStatus(SaveStatusEnum.ERROR);
-      console.error('Error in saving Template', error);
+      toast.error(`Error in saving Template: ${error}`);
     }
   }
 
@@ -141,6 +143,7 @@ export default function CreateTemplateWizard() {
           onPrevious={handlePrevious}
           disableNext={isNextDisabled()}
           onComplete={handleTemplateSave}
+          saveStatus={saveStatus}
         />
       </div>
     </div>

@@ -1,4 +1,4 @@
-import type { CreationMethodEnum } from './Enum';
+import type { CreationMethodEnum, SaveStatusEnum } from './Enum';
 
 export type WizardStep = {
   id: string;
@@ -33,6 +33,7 @@ export type WizardNavigationProps = {
   nextLabel?: string;
   previousLabel?: string;
   completeLabel?: string;
+  saveStatus?: SaveStatusEnum;
 };
 
 export type TemplateSourceStepProps = {
