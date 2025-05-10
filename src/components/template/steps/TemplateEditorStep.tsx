@@ -1,9 +1,7 @@
 'use client';
 
-import { Code, ExternalLink, FileText } from 'lucide-react';
-import Link from 'next/link';
+import { Code, FileText } from 'lucide-react';
 
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
@@ -11,18 +9,12 @@ import { useTemplateStore } from '@/libs/store/TemplateStore';
 import HandlebarsEditor from '../HandlebarsEditor';
 import HTMLBuilder from '../HTMLBuilder';
 
-type TemplateEditorStepProps = {
-  extractedTemplateId?: string;
-};
-
 export enum EditorTypeEnum {
   VISUAL = 'visual',
   HANDLEBARS = 'handlebar',
 }
 
-export default function TemplateEditorStep({
-  extractedTemplateId,
-}: TemplateEditorStepProps) {
+export default function TemplateEditorStep() {
   const { activeTab, setActiveTab } = useTemplateStore();
 
   return (
@@ -34,14 +26,6 @@ export default function TemplateEditorStep({
             Customize your template using our editor
           </p>
         </div>
-        {extractedTemplateId && (
-          <Link href={`/editor/${extractedTemplateId}`} target="_blank" passHref>
-            <Button variant="outline" size="sm" className="gap-1">
-              <ExternalLink className="mr-1 size-4" />
-              Open in Full Editor
-            </Button>
-          </Link>
-        )}
       </CardHeader>
 
       <CardContent className="p-0">
