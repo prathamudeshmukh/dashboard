@@ -30,46 +30,46 @@ export default function HTMLBuilder() {
   const containerRef = useRef(null);
 
   useEffect(() => {
-    const fetchTemplate = async () => {
-      if (!templateId) {
+    const loadTemplate = async () => {
+      if (!editor) {
         return;
       }
-      try {
-        const response = await fetchTemplateById(templateId);
-        if (!response) {
-          return;
+
+      // If templateId exists, fetch the template
+      if (templateId) {
+        try {
+          const response = await fetchTemplateById(templateId);
+          if (!response) {
+            return;
+          }
+          const content = response.data?.templateContent as string;
+          const style = response.data?.templateStyle as string;
+
+          setHtmlContent(content);
+          setHtmlStyle(style);
+          setCreationMethod(response.data?.creationMethod as CreationMethodEnum);
+          setTemplateName(response.data?.templateName as string);
+          setTemplateDescription(response.data?.description as string);
+
+          // Load into editor
+          editor.setComponents(content);
+          editor.setStyle(style || '');
+        } catch (error) {
+          console.error('Failed to load template for editing:', error);
         }
-        setHtmlContent(response.data?.templateContent as string);
-        setHtmlStyle(response.data?.templateStyle as string);
-        setCreationMethod(response.data?.creationMethod as CreationMethodEnum);
-        setTemplateName(response.data?.templateName as string);
-        setTemplateDescription(response.data?.description as string);
-      } catch (error) {
-        console.error('Failed to load template for editing:', error);
+      } else {
+      // No templateId → use current state
+        if (htmlContent) {
+          editor.setComponents(htmlContent);
+          if (htmlStyle) {
+            editor.setStyle(htmlStyle);
+          }
+        }
       }
     };
 
-    fetchTemplate();
-  }, [templateId]);
-
-  useEffect(() => {
-    const loadTemplateData = async () => {
-      if (!editor || !htmlContent) {
-        return;
-      }
-
-      // Load the template data into the editor
-      editor?.setComponents(htmlContent);
-
-      if (templateId && htmlStyle) {
-        editor?.setStyle(htmlStyle);
-      }
-    };
-
-    if (editor) {
-      loadTemplateData();
-    }
-  }, [editor]);
+    loadTemplate();
+  }, [templateId, editor]); // Make sure to depend on both
 
   const onReady = (editor: Editor) => {
     setEditor(editor);
