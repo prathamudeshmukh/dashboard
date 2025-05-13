@@ -3,14 +3,10 @@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { TextArea } from '@/components/ui/text-area';
-import type { TemplateDetailsStepProps } from '@/types/Wizard';
+import { useTemplateStore } from '@/libs/store/TemplateStore';
 
-export default function TemplateDetailsStep({
-  templateName,
-  setTemplateName,
-  templateDescription,
-  setTemplateDescription,
-}: TemplateDetailsStepProps) {
+export default function TemplateDetailsStep() {
+  const { templateName, templateDescription, setTemplateName, setTemplateDescription } = useTemplateStore();
   return (
     <div className="grid gap-6">
       <div className="grid gap-2">

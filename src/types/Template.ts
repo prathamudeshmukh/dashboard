@@ -1,5 +1,3 @@
-import type { CreationMethodEnum } from './Enum';
-
 export enum TemplateType {
   HTML_BUILDER = 'html-builder',
   HANDLBARS_TEMPLATE = 'handlebars-template',
@@ -84,11 +82,6 @@ export type JsonObject<K extends string | number | symbol = string, V = any> = {
 };
 
 type JsonArray<K extends string | number | symbol = string, V = any> = Array<JsonValue<K, V>>;
-
-export type TemplateCreationMethodSelectorProp = {
-  creationMethod: CreationMethodEnum;
-  setCreationMethod: (method: CreationMethodEnum.EXTRACT_FROM_PDF | CreationMethodEnum.TEMPLATE_GALLERY | CreationMethodEnum.NEW_TEMPLATE) => void;
-};
 
 export type TemplateGalleryProps = {
   color: string | null;
