@@ -5,6 +5,7 @@ import '@grapesjs/studio-sdk/style';
 import { useUser } from '@clerk/nextjs';
 import StudioEditor from '@grapesjs/studio-sdk/react';
 import type { Editor } from 'grapesjs';
+import { debounce } from 'lodash';
 import { useEffect, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -36,12 +37,14 @@ export default function HTMLBuilder() {
     setEditor(editor);
 
     // Save HTML content when editor changes
-    editor.on('update', () => {
+    const updateContent = debounce(() => {
       const html = editor.getHtml();
       const css = editor.getCss();
       setHtmlContent(html);
       setHtmlStyle(css as string);
-    });
+    }, 500); // adjust debounce timing
+
+    editor.on('update', updateContent);
 
     // Block Manager
     const blockManager = editor.BlockManager;
