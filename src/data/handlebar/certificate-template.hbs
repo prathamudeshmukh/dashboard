@@ -109,20 +109,20 @@
 <div class="certificate-container">
   <div class="certificate-header">
     <div class="certificate-title">{{certificate.title}}</div>
-    <div class="certificate-subtitle">{{certificate.subtitle}}</div>
+    <div class="certificate-subtitle">{{certificate.type}}</div>
   </div>
   
   <div class="divider"></div>
   
   <div class="certificate-body">
-    <div class="recipient-name">{{recipient.name}}</div>
-    <div class="certificate-text">{{certificate.completionText}}</div>
-    <div class="certificate-course">{{course.name}}</div>
-    <div class="certificate-text">{{certificate.recognitionText}}</div>
-    <div class="certificate-date">{{certificate.date}}</div>
+    <div class="recipient-name">{{recipient.prefix}} {{recipient.fullName}}</div>
+    <div class="certificate-text">{{achievement.description}}</div>
+    <div class="certificate-course">{{achievement.programName}}</div>
+    <div class="certificate-text">{{achievement.additionalText}}</div>
+    <div class="certificate-date">Completed on: {{details.completionDate}}</div>
     
-    {{#if certificate.sealText}}
-    <div class="certificate-seal">{{certificate.sealText}}</div>
+    {{#if verification.id}}
+    <div class="certificate-seal">ID: {{verification.id}}</div>
     {{/if}}
   </div>
   
@@ -137,7 +137,9 @@
   </div>
   
   <div class="certificate-footer">
-    <p>{{footer}}</p>
+    <p>{{issuer.organization}} | {{footer.address}}</p>
+    <p>{{footer.contact}}</p>
+    {{#if verification.verificationText}}<p>{{verification.verificationText}}</p>{{/if}}
   </div>
 </div>
 </body>

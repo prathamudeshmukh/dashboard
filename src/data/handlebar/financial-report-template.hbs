@@ -157,38 +157,41 @@
         <div class="logo-placeholder">{{company.name}} LOGO</div>
       {{/if}}
     </div>
-    <div class="report-title">{{report.title}}</div>
-    <div class="report-subtitle">{{report.subtitle}}</div>
-    <div class="report-date">{{report.period}}</div>
+    <div class="report-title">{{company.name}} Financial Report</div>
+    <div class="report-subtitle">{{company.fiscalYear}} - {{company.reportPeriod}}</div>
+    <div class="report-date">{{company.reportDate}}</div>
   </div>
   
   <div class="section">
     <div class="section-title">Executive Summary</div>
     <div class="summary-box">
       <div class="summary-title">Financial Performance Overview</div>
-      <p>{{executiveSummary}}</p>
+      <ul class="bullet-list">
+        {{#each executiveSummary.highlights}}
+        <li>{{this}}</li>
+        {{/each}}
+      </ul>
     </div>
   </div>
   
   <div class="section">
     <div class="section-title">Financial Highlights</div>
     <div class="financial-highlights">
-      {{#each financialHighlights}}
+      {{#each financialHighlights.metrics}}
       <div class="highlight-card">
-        <div class="highlight-title">{{title}}</div>
-        <div class="highlight-value">{{value}}</div>
-        {{#if change}}
-        <div class="highlight-change {{#if isPositive}}positive-change{{else}}negative-change{{/if}}">
+        <div class="highlight-title">{{name}}</div>
+        <div class="highlight-value">{{current}}</div>
+        <div class="highlight-change {{#if trendUp}}positive-change{{else}}negative-change{{/if}}">
           {{change}}
         </div>
-        {{/if}}
       </div>
       {{/each}}
     </div>
   </div>
   
   <div class="section">
-    <div class="section-title">Income Statement</div>
+    <div class="section-title">{{incomeStatement.title}}</div>
+    <div class="report-subtitle">{{incomeStatement.subtitle}}</div>
     <table>
       <thead>
         <tr>
@@ -199,13 +202,15 @@
         </tr>
       </thead>
       <tbody>
-        {{#each incomeStatement}}
-        <tr>
-          <td>{{item}}</td>
-          <td class="text-right">{{currentPeriod}}</td>
-          <td class="text-right">{{previousPeriod}}</td>
-          <td class="text-right {{#if isPositive}}positive-change{{else}}negative-change{{/if}}">{{change}}</td>
-        </tr>
+        {{#each incomeStatement.items}}
+        <tr {{#if isSubtotal}}style="border-top: 1px solid #333; font-weight: bold;"{{/if}}>
+          <td>{{category}}</td>
+          <td class="text-right">{{amount}}</td>
+          <td class="text-right">{{previousAmount}}</td>
+          <td class="text-right {{#if positiveChange}}positive-change{{else}}negative-change{{/if}}">
+            {{percentChange}}
+          </td>
+        <tr/>
         {{/each}}
       </tbody>
     </table>
@@ -216,72 +221,147 @@
   </div>
   
   <div class="section">
-    <div class="section-title">Balance Sheet</div>
+    <div class="section-title">{{balanceSheet.title}}</div>
+    <div class="report-subtitle">{{balanceSheet.subtitle}}</div>
     <table>
       <thead>
         <tr>
-          <th>Item</th>
+          <th>Assets</th>
           <th class="text-right">Current Period</th>
           <th class="text-right">Previous Period</th>
-          <th class="text-right">Change</th>
         </tr>
       </thead>
       <tbody>
-        {{#each balanceSheet}}
+        {{#each balanceSheet.assets}}
+        <tr {{#if isSubtotal}}style="border-top: 1px solid #333; font-weight: bold;"{{/if}}>
+          <td>{{category}}</td>
+          <td class="text-right">{{amount}}</td>
+          <td class="text-right">{{previousAmount}}</td>
+        <tr/>
+        {{/each}}
+      </tbody>
+    </table>
+    
+    <table>
+      <thead>
         <tr>
-          <td>{{item}}</td>
-          <td class="text-right">{{currentPeriod}}</td>
-          <td class="text-right">{{previousPeriod}}</td>
-          <td class="text-right {{#if isPositive}}positive-change{{else}}negative-change{{/if}}">{{change}}</td>
+          <th>Liabilities & Equity</th>
+          <th class="text-right">Current Period</th>
+          <th class="text-right">Previous Period</th>
         </tr>
+      </thead>
+      <tbody>
+        {{#each balanceSheet.liabilities}}
+        <tr {{#if isSubtotal}}style="border-top: 1px solid #333; font-weight: bold;"{{/if}}>
+          <td>{{category}}</td>
+          <td class="text-right">{{amount}}</td>
+          <td class="text-right">{{previousAmount}}</td>
+        <tr/>
+        {{/each}}
+        {{#each balanceSheet.equity}}
+        <tr {{#if isSubtotal}}style="border-top: 1px solid #333; font-weight: bold;"{{/if}}>
+          <td>{{category}}</td>
+          <td class="text-right">{{amount}}</td>
+          <td class="text-right">{{previousAmount}}</td>
+        <tr/>
         {{/each}}
       </tbody>
     </table>
   </div>
   
   <div class="section">
-    <div class="section-title">Cash Flow Statement</div>
+    <div class="section-title">{{cashFlow.title}}</div>
+    <div class="report-subtitle">{{cashFlow.subtitle}}</div>
     <table>
       <thead>
         <tr>
-          <th>Item</th>
-          <th class="text-right">Current Period</th>
-          <th class="text-right">Previous Period</th>
-          <th class="text-right">Change</th>
+          <th>Cash Flow from Operations</th>
+          <th class="text-right">Amount</th>
         </tr>
       </thead>
       <tbody>
-        {{#each cashFlow}}
+        {{#each cashFlow.operations}}
+        <tr {{#if isSubtotal}}style="border-top: 1px solid #333; font-weight: bold;"{{/if}}>
+          <td>{{category}}</td>
+          <td class="text-right">{{amount}}</td>
+        <tr/>
+        {{/each}}
+      </tbody>
+    </table>
+    
+    <table>
+      <thead>
         <tr>
-          <td>{{item}}</td>
-          <td class="text-right">{{currentPeriod}}</td>
-          <td class="text-right">{{previousPeriod}}</td>
-          <td class="text-right {{#if isPositive}}positive-change{{else}}negative-change{{/if}}">{{change}}</td>
+          <th>Cash Flow from Investing</th>
+          <th class="text-right">Amount</th>
         </tr>
+      </thead>
+      <tbody>
+        {{#each cashFlow.investing}}
+        <tr {{#if isSubtotal}}style="border-top: 1px solid #333; font-weight: bold;"{{/if}}>
+          <td>{{category}}</td>
+          <td class="text-right">{{amount}}</td>
+        <tr/>
+        {{/each}}
+      </tbody>
+    </table>
+    
+    <table>
+      <thead>
+        <tr>
+          <th>Cash Flow from Financing</th>
+          <th class="text-right">Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each cashFlow.financing}}
+        <tr {{#if isSubtotal}}style="border-top: 1px solid #333; font-weight: bold;"{{/if}}>
+          <td>{{category}}</td>
+          <td class="text-right">{{amount}}</td>
+        <tr/>
+        {{/each}}
+      </tbody>
+    </table>
+    
+    <table>
+      <thead>
+        <tr>
+          <th>Cash Flow Summary</th>
+          <th class="text-right">Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each cashFlow.summary}}
+        <tr {{#if isSubtotal}}style="border-top: 1px solid #333; font-weight: bold;"{{/if}}>
+          <td>{{category}}</td>
+          <td class="text-right">{{amount}}</td>
+        <tr/>
         {{/each}}
       </tbody>
     </table>
   </div>
   
-  {{#if keyRatios}}
+  {{#if segmentAnalysis}}
   <div class="section">
-    <div class="section-title">Key Financial Ratios</div>
+    <div class="section-title">{{segmentAnalysis.title}}</div>
     <table>
       <thead>
         <tr>
-          <th>Ratio</th>
-          <th class="text-right">Current Period</th>
-          <th class="text-right">Previous Period</th>
-          <th class="text-right">Industry Average</th>
+          <th>Segment</th>
+          <th class="text-right">Revenue</th>
+          <th class="text-right">Growth</th>
+          <th class="text-right">Operating Income</th>
+          <th class="text-right">Margin</th>
         </tr>
       </thead>
       <tbody>
-        {{#each keyRatios}}
+        {{#each segmentAnalysis.segments}}
         <tr>
-          <td>{{ratio}}</td>
-          <td class="text-right">{{currentPeriod}}</td>
-          <td class="text-right">{{previousPeriod}}</td>
-          <td class="text-right">{{industryAverage}}</td>
+          <td>{{name}}</td>
+          <td class="text-right">{{revenue}}</td>
+          <td class="text-right">{{growth}}</td>
+          <td class="text-right">{{operatingIncome}}</td>
+          <td class="text-right">{{margin}}</td>
         </tr>
         {{/each}}
       </tbody>
@@ -289,15 +369,18 @@
   </div>
   {{/if}}
   
+  {{#if outlook}}
   <div class="section">
-    <div class="section-title">Notes and Assumptions</div>
-    <div class="notes">
-      <p>{{notes}}</p>
-    </div>
+    <div class="section-title">{{outlook.title}}</div>
+    {{#each outlook.paragraphs}}
+    <p>{{this}}</p>
+    {{/each}}
   </div>
+  {{/if}}
   
   <div class="footer">
-    <p>{{footer}}</p>
+    <p>{{footer.disclaimer}}</p>
+    <p>{{footer.contactInfo}}</p>
   </div>
 </div>
 </body>
