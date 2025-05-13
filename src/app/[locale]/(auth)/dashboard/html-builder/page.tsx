@@ -1,11 +1,11 @@
 import React from 'react';
 
-import HtmlBuilder from './html-builder';
+import HTMLBuilder from '@/components/template/HTMLBuilder';
 
 const page = () => {
   return (
     <div>
-      <HtmlBuilder />
+      <HTMLBuilder />
     </div>
   );
 };

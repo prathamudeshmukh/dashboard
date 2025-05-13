@@ -6,32 +6,70 @@ import { useUser } from '@clerk/nextjs';
 import StudioEditor from '@grapesjs/studio-sdk/react';
 import type { Editor } from 'grapesjs';
 import { debounce } from 'lodash';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
 
+import { fetchTemplateById, UpsertTemplate } from '@/libs/actions/templates';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
+import { type CreationMethodEnum, SaveStatusEnum } from '@/types/Enum';
+import { TemplateType } from '@/types/Template';
+
+import { Button } from '../ui/button';
 
 export default function HTMLBuilder() {
   const { user } = useUser();
   const [editor, setEditor] = useState<Editor>();
-  const { htmlContent, setHtmlContent, setHtmlStyle } = useTemplateStore();
+  const { templateName, templateDescription, htmlContent, htmlStyle, creationMethod, setTemplateName, setTemplateDescription, resetTemplate, setCreationMethod, setHtmlContent, setHtmlStyle } = useTemplateStore();
+  const searchParams = useSearchParams();
+  const templateId = searchParams.get('templateId');
+  const [saveStatus, setSaveStatus] = useState<SaveStatusEnum>(SaveStatusEnum.IDLE);
+  const router = useRouter();
 
   const containerRef = useRef(null);
 
   useEffect(() => {
-    const loadTemplateData = async () => {
-      if (!htmlContent) {
+    const loadTemplate = async () => {
+      if (!editor) {
         return;
       }
 
-      // Load the template data into the editor
-      editor?.setComponents(htmlContent);
+      // If templateId exists, fetch the template
+      if (templateId) {
+        try {
+          const response = await fetchTemplateById(templateId);
+          if (!response) {
+            return;
+          }
+          const content = response.data?.templateContent as string;
+          const style = response.data?.templateStyle as string;
+
+          setHtmlContent(content);
+          setHtmlStyle(style);
+          setCreationMethod(response.data?.creationMethod as CreationMethodEnum);
+          setTemplateName(response.data?.templateName as string);
+          setTemplateDescription(response.data?.description as string);
+
+          // Load into editor
+          editor.setComponents(content);
+          editor.setStyle(style || '');
+        } catch (error) {
+          console.error('Failed to load template for editing:', error);
+        }
+      } else {
+      // No templateId → use current state
+        if (htmlContent) {
+          editor.setComponents(htmlContent);
+          if (htmlStyle) {
+            editor.setStyle(htmlStyle);
+          }
+        }
+      }
     };
 
-    if (editor) {
-      loadTemplateData();
-    }
-  }, [editor, htmlContent]);
+    loadTemplate();
+  }, [templateId, editor]); // Make sure to depend on both
 
   const onReady = (editor: Editor) => {
     setEditor(editor);
@@ -75,8 +113,46 @@ export default function HTMLBuilder() {
     });
   };
 
+  const handleSave = async () => {
+    setSaveStatus(SaveStatusEnum.SAVING);
+    if (!user) {
+      return;
+    }
+    try {
+      const templateData = {
+        templateId,
+        description: templateDescription,
+        email: user?.emailAddresses[0]?.emailAddress,
+        templateName,
+        templateContent: htmlContent,
+        templateStyle: htmlStyle,
+        templateType: TemplateType.HTML_BUILDER,
+        creationMethod,
+      };
+      const response = await UpsertTemplate(templateData);
+
+      if (!response) {
+        return;
+      }
+      toast.success('Template updated successfully');
+      router.push('/dashboard');
+      setSaveStatus(SaveStatusEnum.SUCCESS);
+      resetTemplate();
+    } catch (error) {
+      setSaveStatus(SaveStatusEnum.ERROR);
+      toast.error(`Error: ${error}`);
+    }
+  };
+
   return (
     <div className="flex w-full flex-col space-y-4">
+      {templateId && (
+        <h2 className="text-xl font-semibold">
+          Edit Template :
+          {' '}
+          <span className="text-primary">{templateName}</span>
+        </h2>
+      )}
       <div className="m-0 w-full rounded-md border p-0">
         <div className="gjs-editor-cont w-full">
           {/* GrapesJS StudioEditor container */}
@@ -102,6 +178,13 @@ export default function HTMLBuilder() {
           </div>
         </div>
       </div>
+      {templateId && (
+        <div className="flex justify-end">
+          <Button onClick={handleSave} disabled={saveStatus === SaveStatusEnum.SAVING}>
+            {saveStatus === SaveStatusEnum.SAVING ? 'Saving...' : 'Update'}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
