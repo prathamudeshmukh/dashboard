@@ -27,10 +27,12 @@ export function CodeEditorWrapper({ value, onChange, language, isReady }: Editor
   }
 
   return (
-    <CodeEditor
-      value={value}
-      onChange={onChange}
-      language={language}
-    />
+    <div className="h-[350px]">
+      <CodeEditor
+        value={value}
+        onChange={onChange}
+        language={language}
+      />
+    </div>
   );
 }
