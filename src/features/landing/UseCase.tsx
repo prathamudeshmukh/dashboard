@@ -1,7 +1,7 @@
 import { FileText, GraduationCap, ShoppingCart, Stethoscope } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
-import { Section } from '@/features/landing/Section';
+import { Section } from '@/components/landing/Section';
 
 export const UseCase = () => {
   const t = useTranslations('UseCase');

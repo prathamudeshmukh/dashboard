@@ -1,15 +1,15 @@
 /* eslint-disable react-dom/no-dangerously-set-innerhtml */
 import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
 
-import { CTA } from '@/templates/CTA';
-import { FAQ } from '@/templates/FAQ';
-import { Footer } from '@/templates/Footer';
-import { Hero } from '@/templates/Hero';
-import { KeyFeatures } from '@/templates/KeyFeatures';
-import { Navbar } from '@/templates/Navbar';
-import Pricing from '@/templates/Pricing';
-import { SecurityFeatures } from '@/templates/SecurityFeatures';
-import { Working } from '@/templates/Working';
+import About from '@/features/landing/About';
+import { CTA } from '@/features/landing/CTA';
+import { FAQ } from '@/features/landing/FAQ';
+import Features from '@/features/landing/Features';
+import { Footer } from '@/features/landing/Footer';
+import { Hero } from '@/features/landing/Hero';
+import { Navbar } from '@/features/landing/Navbar';
+import Pricing from '@/features/landing/Pricing';
+import Steps from '@/features/landing/Steps';
 import { getBaseUrl } from '@/utils/Helpers';
 
 export async function generateMetadata(props: { params: { locale: string } }) {
@@ -58,10 +58,10 @@ const IndexPage = (props: { params: { locale: string } }) => {
   };
 
   const menuList = [
-    { link: '#features', name: 'Feature' },
+    { link: '#about', name: 'About' },
     { link: '#how-it-works', name: 'How it Works' },
+    { link: '#features', name: 'Feature' },
     { link: '#pricing', name: 'Pricing' },
-    { link: '#security', name: 'Security' },
     { link: '/docs', name: 'Docs' },
   ];
 
@@ -74,12 +74,12 @@ const IndexPage = (props: { params: { locale: string } }) => {
         />
       </section>
       <Navbar menuList={menuList} />
-      <main className="flex-1 overflow-hidden">
+      <main className="flex-1">
         <Hero />
-        <KeyFeatures />
-        <Working />
+        <About />
+        <Features />
+        <Steps />
         <Pricing />
-        <SecurityFeatures />
         <FAQ />
         <CTA />
         <Footer />
