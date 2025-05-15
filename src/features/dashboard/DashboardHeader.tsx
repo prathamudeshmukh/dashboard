@@ -11,7 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Logo } from '@/templates/Logo';
+import { Logo } from '@/features/landing/Logo';
 
 export const DashboardHeader = (props: {
   menu: {

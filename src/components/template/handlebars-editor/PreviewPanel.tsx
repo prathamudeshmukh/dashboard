@@ -5,59 +5,21 @@ import { Eye, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
-import { PREVIEW_STYLES_PREFIX, PREVIEW_STYLES_SUFFIX } from './constants';
 import { PanelHeader } from './PanelHeader';
 
 type PreviewPanelProps = {
   preview: string;
-  styles?: string;
   isLoading: boolean;
   renderCount: number;
   onRefresh: () => void;
-  pageSettings?: {
-    orientation: string;
-    size: string;
-    margins: {
-      top: string;
-      right: string;
-      bottom: string;
-      left: string;
-    };
-    showBorder: boolean;
-  };
 };
 
 export function PreviewPanel({
   preview,
-  styles,
   isLoading,
   renderCount,
   onRefresh,
-  pageSettings,
 }: PreviewPanelProps) {
-  // Generate additional CSS for page layout
-  const pageLayoutStyles = pageSettings
-    ? `
-      @page {
-        size: ${pageSettings.size} ${pageSettings.orientation};
-        margin: ${pageSettings.margins.top} ${pageSettings.margins.right} ${pageSettings.margins.bottom} ${pageSettings.margins.left};
-      }
-      .preview-container {
-        width: 100%;
-        height: 100%;
-        ${
-          pageSettings.showBorder
-            ? `
-            border: 1px dashed #ccc;
-            padding: ${pageSettings.margins.top} ${pageSettings.margins.right} ${pageSettings.margins.bottom} ${pageSettings.margins.left};
-            box-sizing: border-box;
-            `
-            : ''
-        }
-      }
-    `
-    : '';
-
   return (
     <div className="flex h-full flex-col">
       <PanelHeader
@@ -76,7 +38,7 @@ export function PreviewPanel({
           )
         }
       />
-      <div className="flex-1 overflow-auto bg-white p-4">
+      <div className="h-[400px] flex-1 overflow-auto bg-white p-4">
         {isLoading
           ? (
               <div className="flex h-full items-center justify-center">
@@ -85,11 +47,11 @@ export function PreviewPanel({
               </div>
             )
           : (
-              <div
-                className={`preview-container ${pageSettings?.orientation === 'landscape' ? 'landscape' : 'portrait'}`}
-                dangerouslySetInnerHTML={{
-                  __html: PREVIEW_STYLES_PREFIX + pageLayoutStyles + styles + PREVIEW_STYLES_SUFFIX + preview,
-                }}
+              <iframe
+                title="Handlebar Preview"
+                sandbox=""
+                className="size-full"
+                srcDoc={preview}
               />
             )}
       </div>

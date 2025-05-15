@@ -206,10 +206,10 @@
 <div class="proposal-container">
   <div class="cover-page">
     <div class="company-logo">
-      {{#if company.logoUrl}}
-        <img src="{{company.logoUrl}}" alt="{{company.name}} Logo" height="60"/>
+      {{#if proposal.preparedBy.logoUrl}}
+        <img src="{{proposal.preparedBy.logoUrl}}" alt="{{proposal.preparedBy.company}} Logo" height="60"/>
       {{else}}
-        <div class="logo-placeholder">{{company.name}} LOGO</div>
+        <div class="logo-placeholder">{{proposal.preparedBy.company}} LOGO</div>
       {{/if}}
     </div>
     <div class="proposal-title">{{proposal.title}}</div>
@@ -217,10 +217,10 @@
     
     <div class="proposal-meta">
       <div class="meta-item">
-        <span class="meta-label">Prepared for:</span> {{client.name}}
+        <span class="meta-label">Prepared for:</span> {{proposal.preparedFor.contactPerson}}, {{proposal.preparedFor.company}}
       </div>
       <div class="meta-item">
-        <span class="meta-label">Prepared by:</span> {{company.name}}
+        <span class="meta-label">Prepared by:</span> {{proposal.preparedBy.company}}
       </div>
       <div class="meta-item">
         <span class="meta-label">Date:</span> {{proposal.date}}
@@ -230,23 +230,58 @@
         <span class="meta-label">Valid until:</span> {{proposal.validUntil}}
       </div>
       {{/if}}
+      <div class="meta-item">
+        <span class="meta-label">Proposal #:</span> {{proposal.proposalNumber}}
+      </div>
     </div>
   </div>
   
   <div class="section">
     <div class="section-title">Executive Summary</div>
-    <p>{{executiveSummary}}</p>
+    {{#each executiveSummary.paragraphs}}
+    <p>{{this}}</p>
+    {{/each}}
   </div>
   
+  {{#if companyBackground}}
   <div class="section">
-    <div class="section-title">Problem Statement</div>
-    <p>{{problemStatement}}</p>
+    <div class="section-title">About {{proposal.preparedBy.company}}</div>
+    {{#each companyBackground.paragraphs}}
+    <p>{{this}}</p>
+    {{/each}}
     
-    {{#if challenges}}
+    {{#if companyBackground.keyDifferentiators}}
+    <div class="subsection-title">Our Differentiators</div>
+    <ul class="bullet-list">
+      {{#each companyBackground.keyDifferentiators}}
+      <li class="bullet-item">{{this}}</li>
+      {{/each}}
+    </ul>
+    {{/if}}
+  </div>
+  {{/if}}
+  
+  <div class="section">
+    <div class="section-title">Current Situation Analysis</div>
+    
+    {{#if situationAnalysis.challenges}}
     <div class="subsection-title">Key Challenges</div>
     <ul class="bullet-list">
-      {{#each challenges}}
-      <li class="bullet-item">{{this}}</li>
+      {{#each situationAnalysis.challenges}}
+      <li class="bullet-item">
+        <strong>{{title}}:</strong> {{description}}
+      </li>
+      {{/each}}
+    </ul>
+    {{/if}}
+    
+    {{#if situationAnalysis.opportunities}}
+    <div class="subsection-title">Key Opportunities</div>
+    <ul class="bullet-list">
+      {{#each situationAnalysis.opportunities}}
+      <li class="bullet-item">
+        <strong>{{title}}:</strong> {{description}}
+      </li>
       {{/each}}
     </ul>
     {{/if}}
@@ -254,156 +289,230 @@
   
   <div class="section">
     <div class="section-title">Proposed Solution</div>
-    <p>{{proposedSolution.description}}</p>
+    <p>{{proposedSolution.overview}}</p>
     
-    {{#if proposedSolution.highlights}}
+    {{#if proposedSolution.phases}}
+    <div class="subsection-title">Implementation Phases</div>
+    {{#each proposedSolution.phases}}
     <div class="highlight-box">
-      <div class="highlight-title">Solution Highlights</div>
+      <div class="highlight-title">{{name}} (Duration: {{duration}})</div>
+      <div class="subsection-title">Key Activities:</div>
       <ul class="bullet-list">
-        {{#each proposedSolution.highlights}}
+        {{#each activities}}
+        <li class="bullet-item">{{this}}</li>
+        {{/each}}
+      </ul>
+      <div class="subsection-title">Deliverables:</div>
+      <ul class="bullet-list">
+        {{#each deliverables}}
         <li class="bullet-item">{{this}}</li>
         {{/each}}
       </ul>
     </div>
-    {{/if}}
-    
-    {{#if proposedSolution.components}}
-    <div class="subsection-title">Solution Components</div>
-    {{#each proposedSolution.components}}
-    <div class="subsection-title">{{title}}</div>
-    <p>{{description}}</p>
     {{/each}}
     {{/if}}
+    
+  {{#if proposedSolution.technologies}}
+  <div class="subsection-title">Recommended Technologies</div>
+  <table>
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th>Options</th>
+        <th>Recommendation</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each proposedSolution.technologies}}
+      <tr>
+        <td>{{category}}</td>
+        <td>
+          {{#each options}}
+          {{this}}{{#unless @last}}, {{/unless}}
+          {{/each}}
+        </td>
+        <td>{{recommendation}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  {{/if}}
   </div>
   
   <div class="section">
-    <div class="section-title">Benefits & ROI</div>
-    <p>{{benefits.description}}</p>
+    <div class="section-title">Implementation Approach</div>
+    <p>{{implementation.methodology}}</p>
     
-    {{#if benefits.items}}
-    <ul class="bullet-list">
-      {{#each benefits.items}}
-      <li class="bullet-item">{{this}}</li>
-      {{/each}}
-    </ul>
+    {{#if implementation.governanceStructure}}
+    <div class="subsection-title">Governance Structure</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Role</th>
+          <th>Responsibility</th>
+          <th>Meeting Cadence</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each implementation.governanceStructure}}
+        <tr>
+          <td>{{role}}</td>
+          <td>{{responsibility}}</td>
+          <td>{{cadence}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
     {{/if}}
     
-    {{#if benefits.roi}}
+    {{#if implementation.riskManagement.keyRisks}}
     <div class="highlight-box">
-      <div class="highlight-title">Return on Investment</div>
-      <p>{{benefits.roi}}</p>
+      <div class="highlight-title">Risk Management</div>
+      <p>{{implementation.riskManagement.approach}}</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Risk</th>
+            <th>Mitigation Strategy</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each implementation.riskManagement.keyRisks}}
+          <tr>
+            <td>{{risk}}</td>
+            <td>{{mitigation}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
     </div>
     {{/if}}
   </div>
   
   <div class="section">
-    <div class="section-title">Pricing & Investment</div>
+    <div class="section-title">Timeline</div>
+    <p>{{timeline.overview}}</p>
     
-    {{#if pricing.table}}
-    <table>
-      <thead>
-        <tr>
-          <th>Item</th>
-          <th>Description</th>
-          <th class="text-right">Price</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each pricing.table}}
-        <tr>
-          <td>{{item}}</td>
-          <td>{{description}}</td>
-          <td class="text-right">{{price}}</td>
-        </tr>
-        {{/each}}
-        <tr>
-          <td colspan="2"><strong>Total Investment</strong></td>
-          <td class="text-right"><strong>{{pricing.total}}</strong></td>
-        </tr>
-      </tbody>
-    </table>
-    {{/if}}
-    
-    {{#if pricing.notes}}
-    <p>{{pricing.notes}}</p>
-    {{/if}}
-    
-    {{#if pricing.paymentTerms}}
-    <div class="subsection-title">Payment Terms</div>
-    <p>{{pricing.paymentTerms}}</p>
-    {{/if}}
-  </div>
-  
-  <div class="section">
-    <div class="section-title">Timeline & Implementation</div>
-    
+    {{#if timeline.milestones}}
     <div class="timeline">
-      {{#each timeline}}
+      {{#each timeline.milestones}}
       <div class="timeline-item">
         <div class="timeline-date">{{date}}</div>
         <div class="timeline-content">
-          <div><strong>{{phase}}</strong></div>
+          <div><strong>{{name}}</strong></div>
           <div>{{description}}</div>
         </div>
       </div>
       {{/each}}
     </div>
-    
-    {{#if implementationNotes}}
-    <p>{{implementationNotes}}</p>
     {{/if}}
   </div>
   
-  {{#if team}}
   <div class="section">
-    <div class="section-title">Our Team</div>
+    <div class="section-title">Investment & ROI</div>
     
-    <div class="team-members">
-      {{#each team}}
-      <div class="team-member">
-        <div class="member-photo">Photo</div>
-        <div class="member-info">
-          <div class="member-name">{{name}}</div>
-          <div class="member-title">{{title}}</div>
-          <div class="member-bio">{{bio}}</div>
-        </div>
-      </div>
-      {{/each}}
+    {{#if investment.costBreakdown}}
+    <div class="subsection-title">Cost Breakdown</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Amount</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each investment.costBreakdown}}
+        <tr>
+          <td>{{category}}</td>
+          <td>{{amount}}</td>
+          <td>{{description}}</td>
+        </tr>
+        {{/each}}
+        <tr>
+          <td><strong>Total Investment</strong></td>
+          <td><strong>{{investment.totalInvestment}}</strong></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    {{/if}}
+    
+    {{#if investment.roi}}
+    <div class="highlight-box">
+      <div class="highlight-title">Return on Investment</div>
+      <p><strong>Payback Period:</strong> {{investment.roi.paybackPeriod}}</p>
+      <p><strong>5-Year ROI:</strong> {{investment.roi.fiveYearROI}}</p>
+      
+      <div class="subsection-title">Annual Benefits</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Amount</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each investment.roi.annualBenefits}}
+          <tr>
+            <td>{{category}}</td>
+            <td>{{amount}}</td>
+            <td>{{description}}</td>
+          </tr>
+          {{/each}}
+          <tr>
+            <td><strong>Total Annual Benefits</strong></td>
+            <td><strong>{{investment.roi.totalAnnualBenefits}}</strong></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+    {{/if}}
   </div>
-  {{/if}}
   
   <div class="section">
     <div class="section-title">Next Steps</div>
-    <p>{{nextSteps.description}}</p>
     
-    {{#if nextSteps.items}}
+    {{#if nextSteps.steps}}
     <ol class="bullet-list">
-      {{#each nextSteps.items}}
-      <li class="bullet-item">{{this}}</li>
+      {{#each nextSteps.steps}}
+      <li class="bullet-item">
+        <strong>{{action}}</strong> ({{timeline}}): {{description}}
+      </li>
       {{/each}}
     </ol>
+    {{/if}}
+    
+    {{#if nextSteps.contactInfo}}
+    <div class="highlight-box">
+      <div class="highlight-title">Contact Information</div>
+      <p><strong>{{nextSteps.contactInfo.primaryContact}}</strong>, {{nextSteps.contactInfo.title}}</p>
+      <p>Phone: {{nextSteps.contactInfo.phone}} | Email: {{nextSteps.contactInfo.email}}</p>
+    </div>
     {{/if}}
   </div>
   
   <div class="signature-section">
     <div class="signature-block">
       <div class="signature-line"></div>
-      <div class="signature-name">{{client.name}}</div>
-      <div class="signature-title">{{client.title}}</div>
+      <div class="signature-name">{{proposal.preparedFor.contactPerson}}</div>
+      <div class="signature-title">{{proposal.preparedFor.contactTitle}}</div>
       <div class="signature-date">Date: ________________</div>
     </div>
     
     <div class="signature-block">
       <div class="signature-line"></div>
-      <div class="signature-name">{{company.representative.name}}</div>
-      <div class="signature-title">{{company.representative.title}}</div>
+      <div class="signature-name">{{nextSteps.contactInfo.primaryContact}}</div>
+      <div class="signature-title">{{nextSteps.contactInfo.title}}</div>
       <div class="signature-date">Date: ________________</div>
     </div>
   </div>
   
   <div class="footer">
-    <p>{{footer}}</p>
+    <p>{{proposal.preparedBy.company}} | {{proposal.preparedBy.address}}</p>
+    <p>{{proposal.preparedBy.phone}} | {{proposal.preparedBy.email}} | {{proposal.preparedBy.website}}</p>
   </div>
 </div>
 </body>

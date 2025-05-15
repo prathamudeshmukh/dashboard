@@ -3,8 +3,8 @@
 import { format } from 'date-fns';
 import { Mail } from 'lucide-react';
 
-import { Footer } from '@/templates/Footer';
-import { Navbar } from '@/templates/Navbar';
+import { Footer } from '@/features/landing/Footer';
+import { Navbar } from '@/features/landing/Navbar';
 
 type Section = {
   id: string;

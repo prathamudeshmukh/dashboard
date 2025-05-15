@@ -3,11 +3,20 @@ import '@/styles/global.css';
 import { enUS, frFR } from '@clerk/localizations';
 import { ClerkProvider } from '@clerk/nextjs';
 import type { Metadata } from 'next';
+import { Inter_Tight } from 'next/font/google';
 import { NextIntlClientProvider, useMessages } from 'next-intl';
 import { unstable_setRequestLocale } from 'next-intl/server';
 
 import { Toaster } from '@/components/ui/sonner';
 import { AllLocales, AppConfig } from '@/utils/AppConfig';
+
+// Import Inter Tight font
+const interTight = Inter_Tight({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter-tight',
+  weight: ['300', '400', '500', '600', '700'],
+});
 
 export const metadata: Metadata = {
   icons: [
@@ -71,7 +80,7 @@ export default function RootLayout(props: {
   // which dynamically adds a `style` attribute to the body tag.
   return (
     <html lang={props.params.locale} suppressHydrationWarning>
-      <body className="bg-background text-foreground antialiased" suppressHydrationWarning>
+      <body className={`${interTight.variable} font-sans`} suppressHydrationWarning>
         {/* PRO: Dark mode support for Shadcn UI */}
         <ClerkProvider
           localization={clerkLocale}

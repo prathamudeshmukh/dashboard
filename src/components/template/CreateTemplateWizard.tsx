@@ -23,7 +23,7 @@ export default function CreateTemplateWizard() {
   const router = useRouter();
   const [saveStatus, setSaveStatus] = useState<SaveStatusEnum>(SaveStatusEnum.IDLE);
   const [currentStep, setCurrentStep] = useState(0);
-  const { creationMethod, setCreationMethod, selectedTemplate, templateName, templateDescription, htmlContent, htmlStyle, handlebarsCode, activeTab, handlebarsJson, setTemplateName, setTemplateDescription, resetTemplate } = useTemplateStore();
+  const { creationMethod, selectedTemplate, templateName, templateDescription, htmlContent, htmlStyle, handlebarsCode, activeTab, handlebarsJson, resetTemplate } = useTemplateStore();
   const handleNext = () => setCurrentStep(prev => prev + 1);
   const handlePrevious = () => setCurrentStep(prev => prev - 1);
 
@@ -42,25 +42,15 @@ export default function CreateTemplateWizard() {
     switch (currentStep) {
       case 0:
         return (
-          <TemplateCreationMethodSelector
-            creationMethod={creationMethod}
-            setCreationMethod={setCreationMethod}
-          />
+          <TemplateCreationMethodSelector />
         );
       case 1:
         return (
-          <TemplateSourceStep
-            creationMethod={creationMethod!}
-          />
+          <TemplateSourceStep />
         );
       case 2:
         return (
-          <TemplateDetailsStep
-            templateName={templateName}
-            setTemplateName={setTemplateName}
-            templateDescription={templateDescription}
-            setTemplateDescription={setTemplateDescription}
-          />
+          <TemplateDetailsStep />
         );
       case 3:
         return (

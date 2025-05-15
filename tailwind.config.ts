@@ -5,7 +5,17 @@ const config = {
   darkMode: ['class'],
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
   theme: {
+    container: {
+      center: true,
+      padding: '2rem',
+      screens: {
+        '2xl': '1400px',
+      },
+    },
     extend: {
+      fontFamily: {
+        sans: ['var(--font-inter-tight)'],
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
@@ -13,8 +23,9 @@ const config = {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         primary: {
-          DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))',
+          DEFAULT: '#161676',
+          foreground: '#FFFFFF',
+          hover: '#161676',
         },
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
@@ -46,6 +57,14 @@ const config = {
           3: 'hsl(var(--chart-3))',
           4: 'hsl(var(--chart-4))',
           5: 'hsl(var(--chart-5))',
+        },
+        // Custom colors from Templify landing page
+        templify: {
+          blue: '#05b7fe',
+          primary: '#161676',
+          navy: '#151d50',
+          lightgray: '#eefaff',
+          gray: '#f5f5f5',
         },
       },
       borderRadius: {

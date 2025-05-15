@@ -17,7 +17,6 @@ import { DEFAULT_TEMPLATE } from './handlebars-editor/constants';
 import { EditorToolbar } from './handlebars-editor/EditorToolbar';
 import { JsonEditor } from './handlebars-editor/JsonEditor';
 import { PreviewPanel } from './handlebars-editor/PreviewPanel';
-import { StatusBar } from './handlebars-editor/StatusBar';
 import { TemplateEditor } from './handlebars-editor/TemplateEditor';
 
 export default function HandlebarsEditor() {
@@ -154,7 +153,7 @@ export default function HandlebarsEditor() {
             {/* Left section (Editors) */}
             <div className="flex w-3/5 flex-col border-r border-gray-300">
               {/* Template Editor (top half) */}
-              <div className="h-1/2 border-b border-gray-300">
+              <div className="h-1/2">
                 <TemplateEditor
                   code={handlebarsCode}
                   onChange={setHandlebarsCode}
@@ -175,7 +174,7 @@ export default function HandlebarsEditor() {
             </div>
 
             {/* Right section (Preview) */}
-            <div className="w-2/5">
+            <div className="h-[770px] w-2/4">
               <PreviewPanel
                 preview={handlebarsPreview}
                 isLoading={isHandlebarsLoading}
@@ -253,9 +252,6 @@ export default function HandlebarsEditor() {
 
         {/* Main Content based on active tab */}
         <div className="flex-1">{renderTabContent()}</div>
-
-        {/* Status Bar */}
-        <StatusBar />
       </div>
     </>
   );

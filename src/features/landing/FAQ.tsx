@@ -1,10 +1,9 @@
 import { FileText } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
+import { FAQItem } from '@/components/landing/FAQItem';
+import { Section } from '@/components/landing/Section';
 import { Accordion } from '@/components/ui/accordion';
-import { Button } from '@/components/ui/button';
-import { FAQItem } from '@/features/landing/FAQItem';
-import { Section } from '@/features/landing/Section';
 
 export const FAQ = () => {
   const t = useTranslations('FAQ');
@@ -61,11 +60,6 @@ export const FAQ = () => {
                 <FAQItem key={index} question={faq.question} answer={faq.answer} />
               ))}
             </Accordion>
-            <div className="mt-8 flex justify-center">
-              <Button size="lg" className="gap-1">
-                {t('cta')}
-              </Button>
-            </div>
           </div>
         </div>
       </Section>
