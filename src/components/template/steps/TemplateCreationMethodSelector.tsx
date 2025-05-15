@@ -1,15 +1,18 @@
 'use client';
 
 import { FileText, Upload } from 'lucide-react';
+import { useEffect } from 'react';
 
 import { Card, CardContent, CardTitle } from '@/components/ui/card';
+import { useTemplateStore } from '@/libs/store/TemplateStore';
 import { CreationMethodEnum } from '@/types/Enum';
-import type { TemplateCreationMethodSelectorProp } from '@/types/Template';
 
-export default function TemplateCreationMethodSelector({
-  creationMethod,
-  setCreationMethod,
-}: TemplateCreationMethodSelectorProp) {
+export default function TemplateCreationMethodSelector() {
+  const { creationMethod, setCreationMethod, resetTemplate } = useTemplateStore();
+
+  useEffect(() => {
+    resetTemplate();
+  }, []);
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
       <Card
