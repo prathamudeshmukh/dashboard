@@ -94,7 +94,7 @@ export default function Pricing() {
           <div className="inline-flex items-center rounded-full p-1">
             <Button
               variant="ghost"
-              className={`rounded-full px-6 py-2 font-medium ${pricingPeriod === 'monthly' ? 'bg-transparent' : ' bg-templify-gray opacity-50'
+              className={`rounded-full px-6 py-2 font-medium ${pricingPeriod === 'monthly' ? 'bg-templify-gray' : ' bg-transparent'
               }`}
               onClick={() => setPricingPeriod('monthly')}
             >
@@ -102,7 +102,7 @@ export default function Pricing() {
             </Button>
             <Button
               variant="ghost"
-              className={`rounded-full px-6 py-2 font-medium ${pricingPeriod === 'yearly' ? 'bg-transparent' : ' bg-templify-gray opacity-50'
+              className={`rounded-full px-6 py-2 font-medium ${pricingPeriod === 'yearly' ? 'bg-templify-gray' : ' bg-transparent'
               }`}
               onClick={() => setPricingPeriod('yearly')}
             >

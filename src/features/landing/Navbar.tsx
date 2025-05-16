@@ -9,7 +9,7 @@ import { CenteredMenu } from '@/components/landing/CenteredMenu';
 import { Button } from '@/components/ui/button';
 import type { NavbarProps } from '@/types/Navbar';
 
-import { Logo } from './Logo';
+import { Logo } from '../../components/landing/Logo';
 
 export const Navbar = ({ menuList, basePath = ' ' }: NavbarProps) => {
   const { isSignedIn } = useUser();

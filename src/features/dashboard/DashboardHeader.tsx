@@ -4,6 +4,7 @@ import { UserButton } from '@clerk/nextjs';
 import Link from 'next/link';
 
 import { ActiveLink } from '@/components/ActiveLink';
+import { Logo } from '@/components/landing/Logo';
 import { ToggleMenuButton } from '@/components/ToggleMenuButton';
 import {
   DropdownMenu,
@@ -11,7 +12,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Logo } from '@/features/landing/Logo';
 
 export const DashboardHeader = (props: {
   menu: {

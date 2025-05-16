@@ -86,7 +86,7 @@ export default function Steps() {
   };
 
   return (
-    <section id="how-it-works" className="bg-primary py-20 text-white">
+    <section id="how-it-works" className="bg-primary py-20 text-secondary">
       <div className="container mx-auto px-4">
         <div className="mb-12 flex items-start justify-between">
           <h2 className="text-4xl font-bold tracking-tight md:text-5xl">
@@ -94,7 +94,7 @@ export default function Steps() {
             <br />
             5 Simple Steps
           </h2>
-          <Button className="mt-8 flex items-end rounded-full bg-white text-primary hover:bg-white/90">Build your template</Button>
+          <Button variant="outline" className="mt-8 flex items-end rounded-full border-black bg-secondary text-sm text-primary hover:bg-secondary">Build your template</Button>
         </div>
 
         <div className="mt-16 grid max-w-6xl gap-8 md:grid-cols-2">

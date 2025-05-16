@@ -99,3 +99,7 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.hero-radial-bg {
+  background: linear-gradient(90deg, #e3bcff, #d2beff, #c0c1ff, #abc3ff, #95c5ff, #7ec7ff, #67c9fe);
+}
