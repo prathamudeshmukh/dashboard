@@ -32,7 +32,7 @@ export const PricingCard: React.FC<PricingCardProps> = ({ plan }) => {
       }`}
     >
       <div className="p-8">
-        <h3 className="text-xl font-bold text-[#161676]">{name}</h3>
+        <h3 className="text-xl font-bold text-primary">{name}</h3>
         <div className="mt-4 flex items-baseline">
           <span className="text-5xl font-bold">
             Rs.
@@ -52,8 +52,9 @@ export const PricingCard: React.FC<PricingCardProps> = ({ plan }) => {
             ))}
           </div>
         </div>
-
-        <Button className="mt-8 w-full rounded-full bg-[#161676] hover:bg-[#161676]">{cta}</Button>
+        <div className="flex items-center justify-center">
+          <Button className="mt-8 rounded-full">{cta}</Button>
+        </div>
       </div>
     </Card>
   );

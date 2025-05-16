@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { Logo } from './Logo';
+import { LogoFooter } from '../../components/landing/Logo';
 
 export const Footer = () => {
   return (
@@ -10,7 +10,7 @@ export const Footer = () => {
         <div className="flex flex-col items-center justify-between space-y-6 md:flex-row md:space-y-0">
           {/* Logo */}
           <div className="flex items-center">
-            <Logo />
+            <LogoFooter />
           </div>
 
           {/* Center Navigation */}

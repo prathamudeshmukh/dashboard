@@ -52,6 +52,7 @@ export const FAQ = () => {
       <Section
         title={t('title')}
         icon={FileText}
+        className="bg-templify-gray"
       >
         <div className="container px-4 md:px-6">
           <div className="mx-auto mt-8 max-w-3xl space-y-4">

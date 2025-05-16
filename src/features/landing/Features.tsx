@@ -45,8 +45,8 @@ export default function Features() {
   return (
     <section id="features" className="bg-white py-20">
       <div className="container mx-auto px-4">
-        <h2 className="mb-4 text-center text-4xl font-bold md:text-5xl">{t('title')}</h2>
-        <p className="mx-auto mb-12 max-w-3xl text-center text-gray-600">{t('subtitle')}</p>
+        <h2 className="text-center text-4xl font-bold md:text-5xl">{t('title')}</h2>
+        <p className="mx-auto mb-6 mt-4 max-w-3xl text-center text-gray-600">{t('subtitle')}</p>
 
         <div className="mb-12 flex justify-center">
           <Button className="rounded-full bg-primary hover:bg-primary">{t('cta')}</Button>
@@ -54,7 +54,7 @@ export default function Features() {
 
         <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-2">
           <div>
-            <Accordion type="single" collapsible className="space-y-6">
+            <Accordion type="single" collapsible>
               {features.map(feature => (
                 <FeatureAccordionItem
                   key={feature.id}
