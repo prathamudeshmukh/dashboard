@@ -26,11 +26,11 @@ export const Section = (props: {
           )}
 
           {props.title && (
-            <div className="mt-1 text-3xl font-bold">{props.title}</div>
+            <div className="mt-1 text-6xl font-semibold">{props.title}</div>
           )}
 
           {props.description && (
-            <div className="mt-2 text-lg text-muted-foreground">
+            <div className="mt-2 text-2xl text-muted-foreground">
               {props.description}
             </div>
           )}

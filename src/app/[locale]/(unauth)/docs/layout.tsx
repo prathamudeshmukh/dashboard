@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Footer } from '@/templates/Footer';
+import { Footer } from '@/features/landing/Footer';
 
 const navItems = [
   {
