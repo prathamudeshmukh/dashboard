@@ -82,8 +82,8 @@ const IndexPage = (props: { params: { locale: string } }) => {
         <Pricing />
         <FAQ />
         <CTA />
-        <Footer />
       </main>
+      <Footer />
     </div>
   );
 };

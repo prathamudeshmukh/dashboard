@@ -84,7 +84,7 @@ export default function Pricing() {
   return (
     <section id="pricing" className="py-20">
       <div className="container mx-auto px-4">
-        <h2 className="mb-8 text-center text-4xl font-bold md:text-5xl">
+        <h2 className="mb-8 text-center text-4xl font-semibold md:text-5xl lg:text-6xl">
           Flexible Plans for
           <br />
           Every Need
@@ -94,7 +94,7 @@ export default function Pricing() {
           <div className="inline-flex items-center rounded-full p-1">
             <Button
               variant="ghost"
-              className={`rounded-full px-6 py-2 font-medium ${pricingPeriod === 'monthly' ? 'bg-templify-gray' : ' bg-transparent'
+              className={`rounded-full px-6 py-2 text-2xl font-semibold ${pricingPeriod === 'monthly' ? 'bg-templify-gray' : ' bg-transparent'
               }`}
               onClick={() => setPricingPeriod('monthly')}
             >
@@ -102,7 +102,7 @@ export default function Pricing() {
             </Button>
             <Button
               variant="ghost"
-              className={`rounded-full px-6 py-2 font-medium ${pricingPeriod === 'yearly' ? 'bg-templify-gray' : ' bg-transparent'
+              className={`rounded-full px-6 py-2 text-2xl font-semibold ${pricingPeriod === 'yearly' ? 'bg-templify-gray' : ' bg-transparent'
               }`}
               onClick={() => setPricingPeriod('yearly')}
             >

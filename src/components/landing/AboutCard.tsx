@@ -12,8 +12,8 @@ export const AboutCard = ({ icon, title, description }: AboutCardProps) => {
       <div className="mb-4 flex size-16 items-center justify-center rounded-full bg-blue-50">
         {icon}
       </div>
-      <h3 className="mb-2 text-xl font-bold">{title}</h3>
-      <p className="text-gray-600">{description}</p>
+      <h3 className="mb-2 text-2xl font-semibold">{title}</h3>
+      <p className="text-base font-normal text-gray-600">{description}</p>
     </div>
   );
 };

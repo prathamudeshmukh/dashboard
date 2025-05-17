@@ -65,6 +65,7 @@ const config = {
           navy: '#151d50',
           lightgray: '#eefaff',
           gray: '#f5f5f5',
+          cardBg: '#0F0F64',
         },
       },
       borderRadius: {

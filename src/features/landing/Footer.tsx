@@ -14,16 +14,16 @@ export const Footer = () => {
           </div>
 
           {/* Center Navigation */}
-          <div className="flex flex-wrap items-center justify-center gap-6 text-sm font-medium">
+          <div className="ml-28 items-center space-x-8 text-xl font-normal">
             <Link href="#about" className="hover:text-white/80">About</Link>
             <Link href="#how-it-works" className="hover:text-white/80">How it works</Link>
             <Link href="#features" className="hover:text-white/80">Features</Link>
             <Link href="#pricing" className="hover:text-white/80">Pricing</Link>
-            <Link href="#other" className="hover:text-white/80">Other</Link>
+            <Link href="/docs" className="hover:text-white/80">Docs</Link>
           </div>
 
           {/* Copyright */}
-          <div className="text-center text-sm text-white md:text-right">
+          <div className="text-xl font-normal">
             © 2025 Templify. All rights reserved
           </div>
         </div>
@@ -31,7 +31,7 @@ export const Footer = () => {
       </div>
       {/* Bottom Links */}
       <div className="bg-white py-4">
-        <div className="mr-12 flex flex-wrap items-center justify-center gap-2 text-sm font-medium text-primary">
+        <div className="flex flex-wrap items-center justify-center gap-2 text-xl font-normal text-primary">
           <Link href="#" className="hover:underline">Privacy Policy</Link>
           <span className="text-black">|</span>
           <Link href="#" className="hover:underline">Terms of service</Link>

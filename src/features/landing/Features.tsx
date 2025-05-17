@@ -45,11 +45,11 @@ export default function Features() {
   return (
     <section id="features" className="bg-white py-20">
       <div className="container mx-auto px-4">
-        <h2 className="text-center text-4xl font-bold md:text-5xl">{t('title')}</h2>
-        <p className="mx-auto mb-6 mt-4 max-w-3xl text-center text-gray-600">{t('subtitle')}</p>
+        <h2 className="text-center text-4xl font-bold md:text-5xl lg:text-6xl lg:font-semibold">{t('title')}</h2>
+        <p className="mx-auto mb-6 mt-4 max-w-3xl text-center font-normal text-gray-600">{t('subtitle')}</p>
 
         <div className="mb-12 flex justify-center">
-          <Button className="rounded-full bg-primary hover:bg-primary">{t('cta')}</Button>
+          <Button className="rounded-full bg-primary text-lg font-normal hover:bg-primary">{t('cta')}</Button>
         </div>
 
         <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-2">
