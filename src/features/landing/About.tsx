@@ -10,7 +10,7 @@ export default function About() {
   return (
     <section id="about" className="py-20">
       <div className="container mx-auto px-4">
-        <h2 className="mb-16 text-center text-4xl font-bold md:text-5xl">
+        <h2 className="mb-16 text-center text-4xl font-bold md:text-5xl lg:text-6xl lg:font-semibold">
           Designed to Do More,
           <br />
           Differently

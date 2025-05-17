@@ -29,22 +29,22 @@ export const Navbar = ({ menuList, basePath = ' ' }: NavbarProps) => {
                   ? (
                       <div className="flex items-center space-x-4">
                         <SignOutButton>
-                          <Button variant="outline" className="rounded-full border-black text-sm">{t('sign_out')}</Button>
+                          <Button variant="outline" className="rounded-full border-black text-lg">{t('sign_out')}</Button>
                         </SignOutButton>
                         <Link href="/dashboard">
-                          <Button className="rounded-full bg-primary text-sm hover:bg-primary">{t('dashboard')}</Button>
+                          <Button className="rounded-full bg-primary text-lg hover:bg-primary">{t('dashboard')}</Button>
                         </Link>
                       </div>
                     )
                   : (
                       <div className="flex items-center space-x-4">
                         <SignUpButton mode="modal" forceRedirectUrl="/dashboard">
-                          <Button variant="outline" className="rounded-full border-black text-sm ">
+                          <Button variant="outline" className="rounded-full border-black text-lg ">
                             {t('sign_up')}
                           </Button>
                         </SignUpButton>
                         <Link href="/sign-in">
-                          <Button className="rounded-full bg-primary text-sm hover:bg-primary">
+                          <Button className="rounded-full bg-primary text-lg hover:bg-primary">
                             Start free trial
                           </Button>
                         </Link>
@@ -60,7 +60,7 @@ export const Navbar = ({ menuList, basePath = ' ' }: NavbarProps) => {
                 return (
                   <li key={index}>
                     <Link
-                      className="text-sm font-normal text-black hover:text-primary"
+                      className="text-lg font-normal text-black hover:text-primary"
                       href={linkHref}
                     >
                       {item.name}

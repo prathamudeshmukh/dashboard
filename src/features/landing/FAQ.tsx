@@ -50,7 +50,15 @@ export const FAQ = () => {
   return (
     <div id="faq">
       <Section
-        title={t('title')}
+        title={t.rich('title', {
+          important: chunks => (
+            <>
+              <br />
+              {' '}
+              {chunks}
+            </>
+          ),
+        })}
         icon={FileText}
         className="bg-templify-gray"
       >

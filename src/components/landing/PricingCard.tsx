@@ -1,4 +1,4 @@
-import { Check } from 'lucide-react';
+import { Icon } from '@iconify-icon/react/dist/iconify.mjs';
 import React from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -28,32 +28,32 @@ export const PricingCard: React.FC<PricingCardProps> = ({ plan }) => {
     <Card
       className={`overflow-hidden ${isPopular
         ? 'relative z-10 -mt-4 rounded-3xl border-0 bg-templify-lightgray'
-        : 'h-96 rounded-3xl border-0 bg-templify-lightgray'
+        : 'h-[480px] rounded-3xl border-0 bg-templify-lightgray'
       }`}
     >
       <div className="p-8">
-        <h3 className="text-xl font-bold text-primary">{name}</h3>
+        <h3 className="text-2xl font-semibold text-primary">{name}</h3>
         <div className="mt-4 flex items-baseline">
-          <span className="text-5xl font-bold">
+          <span className="text-6xl font-semibold text-primary">
             Rs.
             {price}
           </span>
-          <span className="ml-2 text-gray-600">/Monthly</span>
+          <span className="ml-2 text-base font-normal text-gray-600">/Monthly</span>
         </div>
 
         <div className="mt-8">
-          <h4 className="mb-4 text-sm font-medium">What we cover</h4>
+          <h4 className="mb-4 text-xl font-semibold text-gray-700">What we cover</h4>
           <div className="space-y-4">
             {features.map((feature, index) => (
               <div key={index} className="flex items-start gap-3">
-                <Check className="mt-0.5 size-5 shrink-0 text-green-600" />
-                <p className="text-sm text-gray-600">{feature.text}</p>
+                <Icon icon="teenyicons:tick-circle-outline" width="24" height="24" />
+                <p className="text-base font-normal text-gray-600">{feature.text}</p>
               </div>
             ))}
           </div>
         </div>
         <div className="flex items-center justify-center">
-          <Button className="mt-8 rounded-full">{cta}</Button>
+          <Button className="mt-8 rounded-full text-xl font-normal">{cta}</Button>
         </div>
       </div>
     </Card>

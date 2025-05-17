@@ -134,7 +134,7 @@
     "next_renew_date": "Your subscription renews on {date}"
   },
   "FAQ": {
-    "title": "Frequently asked questions",
+    "title": "Got Questions? <important>We’ve Got Answers</important>",
     "subtitle": "Support",
     "description": "Everything you need to know about Templify",
     "question_1": "What is Templify?",
