@@ -83,7 +83,7 @@ export default function Pricing() {
 
   return (
     <section id="pricing" className="py-20">
-      <div className="container mx-auto px-4">
+      <div className="container">
         <h2 className="mb-8 text-center text-4xl font-semibold md:text-5xl lg:text-6xl">
           Flexible Plans for
           <br />
@@ -111,7 +111,7 @@ export default function Pricing() {
           </div>
         </div>
 
-        <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-3">
+        <div className="mx-auto grid gap-8 md:grid-cols-3">
           {pricingPlans[pricingPeriod].map(plan => (
             <PricingCard key={plan.id} plan={plan as PricingPlan} />
           ))}

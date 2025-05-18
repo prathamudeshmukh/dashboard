@@ -44,7 +44,7 @@ export default function Features() {
 
   return (
     <section id="features" className="bg-white py-20">
-      <div className="container mx-auto px-4">
+      <div className="container">
         <h2 className="text-center text-4xl font-bold md:text-5xl lg:text-6xl lg:font-semibold">{t('title')}</h2>
         <p className="mx-auto mb-6 mt-4 max-w-3xl text-center font-normal text-gray-600">{t('subtitle')}</p>
 
@@ -52,7 +52,7 @@ export default function Features() {
           <Button className="rounded-full bg-primary text-lg font-normal hover:bg-primary">{t('cta')}</Button>
         </div>
 
-        <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-2">
+        <div className="mx-auto grid gap-10 md:grid-cols-2">
           <div>
             <Accordion type="single" collapsible>
               {features.map(feature => (

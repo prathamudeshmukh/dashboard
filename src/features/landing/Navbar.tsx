@@ -20,7 +20,7 @@ export const Navbar = ({ menuList, basePath = ' ' }: NavbarProps) => {
   return (
     <>
       <header className="sticky top-0 z-40 w-full border-b bg-primary-foreground py-4">
-        <section className="container mx-auto px-4">
+        <section className="container">
           <CenteredMenu
             logo={<Logo />}
             rightMenu={(
