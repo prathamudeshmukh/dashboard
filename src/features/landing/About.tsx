@@ -16,7 +16,7 @@ export default function About() {
           Differently
         </h2>
 
-        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
+        <div className="mx-auto grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
           <AboutCard
             icon={<Icon icon="material-symbols-light:lock-outline" width="50" height="50" className="bg-templify-lightgray" />}
             title={t('feature1')}
