@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-import { UpsertTemplate } from '@/libs/actions/templates';
+import { PublishTemplateToProd, UpsertTemplate } from '@/libs/actions/templates';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 import { CreationMethodEnum, SaveStatusEnum } from '@/types/Enum';
 import { TemplateType } from '@/types/Template';
@@ -86,7 +86,7 @@ export default function CreateTemplateWizard() {
   async function handleTemplateSave() {
     setSaveStatus(SaveStatusEnum.SAVING);
     try {
-      await UpsertTemplate({
+      const response = await UpsertTemplate({
         description: templateDescription,
         email: user?.emailAddresses[0]?.emailAddress,
         templateName,
@@ -97,6 +97,7 @@ export default function CreateTemplateWizard() {
         creationMethod,
         templateGeneratedFrom: creationMethod === CreationMethodEnum.TEMPLATE_GALLERY ? selectedTemplate : null,
       });
+      await PublishTemplateToProd(response.templateId as string);
       toast.success('Template Saved Successfully');
       setSaveStatus(SaveStatusEnum.SUCCESS);
       resetTemplate();

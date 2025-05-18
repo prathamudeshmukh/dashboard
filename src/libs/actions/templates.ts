@@ -28,7 +28,7 @@ export async function UpsertTemplate({
   }
 
   try {
-    await db.insert(templates)
+    const response = await db.insert(templates)
       .values({
         description,
         email,
@@ -53,10 +53,15 @@ export async function UpsertTemplate({
           updatedAt: sql`now()`,
         },
         where: eq(templates.environment, 'dev'),
-      });
+      }).returning();
 
+    if (!response) {
+      throw new Error(`Error in Saving Template`);
+    }
+    const tempID = response[0]?.templateId;
     return {
       success: true,
+      templateId: tempID,
       message: templateId ? 'Template updated successfully' : 'Template saved successfully',
     };
   } catch (error: any) {
