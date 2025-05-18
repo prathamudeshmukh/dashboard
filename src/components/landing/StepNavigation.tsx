@@ -8,7 +8,7 @@ type StepNavigationProps = {
 
 export default function StepNavigation({ steps, activeStep, onStepClick }: StepNavigationProps) {
   return (
-    <div className="space-y-8 md:sticky md:top-24 md:self-start">
+    <div className="space-y-8 md:sticky md:top-72 md:self-start">
       {steps.map(step => (
         <button
           key={step.id}

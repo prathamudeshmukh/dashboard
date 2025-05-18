@@ -11,7 +11,9 @@ export default function Steps() {
   const t = useTranslations('Steps');
   const [activeStep, setActiveStep] = useState(t('step1'));
   const stepRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const sectionRef = useRef<HTMLElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   const steps = [
     {
@@ -86,33 +88,40 @@ export default function Steps() {
   };
 
   return (
-    <section id="how-it-works" className="bg-primary py-20 text-secondary">
-      <div className="container mx-auto  px-4 md:px-8 lg:px-32">
-        <div className="mb-12 flex flex-col items-start justify-between md:flex-row">
-          <h2 className="text-4xl font-semibold tracking-tight xl:text-6xl">
-            How Templify Works in
-            <br />
-            5 Simple Steps
-          </h2>
-          <Button variant="outline" className="mt-8 flex flex-col items-end rounded-full border-black bg-secondary text-lg font-normal text-primary hover:bg-secondary">Build your template</Button>
-        </div>
+    <section id="how-it-works" ref={sectionRef} className="relative bg-primary py-20 text-secondary">
+      <div className="container mx-auto  px-4">
+        <div className="mx-auto max-w-6xl">
+          <div className="z-[5] py-8 md:sticky md:top-16">
+            <div className="grid grid-cols-1 md:grid-cols-[40%_60%]">
+              <div className="flex items-center justify-between bg-primary">
+                <h2 className="text-left text-4xl font-semibold tracking-tight xl:text-6xl">
+                  How Templify Works in
+                  <br className="hidden md:block" />
+                  {' '}
+                  5 Simple Steps
+                </h2>
+              </div>
+              <div className="mt-6 flex justify-end md:mt-0">
+                <Button variant="outline" className="mt-8 flex flex-col items-end rounded-full border-black bg-secondary text-lg font-normal text-primary hover:bg-secondary">Build your template</Button>
+              </div>
+            </div>
+          </div>
 
-        <div className="mt-16 grid gap-32 md:grid-cols-2">
-
-          <StepNavigation steps={steps} activeStep={activeStep} onStepClick={handleStepClick} />
-
-          <div className="space-y-32">
-            {steps.map(step => (
-              <StepContent
-                key={step.id}
-                id={step.id}
-                title={step.title}
-                description={step.description}
-                image={step.image}
-                imageAlt={step.imageAlt}
-                innerRef={el => (stepRefs.current[step.id] = el)}
-              />
-            ))}
+          <div ref={contentRef} className="mt-16 grid grid-cols-1 gap-8 pt-16 md:grid-cols-[40%_60%]">
+            <StepNavigation steps={steps} activeStep={activeStep} onStepClick={handleStepClick} />
+            <div className="space-y-32">
+              {steps.map(step => (
+                <StepContent
+                  key={step.id}
+                  id={step.id}
+                  title={step.title}
+                  description={step.description}
+                  image={step.image}
+                  imageAlt={step.imageAlt}
+                  innerRef={el => (stepRefs.current[step.id] = el)}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
