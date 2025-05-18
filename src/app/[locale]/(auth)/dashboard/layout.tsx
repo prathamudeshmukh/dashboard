@@ -21,7 +21,7 @@ export default function DashboardLayout(props: { children: React.ReactNode }) {
   return (
     <>
       <div className="shadow-md">
-        <div className="mx-auto flex max-w-screen-xl items-center justify-between px-3 py-4">
+        <div className="mx-auto flex max-w-screen-xl items-center justify-between px-3 py-6">
           <DashboardHeader
             menu={[
               {

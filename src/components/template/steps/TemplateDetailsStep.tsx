@@ -10,13 +10,13 @@ export default function TemplateDetailsStep() {
   return (
     <div className="grid gap-6">
       <div className="grid gap-2">
-        <Label>Name</Label>
-        <Input value={templateName} onChange={e => setTemplateName(e.target.value)} />
+        <Label className="text-base font-normal">Name</Label>
+        <Input className="text-base font-normal" value={templateName} onChange={e => setTemplateName(e.target.value)} />
       </div>
 
       <div className="grid gap-2">
-        <Label>Description</Label>
-        <TextArea value={templateDescription} onChange={e => setTemplateDescription(e.target.value)} />
+        <Label className="text-base font-normal">Description</Label>
+        <TextArea className="text-base font-normal" value={templateDescription} onChange={e => setTemplateDescription(e.target.value)} />
       </div>
     </div>
   );
