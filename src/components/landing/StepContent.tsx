@@ -27,7 +27,7 @@ export default function StepContent({
         <div
           id={`step-${id}`}
           ref={innerRef}
-          className="w-full scroll-mt-72 rounded-xl bg-templify-cardBg p-8"
+          className="w-full scroll-mt-24 rounded-xl bg-templify-cardBg p-6"
         >
           <div className="flex flex-col justify-between gap-8 md:flex-row">
             {/* Left column: Title + Try Now button */}
