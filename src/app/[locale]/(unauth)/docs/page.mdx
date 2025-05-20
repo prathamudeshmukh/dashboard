@@ -24,7 +24,7 @@ To obtain your API key, sign in to your Templify account and navigate to the **A
 
 **Endpoint:**
 ```
-POST /api/convert/TEMPLATE_ID_HERE
+POST /convert/TEMPLATE_ID_HERE
 ```
 
 **Headers:**
@@ -60,7 +60,7 @@ client_secret: CLIENT_SECRET_HERE
 
 **cURL Example:**
 ```
-curl --location 'https://templify.cloud/api/convert/YOUR_TEMPLATE_ID_HERE' \
+curl --location https://api.templify.cloud/convert/YOUR_TEMPLATE_ID_HERE' \
 --header 'client_id: USER_ID_HERE' \
 --header 'client_secret: CLIENT_SECRET_HERE' \
 --header 'Content-Type: application/json' \
