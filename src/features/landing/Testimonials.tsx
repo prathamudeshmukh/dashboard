@@ -1,7 +1,7 @@
 import { Star } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
-import { Section } from '@/features/landing/Section';
+import { Section } from '@/components/landing/Section';
 
 export const Testimonials = () => {
   const t = useTranslations('Reviews');
