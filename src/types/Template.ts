@@ -95,3 +95,17 @@ export type TemplateGalleryProps = {
   handlebarContent: string | null;
   sampleData: unknown;
 };
+
+export type TemplateSuccessData = {
+  templateId: string;
+  templateName: string;
+  templateSampleData?: JsonValue;
+};
+
+export type SuccessViewProps = {
+  templateId: string;
+  templateName: string;
+  templateSampleData?: string;
+  onViewDashboard: () => void;
+  onCreateAnother: () => void;
+};

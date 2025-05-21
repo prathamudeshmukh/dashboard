@@ -14,6 +14,7 @@ export type MonacoEditorProps = {
   width?: string | number;
   className?: string;
   loading?: React.ReactNode;
+  readonly?: boolean;
 };
 
 export default function MonacoEditor({
@@ -25,6 +26,7 @@ export default function MonacoEditor({
   width = '100%',
   className = '',
   loading,
+  readonly,
 }: MonacoEditorProps) {
   const editorRef = useRef<any>(null);
 
@@ -72,6 +74,7 @@ export default function MonacoEditor({
           wordWrap: 'on',
           formatOnPaste: true,
           formatOnType: true,
+          readOnly: readonly,
         }}
         onChange={handleEditorChange}
         onMount={handleEditorDidMount}
