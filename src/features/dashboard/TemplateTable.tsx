@@ -214,11 +214,11 @@ const TemplateTable = () => {
       {templateData.length === 0 && !searchTriggered && page === 1
         ? (
             <div className="flex h-96 flex-col items-center justify-center text-center">
-              <h2 className="mb-2 text-2xl font-semibold">Welcome to Templify</h2>
-              <p className="mb-4 text-gray-600">
+              <h2 className="mb-2 text-6xl font-semibold">Welcome to Templify</h2>
+              <p className="mb-4 text-base font-normal text-gray-600">
                 Your one-stop solution to your dynamic PDF generation needs.
               </p>
-              <Button onClick={handleCreateTemplate} className="px-6 py-2">
+              <Button onClick={handleCreateTemplate} className="rounded-full bg-primary text-lg">
                 Create your first template
               </Button>
             </div>
@@ -227,7 +227,7 @@ const TemplateTable = () => {
             <>
               <div className="mt-5 flex items-end justify-end">
                 <Link href="/dashboard/create-template">
-                  <Button>
+                  <Button className="rounded-full bg-primary text-lg">
                     <Plus />
                     {' '}
                     Create Template

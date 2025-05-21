@@ -144,7 +144,7 @@ export default function HTMLBuilder() {
   return (
     <div className="flex w-full flex-col space-y-4">
       {templateId && (
-        <h2 className="text-xl font-semibold">
+        <h2 className="text-2xl font-semibold">
           Edit Template :
           {' '}
           <span className="text-primary">{templateName}</span>
@@ -177,7 +177,7 @@ export default function HTMLBuilder() {
       </div>
       {templateId && (
         <div className="flex justify-end">
-          <Button onClick={handleSave} disabled={saveStatus === SaveStatusEnum.SAVING}>
+          <Button className="rounded-full text-lg" onClick={handleSave} disabled={saveStatus === SaveStatusEnum.SAVING}>
             {saveStatus === SaveStatusEnum.SAVING ? 'Saving...' : 'Update'}
           </Button>
         </div>

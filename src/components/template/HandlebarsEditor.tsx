@@ -233,12 +233,12 @@ export default function HandlebarsEditor() {
     <>
       {templateId && (
         <div className="flex items-center justify-between px-4 py-2">
-          <h2 className="text-xl font-semibold">
+          <h2 className="text-2xl font-semibold">
             Edit Template:
             {' '}
             {templateName || 'Unnamed'}
           </h2>
-          <Button onClick={handleSave} disabled={saveStatus === SaveStatusEnum.SAVING}>
+          <Button className="rounded-full text-lg" onClick={handleSave} disabled={saveStatus === SaveStatusEnum.SAVING}>
             {saveStatus === SaveStatusEnum.SAVING ? 'Saving...' : 'Update'}
           </Button>
         </div>

@@ -96,7 +96,7 @@ export default function TemplateGallery() {
             <Badge
               key={category}
               variant={selectedCategory === category ? 'default' : 'outline'}
-              className="cursor-pointer"
+              className="cursor-pointer text-base font-normal"
               onClick={() => setSelectedCategory(category as string)}
             >
               {selectedCategory === category && <Check className="mr-1 size-3" />}
@@ -130,16 +130,16 @@ export default function TemplateGallery() {
                         <div className="flex size-8 items-center justify-center rounded-full">
                           <DynamicLucideIcon name={template.icon as keyof typeof Icons} color={`${template.color}`} />
                         </div>
-                        <CardTitle className="text-base">{template.title}</CardTitle>
+                        <CardTitle className="text-xl font-medium">{template.title}</CardTitle>
                       </div>
                     </CardHeader>
 
                     <CardContent className="py-2">
-                      <p className="mb-2 text-sm text-muted-foreground">{template.description}</p>
+                      <p className="mb-2 text-base font-normal text-muted-foreground">{template.description}</p>
                     </CardContent>
 
                     <CardFooter className="pt-0">
-                      <Button variant={selectedTemplate === template.id ? 'default' : 'outline'} size="sm" className="w-full">
+                      <Button variant={selectedTemplate === template.id ? 'default' : 'outline'} size="sm" className="w-full rounded-full text-base font-normal">
                         {selectedTemplate === template.id
                           ? (
                               <>

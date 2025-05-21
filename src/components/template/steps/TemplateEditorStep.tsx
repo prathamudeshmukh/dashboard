@@ -21,8 +21,8 @@ export default function TemplateEditorStep() {
     <Card className="w-full border shadow-sm">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <div>
-          <CardTitle className="text-xl">Edit Template</CardTitle>
-          <p className="mt-1 text-muted-foreground">
+          <CardTitle className="text-2xl font-semibold">Edit Template</CardTitle>
+          <p className="mt-1 text-base font-normal text-muted-foreground">
             Customize your template using our editor
           </p>
         </div>
@@ -32,11 +32,11 @@ export default function TemplateEditorStep() {
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <div className="border-b px-4">
             <TabsList className="h-14 bg-transparent">
-              <TabsTrigger value={EditorTypeEnum.VISUAL} className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-muted/50">
+              <TabsTrigger value={EditorTypeEnum.VISUAL} className="rounded-none border-b-2 border-transparent text-base data-[state=active]:border-primary data-[state=active]:bg-muted/50">
                 <FileText className="mr-2 size-4" />
                 Visual Editor
               </TabsTrigger>
-              <TabsTrigger value={EditorTypeEnum.HANDLEBARS} className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-muted/50">
+              <TabsTrigger value={EditorTypeEnum.HANDLEBARS} className="rounded-none border-b-2 border-transparent text-base data-[state=active]:border-primary data-[state=active]:bg-muted/50">
                 <Code className="mr-2 size-4" />
                 Handlebars Editor
               </TabsTrigger>
@@ -88,7 +88,7 @@ function InfoMessage({ text }: { text: string }) {
         <line x1="12" y1="16" x2="12" y2="12"></line>
         <line x1="12" y1="8" x2="12.01" y2="8"></line>
       </svg>
-      <p className="text-sm text-muted-foreground">{text}</p>
+      <p className="text-base font-normal text-muted-foreground">{text}</p>
     </div>
   );
 }

@@ -39,7 +39,7 @@ export const DashboardHeader = (props: {
         </svg>
 
         <nav className="ml-3 max-lg:hidden">
-          <ul className="flex flex-row items-center gap-x-3 text-lg font-medium [&_a:hover]:opacity-100 [&_a]:opacity-75">
+          <ul className="flex flex-row items-center gap-x-3 text-xl font-normal [&_a:hover]:opacity-100 [&_a]:opacity-75">
             {props.menu.map(item => (
               <li key={item.href}>
                 <ActiveLink href={item.href}>{item.label}</ActiveLink>
