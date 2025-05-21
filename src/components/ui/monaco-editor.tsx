@@ -5,8 +5,6 @@ import { Loader2 } from 'lucide-react';
 import type React from 'react';
 import { useEffect, useRef } from 'react';
 
-import { HandlebarsService } from '@/libs/services/HandlebarService';
-
 export type MonacoEditorProps = {
   value: string;
   onChange: (value: string) => void;
@@ -30,81 +28,11 @@ export default function MonacoEditor({
 }: MonacoEditorProps) {
   const editorRef = useRef<any>(null);
 
-  const handlebarService = new HandlebarsService();
-
-  // Define Handlebars language if it's not already defined
-  const defineHandlebarsLanguage = (monaco: any) => {
-    if (!monaco.languages.getLanguages().some((lang: any) => lang.id === 'handlebars')) {
-      monaco.languages.register({ id: 'handlebars' });
-
-      monaco.languages.setMonarchTokensProvider('handlebars', {
-        tokenizer: {
-          root: [
-            [/\{\{!--[\s\S]*?--\}\}/, 'comment'],
-            [/\{\{![\s\S]*?\}\}/, 'comment'],
-            [/\{\{/, { token: 'delimiter.curly', next: '@handlebarsInside' }],
-            [/[^{]+/, 'text'],
-          ],
-          handlebarsInside: [
-            [/\}\}/, { token: 'delimiter.curly', next: '@pop' }],
-            [/"([^"\\]|\\.)*$/, 'string.invalid'],
-            [/'([^'\\]|\\.)*$/, 'string.invalid'],
-            [/"/, 'string', '@string_double'],
-            [/'/, 'string', '@string_single'],
-            [/[a-z_$][\w$]*/i, 'variable'],
-            [/[[\](),.:]/, 'delimiter'],
-            [/#/, 'keyword'],
-            [/\//, 'keyword'],
-            [/\s+/, 'white'],
-          ],
-          string_double: [
-            [/[^"\\]+/, 'string'],
-            [/\\./, 'string.escape'],
-            [/"/, 'string', '@pop'],
-          ],
-          string_single: [
-            [/[^'\\]+/, 'string'],
-            [/\\./, 'string.escape'],
-            [/'/, 'string', '@pop'],
-          ],
-        },
-      });
-
-      monaco.languages.setLanguageConfiguration('handlebars', {
-        brackets: [
-          ['{', '}'],
-          ['[', ']'],
-          ['(', ')'],
-        ],
-        autoClosingPairs: [
-          { open: '{', close: '}' },
-          { open: '[', close: ']' },
-          { open: '(', close: ')' },
-          { open: '"', close: '"' },
-          { open: '\'', close: '\'' },
-          { open: '{{', close: '}}' },
-        ],
-        surroundingPairs: [
-          { open: '{', close: '}' },
-          { open: '[', close: ']' },
-          { open: '(', close: ')' },
-          { open: '"', close: '"' },
-          { open: '\'', close: '\'' },
-          { open: '{{', close: '}}' },
-        ],
-      });
-    }
-  };
-
-  const handleEditorDidMount: OnMount = (editor, monaco) => {
+  const handleEditorDidMount: OnMount = (editor) => {
     editorRef.current = editor;
 
-    // Define Handlebars language
-    defineHandlebarsLanguage(monaco);
-
-    // Set initial value
-    const formattedCode = handlebarService.formatHandlebarsCode(value);
-    editor.setValue(formattedCode || '');
+    editor.setValue(value);
+    editor.getAction('editor.action.formatDocument')?.run();
 
     // Focus the editor
     editor.focus();
@@ -142,6 +70,8 @@ export default function MonacoEditor({
           lineNumbers: 'on',
           folding: true,
           wordWrap: 'on',
+          formatOnPaste: true,
+          formatOnType: true,
         }}
         onChange={handleEditorChange}
         onMount={handleEditorDidMount}
