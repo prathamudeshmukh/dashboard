@@ -12,3 +12,8 @@ export enum SaveStatusEnum {
   SUCCESS,
   ERROR,
 }
+
+export enum UpdateTypeEnum {
+  UPDATE,
+  UPDATE_PUBLISH,
+}

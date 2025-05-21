@@ -5,11 +5,11 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-import { fetchTemplateById, UpsertTemplate } from '@/libs/actions/templates';
+import { fetchTemplateById, PublishTemplateToProd, UpsertTemplate } from '@/libs/actions/templates';
 import { HandlebarsService } from '@/libs/services/HandlebarService';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 import type { CreationMethodEnum } from '@/types/Enum';
-import { SaveStatusEnum } from '@/types/Enum';
+import { SaveStatusEnum, UpdateTypeEnum } from '@/types/Enum';
 import { TemplateType } from '@/types/Template';
 
 import { Button } from '../ui/button';
@@ -201,8 +201,12 @@ export default function HandlebarsEditor() {
     }
   };
 
-  const handleSave = async () => {
+  const handleSave = async (type: UpdateTypeEnum) => {
     setSaveStatus(SaveStatusEnum.SAVING);
+    if (!user) {
+      setSaveStatus(SaveStatusEnum.ERROR);
+      return;
+    }
     try {
       const templateData = {
         templateId,
@@ -217,12 +221,25 @@ export default function HandlebarsEditor() {
       const response = await UpsertTemplate(templateData);
 
       if (!response) {
+        setSaveStatus(SaveStatusEnum.ERROR);
         return;
       }
-      toast.success('Template updated successfully');
-      router.push('/dashboard');
+      if (type === UpdateTypeEnum.UPDATE) {
+        toast.success('Template updated successfully');
+        router.push('/dashboard');
+        resetTemplate();
+      } else if (type === UpdateTypeEnum.UPDATE_PUBLISH) {
+        if (response?.templateId) {
+          await PublishTemplateToProd(response?.templateId);
+          toast.success('Template updated and published successfully');
+          router.push('/dashboard');
+          resetTemplate();
+        } else {
+          toast.error('Template ID not found after update, cannot publish.');
+          setSaveStatus(SaveStatusEnum.ERROR);
+        }
+      }
       setSaveStatus(SaveStatusEnum.SUCCESS);
-      resetTemplate();
     } catch (error) {
       setSaveStatus(SaveStatusEnum.ERROR);
       toast.error(`Error: ${error}`);
@@ -238,9 +255,23 @@ export default function HandlebarsEditor() {
             {' '}
             {templateName || 'Unnamed'}
           </h2>
-          <Button className="rounded-full text-lg" onClick={handleSave} disabled={saveStatus === SaveStatusEnum.SAVING}>
-            {saveStatus === SaveStatusEnum.SAVING ? 'Saving...' : 'Update'}
-          </Button>
+          <div className="flex justify-end gap-2">
+            <Button
+              className="rounded-full text-lg"
+              onClick={() => handleSave(UpdateTypeEnum.UPDATE)}
+              disabled={saveStatus === SaveStatusEnum.SAVING}
+            >
+              {saveStatus === SaveStatusEnum.SAVING ? 'Updating...' : 'Update'}
+            </Button>
+
+            <Button
+              className="rounded-full text-lg"
+              onClick={() => handleSave(UpdateTypeEnum.UPDATE_PUBLISH)}
+              disabled={saveStatus === SaveStatusEnum.SAVING}
+            >
+              {saveStatus === SaveStatusEnum.SAVING ? 'Updating & Publishing...' : 'Update & Publish'}
+            </Button>
+          </div>
         </div>
       )}
       <div className="flex h-[800px] flex-col overflow-hidden rounded-md border text-black">

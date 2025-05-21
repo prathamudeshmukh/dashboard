@@ -17,7 +17,7 @@ export function WizardNavigation({
   className,
   nextLabel = 'Next',
   previousLabel = 'Back',
-  completeLabel = 'Submit',
+  completeLabel = 'Submit & Publish',
   saveStatus,
 }: WizardNavigationProps) {
   const isLastStep = currentStep === totalSteps - 1;
