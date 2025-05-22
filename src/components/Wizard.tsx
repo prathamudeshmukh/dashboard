@@ -33,12 +33,12 @@ export function Wizard({ steps, currentStep, onStepClick, className }: WizardPro
                       <Check className="size-5" />
                     )
                   : (
-                      <span className="text-sm font-medium">{index + 1}</span>
+                      <span className="text-base font-normal">{index + 1}</span>
                     )}
               </button>
               <span
                 className={cn(
-                  'mt-2 text-xs font-medium',
+                  'mt-2 text-base font-normal',
                   index === currentStep ? 'text-primary' : 'text-muted-foreground',
                 )}
               >

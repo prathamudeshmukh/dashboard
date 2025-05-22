@@ -122,8 +122,8 @@ const PDFExtractor = () => {
       <div className="mb-4 flex items-start rounded-md border border-amber-200 bg-amber-50 p-3 text-sm">
         <TriangleAlert className="mr-3 mt-0.5 text-amber-600" />
         <div>
-          <p className="font-medium text-amber-800">Free Plan Limit</p>
-          <p className="mt-0.5 text-xs text-amber-700">
+          <p className="text-base font-normal text-amber-800">Free Plan Limit</p>
+          <p className="mt-0.5 text-base text-amber-700">
             Your free plan includes extraction from 3 PDFs.
             {' '}
             <a href="#demo" className="font-medium underline">
@@ -156,20 +156,20 @@ const PDFExtractor = () => {
               <FileUp className="size-8 text-primary" />
             </div>
             <div>
-              <p className="text-lg font-medium">Drag & drop your PDF here</p>
-              <p className="text-sm text-muted-foreground">or</p>
+              <p className="text-4xl font-semibold">Drag & drop your PDF here</p>
+              <p className="text-base text-muted-foreground">or</p>
             </div>
-            <Button onClick={() => fileInputRef.current?.click()}>
+            <Button className="rounded-full text-xl font-normal" onClick={() => fileInputRef.current?.click()}>
               <Upload className="mr-2 size-4" />
               Browse Files
             </Button>
-            <p className="text-xs text-muted-foreground">Supported format: PDF (Max size: 4MB)</p>
+            <p className="text-base font-normal text-muted-foreground">Supported format: PDF (Max size: 4MB)</p>
           </div>
 
           {pdfUploadStatus === PdfUploadStatusEnum.IN_PROGRESS && (
             <div className="mt-6">
               <Progress value={progress} className="h-2" />
-              <p className="mt-1 text-sm text-muted-foreground">
+              <p className="mt-1 text-base font-normal text-muted-foreground">
                 Uploading...
                 {progress}
                 %

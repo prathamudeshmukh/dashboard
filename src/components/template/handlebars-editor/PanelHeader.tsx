@@ -10,10 +10,10 @@ import type { PanelHeaderProps } from './types';
 
 export function PanelHeader({ title, icon, onCopy, additionalInfo }: PanelHeaderProps) {
   return (
-    <div className="flex items-center justify-between border-b border-gray-700 bg-[#252526] px-4 py-1">
+    <div className="flex items-center justify-between border-b border-gray-700 bg-[#252526] px-4 py-2">
       <div className="flex items-center">
         {icon}
-        <Label className="ml-2 text-xs font-medium text-gray-400">{title}</Label>
+        <Label className="ml-2 text-base font-normal text-gray-400">{title}</Label>
         {additionalInfo}
       </div>
       <div className="flex items-center">

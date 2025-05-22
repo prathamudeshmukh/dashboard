@@ -47,21 +47,21 @@ export default function TemplateReviewStep() {
       <div className="flex-1 space-y-6 pr-2">
         <Card>
           <CardHeader>
-            <CardTitle>Details</CardTitle>
+            <CardTitle className="text-2xl font-medium">Details</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
             <p>
-              <strong>Name:</strong>
+              <span className="font-semibold">Name:</span>
               {' '}
               {templateName}
             </p>
             <p>
-              <strong>Type:</strong>
+              <span className="font-semibold">Type:</span>
               {' '}
               {creationMethod}
             </p>
             <p>
-              <strong>Description:</strong>
+              <span className="font-semibold">Description:</span>
               {' '}
               {templateDescription}
             </p>
@@ -71,10 +71,10 @@ export default function TemplateReviewStep() {
         {(handlebarsJson && handlebarsCode && activeTab === EditorTypeEnum.HANDLEBARS) && (
           <Card className="max-h-[40vh] overflow-auto">
             <CardHeader>
-              <CardTitle>Handlebars JSON</CardTitle>
+              <CardTitle className="text-2xl font-medium">Handlebars JSON</CardTitle>
             </CardHeader>
             <CardContent>
-              <pre className="whitespace-pre-wrap text-xs">{handlebarsJson}</pre>
+              <pre className="whitespace-pre-wrap text-base font-normal">{handlebarsJson}</pre>
             </CardContent>
           </Card>
         )}
@@ -84,7 +84,7 @@ export default function TemplateReviewStep() {
       <div className="flex-1 pr-2">
         <Card className="flex h-full max-h-[80vh] flex-col">
           <CardHeader>
-            <CardTitle>Preview</CardTitle>
+            <CardTitle className="text-2xl font-medium">Preview</CardTitle>
           </CardHeader>
           <CardContent className="flex-1 overflow-auto px-2">
             {compiledHtml

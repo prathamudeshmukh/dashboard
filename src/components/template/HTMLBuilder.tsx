@@ -11,9 +11,9 @@ import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
 
-import { fetchTemplateById, UpsertTemplate } from '@/libs/actions/templates';
+import { fetchTemplateById, PublishTemplateToProd, UpsertTemplate } from '@/libs/actions/templates';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
-import { type CreationMethodEnum, SaveStatusEnum } from '@/types/Enum';
+import { type CreationMethodEnum, SaveStatusEnum, UpdateTypeEnum } from '@/types/Enum';
 import { TemplateType } from '@/types/Template';
 
 import { Button } from '../ui/button';
@@ -110,9 +110,10 @@ export default function HTMLBuilder() {
     });
   };
 
-  const handleSave = async () => {
+  const handleSave = async (type: UpdateTypeEnum) => {
     setSaveStatus(SaveStatusEnum.SAVING);
     if (!user) {
+      setSaveStatus(SaveStatusEnum.ERROR);
       return;
     }
     try {
@@ -129,12 +130,27 @@ export default function HTMLBuilder() {
       const response = await UpsertTemplate(templateData);
 
       if (!response) {
+        setSaveStatus(SaveStatusEnum.ERROR);
         return;
       }
-      toast.success('Template updated successfully');
-      router.push('/dashboard');
+
+      if (type === UpdateTypeEnum.UPDATE) {
+        toast.success('Template updated successfully');
+        router.push('/dashboard');
+        resetTemplate();
+      } else if (type === UpdateTypeEnum.UPDATE_PUBLISH) {
+        if (response?.templateId) {
+          await PublishTemplateToProd(response?.templateId);
+          toast.success('Template updated and published successfully');
+          router.push('/dashboard');
+          resetTemplate();
+        } else {
+          toast.error('Template ID not found after update, cannot publish.');
+          setSaveStatus(SaveStatusEnum.ERROR);
+        }
+      }
+
       setSaveStatus(SaveStatusEnum.SUCCESS);
-      resetTemplate();
     } catch (error) {
       setSaveStatus(SaveStatusEnum.ERROR);
       toast.error(`Error: ${error}`);
@@ -144,7 +160,7 @@ export default function HTMLBuilder() {
   return (
     <div className="flex w-full flex-col space-y-4">
       {templateId && (
-        <h2 className="text-xl font-semibold">
+        <h2 className="text-2xl font-semibold">
           Edit Template :
           {' '}
           <span className="text-primary">{templateName}</span>
@@ -176,9 +192,21 @@ export default function HTMLBuilder() {
         </div>
       </div>
       {templateId && (
-        <div className="flex justify-end">
-          <Button onClick={handleSave} disabled={saveStatus === SaveStatusEnum.SAVING}>
-            {saveStatus === SaveStatusEnum.SAVING ? 'Saving...' : 'Update'}
+        <div className="flex justify-end gap-2">
+          <Button
+            className="rounded-full text-lg"
+            onClick={() => handleSave(UpdateTypeEnum.UPDATE)}
+            disabled={saveStatus === SaveStatusEnum.SAVING}
+          >
+            {saveStatus === SaveStatusEnum.SAVING ? 'Updating...' : 'Update'}
+          </Button>
+
+          <Button
+            className="rounded-full text-lg"
+            onClick={() => handleSave(UpdateTypeEnum.UPDATE_PUBLISH)}
+            disabled={saveStatus === SaveStatusEnum.SAVING}
+          >
+            {saveStatus === SaveStatusEnum.SAVING ? 'Updating & Publishing...' : 'Update & Publish'}
           </Button>
         </div>
       )}
