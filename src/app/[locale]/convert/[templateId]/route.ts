@@ -4,8 +4,8 @@ import { type NextRequest, NextResponse } from 'next/server';
 
 import { generatePdf } from '@/libs/actions/templates';
 
-import { authenticateApi } from '../../authenticateApi';
-import { withApiAuth } from '../../withApiAuth';
+import { authenticateApi } from '../../api/authenticateApi';
+import { withApiAuth } from '../../api/withApiAuth';
 
 export const POST = withApiAuth(async (req: NextRequest, { params }: { params: { templateId: string } }): Promise<NextResponse> => {
   try {
