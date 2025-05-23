@@ -3,21 +3,27 @@
 import { useUser } from '@clerk/nextjs';
 import { Check, ChevronRight, Copy, FileText } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
+import { BASE_API_URL } from 'templify.constants';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getClientSecret } from '@/libs/actions/user';
-import type { SuccessViewProps } from '@/types/Template';
+import { useTemplateStore } from '@/libs/store/TemplateStore';
+import { generateCodeSnippets } from '@/service/generateCodeSnippets';
 
 import { IntegrationCodeViewer } from './handlebars-editor/IntegrationCodeViewer';
 
-export default function SuccessView({ templateId, templateName, templateSampleData, onViewDashboard, onCreateAnother }: SuccessViewProps) {
+export default function SuccessView() {
   const [activeTab, setActiveTab] = useState('javascript');
   const { user } = useUser();
   const [secret, setSecret] = useState<string>('');
   const [copied, setCopied] = useState<string | null>(null);
+  const { successData } = useTemplateStore();
+  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
   const handleSecret = async () => {
     if (!user) {
@@ -40,17 +46,21 @@ export default function SuccessView({ templateId, templateName, templateSampleDa
     handleSecret();
   }, [user]);
 
-  // Parse the template sample data if available
-  const parsedSampleData = templateSampleData
-    ? (() => {
-        try {
-          return JSON.parse(templateSampleData as string);
-        } catch (e) {
-          console.error(e);
-          return {};
-        }
-      })()
-    : {};
+  useEffect(() => {
+    if (!successData) {
+      router.push('/dashboard');
+      return;
+    }
+    setIsLoading(false);
+  }, [successData]);
+
+  const handleViewDashboard = () => {
+    router.push('/dashboard');
+  };
+
+  const handleCreateAnother = () => {
+    router.push('/dashboard/create-template');
+  };
 
   const handleCopy = (code: string, language: string) => {
     navigator.clipboard.writeText(code);
@@ -59,91 +69,28 @@ export default function SuccessView({ templateId, templateName, templateSampleDa
   };
 
   // Generate a formatted version of the sample data for code snippets
-  const formattedSampleData = Object.keys(parsedSampleData).length > 0
-    ? JSON.stringify(parsedSampleData, null, 2)
+  const formattedSampleData = successData?.templateSampleData
+    ? JSON.stringify(successData.templateSampleData, null, 2)
     : `{}`;
 
   // Code snippets for different languages
-  const codeSnippets = {
-    javascript: `// Using fetch API
-const response = await fetch('https://api.templify.com/convert', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': '${secret}'
-  },
-  body: JSON.stringify({
-    templateId: '${templateId}',
-    data: ${formattedSampleData},
-    options: {
-      format: 'pdf'
-    }
-  })
-});
+  const codeSnippets = useMemo(() => {
+    return generateCodeSnippets({
+      BASE_API_URL,
+      templateId: successData?.templateId as string,
+      secret,
+      userId: user?.id as string,
+      formattedSampleData,
+    });
+  }, [BASE_API_URL, successData, secret, user, formattedSampleData]);
 
-const pdf = await response.blob();`,
-
-    python: `import requests
-import json
-
-response = requests.post(
-    'https://api.templify.com/convert',
-    headers={
-        'Content-Type': 'application/json',
-        'Authorization': '${secret}'
-    },
-    json={
-        'templateId': '${templateId}',
-        'data': ${formattedSampleData.replace(/'/g, '"')},
-        'options': {
-            'format': 'pdf'
-        }
-    }
-)
-
-# Save the PDF
-with open('output.pdf', 'wb') as f:
-    f.write(response.content)`,
-
-    php: `<?php
-$ch = curl_init();
-
-curl_setopt($ch, CURLOPT_URL, 'https://api.templify.com/convert');
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-curl_setopt($ch, CURLOPT_POST, 1);
-
-$data = [
-    'templateId' => '${templateId}',
-    'data' => '${formattedSampleData.replace(/'/g, '"')}',
-    'options' => [
-        'format' => 'pdf'
-    ]
-];
-
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-curl_setopt($ch, CURLOPT_HTTPHEADER, [
-    'Content-Type: application/json',
-    'Authorization': '${secret}'
-]);
-
-$response = curl_exec($ch);
-curl_close($ch);
-
-// Save the PDF
-file_put_contents('output.pdf', $response);`,
-
-    curl: `curl -X POST https://api.templify.com/convert \\
-  -H "Content-Type: application/json" \\
-  -H "Authorization: ${secret}" \\
-  -d '{
-    "templateId": "${templateId}",
-    "data": ${formattedSampleData.replace(/'/g, '"')},
-    "options": {
-      "format": "pdf"
-    }
-  }' \\
-  --output output.pdf`,
-  };
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-lg">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -156,7 +103,7 @@ file_put_contents('output.pdf', $response);`,
             <h2 className="mb-2 text-4xl font-bold text-green-800">Template Created Successfully!</h2>
             <p className="max-w-md text-base text-green-700">
               Your template "
-              {templateName}
+              {successData?.templateName}
               " has been created and is ready to use.
             </p>
           </div>
@@ -169,12 +116,12 @@ file_put_contents('output.pdf', $response);`,
         </CardHeader>
         <CardContent>
           <div className="mb-4 flex items-center justify-between rounded-md bg-muted p-3">
-            <code className="font-mono text-base">{templateId}</code>
+            <code className="font-mono text-base">{successData?.templateId}</code>
             <Button
               variant="ghost"
               size="sm"
               onClick={() => {
-                navigator.clipboard.writeText(templateId);
+                navigator.clipboard.writeText(successData?.templateId as string);
                 setCopied('id');
                 setTimeout(() => setCopied(null), 2000);
               }}
@@ -258,10 +205,10 @@ file_put_contents('output.pdf', $response);`,
       </Card>
 
       <div className="flex flex-col gap-4 sm:flex-row">
-        <Button variant="outline" onClick={onCreateAnother} className="flex-1 rounded-full text-lg font-medium">
+        <Button variant="outline" onClick={handleCreateAnother} className="flex-1 rounded-full text-lg font-medium">
           Create Another Template
         </Button>
-        <Button onClick={onViewDashboard} className="flex-1 rounded-full text-lg font-medium">
+        <Button onClick={handleViewDashboard} className="flex-1 rounded-full text-lg font-medium">
           Go to Dashboard
           <ChevronRight className="ml-2 size-4" />
         </Button>
