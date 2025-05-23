@@ -8,10 +8,11 @@ import { useTemplateStore } from '@/libs/store/TemplateStore';
 import { CreationMethodEnum } from '@/types/Enum';
 
 export default function TemplateCreationMethodSelector() {
-  const { creationMethod, setCreationMethod, resetTemplate } = useTemplateStore();
+  const { creationMethod, setCreationMethod, resetTemplate, clearSuccessData } = useTemplateStore();
 
   useEffect(() => {
     resetTemplate();
+    clearSuccessData();
   }, []);
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2">

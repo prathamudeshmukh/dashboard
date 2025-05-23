@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 import { EditorTypeEnum } from '@/components/template/steps/TemplateEditorStep';
 import { CreationMethodEnum } from '@/types/Enum';
-import type { TemplateGalleryProps } from '@/types/Template';
+import type { TemplateGalleryProps, TemplateSuccessData } from '@/types/Template';
 
 type TemplateStore = {
 
@@ -19,6 +19,8 @@ type TemplateStore = {
   creationMethod: CreationMethodEnum;
   activeTab: string;
 
+  successData: TemplateSuccessData | null;
+
   setTemplateName: (name: string) => void;
   setTemplateDescription: (desc: string) => void;
   selectTemplate: (templateId: string) => void;
@@ -29,6 +31,10 @@ type TemplateStore = {
   setTemplateGallery: (template: TemplateGalleryProps[]) => void;
   setActiveTab: (tab: string) => void;
   setCreationMethod: (method: CreationMethodEnum) => void;
+
+  setSuccessData: (data: TemplateSuccessData) => void;
+  clearSuccessData: () => void;
+
   saveTemplate: () => void;
   resetTemplate: () => void;
 };
@@ -46,9 +52,10 @@ export const useTemplateStore = create<TemplateStore>((set, get) => ({
   handlebarsJson: '{}',
   templateGallery: null,
 
-  activeTab: EditorTypeEnum.VISUAL,
+  activeTab: EditorTypeEnum.HANDLEBARS,
   creationMethod: CreationMethodEnum.EXTRACT_FROM_PDF,
 
+  successData: null,
   // Setters
   setTemplateName: name => set({ templateName: name }),
   setTemplateDescription: desc => set({ templateDescription: desc }),
@@ -62,6 +69,8 @@ export const useTemplateStore = create<TemplateStore>((set, get) => ({
   setTemplateGallery: template => set({ templateGallery: template }),
   setActiveTab: tab => set({ activeTab: tab }),
   setCreationMethod: method => set({ creationMethod: method }),
+
+  setSuccessData: (data: TemplateSuccessData) => set({ successData: data }),
 
   // Actions
   saveTemplate: () => {
@@ -81,7 +90,9 @@ export const useTemplateStore = create<TemplateStore>((set, get) => ({
       handlebarsCode: '',
       handlebarsJson: '{}',
 
-      activeTab: EditorTypeEnum.VISUAL,
+      activeTab: EditorTypeEnum.HANDLEBARS,
       creationMethod: CreationMethodEnum.EXTRACT_FROM_PDF,
     }),
+
+  clearSuccessData: () => set({ successData: null }),
 }));

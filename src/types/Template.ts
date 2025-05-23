@@ -99,13 +99,6 @@ export type TemplateGalleryProps = {
 export type TemplateSuccessData = {
   templateId: string;
   templateName: string;
-  templateSampleData?: JsonValue;
-};
-
-export type SuccessViewProps = {
-  templateId: string;
-  templateName: string;
-  templateSampleData?: string;
-  onViewDashboard: () => void;
-  onCreateAnother: () => void;
+  templateSampleData: JsonValue;
+  createdAt?: string;
 };
