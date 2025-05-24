@@ -30,7 +30,7 @@ export function TemplateEditor({ code, onChange, error, isReady }: TemplateEdito
         <CodeEditorWrapper
           value={code}
           onChange={onChange}
-          language="handlebars"
+          language="html"
           isReady={isReady}
         />
       </div>
