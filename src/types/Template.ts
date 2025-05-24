@@ -95,3 +95,10 @@ export type TemplateGalleryProps = {
   handlebarContent: string | null;
   sampleData: unknown;
 };
+
+export type TemplateSuccessData = {
+  templateId: string;
+  templateName: string;
+  templateSampleData: JsonValue;
+  createdAt?: string;
+};

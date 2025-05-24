@@ -59,8 +59,10 @@ export async function UpsertTemplate({
       throw new Error(`Error in Saving Template`);
     }
     const tempID = response[0]?.templateId;
+    const data = response[0];
     return {
       success: true,
+      data,
       templateId: tempID,
       message: templateId ? 'Template updated successfully' : 'Template saved successfully',
     };

@@ -16,7 +16,7 @@ const CodeEditor = dynamic(() => import('@/components/ui/monaco-editor'), {
   ),
 });
 
-export function CodeEditorWrapper({ value, onChange, language, isReady }: EditorProps) {
+export function CodeEditorWrapper({ value, onChange, language, isReady, readOnly }: EditorProps) {
   if (!isReady) {
     return (
       <div className="flex h-full items-center justify-center">
@@ -32,6 +32,7 @@ export function CodeEditorWrapper({ value, onChange, language, isReady }: Editor
         value={value}
         onChange={onChange}
         language={language}
+        readonly={readOnly}
       />
     </div>
   );

@@ -7,6 +7,7 @@ export type EditorProps = {
   language: string;
   placeholder?: string;
   isReady: boolean;
+  readOnly?: boolean;
 };
 
 export type PanelHeaderProps = {

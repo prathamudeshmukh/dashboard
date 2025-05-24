@@ -1,6 +1,7 @@
 'use client';
 
 import { useUser } from '@clerk/nextjs';
+import type { JsonValue } from 'inngest/helpers/jsonify';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -23,7 +24,7 @@ export default function CreateTemplateWizard() {
   const router = useRouter();
   const [saveStatus, setSaveStatus] = useState<SaveStatusEnum>(SaveStatusEnum.IDLE);
   const [currentStep, setCurrentStep] = useState(0);
-  const { creationMethod, selectedTemplate, templateName, templateDescription, htmlContent, htmlStyle, handlebarsCode, activeTab, handlebarsJson, resetTemplate } = useTemplateStore();
+  const { creationMethod, selectedTemplate, templateName, templateDescription, htmlContent, htmlStyle, handlebarsCode, activeTab, handlebarsJson, setSuccessData } = useTemplateStore();
   const handleNext = () => setCurrentStep(prev => prev + 1);
   const handlePrevious = () => setCurrentStep(prev => prev - 1);
 
@@ -100,8 +101,13 @@ export default function CreateTemplateWizard() {
       await PublishTemplateToProd(response.templateId as string);
       toast.success('Template Saved Successfully');
       setSaveStatus(SaveStatusEnum.SUCCESS);
-      resetTemplate();
-      router.push('/dashboard');
+      setSuccessData({
+        templateId: response.templateId as string,
+        templateName,
+        templateSampleData: response.data?.templateSampleData as JsonValue,
+      });
+
+      router.push(`/dashboard/template/success`);
     } catch (error) {
       setSaveStatus(SaveStatusEnum.ERROR);
       toast.error(`Error in saving Template: ${error}`);
@@ -113,7 +119,7 @@ export default function CreateTemplateWizard() {
 
       {/* Wizard progress */}
       <Wizard
-        steps={steps}
+        steps={steps.slice(0, 5)} // Don't show success step in progress bar
         currentStep={currentStep}
         onStepClick={(index) => {
           // Only allow clicking on completed steps or the current step + 1
