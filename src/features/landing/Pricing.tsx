@@ -83,7 +83,7 @@ export default function Pricing() {
 
   return (
     <section id="pricing" className="py-20">
-      <div className="container">
+      <div className="container px-5 md:px-0">
         <h2 className="mb-8 text-center text-4xl font-semibold md:text-5xl lg:text-6xl">
           Flexible Plans for
           <br />
