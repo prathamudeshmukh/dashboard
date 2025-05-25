@@ -17,3 +17,8 @@ export enum UpdateTypeEnum {
   UPDATE,
   UPDATE_PUBLISH,
 }
+
+export enum EditorTypeEnum {
+  VISUAL = 'visual',
+  HANDLEBARS = 'handlebar',
+}

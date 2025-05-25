@@ -13,8 +13,29 @@ export const generateCodeSnippets = ({
   userId,
   formattedSampleData,
 }: GenerateCodeSnippetsProps) => {
-  // Replace single quotes with double quotes for JSON compatibility in Python/PHP/cURL
-  const jsonFormattedSampleData = formattedSampleData.replace(/'/g, '"');
+  // Determine if formattedSampleData is essentially empty JSON
+  const isSampleDataEmpty = formattedSampleData === '{}' || formattedSampleData === '';
+
+  // Construct the request body string conditionally
+  const jsonFormattedSampleDataForEmbedding = formattedSampleData.replace(/'/g, '"');
+
+  // Request body structure for Python, PHP, cURL
+  let pythonPhpCurlRequestBody;
+  if (isSampleDataEmpty) {
+    pythonPhpCurlRequestBody = '{}'; // Empty JSON object
+  } else {
+    pythonPhpCurlRequestBody = `{
+    "templateData": ${jsonFormattedSampleDataForEmbedding}
+  }`;
+  }
+
+  // Request body structure for JavaScript (using JSON.stringify)
+  let javascriptRequestBodyValue;
+  if (isSampleDataEmpty) {
+    javascriptRequestBodyValue = '{}'; // An empty object string for stringify
+  } else {
+    javascriptRequestBodyValue = `templateData: ${formattedSampleData},`; // Original formattedSampleData, as it will be stringified
+  }
 
   return {
     javascript: `// Using fetch API
@@ -22,11 +43,11 @@ const response = await fetch('${BASE_API_URL}convert/${templateId}?devMode=true'
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    'client_secret': '${secret}', // Ensure comma is here
+    'client_secret': '${secret}',
     'client_id': '${userId}'
   },
   body: JSON.stringify({
-    templateData: ${formattedSampleData},
+    ${javascriptRequestBodyValue},
   })
 });
 
@@ -42,9 +63,7 @@ response = requests.post(
         'client_secret': '${secret}',
         'client_id': '${userId}'
     },
-    json={
-        'templateData': ${jsonFormattedSampleData},
-    }
+    json=${isSampleDataEmpty ? '{}' : `{'templateData': ${jsonFormattedSampleDataForEmbedding}}`}
 )
 
 # Save the PDF
@@ -58,9 +77,7 @@ curl_setopt($ch, CURLOPT_URL, '${BASE_API_URL}convert/${templateId}?devMode=true
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 curl_setopt($ch, CURLOPT_POST, 1);
 
-$data = [
-    'templateData' => json_decode('${jsonFormattedSampleData}', true), // Decode JSON string
-];
+$data = ${isSampleDataEmpty ? '[]' : `['templateData' => json_decode('${jsonFormattedSampleDataForEmbedding}', true)]`};
 
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
@@ -75,13 +92,11 @@ curl_close($ch);
 // Save the PDF
 file_put_contents('output.pdf', $response);`,
 
-    curl: `curl -X POST ${BASE_API_URL}convert/${templateId}?devMode=true \\
+    shell: `curl -X POST ${BASE_API_URL}convert/${templateId}?devMode=true \\
   -H "Content-Type: application/json" \\
   -H "client_secret: ${secret}" \\
   -H "client_id: ${userId}" \\
-  -d '{
-    "templateData": ${jsonFormattedSampleData}
-  }' \\
+  -d '${pythonPhpCurlRequestBody}' \\
   --output output.pdf`,
   };
 };
