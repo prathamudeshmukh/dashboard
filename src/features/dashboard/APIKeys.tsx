@@ -199,7 +199,7 @@ export default function APIKeys({ clientId }: { clientId: string }) {
         </Card>
 
         <div className="flex justify-end">
-          <Button variant="outline" className="bg-primary text-primary-foreground" asChild>
+          <Button className="rounded-full bg-primary text-lg" asChild>
             <a href="/docs">View Full API Documentation</a>
           </Button>
         </div>

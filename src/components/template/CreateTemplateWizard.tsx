@@ -8,14 +8,14 @@ import { toast } from 'sonner';
 
 import { PublishTemplateToProd, UpsertTemplate } from '@/libs/actions/templates';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
-import { CreationMethodEnum, SaveStatusEnum } from '@/types/Enum';
+import { CreationMethodEnum, EditorTypeEnum, SaveStatusEnum } from '@/types/Enum';
 import { TemplateType } from '@/types/Template';
 
 import { Wizard } from '../Wizard';
 import { WizardNavigation } from '../WizardNavigation';
 import TemplateCreationMethodSelector from './steps/TemplateCreationMethodSelector';
 import TemplateDetailsStep from './steps/TemplateDetailsStep';
-import TemplateEditorStep, { EditorTypeEnum } from './steps/TemplateEditorStep';
+import TemplateEditorStep from './steps/TemplateEditorStep';
 import TemplateReviewStep from './steps/TemplateReviewStep';
 import TemplateSourceStep from './steps/TemplateSourceStep';
 

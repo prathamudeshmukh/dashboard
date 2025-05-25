@@ -5,9 +5,8 @@ import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 import contentGenerator from '@/service/contentGenerator';
+import { EditorTypeEnum } from '@/types/Enum';
 import { TemplateType } from '@/types/Template';
-
-import { EditorTypeEnum } from './TemplateEditorStep';
 
 export default function TemplateReviewStep() {
   const [compiledHtml, setCompiledHtml] = useState<string>('');
