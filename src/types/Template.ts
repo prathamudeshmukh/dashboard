@@ -56,9 +56,6 @@ export type PaginatedResponse<T> = {
 
 export type GeneratePdfRequest = {
   templateId?: string;
-  templateType?: TemplateType;
-  templateContent?: string;
-  templateStyle?: string;
   templateData?: JsonObject;
   devMode?: boolean;
   isApi?: boolean;
