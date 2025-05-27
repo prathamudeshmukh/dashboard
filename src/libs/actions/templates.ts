@@ -262,7 +262,12 @@ export async function generatePdf({
         throw new Error('Template not found');
       }
     }
-
+    // eslint-disable-next-line no-console
+    console.debug('inside generate pdf action');
+    // eslint-disable-next-line no-console
+    console.debug({ data: templateData ? templateData as JsonValue : template?.data?.templateSampleData as JsonValue });
+    // eslint-disable-next-line no-console
+    console.debug('#########################################');
     const content = await contentGenerator({
       templateType: template?.data?.templateType as TemplateType,
       templateContent: template?.data?.templateContent as string,
