@@ -56,9 +56,6 @@ export type PaginatedResponse<T> = {
 
 export type GeneratePdfRequest = {
   templateId?: string;
-  templateType?: TemplateType;
-  templateContent?: string;
-  templateStyle?: string;
   templateData?: JsonObject;
   devMode?: boolean;
   isApi?: boolean;
@@ -99,6 +96,35 @@ export type TemplateGalleryProps = {
 export type TemplateSuccessData = {
   templateId: string;
   templateName: string;
-  templateSampleData: JsonValue;
-  createdAt?: string;
+  templateSampleData?: JsonValue;
+};
+
+export type SuccessViewProps = {
+  templateId: string;
+  templateName: string;
+  templateSampleData?: string;
+  onViewDashboard: () => void;
+  onCreateAnother: () => void;
+};
+
+export type TemplatePreviewJobData = {
+  templateId: string;
+  templateType: string;
+  templateContent: string;
+  templateStyle?: string;
+  templateSampleData?: any;
+};
+
+export type UpdatePreviewURLParams = {
+  templateId: string;
+  previewURL: string;
+  environment?: string;
+};
+
+export type UpdatePreviewURLResult = {
+  data?: {
+    templateId: string;
+    previewURL: string;
+  };
+  error?: string;
 };
