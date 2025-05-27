@@ -255,24 +255,16 @@ export async function generatePdf({
     // If templateId is provided fetch existing template
     if (templateId) {
       template = await fetchTemplateById(templateId, devMode);
-      // eslint-disable-next-line no-console
-      console.log({ 'template fetched': template });
 
       if (!template) {
         throw new Error('Template not found');
       }
     }
-    // eslint-disable-next-line no-console
-    console.debug('inside generate pdf action');
     // Determine the data to be used by contentGenerator
     const dataForContentGenerator = templateData !== undefined
       ? (templateData as JsonValue) // If templateData was passed, use it (even if it's an empty object {})
       : (template?.data?.templateSampleData as JsonValue); // Otherwise, use the sample data from the template
 
-    // eslint-disable-next-line no-console
-    console.debug({ data: dataForContentGenerator });
-    // eslint-disable-next-line no-console
-    console.debug('#########################################');
     const content = await contentGenerator({
       templateType: template?.data?.templateType as TemplateType,
       templateContent: template?.data?.templateContent as string,
