@@ -105,6 +105,7 @@ export const templates = pgTable('templates', {
   environment: environmentEnum('environment').notNull().default('dev'),
   creationMethod: creationMethodEnum('creation_method').notNull(),
   templateGeneratedFrom: uuid('template_generated_from').references(() => templateGallery.id),
+  previewURL: text('preview_url'),
   createdAt: timestamp('created_at', { mode: 'date' })
     .defaultNow()
     .notNull(),
