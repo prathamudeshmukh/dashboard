@@ -200,7 +200,7 @@ export async function fetchTemplatesFromGallery() {
   try {
     const templates = await db.select().from(templateGallery);
     if (!templates) {
-      throw new Error ('Templates not found.');
+      throw new Error('Templates not found.');
     };
     return templates;
   } catch (error) {
@@ -236,7 +236,7 @@ export async function fetchTemplateById(templateId: string, isDev: boolean = tru
     const template = result[0]?.templateData;
     const userData = result[0]?.user;
 
-    return { success: true, data: { ...template, user: userData } };
+    return { data: { ...template, user: userData } };
   } catch (error: any) {
     console.error('Error fetching template:', error);
     return { success: false, error: error.message };
@@ -245,7 +245,7 @@ export async function fetchTemplateById(templateId: string, isDev: boolean = tru
 
 export async function generatePdf({
   templateId,
-  templateData = {},
+  templateData,
   devMode = true,
   isApi = false,
 }: GeneratePdfRequest): Promise<{ pdf?: string; error?: string }> {
@@ -255,19 +255,21 @@ export async function generatePdf({
     // If templateId is provided fetch existing template
     if (templateId) {
       template = await fetchTemplateById(templateId, devMode);
-      // eslint-disable-next-line no-console
-      console.log({ 'template fetched': template });
 
       if (!template) {
         throw new Error('Template not found');
       }
     }
+    // Determine the data to be used by contentGenerator
+    const dataForContentGenerator = templateData !== undefined
+      ? (templateData as JsonValue) // If templateData was passed, use it (even if it's an empty object {})
+      : (template?.data?.templateSampleData as JsonValue); // Otherwise, use the sample data from the template
 
     const content = await contentGenerator({
       templateType: template?.data?.templateType as TemplateType,
       templateContent: template?.data?.templateContent as string,
       templateStyle: template?.data?.templateStyle as string,
-      templateData: templateData ? templateData as JsonValue : template?.data?.templateSampleData as JsonValue,
+      templateData: dataForContentGenerator,
     });
 
     const htmlPdf = new LeanPuppeteerHTMLPDF({
