@@ -26,12 +26,6 @@ const contentGenerator = async ({
 
   // Compile and generate content for Handlebars templates
   if (templateType === TemplateType.HANDLBARS_TEMPLATE) {
-    // eslint-disable-next-line no-console
-    console.debug('Inside Handlebar Content Generator');
-    // eslint-disable-next-line no-console
-    console.debug({ templateData });
-    // eslint-disable-next-line no-console
-    console.debug('#########################################');
     try {
       const compiledTemplate = hbs.compile(templateContent);
       return compiledTemplate(templateData);
