@@ -245,9 +245,6 @@ export async function fetchTemplateById(templateId: string, isDev: boolean = tru
 
 export async function generatePdf({
   templateId,
-  templateType,
-  templateContent,
-  templateStyle = '',
   templateData = {},
   devMode = true,
   isApi = false,
@@ -258,20 +255,18 @@ export async function generatePdf({
     // If templateId is provided fetch existing template
     if (templateId) {
       template = await fetchTemplateById(templateId, devMode);
+      // eslint-disable-next-line no-console
+      console.log({ 'template fetched': template });
 
-      if (!template || template.error) {
-        return { error: template?.error || 'Template not found' };
+      if (!template) {
+        throw new Error('Template not found');
       }
-    }
-    // If creating a new template
-    if ((!templateType || !templateContent) && !isApi) {
-      return { error: 'Missing required fields: templateType and templateContent' };
     }
 
     const content = await contentGenerator({
-      templateType: (template?.data?.templateType || templateType) as TemplateType,
-      templateContent: (template?.data?.templateContent || templateContent) as string,
-      templateStyle: template?.data?.templateStyle || templateStyle,
+      templateType: template?.data?.templateType as TemplateType,
+      templateContent: template?.data?.templateContent as string,
+      templateStyle: template?.data?.templateStyle as string,
       templateData: templateData ? templateData as JsonValue : template?.data?.templateSampleData as JsonValue,
     });
 
