@@ -12,7 +12,10 @@ export type Template = {
   templateSampleData?: string;
   templateStyle?: string;
   assets?: string; // JSON string
+  previewURL?: string;
   templateType?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 };
 
 export type FetchTemplateResponse = {
