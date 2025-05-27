@@ -236,7 +236,7 @@ export async function fetchTemplateById(templateId: string, isDev: boolean = tru
     const template = result[0]?.templateData;
     const userData = result[0]?.user;
 
-    return { success: true, data: { ...template, user: userData } };
+    return { data: { ...template, user: userData } };
   } catch (error: any) {
     console.error('Error fetching template:', error);
     return { success: false, error: error.message };

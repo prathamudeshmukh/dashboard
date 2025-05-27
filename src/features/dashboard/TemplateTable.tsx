@@ -23,6 +23,7 @@ import { DataTable } from '@/components/ui/data-table';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { deleteTemplate, fetchTemplates } from '@/libs/actions/templates';
+import { useTemplateStore } from '@/libs/store/TemplateStore';
 import { type Template, TemplateType } from '@/types/Template';
 
 import AsyncActionButton from '../../components/AsyncActionButton';
@@ -36,6 +37,7 @@ const TemplateTable = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [openDialog, setOpenDialog] = useState(false);
   const [searchTriggered, setSearchTriggered] = useState(false);
+  const { selectTemplate } = useTemplateStore();
 
   const t = useTranslations('TemplateTable');
   const fetchTemplateData = async (email: string, page: number, search: string) => {
@@ -75,6 +77,10 @@ const TemplateTable = () => {
     } else {
       toast.error(`Failed to delete template: ${response.error}`);
     }
+  };
+  const handlePreview = async (templateId: string) => {
+    selectTemplate(templateId);
+    router.push(`/dashboard/template/preview`);
   };
 
   const columns: ColumnDef<Template>[] = [
@@ -156,6 +162,15 @@ const TemplateTable = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
+                <DropdownMenuItem
+                  onClick={() =>
+                    handlePreview(template.templateId as string)}
+                >
+                  <Button size="sm" variant="ghost">
+                    <SquarePen />
+                    Preview
+                  </Button>
+                </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() =>
                     handleEdit(template.templateId!, template.templateType!)}
