@@ -49,21 +49,19 @@ export default function TemplatePreviewPage() {
     handleSecret();
   }, [user]);
 
-  useEffect(() => {
-    // Simulate API call to fetch template data
-    const fetchTemplate = async () => {
-      setLoading(true);
-      try {
-        // In a real app, this would be an API call
-        const data = await fetchTemplateById(selectedTemplate as string);
-        setPreviewTemplate(data.data as Template);
-      } catch (error) {
-        console.error('Error fetching template:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchTemplate = async () => {
+    setLoading(true);
+    try {
+      const data = await fetchTemplateById(selectedTemplate as string);
+      setPreviewTemplate(data.data as Template);
+    } catch (error) {
+      console.error('Error fetching template:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchTemplate();
   }, [selectedTemplate]);
 
@@ -138,21 +136,29 @@ export default function TemplatePreviewPage() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Left Column - PDF Preview */}
         <div className="lg:col-span-2">
-          <Card className="h-full">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle>PDF Preview</CardTitle>
-            </CardHeader>
-            <CardContent className="p-0">
-              <div className="border-t">
-                <iframe
-                  src={previewTemplate?.previewURL}
-                  className="h-[800px] w-full border-0"
-                  title={`${previewTemplate?.templateName} Preview`}
-                >
-                </iframe>
-              </div>
-            </CardContent>
-          </Card>
+          <CardContent className="p-0">
+            <div className="flex min-h-[800px] flex-row items-center justify-center border-t p-6">
+              {previewTemplate?.previewURL
+                ? (
+                    <iframe
+                      src={previewTemplate.previewURL}
+                      className="h-[1070px] w-full border-0"
+                      title={`${previewTemplate.templateName} Preview`}
+                    />
+                  )
+                : (
+                    <div className="space-y-4 text-center">
+                      <p className="text-lg text-muted-foreground">Preview is being generated...</p>
+                      <Button
+                        onClick={() => fetchTemplate()}
+                        className="rounded-full"
+                      >
+                        Refresh Page
+                      </Button>
+                    </div>
+                  )}
+            </div>
+          </CardContent>
         </div>
 
         {/* Right Column - API Integration */}
