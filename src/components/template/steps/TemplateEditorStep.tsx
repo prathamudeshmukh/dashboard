@@ -1,25 +1,44 @@
 'use client';
 
 import { Lightbulb } from 'lucide-react';
+import { useState } from 'react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import ConfirmationDialog from '@/components/ui/confirmation-dialog';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
+import { EditorTypeEnum } from '@/types/Enum';
 
 import EditorSwitchHeader from '../EditorSwitchHeader';
 import HandlebarsEditor from '../HandlebarsEditor';
 import HTMLBuilder from '../HTMLBuilder';
 
-export enum EditorTypeEnum {
-  VISUAL = 'visual',
-  HANDLEBARS = 'handlebar',
-}
-
 export default function TemplateEditorStep() {
   const { activeTab, setActiveTab } = useTemplateStore();
+  // State for managing the confirmation dialog
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [pendingTab, setPendingTab] = useState<EditorTypeEnum | null>(null);
 
-  const handleTabChange = (value: string) => {
-    setActiveTab(value);
+  const handleTabChange = (tabName: string) => {
+    // Only show confirmation if the user is actually trying to switch to a different tab
+    if (tabName !== activeTab) {
+      setPendingTab(tabName as EditorTypeEnum); // Store the tab they want to switch to
+      setShowConfirmation(true); // Open the confirmation dialog
+    }
+    // If value === activeTab, do nothing (they clicked the current tab)
+  };
+
+  const handleConfirmSwitch = () => {
+    if (pendingTab) {
+      setActiveTab(pendingTab);
+    }
+    setShowConfirmation(false);
+    setPendingTab(null);
+  };
+
+  const handleCancelSwitch = () => {
+    setShowConfirmation(false);
+    setPendingTab(null);
   };
 
   return (
@@ -58,6 +77,16 @@ export default function TemplateEditorStep() {
 
         </Tabs>
       </CardContent>
+      {/* Confirmation Dialog */}
+      <ConfirmationDialog
+        isOpen={showConfirmation}
+        onClose={handleCancelSwitch} // Closing the dialog is like canceling
+        onConfirm={handleConfirmSwitch}
+        title="Switch Editor?"
+        description={`Are you sure you want to switch to the ${pendingTab === EditorTypeEnum.VISUAL ? 'Visual' : 'Code'} Editor? Any unsaved changes in the current editor might be lost or not reflected in the new editor.`}
+        confirmText="Yes, Switch"
+        cancelText="No, Stay"
+      />
     </Card>
   );
 }

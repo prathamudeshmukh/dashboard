@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 
-import { EditorTypeEnum } from '@/components/template/steps/TemplateEditorStep';
-import { CreationMethodEnum } from '@/types/Enum';
+import { CreationMethodEnum, EditorTypeEnum } from '@/types/Enum';
 import type { TemplateGalleryProps, TemplateSuccessData } from '@/types/Template';
 
 type TemplateStore = {

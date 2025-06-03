@@ -1,7 +1,8 @@
 import { Code, WandSparkles } from 'lucide-react';
 
+import { EditorTypeEnum } from '@/types/Enum';
+
 import { Button } from '../ui/button';
-import { EditorTypeEnum } from './steps/TemplateEditorStep';
 
 type EditorSwitchHeaderProps = {
   activeTab: string;

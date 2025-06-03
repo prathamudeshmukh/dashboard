@@ -102,8 +102,8 @@ const TemplateTable = () => {
         };
 
         return (
-          <div className="flex items-center gap-2">
-            <span>{templateId}</span>
+          <div className="flex min-w-[300px] items-center gap-2">
+            <span className="text-xs">{templateId}</span>
             <Button variant="ghost" size="sm" onClick={handleCopy}>
               <Copy />
             </Button>
