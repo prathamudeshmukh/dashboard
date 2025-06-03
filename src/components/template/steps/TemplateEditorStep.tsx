@@ -19,10 +19,10 @@ export default function TemplateEditorStep() {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [pendingTab, setPendingTab] = useState<EditorTypeEnum | null>(null);
 
-  const handleTabChange = (value: string) => {
+  const handleTabChange = (tabName: string) => {
     // Only show confirmation if the user is actually trying to switch to a different tab
-    if (value !== activeTab) {
-      setPendingTab(value as EditorTypeEnum); // Store the tab they want to switch to
+    if (tabName !== activeTab) {
+      setPendingTab(tabName as EditorTypeEnum); // Store the tab they want to switch to
       setShowConfirmation(true); // Open the confirmation dialog
     }
     // If value === activeTab, do nothing (they clicked the current tab)
