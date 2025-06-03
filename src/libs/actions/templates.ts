@@ -322,7 +322,6 @@ export async function updateTemplatePreviewURL({
       .update(templates)
       .set({
         previewURL,
-        updatedAt: sql`now()`,
       })
       .where(
         and(
