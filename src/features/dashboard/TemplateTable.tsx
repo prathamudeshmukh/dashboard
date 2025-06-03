@@ -2,7 +2,7 @@
 
 import { useUser } from '@clerk/nextjs';
 import type { ColumnDef } from '@tanstack/react-table';
-import { Copy, MoreHorizontal, Plus, Search, SquarePen, Trash2 } from 'lucide-react';
+import { Copy, FileSearch, MoreHorizontal, Plus, Search, SquarePen, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -167,7 +167,7 @@ const TemplateTable = () => {
                     handlePreview(template.templateId as string)}
                 >
                   <Button size="sm" variant="ghost">
-                    <SquarePen />
+                    <FileSearch />
                     Preview
                   </Button>
                 </DropdownMenuItem>
