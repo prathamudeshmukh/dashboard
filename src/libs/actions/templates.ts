@@ -2,13 +2,16 @@
 
 import { and, desc, eq, gte, ilike, lte, sql } from 'drizzle-orm';
 
+import { inngest } from '@/inngest/client';
 import { generated_templates, templateGallery, templates, users } from '@/models/Schema';
 import contentGenerator from '@/service/contentGenerator';
-import type { FetchTemplateResponse, FetchTemplatesRequest, GeneratedTemplates, GeneratePdfRequest, JsonObject, JsonValue, PaginatedResponse, TemplateType, UsageMetric, UsageMetricRequest } from '@/types/Template';
+import type { FetchTemplateResponse, FetchTemplatesRequest, GeneratedTemplates, GeneratePdfRequest, JsonObject, JsonValue, PaginatedResponse, TemplateType, UpdatePreviewURLParams, UpdatePreviewURLResult, UsageMetric, UsageMetricRequest } from '@/types/Template';
 
 import { LeanPuppeteerHTMLPDF } from '../../leanPuppeteerHtmlPDF/index';
 import { db } from '../DB';
 import { deductCredit } from './user';
+
+// Types
 
 export async function UpsertTemplate({
   templateId,
@@ -60,6 +63,14 @@ export async function UpsertTemplate({
     }
     const tempID = response[0]?.templateId;
     const data = response[0];
+
+    if (tempID) {
+      await inngest.send({
+        name: 'template/generate-preview',
+        data: { templateId: tempID },
+      });
+    }
+
     return {
       success: true,
       data,
@@ -234,9 +245,6 @@ export async function fetchTemplateById(templateId: string, isDev: boolean = tru
 
 export async function generatePdf({
   templateId,
-  templateType,
-  templateContent,
-  templateStyle = '',
   templateData = {},
   devMode = true,
   isApi = false,
@@ -247,20 +255,18 @@ export async function generatePdf({
     // If templateId is provided fetch existing template
     if (templateId) {
       template = await fetchTemplateById(templateId, devMode);
+      // eslint-disable-next-line no-console
+      console.log({ 'template fetched': template });
 
-      if (!template || template.error) {
-        return { error: template?.error || 'Template not found' };
+      if (!template) {
+        throw new Error('Template not found');
       }
-    }
-    // If creating a new template
-    if ((!templateType || !templateContent) && !isApi) {
-      return { error: 'Missing required fields: templateType and templateContent' };
     }
 
     const content = await contentGenerator({
-      templateType: (template?.data?.templateType || templateType) as TemplateType,
-      templateContent: (template?.data?.templateContent || templateContent) as string,
-      templateStyle: template?.data?.templateStyle || templateStyle,
+      templateType: template?.data?.templateType as TemplateType,
+      templateContent: template?.data?.templateContent as string,
+      templateStyle: template?.data?.templateStyle as string,
       templateData: templateData ? templateData as JsonValue : template?.data?.templateSampleData as JsonValue,
     });
 
@@ -293,6 +299,57 @@ export async function generatePdf({
   } catch (error: any) {
     console.error('Error generating PDF:', error);
     return { error: `Failed to generate PDF: ${error.message}` };
+  }
+}
+
+export async function updateTemplatePreviewURL({
+  templateId,
+  previewURL,
+}: UpdatePreviewURLParams): Promise<UpdatePreviewURLResult> {
+  try {
+    if (!templateId) {
+      throw new Error('Template ID is required');
+    }
+
+    if (!previewURL) {
+      throw new Error('Preview URL is required');
+    }
+
+    // Update the template
+    const updateResult = await db
+      .update(templates)
+      .set({
+        previewURL,
+      })
+      .where(
+        and(
+          eq(templates.templateId, templateId),
+          eq(templates.environment, 'dev'),
+        ),
+      )
+      .returning({
+        id: templates.id,
+        templateId: templates.templateId,
+        previewURL: templates.previewURL,
+        updatedAt: templates.updatedAt,
+      });
+
+    if (!updateResult.length) {
+      throw new Error('Template not found or update failed');
+    }
+
+    const updatedTemplate = updateResult[0];
+    return {
+      data: {
+        templateId: updatedTemplate?.templateId as string,
+        previewURL: updatedTemplate?.previewURL as string,
+      },
+    };
+  } catch (error) {
+    console.error('Error updating template preview URL:', error);
+    return {
+      error: error instanceof Error ? error.message : 'Failed to update preview URL',
+    };
   }
 }
 
