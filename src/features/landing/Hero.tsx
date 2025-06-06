@@ -34,7 +34,7 @@ export const Hero = () => {
 
         {/* Dashboard UI Mockup */}
         <div className="relative mx-auto mt-24 max-w-5xl">
-          <div className="hero-radial-bg absolute -inset-20 -z-10 rounded-[30px] opacity-85 blur-2xl"></div>
+          <div className="hero-radial-bg absolute -inset-5 -z-10 rounded-[30px] opacity-85 blur-2xl md:-inset-20"></div>
           <div className="relative z-10 overflow-hidden rounded-lg border bg-white p-2 shadow-xl">
             <Image
               src="/images/dashboard.png"

@@ -87,8 +87,8 @@ export default function Steps() {
 
   return (
     <section id="how-it-works" className="bg-primary py-20 text-secondary">
-      <div className="container">
-        <div className="mb-12 flex flex-col items-start justify-between md:flex-row">
+      <div className="container px-5 md:px-0">
+        <div className="mb-12 flex flex-col items-center justify-between md:flex-row md:items-start">
           <h2 className="text-4xl font-semibold tracking-tight xl:text-6xl">
             How Templify Works in
             <br />
@@ -97,11 +97,11 @@ export default function Steps() {
           <Button variant="outline" className="mt-8 flex flex-col items-end rounded-full border-black bg-secondary text-lg font-normal text-primary hover:bg-secondary">Build your template</Button>
         </div>
 
-        <div className="mt-16 grid gap-32 md:grid-cols-4">
+        <div className="mt-16 grid md:grid-cols-4 md:gap-32">
 
           <StepNavigation steps={steps} activeStep={activeStep} onStepClick={handleStepClick} />
 
-          <div className="col-span-3 space-y-32">
+          <div className="col-span-3 space-y-16 md:space-y-32">
             {steps.map(step => (
               <StepContent
                 key={step.id}

@@ -62,7 +62,7 @@ export const FAQ = () => {
         icon={FileText}
         className="bg-templify-gray"
       >
-        <div className="container px-4 md:px-6">
+        <div className="container px-5 md:px-0">
           <div className="mx-auto mt-8 max-w-3xl space-y-4">
             <Accordion type="single" collapsible className="w-full">
               {faqs.map((faq, index) => (

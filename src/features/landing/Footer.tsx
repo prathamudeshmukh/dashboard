@@ -5,16 +5,15 @@ import { LogoFooter } from '../../components/landing/Logo';
 export const Footer = () => {
   return (
     <footer className="bg-primary text-white">
-      <div className="container mx-auto px-4 py-12">
+      <div className="container mx-auto px-4 py-12 md:px-0">
         {/* Top Row */}
-        <div className="flex flex-col items-center justify-between space-y-6 md:flex-row md:space-y-0">
+        <div className="flex flex-wrap items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center">
-            <LogoFooter />
-          </div>
+
+          <LogoFooter />
 
           {/* Center Navigation */}
-          <div className="ml-28 items-center space-x-8 text-xl font-normal">
+          <div className="md:ml-30 flex flex-col items-center space-x-0 text-xl font-normal md:flex-row md:items-center md:space-x-8">
             <Link href="#about" className="hover:text-white/80">About</Link>
             <Link href="#how-it-works" className="hover:text-white/80">How it works</Link>
             <Link href="#features" className="hover:text-white/80">Features</Link>
