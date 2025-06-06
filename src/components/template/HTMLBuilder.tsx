@@ -52,13 +52,17 @@ export default function HTMLBuilder() {
           setTemplateDescription(response.data?.description as string);
 
           // Load into editor
-          editor.setComponents(content);
-          editor.setStyle(style || '');
+          if (content) {
+            editor.setComponents(content);
+          }
+          if (style) {
+            editor.setStyle(style);
+          }
         } catch (error) {
           console.error('Failed to load template for editing:', error);
         }
       } else {
-      // No templateId → use current state
+        // No templateId → use current state
         if (htmlContent) {
           editor.setComponents(htmlContent);
         }
