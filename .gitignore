@@ -19,6 +19,8 @@ storybook-static
 /test-results/
 /playwright-report/
 /playwright/.cache/
+/tests/chrome-user-data
+/tests/auth.json
 
 # next.js
 /.next

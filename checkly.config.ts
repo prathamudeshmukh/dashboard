@@ -8,11 +8,11 @@ const sendDefaults = {
 };
 
 // FIXME: Add your production URL
-const productionURL = 'https://react-saas.com';
+const productionURL = 'https://templify-dashboard-dev.vercel.app/';
 
 const emailChannel = new EmailAlertChannel('email-channel-1', {
   // FIXME: add your own email address, Checkly will send you an email notification if a check fails
-  address: 'contact@creativedesignsguru.com',
+  address: 'support@templify.cloud',
   ...sendDefaults,
 });
 
@@ -26,7 +26,7 @@ export const config = defineConfig({
     tags: ['website'],
     runtimeId: '2024.02',
     browserChecks: {
-      frequency: Frequency.EVERY_24H,
+      frequency: Frequency.EVERY_5M,
       testMatch: '**/tests/e2e/**/*.check.e2e.ts',
       alertChannels: [emailChannel],
     },

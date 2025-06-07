@@ -1,10 +1,10 @@
 import { defineConfig, devices } from '@playwright/test';
 
 // Use process.env.PORT by default and fallback to port 3000
-const PORT = process.env.PORT || 3000;
+// const PORT = process.env.PORT || 3000;
 
 // Set webServer.url and use.baseURL with the location of the WebServer respecting the correct set port
-const baseURL = `http://localhost:${PORT}`;
+const baseURL = `https://templify-dashboard-dev.vercel.app`;
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -39,6 +39,7 @@ export default defineConfig({
     // Use baseURL so to make navigations relative.
     // More information: https://playwright.dev/docs/api/class-testoptions#test-options-base-url
     baseURL,
+    storageState: './tests/auth.json',
 
     // Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer
     trace: process.env.CI ? 'retain-on-failure' : undefined,
