@@ -1,6 +1,5 @@
 import { defineConfig } from 'checkly';
 import { EmailAlertChannel, Frequency } from 'checkly/constructs';
-import { SUPPORT_EMAIL } from 'templify.constants';
 
 const sendDefaults = {
   sendFailure: true,
@@ -13,7 +12,7 @@ const productionURL = 'https://templify-dashboard-dev.vercel.app/';
 
 const emailChannel = new EmailAlertChannel('email-channel-1', {
   // FIXME: add your own email address, Checkly will send you an email notification if a check fails
-  address: `${SUPPORT_EMAIL}`,
+  address: 'support@templify.cloud',
   ...sendDefaults,
 });
 
