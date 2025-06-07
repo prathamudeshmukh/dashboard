@@ -59,7 +59,7 @@ const PDFExtractor = () => {
         }
         return; // Job finished, exit the function
       } catch (error: any) {
-        if (error.message.includes('No status found')) {
+        if (error) {
           attempts++;
           if (attempts >= maxAttempts) {
             console.error('Max attempts reached. Could not find status for run ID:', runID);
