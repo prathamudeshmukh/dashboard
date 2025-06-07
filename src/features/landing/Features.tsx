@@ -44,7 +44,7 @@ export default function Features() {
 
   return (
     <section id="features" className="bg-white py-20">
-      <div className="container">
+      <div className="container px-5 md:px-0">
         <h2 className="text-center text-4xl font-bold md:text-5xl lg:text-6xl lg:font-semibold">{t('title')}</h2>
         <p className="mx-auto mb-6 mt-4 max-w-3xl text-center font-normal text-gray-600">{t('subtitle')}</p>
 

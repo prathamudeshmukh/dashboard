@@ -8,7 +8,7 @@ type AboutCardProps = {
 
 export const AboutCard = ({ icon, title, description }: AboutCardProps) => {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col items-center md:items-start">
       <div className="mb-4 flex size-16 items-center justify-center rounded-full bg-blue-50">
         {icon}
       </div>
