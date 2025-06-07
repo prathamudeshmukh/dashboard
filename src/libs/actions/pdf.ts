@@ -30,16 +30,12 @@ export async function uploadPdf(formData: FormData) {
 }
 
 export async function getStatus(runId: string) {
-  // eslint-disable-next-line no-console
-  console.log({ inngestURL: `${inngestBaseUrl}v1/events/${runId}/runs` });
   const response = await fetch(`${inngestBaseUrl}v1/events/${runId}/runs`, {
     headers: {
       Authorization: `Bearer ${process.env.INNGEST_SIGNING_KEY}`,
     },
   });
   const json = await response?.json();
-  // eslint-disable-next-line no-console
-  console.log({ Response: json });
   if (!json?.data[0]?.status) {
     throw new Error(`No status found for this RUN ID - ${runId}`);
   }
