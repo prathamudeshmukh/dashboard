@@ -1,5 +1,6 @@
 import { defineConfig } from 'checkly';
 import { EmailAlertChannel, Frequency } from 'checkly/constructs';
+import { SUPPORT_EMAIL } from 'templify.constants';
 
 const sendDefaults = {
   sendFailure: true,
@@ -8,11 +9,11 @@ const sendDefaults = {
 };
 
 // FIXME: Add your production URL
-const productionURL = 'https://react-saas.com';
+const productionURL = 'https://templify-dashboard-dev.vercel.app/';
 
 const emailChannel = new EmailAlertChannel('email-channel-1', {
   // FIXME: add your own email address, Checkly will send you an email notification if a check fails
-  address: 'contact@creativedesignsguru.com',
+  address: `${SUPPORT_EMAIL}`,
   ...sendDefaults,
 });
 
@@ -26,7 +27,7 @@ export const config = defineConfig({
     tags: ['website'],
     runtimeId: '2024.02',
     browserChecks: {
-      frequency: Frequency.EVERY_24H,
+      frequency: Frequency.EVERY_5M,
       testMatch: '**/tests/e2e/**/*.check.e2e.ts',
       alertChannels: [emailChannel],
     },
