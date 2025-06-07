@@ -33,20 +33,47 @@ const PDFExtractor = () => {
   const { setHtmlContent, setHandlebarsCode } = useTemplateStore();
 
   async function pollJobStatus(runID: string) {
-    let response = await getStatus(runID);
+    let attempts = 0;
+    const maxAttempts = 5; // You can adjust this value
+    const initialDelay = 1000; // 1 second, you can adjust this
 
-    while (response.status !== 'Completed') {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      response = await getStatus(runID);
-      if (response.status === 'Failed' || response.status === 'Cancelled') {
-        setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED);
-        break;
+    while (attempts < maxAttempts) {
+      try {
+        let response = await getStatus(runID);
+
+        // Once we get a status, we can start the main polling logic
+        while (response.status !== 'Completed') {
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          response = await getStatus(runID);
+
+          if (response.status === 'Failed' || response.status === 'Cancelled') {
+            setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED);
+            return; // Exit the function
+          }
+        }
+
+        if (response.status === 'Completed') {
+          setpdfExtractionStatus(PdfExtractionStatusEnum.COMPLETED);
+          setHtmlContent(response.output.htmlContent);
+          setHandlebarsCode(response.output.htmlContent);
+        }
+        return; // Job finished, exit the function
+      } catch (error: any) {
+        if (error.message.includes('No status found')) {
+          attempts++;
+          if (attempts >= maxAttempts) {
+            console.error('Max attempts reached. Could not find status for run ID:', runID);
+            setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED);
+            return;
+          }
+          await new Promise(resolve => setTimeout(resolve, initialDelay * attempts)); // Exponential backoff
+        } else {
+          // Handle other errors
+          console.error('An unexpected error occurred:', error);
+          setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED);
+          return;
+        }
       }
-    }
-    if (response.status === 'Completed') {
-      setpdfExtractionStatus(PdfExtractionStatusEnum.COMPLETED);
-      setHtmlContent(response.output.htmlContent);
-      setHandlebarsCode(response.output.htmlContent);
     }
   }
 
