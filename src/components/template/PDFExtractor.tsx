@@ -40,6 +40,7 @@ const PDFExtractor = () => {
       response = await getStatus(runID);
       if (response.status === 'Failed' || response.status === 'Cancelled') {
         setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED);
+        break;
       }
     }
     if (response.status === 'Completed') {
