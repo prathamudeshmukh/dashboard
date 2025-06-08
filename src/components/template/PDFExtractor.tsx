@@ -33,47 +33,27 @@ const PDFExtractor = () => {
   const { setHtmlContent, setHandlebarsCode } = useTemplateStore();
 
   async function pollJobStatus(runID: string) {
-    let attempts = 0;
-    const maxAttempts = 5; // You can adjust this value
-    const initialDelay = 1000; // 1 second, you can adjust this
+    try {
+    // Initial fetch before starting the loop
+      let response = await getStatus(runID);
 
-    while (attempts < maxAttempts) {
-      try {
-        let response = await getStatus(runID);
-
-        // Once we get a status, we can start the main polling logic
-        while (response.status !== 'Completed') {
-          await new Promise(resolve => setTimeout(resolve, 1000));
-          response = await getStatus(runID);
-
-          if (response.status === 'Failed' || response.status === 'Cancelled') {
-            setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED);
-            return; // Exit the function
-          }
-        }
-
-        if (response.status === 'Completed') {
-          setpdfExtractionStatus(PdfExtractionStatusEnum.COMPLETED);
-          setHtmlContent(response.output.htmlContent);
-          setHandlebarsCode(response.output.htmlContent);
-        }
-        return; // Job finished, exit the function
-      } catch (error: any) {
-        if (error) {
-          attempts++;
-          if (attempts >= maxAttempts) {
-            console.error('Max attempts reached. Could not find status for run ID:', runID);
-            setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED);
-            return;
-          }
-          await new Promise(resolve => setTimeout(resolve, initialDelay * attempts)); // Exponential backoff
-        } else {
-          // Handle other errors
-          console.error('An unexpected error occurred:', error);
-          setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED);
-          return;
-        }
+      // Poll until the job is in a terminal state
+      while (response.status !== 'Completed' && response.status !== 'Failed' && response.status !== 'Cancelled') {
+      // Wait for a second before the next poll
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        response = await getStatus(runID);
       }
+
+      if (response.status === 'Completed') {
+        setpdfExtractionStatus(PdfExtractionStatusEnum.COMPLETED);
+        setHtmlContent(response.output.htmlContent);
+        setHandlebarsCode(response.output.htmlContent);
+      } else if (response.status === 'Failed' || response.status === 'Cancelled') {
+        setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED);
+      }
+    } catch (error) {
+      console.error('An error occurred while polling job status:', error);
+      setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED);
     }
   }
 
