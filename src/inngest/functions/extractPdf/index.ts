@@ -32,6 +32,10 @@ export const extractPdfContent = inngest.createFunction(
       fs.mkdirSync(outputDir, { recursive: true });
       fs.mkdirSync(TMP_EXTRACT_DIR, { recursive: true });
 
+      // Cleanup step - runs after successful completion
+      await step.run('cleanup-temp-files-first', () =>
+        cleanupDirectory({ directory: tmpBase }));
+
       await step.run('download-appryse-module', () =>
         downloadAppryseModule(TMP_ZIP_PATH, logger));
 
