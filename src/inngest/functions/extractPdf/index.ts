@@ -4,6 +4,7 @@ import path from 'node:path';
 
 import { inngest } from '@/inngest/client';
 
+import { cleanupDirectory } from './cleanupDirectory';
 import { convertToHtml } from './convertToHtml';
 import { downloadAppryseModule } from './downloadAppryseModule';
 import { downloadPDF } from './downloadPDF';
@@ -48,6 +49,10 @@ export const extractPdfContent = inngest.createFunction(
 
       const htmlContent = await step.run('read-html', () =>
         readHtmlFile(outputHtmlPath));
+
+      // Cleanup step - runs after successful completion
+      await step.run('cleanup-temp-files', () =>
+        cleanupDirectory({ directory: inputDir }));
 
       return { htmlContent };
     } catch (error: any) {
