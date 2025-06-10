@@ -33,19 +33,27 @@ const PDFExtractor = () => {
   const { setHtmlContent, setHandlebarsCode } = useTemplateStore();
 
   async function pollJobStatus(runID: string) {
-    let response = await getStatus(runID);
+    try {
+    // Initial fetch before starting the loop
+      let response = await getStatus(runID);
 
-    while (response.status !== 'Completed') {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      response = await getStatus(runID);
-      if (response.status === 'Failed' || response.status === 'Cancelled') {
+      // Poll until the job is in a terminal state
+      while (response.status !== 'Completed' && response.status !== 'Failed' && response.status !== 'Cancelled') {
+      // Wait for a second before the next poll
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        response = await getStatus(runID);
+      }
+
+      if (response.status === 'Completed') {
+        setpdfExtractionStatus(PdfExtractionStatusEnum.COMPLETED);
+        setHtmlContent(response.output.htmlContent);
+        setHandlebarsCode(response.output.htmlContent);
+      } else if (response.status === 'Failed' || response.status === 'Cancelled') {
         setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED);
       }
-    }
-    if (response.status === 'Completed') {
-      setpdfExtractionStatus(PdfExtractionStatusEnum.COMPLETED);
-      setHtmlContent(response.output.htmlContent);
-      setHandlebarsCode(response.output.htmlContent);
+    } catch (error) {
+      console.error('An error occurred while polling job status:', error);
+      setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED);
     }
   }
 

@@ -35,9 +35,13 @@ export async function getStatus(runId: string) {
       Authorization: `Bearer ${process.env.INNGEST_SIGNING_KEY}`,
     },
   });
-  const json = await response.json();
+  if (!response.ok) {
+    throw new Error(`Error fetching status: ${response.statusText}`);
+  }
+
+  const json = await response?.json();
   if (!json?.data[0]?.status) {
-    throw new Error(`No status found for this RUN ID - ${runId}`);
+    return { status: 'pending', output: null };
   }
 
   return { status: json?.data[0]?.status, output: json?.data[0]?.output };
