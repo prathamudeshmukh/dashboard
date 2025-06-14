@@ -26,9 +26,17 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
     const searchParams = req.nextUrl.searchParams;
     const devMode = searchParams.get('devMode') === 'true';
 
-    // Parse the request body
-    const body = await req.json();
-    const { templateData } = body; // Extract dev_mode from body with default false
+    let templateData;
+
+    try {
+      const body = await req.text();
+      if (body) {
+        const parsedBody = JSON.parse(body);
+        templateData = parsedBody.templateData;
+      }
+    } catch (error) {
+      console.warn(`No valid JSON body provided. Continuing with empty templateData: ${error}`);
+    }
 
     const response = await generatePdf({
       devMode,

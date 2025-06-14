@@ -1,6 +1,6 @@
 'use client';
 
-import { Check, Code, Copy, ExternalLink } from 'lucide-react';
+import { Check, Copy, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -71,12 +71,6 @@ export default function TemplateInformation({ previewTemplate, codeSnippets }: P
           <Separator className="my-4" />
 
           <div className="mt-4 flex flex-col gap-2">
-            <Link href={`/api-playground?template=${previewTemplate.templateId}`} className="w-full">
-              <Button className="w-full rounded-full text-lg">
-                <Code className="mr-2 size-4" />
-                Try in API Playground
-              </Button>
-            </Link>
             <Link href="/docs" className="w-full">
               <Button variant="outline" className="w-full rounded-full text-lg">
                 <ExternalLink className="mr-2 size-4" />

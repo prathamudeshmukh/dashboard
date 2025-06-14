@@ -1,8 +1,9 @@
 'use client';
 
 import { useUser } from '@clerk/nextjs';
-import { ArrowLeft, Code, Edit } from 'lucide-react';
+import { ArrowLeft, Edit } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { BASE_API_URL } from 'templify.constants';
 
@@ -12,7 +13,7 @@ import { fetchTemplateById } from '@/libs/actions/templates';
 import { getClientSecret } from '@/libs/actions/user';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 import { generateCodeSnippets } from '@/service/generateCodeSnippets';
-import type { Template } from '@/types/Template';
+import { type Template, TemplateType } from '@/types/Template';
 
 import MainContent from './MainContent';
 import TemplateInformation from './TemplateInformation';
@@ -20,6 +21,7 @@ import TemplatePreviewLoading from './TemplatePreviewLoading';
 
 export default function TemplatePreviewPage() {
   const { user } = useUser();
+  const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
   const [secret, setSecret] = useState<string>('');
@@ -64,6 +66,14 @@ export default function TemplatePreviewPage() {
     });
   }, [BASE_API_URL, previewTemplate, secret, user, formattedSampleData]);
 
+  const handleEdit = (templateId: string, templateType: TemplateType) => {
+    if (templateType === TemplateType.HTML_BUILDER) {
+      router.push(`/dashboard/html-builder?templateId=${templateId}`);
+    } else {
+      router.push(`/dashboard/handlebar-editor?templateId=${templateId}`);
+    }
+  };
+
   if (loading || !previewTemplate) {
     return <TemplatePreviewLoading />;
   }
@@ -91,18 +101,10 @@ export default function TemplatePreviewPage() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Link href={`/editor/${previewTemplate.templateId}`}>
-            <Button variant="outline" className="w-full rounded-full text-lg">
-              <Edit className="mr-2 size-4" />
-              Edit Template
-            </Button>
-          </Link>
-          <Link href={`/api-playground?template=${previewTemplate.templateId}`}>
-            <Button className="w-full rounded-full text-lg">
-              <Code className="mr-2 size-4" />
-              Try in API Playground
-            </Button>
-          </Link>
+          <Button onClick={() => handleEdit(previewTemplate.templateId as string, previewTemplate.templateType as TemplateType)} variant="outline" className="w-full rounded-full text-lg">
+            <Edit className="mr-2 size-4" />
+            Edit Template
+          </Button>
         </div>
       </div>
 
