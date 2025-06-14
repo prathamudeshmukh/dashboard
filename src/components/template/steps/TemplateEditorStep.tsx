@@ -5,7 +5,6 @@ import { useState } from 'react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import ConfirmationDialog from '@/components/ui/confirmation-dialog';
-import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 import { EditorTypeEnum } from '@/types/Enum';
 
@@ -20,12 +19,10 @@ export default function TemplateEditorStep() {
   const [pendingTab, setPendingTab] = useState<EditorTypeEnum | null>(null);
 
   const handleTabChange = (tabName: string) => {
-    // Only show confirmation if the user is actually trying to switch to a different tab
     if (tabName !== activeTab) {
       setPendingTab(tabName as EditorTypeEnum); // Store the tab they want to switch to
       setShowConfirmation(true); // Open the confirmation dialog
     }
-    // If value === activeTab, do nothing (they clicked the current tab)
   };
 
   const handleConfirmSwitch = () => {
@@ -50,32 +47,30 @@ export default function TemplateEditorStep() {
       </CardHeader>
 
       <CardContent className="p-0">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <EditorSwitchHeader activeTab={activeTab} onTabChange={handleTabChange} />
+        <EditorSwitchHeader activeTab={activeTab} onTabChange={handleTabChange} />
 
-          <TabsContent value={EditorTypeEnum.VISUAL} className="mt-0 border-0 p-0">
-            <div className="border-b bg-amber-50/50 p-4">
-              <InfoMessage text="Drag and drop elements to build your template visually. Changes here will not affect your Handlebars template." />
+        <div className={(activeTab === EditorTypeEnum.VISUAL) ? 'block' : 'hidden'}>
+          <div className="border-b bg-amber-50/50 p-4">
+            <InfoMessage text="Drag and drop elements to build your template visually. Changes here will not affect your Handlebars template." />
+          </div>
+          <div className="p-4">
+            <div className="min-h-[700px]">
+              <HTMLBuilder />
             </div>
-            <div className="p-4">
-              <div className="min-h-[700px]">
-                <HTMLBuilder />
-              </div>
-            </div>
-          </TabsContent>
+          </div>
+        </div>
 
-          <TabsContent value={EditorTypeEnum.HANDLEBARS} className="mt-0 border-0 p-0">
-            <div className="border-b bg-amber-50/50 p-4">
-              <InfoMessage text="You're using the Code Editor, which give you full control over your template using Handlebars syntax. Need a simpler approach? Switch to the Visual Editor to build your template using drag-and-drop" />
+        <div className={(activeTab === EditorTypeEnum.HANDLEBARS) ? 'block' : 'hidden'}>
+          <div className="border-b bg-amber-50/50 p-4">
+            <InfoMessage text="You're using the Code Editor, which give you full control over your template using Handlebars syntax. Need a simpler approach? Switch to the Visual Editor to build your template using drag-and-drop" />
+          </div>
+          <div className="p-4">
+            <div className="min-h-[700px]">
+              <HandlebarsEditor />
             </div>
-            <div className="p-4">
-              <div className="min-h-[700px]">
-                <HandlebarsEditor />
-              </div>
-            </div>
-          </TabsContent>
+          </div>
+        </div>
 
-        </Tabs>
       </CardContent>
       {/* Confirmation Dialog */}
       <ConfirmationDialog
