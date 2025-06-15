@@ -25,7 +25,7 @@ export const extractPdfContent = inngest.createFunction(
     const pdfId = event.data.pdfId;
     const inputDir = path.join(tmpBase, pdfId);
     const outputDir = path.join(inputDir, 'output');
-    const localPdfPath = path.join(inputDir, 'in.pdf');
+    // const localPdfPath = path.join(inputDir, 'in.pdf');
     const outputHtmlPath = path.join(outputDir, 'output');
 
     try {
@@ -41,11 +41,11 @@ export const extractPdfContent = inngest.createFunction(
       const { downloadUrl } = await step.run('fetch-blob-metadata', () =>
         fetchBlobMetadata(pdfId));
 
-      await step.run('download-pdf', () =>
-        downloadPDF(downloadUrl, localPdfPath));
+      const pdfBuffer = await step.run('download-pdf', () =>
+        downloadPDF(downloadUrl));
 
       await step.run('convert-to-html', () =>
-        convertToHtml(localPdfPath, outputHtmlPath, TMP_EXTRACT_DIR));
+        convertToHtml(pdfBuffer, outputHtmlPath, TMP_EXTRACT_DIR));
 
       const htmlContent = await step.run('read-html', () =>
         readHtmlFile(outputHtmlPath));
