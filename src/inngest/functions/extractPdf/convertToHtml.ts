@@ -4,7 +4,7 @@ import path from 'node:path';
 
 import { PDFNet } from '@pdftron/pdfnet-node';
 
-export async function convertToHtml(pdfBuffer: any, outputHtmlPath: string, resourceBasePath: string) {
+export async function convertToHtml(pdfBuffer: ArrayBuffer, outputHtmlPath: string, resourceBasePath: string) {
   const main = async () => {
     console.log('Buffer type:', typeof pdfBuffer);
     console.log('Buffer constructor:', pdfBuffer.constructor.name);

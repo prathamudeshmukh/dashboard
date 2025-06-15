@@ -45,7 +45,7 @@ export const extractPdfContent = inngest.createFunction(
         downloadPDF(downloadUrl));
 
       await step.run('convert-to-html', () =>
-        convertToHtml(pdfBuffer, outputHtmlPath, TMP_EXTRACT_DIR));
+        convertToHtml(pdfBuffer as ArrayBuffer, outputHtmlPath, TMP_EXTRACT_DIR));
 
       const htmlContent = await step.run('read-html', () =>
         readHtmlFile(outputHtmlPath));
