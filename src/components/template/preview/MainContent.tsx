@@ -16,6 +16,7 @@ export default function MainContent({ previewTemplate, onRefresh }: MainContentP
           {previewTemplate?.previewURL
             ? (
                 <iframe
+                  key={`${previewTemplate.previewURL}-${previewTemplate.updatedAt}`}
                   src={previewTemplate.previewURL}
                   className="h-[1070px] w-full border-0"
                   title={`${previewTemplate.templateName} Preview`}
