@@ -1,8 +1,9 @@
-import fs from 'node:fs';
+import { Buffer } from 'node:buffer';
 
 import axios from 'axios';
 
-export async function downloadPDF(downloadUrl: string, localPdfPath: string) {
+export async function downloadPDF(downloadUrl: string): Promise<Buffer> {
   const response = await axios.get(downloadUrl, { responseType: 'arraybuffer' });
-  fs.writeFileSync(localPdfPath, response.data);
+  const arrayBuffer = response.data as ArrayBuffer;
+  return Buffer.from(arrayBuffer);
 }
