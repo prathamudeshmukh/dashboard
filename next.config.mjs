@@ -35,7 +35,7 @@ const NextConfig = withSentryConfig(
           dirs: ['.'],
         },
         poweredByHeader: false,
-        reactStrictMode: true,
+        reactStrictMode: false,
         experimental: {
           serverComponentsExternalPackages: ['@electric-sql/pglite', 'puppeteer-core', '@sparticuz/chromium', '@pdftron/pdfnet-node'],
         },
