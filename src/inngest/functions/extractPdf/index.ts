@@ -32,6 +32,27 @@ export const extractPdfContent = inngest.createFunction(
       fs.mkdirSync(outputDir, { recursive: true });
       fs.mkdirSync(TMP_EXTRACT_DIR, { recursive: true });
 
+      await step.run('list-tmp-directory', async () => {
+        const tmpPath = tmpBase;
+        const fs = await import('node:fs');
+        const path = await import('node:path');
+
+        try {
+          const files = fs.readdirSync(tmpPath);
+          const detailed = files.map((file) => {
+            const filePath = path.join(tmpPath, file);
+            const isDir = fs.statSync(filePath).isDirectory();
+            return `${isDir ? '📁' : '📄'} ${file}`;
+          });
+
+          logger.info('📂 /tmp directory contents:\n', detailed.join('\n'));
+          return detailed;
+        } catch (err) {
+          console.error('Error reading /tmp directory:', err);
+          return [];
+        }
+      });
+
       await step.run('download-appryse-module', () =>
         downloadAppryseModule(TMP_ZIP_PATH, logger));
 
