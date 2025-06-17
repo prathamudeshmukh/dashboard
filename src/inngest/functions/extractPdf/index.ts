@@ -72,7 +72,7 @@ export const extractPdfContent = inngest.createFunction(
       });
 
       await step.run('download-appryse-module', () =>
-        downloadAppryseModule(TMP_ZIP_PATH, logger));
+        downloadAppryseModule(TMP_ZIP_PATH, TMP_EXTRACT_DIR, logger));
 
       await step.run('extract-appryse-module', () =>
         extractAppryseModule(TMP_ZIP_PATH, TMP_EXTRACT_DIR, logger));
