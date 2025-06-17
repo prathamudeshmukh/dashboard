@@ -75,7 +75,7 @@ export const extractPdfContent = inngest.createFunction(
         downloadAppryseModule(TMP_ZIP_PATH, logger));
 
       await step.run('extract-appryse-module', () =>
-        extractAppryseModule(TMP_ZIP_PATH, TMP_EXTRACT_DIR));
+        extractAppryseModule(TMP_ZIP_PATH, TMP_EXTRACT_DIR, logger));
 
       const { downloadUrl } = await step.run('fetch-blob-metadata', () =>
         fetchBlobMetadata(pdfId));
@@ -91,7 +91,7 @@ export const extractPdfContent = inngest.createFunction(
 
       // Cleanup step - runs after successful completion
       await step.run('cleanup-temp-files', () =>
-        cleanupDirectory({ directory: inputDir }));
+        cleanupDirectory({ directory: inputDir, logger }));
 
       return { htmlContent };
     } catch (error: any) {
