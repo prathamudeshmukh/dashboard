@@ -37,16 +37,34 @@ export const extractPdfContent = inngest.createFunction(
         const fs = await import('node:fs');
         const path = await import('node:path');
 
-        try {
-          const files = fs.readdirSync(tmpPath);
-          const detailed = files.map((file) => {
-            const filePath = path.join(tmpPath, file);
-            const isDir = fs.statSync(filePath).isDirectory();
-            return `${isDir ? '📁' : '📄'} ${file}`;
-          });
+        function formatSize(bytes: number) {
+          return bytes > 1024 * 1024
+            ? `${(bytes / (1024 * 1024)).toFixed(2)} MB`
+            : `${(bytes / 1024).toFixed(2)} KB`;
+        }
 
-          logger.info('📂 /tmp directory contents:\n', detailed.join('\n'));
-          return detailed;
+        function walk(dir: string, depth = 0): string[] {
+          const entries: string[] = [];
+          const indent = '  '.repeat(depth);
+
+          for (const entry of fs.readdirSync(dir)) {
+            const entryPath = path.join(dir, entry);
+            const stats = fs.statSync(entryPath);
+            if (stats.isDirectory()) {
+              entries.push(`${indent}📁 ${entry}/`);
+              entries.push(...walk(entryPath, depth + 1));
+            } else {
+              entries.push(`${indent}📄 ${entry} — ${formatSize(stats.size)}`);
+            }
+          }
+
+          return entries;
+        }
+
+        try {
+          const listing = walk(tmpPath);
+          logger.info(`📂 Recursive /tmp directory listing:\n${listing.join('\n')}`);
+          return listing;
         } catch (err) {
           console.error('Error reading /tmp directory:', err);
           return [];
