@@ -81,7 +81,7 @@ curl_close($ch);
 file_put_contents('output.pdf', $response);`;
 
   // cURL snippet
-  const curl = `curl -X POST ${BASE_API_URL}convert/${templateId}?devMode=true \\
+  const shell = `curl -X POST ${BASE_API_URL}convert/${templateId}?devMode=true \\
   -H "Content-Type: application/json" \\
   -H "client_secret: ${secret}" \\
   -H "client_id: ${userId}"${
@@ -98,6 +98,6 @@ file_put_contents('output.pdf', $response);`;
     javascript,
     python,
     php,
-    curl,
+    shell,
   };
 };
