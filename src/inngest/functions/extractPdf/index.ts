@@ -5,7 +5,6 @@ import path from 'node:path';
 import { inngest } from '@/inngest/client';
 
 import { cleanupDirectory } from './cleanupDirectory';
-import { convertToHtml } from './convertToHtml';
 import { downloadAppryseModule } from './downloadAppryseModule';
 import { downloadPDF } from './downloadPDF';
 import { extractAppryseModule } from './extractAppryseModule';
@@ -80,11 +79,11 @@ export const extractPdfContent = inngest.createFunction(
       const { downloadUrl } = await step.run('fetch-blob-metadata', () =>
         fetchBlobMetadata(pdfId));
 
-      const pdfBuffer = await step.run('download-pdf', () =>
-        downloadPDF(downloadUrl));
+      await step.run('download-pdf', () =>
+        downloadPDF(downloadUrl, outputHtmlPath, TMP_EXTRACT_DIR));
 
-      await step.run('convert-to-html', () =>
-        convertToHtml(pdfBuffer as ArrayBuffer, outputHtmlPath, TMP_EXTRACT_DIR));
+      // await step.run('convert-to-html', () =>
+      //   convertToHtml(pdfBuffer as ArrayBuffer, outputHtmlPath, TMP_EXTRACT_DIR));
 
       const htmlContent = await step.run('read-html', () =>
         readHtmlFile(outputHtmlPath));
