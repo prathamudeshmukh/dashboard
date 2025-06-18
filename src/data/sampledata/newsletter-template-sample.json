@@ -11,15 +11,15 @@
     "title": "New Product Launch: What You Need to Know",
     "imageUrl": null,
     "paragraphs": [
-      "We're excited to announce the launch of our newest product line, designed to revolutionize how you work. With enhanced features and improved performance, this update brings significant value to all our customers.",
+      "We are excited to announce the launch of our newest product line, designed to revolutionize how you work. With enhanced features and improved performance, this update brings significant value to all our customers.",
       "Early adopters have reported a 40% increase in productivity..."
     ]
   },
   "companyUpdates": {
     "title": "Company Updates",
     "paragraphs": [
-      "Our company has been recognized as a leader in innovation for the third consecutive year. This achievement reflects our team's dedication to excellence and our commitment to providing cutting-edge solutions.",
-      "We're also pleased to welcome three new members to our executive team, bringing decades of industry experience."
+      "Our company has been recognized as a leader in innovation for the third consecutive year. This achievement reflects our teams dedication to excellence and our commitment to providing cutting-edge solutions.",
+      "We are also pleased to welcome three new members to our executive team, bringing decades of industry experience."
     ]
   },
   "upcomingEvents": {
@@ -44,7 +44,7 @@
   },
   "customerSpotlight": {
     "title": "Customer Spotlight",
-    "quote": "Implementing this solution has transformed our business operations. We've seen a 30% reduction in processing time and significant cost savings.",
+    "quote": "Implementing this solution has transformed our business operations. We have seen a 30% reduction in processing time and significant cost savings.",
     "author": "Jane Smith",
     "position": "CEO",
     "company": "Client Company"
@@ -58,7 +58,7 @@
   },
   "footer": {
     "copyright": "© 2025 Your Company Name. All rights reserved.",
-    "subscriptionInfo": "You're receiving this email because you subscribed to our newsletter.",
+    "subscriptionInfo": "You are receiving this email because you subscribed to our newsletter.",
     "links": [
       {
         "text": "Unsubscribe",

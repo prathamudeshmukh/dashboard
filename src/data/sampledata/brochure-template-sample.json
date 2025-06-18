@@ -49,7 +49,7 @@
     "imageUrl": null
   },
   "testimonial": {
-    "quote": "TechInnovate transformed our operations with their innovative solutions. Their team's expertise and dedication to our success made all the difference. We've seen a 40% increase in efficiency since implementing their systems.",
+    "quote": "TechInnovate transformed our operations with their innovative solutions. Their teams expertise and dedication to our success made all the difference. We have seen a 40% increase in efficiency since implementing their systems.",
     "author": "Jennifer Martinez",
     "company": "CEO, Global Enterprises"
   },
@@ -85,7 +85,7 @@
   },
   "contact": {
     "title": "Get In Touch",
-    "subtitle": "We're here to answer your questions and help you succeed",
+    "subtitle": "We are here to answer your questions and help you succeed",
     "methods": [
       {
         "icon": "ICON",

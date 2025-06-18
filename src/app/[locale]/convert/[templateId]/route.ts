@@ -32,6 +32,12 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
       const body = await req.text();
       if (body) {
         const parsedBody = JSON.parse(body);
+        if (!('templateData' in parsedBody)) {
+          return NextResponse.json(
+            { error: '"templateData" key is missing in the request body' },
+            { status: 400 },
+          );
+        }
         templateData = parsedBody.templateData;
       }
     } catch (error) {
