@@ -11,7 +11,7 @@ export async function convertToHtml(
     await PDFNet.initialize();
     const resourcePath = path.join(resourceBasePath, '/Lib/Linux');
     await PDFNet.addResourceSearchPath(resourcePath);
-    const pdfDoc = await PDFNet.PDFDoc.createFromBuffer(pdfBuffer);
+    const pdfDoc = await PDFNet.PDFDoc.createFromBuffer(pdfBuffer as ArrayBuffer);
     const htmlOptions = new PDFNet.Convert.HTMLOutputOptions();
     htmlOptions.setContentReflowSetting(PDFNet.Convert.HTMLOutputOptions.ContentReflowSetting.e_reflow_full);
     htmlOptions.setEmbedImages(false);
