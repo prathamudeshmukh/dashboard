@@ -161,7 +161,7 @@ export default function SuccessView() {
               <TabsTrigger className="text-lg" value="javascript">JavaScript</TabsTrigger>
               <TabsTrigger className="text-lg" value="python">Python</TabsTrigger>
               <TabsTrigger className="text-lg" value="php">PHP</TabsTrigger>
-              <TabsTrigger className="text-lg" value="curl">cURL</TabsTrigger>
+              <TabsTrigger className="text-lg" value="shell">cURL</TabsTrigger>
             </TabsList>
 
             {Object.entries(codeSnippets).map(([language, code]) => (
