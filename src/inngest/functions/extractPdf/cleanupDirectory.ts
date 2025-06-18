@@ -13,6 +13,6 @@ export const cleanupDirectory = ({ directory, logger }: CleanupDirectoryOptions)
     }
   } catch (error) {
     // Log error but don't throw to avoid breaking the main flow
-    console.warn(`Failed to cleanup directory ${directory}:`, error);
+    logger.error(`Failed to cleanup directory ${directory}:`, error);
   }
 };
