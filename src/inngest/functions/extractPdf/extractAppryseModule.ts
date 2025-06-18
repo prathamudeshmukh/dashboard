@@ -30,7 +30,7 @@ export async function extractAppryseModule(TMP_ZIP_PATH: string, TMP_EXTRACT_DIR
     await fs.unlink(TMP_ZIP_PATH);
     logger.info(`🗑️ Deleted archive file: ${TMP_ZIP_PATH}`);
   } catch (error) {
-    console.error(`Failed to extract or clean up: ${TMP_ZIP_PATH}`, error);
+    logger.error(`Failed to extract or clean up: ${TMP_ZIP_PATH}`, error);
     throw error;
   }
 }
