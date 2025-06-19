@@ -2,16 +2,17 @@ import fs from 'node:fs';
 
 type CleanupDirectoryOptions = {
   directory: string;
-  force?: boolean;
+  logger: any;
 };
 
-export const cleanupDirectory = async ({ directory, force = true }: CleanupDirectoryOptions): Promise<void> => {
+export const cleanupDirectory = ({ directory, logger }: CleanupDirectoryOptions): void => {
   try {
     if (fs.existsSync(directory)) {
-      await fs.promises.rm(directory, { recursive: true, force });
+      fs.rmSync(directory, { recursive: true, force: true });
+      logger.info(`✅ Successfully cleaned up directory: ${directory}`);
     }
   } catch (error) {
     // Log error but don't throw to avoid breaking the main flow
-    console.warn(`Failed to cleanup directory ${directory}:`, error);
+    logger.error(`Failed to cleanup directory ${directory}:`, error);
   }
 };

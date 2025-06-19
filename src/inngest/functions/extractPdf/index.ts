@@ -5,9 +5,8 @@ import path from 'node:path';
 import { inngest } from '@/inngest/client';
 
 import { cleanupDirectory } from './cleanupDirectory';
-import { convertToHtml } from './convertToHtml';
+import { convertToHTML } from './convertToHtml';
 import { downloadAppryseModule } from './downloadAppryseModule';
-import { downloadPDF } from './downloadPDF';
 import { extractAppryseModule } from './extractAppryseModule';
 import { fetchBlobMetadata } from './fetchBlobMetadata';
 import { readHtmlFile } from './readHtml';
@@ -25,7 +24,6 @@ export const extractPdfContent = inngest.createFunction(
     const pdfId = event.data.pdfId;
     const inputDir = path.join(tmpBase, pdfId);
     const outputDir = path.join(inputDir, 'output');
-    const localPdfPath = path.join(inputDir, 'in.pdf');
     const outputHtmlPath = path.join(outputDir, 'output');
 
     try {
@@ -33,26 +31,23 @@ export const extractPdfContent = inngest.createFunction(
       fs.mkdirSync(TMP_EXTRACT_DIR, { recursive: true });
 
       await step.run('download-appryse-module', () =>
-        downloadAppryseModule(TMP_ZIP_PATH, logger));
+        downloadAppryseModule(TMP_ZIP_PATH, TMP_EXTRACT_DIR, logger));
 
       await step.run('extract-appryse-module', () =>
-        extractAppryseModule(TMP_ZIP_PATH, TMP_EXTRACT_DIR));
+        extractAppryseModule(TMP_ZIP_PATH, TMP_EXTRACT_DIR, logger));
 
       const { downloadUrl } = await step.run('fetch-blob-metadata', () =>
         fetchBlobMetadata(pdfId));
 
-      await step.run('download-pdf', () =>
-        downloadPDF(downloadUrl, localPdfPath));
-
       await step.run('convert-to-html', () =>
-        convertToHtml(localPdfPath, outputHtmlPath, TMP_EXTRACT_DIR));
+        convertToHTML(downloadUrl, outputHtmlPath, TMP_EXTRACT_DIR));
 
       const htmlContent = await step.run('read-html', () =>
         readHtmlFile(outputHtmlPath));
 
       // Cleanup step - runs after successful completion
       await step.run('cleanup-temp-files', () =>
-        cleanupDirectory({ directory: inputDir }));
+        cleanupDirectory({ directory: inputDir, logger }));
 
       return { htmlContent };
     } catch (error: any) {
