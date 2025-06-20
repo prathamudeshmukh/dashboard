@@ -119,6 +119,10 @@ export const templates = pgTable('templates', {
     table.environment,
   ),
   emailIndex: index('template_email_idx').on(table.email),
+  emailEnvIndex: index('template_email_env_created_idx').on(
+    table.email,
+    table.environment,
+  ),
 }));
 
 export const generated_templates = pgTable('generated_templates', {
