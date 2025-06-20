@@ -44,7 +44,11 @@ const TemplateTable = () => {
     if (!email) {
       return;
     }
+    const start = performance.now();
     const response = await fetchTemplates({ email, page, pageSize: 10, searchQuery: search });
+    const end = performance.now();
+    // eslint-disable-next-line no-console
+    console.log(`Fetching templates took ${end - start} ms`);
     setTotalPages(response.totalPages);
     setTemplateData(response.data);
   };
