@@ -22,3 +22,13 @@ export enum EditorTypeEnum {
   VISUAL = 'visual',
   HANDLEBARS = 'handlebar',
 }
+
+export enum TemplateTableState {
+  Idle = 'idle',
+  Loading = 'loading',
+  Success = 'success',
+  Empty = 'empty',
+  SearchNoResults = 'search-no-results',
+  Error = 'error',
+  FTUX = 'ftux',
+}
