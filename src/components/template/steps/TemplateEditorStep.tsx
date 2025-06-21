@@ -49,27 +49,33 @@ export default function TemplateEditorStep() {
       <CardContent className="p-0">
         <EditorSwitchHeader activeTab={activeTab} onTabChange={handleTabChange} />
 
-        <div className={(activeTab === EditorTypeEnum.VISUAL) ? 'block' : 'hidden'}>
-          <div className="border-b bg-amber-50/50 p-4">
-            <InfoMessage text="Drag and drop elements to build your template visually. Changes here will not affect your Handlebars template." />
-          </div>
-          <div className="p-4">
-            <div className="min-h-[700px]">
-              <HTMLBuilder />
+        {(activeTab === EditorTypeEnum.VISUAL)
+        && (
+          <>
+            <div className="border-b bg-amber-50/50 p-4">
+              <InfoMessage text="Drag and drop elements to build your template visually. Changes here will not affect your Handlebars template." />
             </div>
-          </div>
-        </div>
+            <div className="p-4">
+              <div className="min-h-[700px]">
+                <HTMLBuilder />
+              </div>
+            </div>
+          </>
+        )}
 
-        <div className={(activeTab === EditorTypeEnum.HANDLEBARS) ? 'block' : 'hidden'}>
-          <div className="border-b bg-amber-50/50 p-4">
-            <InfoMessage text="You're using the Code Editor, which give you full control over your template using Handlebars syntax. Need a simpler approach? Switch to the Visual Editor to build your template using drag-and-drop" />
-          </div>
-          <div className="p-4">
-            <div className="min-h-[700px]">
-              <HandlebarsEditor />
+        {(activeTab === EditorTypeEnum.HANDLEBARS)
+        && (
+          <>
+            <div className="border-b bg-amber-50/50 p-4">
+              <InfoMessage text="You're using the Code Editor, which give you full control over your template using Handlebars syntax. Need a simpler approach? Switch to the Visual Editor to build your template using drag-and-drop" />
             </div>
-          </div>
-        </div>
+            <div className="p-4">
+              <div className="min-h-[700px]">
+                <HandlebarsEditor />
+              </div>
+            </div>
+          </>
+        )}
 
       </CardContent>
       {/* Confirmation Dialog */}
