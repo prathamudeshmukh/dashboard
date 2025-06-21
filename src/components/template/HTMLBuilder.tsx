@@ -70,11 +70,15 @@ export default function HTMLBuilder() {
     };
 
     loadTemplate();
+
+    return () => {
+      if (editor) {
+        editor.destroy();
+      }
+    };
   }, [templateId, editor]); // Make sure to depend on both
 
   const onReady = (editor: Editor) => {
-    setEditor(editor);
-
     // Save HTML content when editor changes
     const updateContent = debounce(() => {
       const html = editor.getHtml();
@@ -112,6 +116,8 @@ export default function HTMLBuilder() {
         placeholder[0]?.remove();
       }
     });
+    editor.render();
+    setEditor(editor);
   };
 
   const handleSave = async (type: UpdateTypeEnum) => {
@@ -175,6 +181,7 @@ export default function HTMLBuilder() {
           {/* GrapesJS StudioEditor container */}
           <div ref={containerRef} className="h-[700px] w-full">
             <StudioEditor
+              key="studio-editor"
               onReady={onReady}
               options={{
                 licenseKey: process.env.NEXT_PUBLIC_GRAPE_STUDIO_KEY as string,
