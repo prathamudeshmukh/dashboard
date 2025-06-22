@@ -1,7 +1,7 @@
 'use client';
 
 import { FileCode } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { ErrorMessage } from './ErrorMessage';
 import { PanelHeader } from './PanelHeader';
@@ -16,28 +16,66 @@ type TemplateEditorProps = {
 
 export function TemplateEditor({ code, onChange, error }: TemplateEditorProps) {
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
+  const [isIframeReady, setIsIframeReady] = useState(false);
+  const [pendingCode, setPendingCode] = useState<string>('');
 
   const handleCopy = async () => {
     await copyToClipboard(code);
   };
 
+  const sendCodeToIframe = (codeToSend: string) => {
+    if (iframeRef.current?.contentWindow) {
+      iframeRef.current.contentWindow.postMessage(
+        { type: 'INIT_CODE', payload: codeToSend },
+        '*',
+      );
+    }
+  };
+
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
+      // Only accept messages from our iframe
+      if (event.source !== iframeRef.current?.contentWindow) {
+        return;
+      }
+
       if (event.data?.type === 'CODE_UPDATED') {
         onChange(event.data.payload);
+      } else if (event.data?.type === 'IFRAME_READY') {
+        // Iframe is ready to receive messages
+        setIsIframeReady(true);
+        // Send any pending code
+        if (pendingCode || code) {
+          sendCodeToIframe(pendingCode || code);
+        }
       }
     };
 
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
-  }, [onChange]);
+  }, [onChange, code, pendingCode]);
 
   const sendInitialCode = () => {
-    // console.log('sending initial code', code);
-    iframeRef.current?.contentWindow?.postMessage(
-      { type: 'INIT_CODE', payload: code },
-      '*',
-    );
+    // Store the code to send once iframe is ready
+    setPendingCode(code);
+
+    // Try to send immediately in case iframe is already ready
+    if (code) {
+      sendCodeToIframe(code);
+    }
+  };
+
+  // Handle external code changes (when parent component updates code)
+  useEffect(() => {
+    if (isIframeReady && code !== undefined) {
+      sendCodeToIframe(code);
+    }
+  }, [code, isIframeReady]);
+
+  // Reset iframe ready state when iframe reloads
+  const handleIframeLoad = () => {
+    setIsIframeReady(false);
+    sendInitialCode();
   };
 
   return (
@@ -51,7 +89,7 @@ export function TemplateEditor({ code, onChange, error }: TemplateEditorProps) {
         <iframe
           ref={iframeRef}
           src="/editor-frame"
-          onLoad={sendInitialCode}
+          onLoad={handleIframeLoad}
           className="size-full border-0"
           // eslint-disable-next-line react-dom/no-unsafe-iframe-sandbox
           sandbox="allow-same-origin allow-scripts"
