@@ -1,31 +1,112 @@
 'use client';
 
-import { Lightbulb } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import ConfirmationDialog from '@/components/ui/confirmation-dialog';
-import { Tabs, TabsContent } from '@/components/ui/tabs';
+import { Tabs } from '@/components/ui/tabs';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 import { EditorTypeEnum } from '@/types/Enum';
+import type { PostMessagePayload, TemplateData } from '@/types/PostMessage';
 
 import EditorSwitchHeader from '../EditorSwitchHeader';
-import HandlebarsEditor from '../HandlebarsEditor';
-import HTMLBuilder from '../HTMLBuilder';
 
 export default function TemplateEditorStep() {
-  const { activeTab, setActiveTab } = useTemplateStore();
-  // State for managing the confirmation dialog
+  const {
+    activeTab,
+    setActiveTab,
+    templateName,
+    templateDescription,
+    handlebarsCode,
+    handlebarsJson,
+    creationMethod,
+    setTemplateName,
+    setTemplateDescription,
+    setHandlebarsCode,
+    setHandlebarsJson,
+  } = useTemplateStore();
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [pendingTab, setPendingTab] = useState<EditorTypeEnum | null>(null);
+  const iframeRef = useRef<HTMLIFrameElement | null>(null);
+
+  // Send data to iframe
+  const sendDataToIframe = (templateData: TemplateData) => {
+    const message: PostMessagePayload = {
+      type: 'TEMPLATE_DATA_RESPONSE',
+      data: templateData,
+      source: 'parent',
+    };
+    if (!iframeRef.current) {
+      return;
+    }
+    iframeRef?.current?.contentWindow?.postMessage(message);
+  };
+
+  // Listen for messages from iframe
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent<PostMessagePayload>) => {
+      // Verify origin for security
+      if (!event.origin.includes(window.location.origin)) {
+        return;
+      }
+
+      const { type, data, source } = event.data;
+
+      switch (type) {
+        case 'IFRAME_LOADED':
+          if (source === 'iframe') {
+            sendDataToIframe({
+              templateName,
+              templateDescription,
+              handlebarsCode,
+              handlebarsJson,
+              creationMethod,
+            });
+          }
+          break;
+
+        case 'TEMPLATE_UPDATE':
+          // Update parent state with data from iframe
+          if (data) {
+            if (data.templateName !== undefined) {
+              setTemplateName(data.templateName);
+            }
+            if (data.templateDescription !== undefined) {
+              setTemplateDescription(data.templateDescription);
+            }
+            if (data.handlebarsCode !== undefined) {
+              setHandlebarsCode(data.handlebarsCode);
+            }
+            if (data.handlebarsJson !== undefined) {
+              setHandlebarsJson(data.handlebarsJson);
+            }
+          }
+          break;
+
+        default:
+          break;
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, [
+    templateName,
+    templateDescription,
+    handlebarsCode,
+    handlebarsJson,
+    creationMethod,
+    setTemplateName,
+    setTemplateDescription,
+    setHandlebarsCode,
+    setHandlebarsJson,
+  ]);
 
   const handleTabChange = (tabName: string) => {
-    // Only show confirmation if the user is actually trying to switch to a different tab
     if (tabName !== activeTab) {
-      setPendingTab(tabName as EditorTypeEnum); // Store the tab they want to switch to
-      setShowConfirmation(true); // Open the confirmation dialog
+      setPendingTab(tabName as EditorTypeEnum);
+      setShowConfirmation(true);
     }
-    // If value === activeTab, do nothing (they clicked the current tab)
   };
 
   const handleConfirmSwitch = () => {
@@ -52,35 +133,25 @@ export default function TemplateEditorStep() {
       <CardContent className="p-0">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <EditorSwitchHeader activeTab={activeTab} onTabChange={handleTabChange} />
-
-          <TabsContent value={EditorTypeEnum.VISUAL} className="mt-0 border-0 p-0">
-            <div className="border-b bg-amber-50/50 p-4">
-              <InfoMessage text="Drag and drop elements to build your template visually. Changes here will not affect your Handlebars template." />
-            </div>
-            <div className="p-4">
-              <div className="min-h-[700px]">
-                <HTMLBuilder />
-              </div>
-            </div>
-          </TabsContent>
-
-          <TabsContent value={EditorTypeEnum.HANDLEBARS} className="mt-0 border-0 p-0">
-            <div className="border-b bg-amber-50/50 p-4">
-              <InfoMessage text="You're using the Code Editor, which give you full control over your template using Handlebars syntax. Need a simpler approach? Switch to the Visual Editor to build your template using drag-and-drop" />
-            </div>
-            <div className="p-4">
-              <div className="min-h-[700px]">
-                <HandlebarsEditor />
-              </div>
-            </div>
-          </TabsContent>
-
         </Tabs>
+
+        <iframe
+          ref={iframeRef}
+          key={activeTab}
+          title="Template Editor"
+          className="min-h-[900px] w-full border-0"
+          src={
+            activeTab === EditorTypeEnum.VISUAL
+              ? '/editor-frame/visual-editor'
+              : '/editor-frame/code-editor'
+          }
+          sandbox="allow-same-origin allow-scripts"
+        />
       </CardContent>
-      {/* Confirmation Dialog */}
+
       <ConfirmationDialog
         isOpen={showConfirmation}
-        onClose={handleCancelSwitch} // Closing the dialog is like canceling
+        onClose={handleCancelSwitch}
         onConfirm={handleConfirmSwitch}
         title="Switch Editor?"
         description={`Are you sure you want to switch to the ${pendingTab === EditorTypeEnum.VISUAL ? 'Visual' : 'Code'} Editor? Any unsaved changes in the current editor might be lost or not reflected in the new editor.`}
@@ -88,14 +159,5 @@ export default function TemplateEditorStep() {
         cancelText="No, Stay"
       />
     </Card>
-  );
-}
-
-function InfoMessage({ text }: { text: string }) {
-  return (
-    <div className="flex items-center gap-2">
-      <Lightbulb className="text-orange-300" />
-      <p className="text-base font-normal text-muted-foreground">{text}</p>
-    </div>
   );
 }

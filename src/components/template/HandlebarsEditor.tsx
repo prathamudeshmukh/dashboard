@@ -10,6 +10,7 @@ import { HandlebarsService } from '@/libs/services/HandlebarService';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 import type { CreationMethodEnum } from '@/types/Enum';
 import { SaveStatusEnum, UpdateTypeEnum } from '@/types/Enum';
+import type { PostMessagePayload } from '@/types/PostMessage';
 import { TemplateType } from '@/types/Template';
 
 import { Button } from '../ui/button';
@@ -43,15 +44,79 @@ export default function HandlebarsEditor() {
   const [activeTab, setActiveTab] = useState('editor');
   const [renderCount, setRenderCount] = useState(0);
   const [saveStatus, setSaveStatus] = useState<SaveStatusEnum>(SaveStatusEnum.IDLE);
+  const [dataReceived, setDataReceived] = useState(false);
   const { user } = useUser();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [isInFrame, setIsInFrame] = useState<boolean>(false);
   const templateId = searchParams.get('templateId');
 
   const handlebarsService = new HandlebarsService();
+  const [isTemplateLoaded, setIsTemplateLoaded] = useState(false);
 
-  // Set default template and data if none exists
+  // Check if running in iframe and signal parent when ready
   useEffect(() => {
+    const inIframe = window !== window.parent;
+    setIsInFrame(inIframe);
+    if (inIframe) {
+      const message: PostMessagePayload = {
+        type: 'IFRAME_LOADED',
+        source: 'iframe',
+      };
+      window.parent.postMessage(message, '*');
+    }
+  }, []);
+
+  // Listen for messages from parent (when in iframe)
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent<PostMessagePayload>) => {
+      const { type, data } = event.data;
+
+      if (type === 'TEMPLATE_DATA_RESPONSE') {
+        if (data) {
+          setTemplateName(data.templateName);
+          setTemplateDescription(data.templateDescription);
+          setHandlebarsCode(data.handlebarsCode);
+          setHandlebarsJson(data.handlebarsJson);
+          setCreationMethod(data.creationMethod);
+          setDataReceived(true);
+        }
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
+
+  // Send updates to parent when data changes (debounced)
+  useEffect(() => {
+    if (!isInFrame || !dataReceived) {
+      return;
+    }
+
+    const timeoutId = setTimeout(() => {
+      const message: PostMessagePayload = {
+        type: 'TEMPLATE_UPDATE',
+        data: {
+          templateName,
+          templateDescription,
+          handlebarsCode,
+          handlebarsJson,
+        },
+        source: 'iframe',
+      };
+      window.parent.postMessage(message, '*');
+    }, 500); // Debounce updates
+
+    return () => clearTimeout(timeoutId);
+  }, [isInFrame, dataReceived, templateName, templateDescription, handlebarsCode, handlebarsJson]);
+
+  // Set default template and data if not in iframe or no data received
+  useEffect(() => {
+    // Skip if we're waiting for iframe data or if template is being loaded
+    if ((isInFrame && !dataReceived) || (templateId && !isTemplateLoaded)) {
+      return;
+    }
     if (!handlebarsCode) {
       setHandlebarsCode(DEFAULT_TEMPLATE);
     }
@@ -66,9 +131,10 @@ export default function HandlebarsEditor() {
 
   useEffect(() => {
     const fetchTemplate = async () => {
-      if (!templateId) {
+      if (!templateId || isTemplateLoaded) {
         return;
       }
+
       try {
         const response = await fetchTemplateById(templateId);
         if (!response?.data) {
@@ -80,13 +146,14 @@ export default function HandlebarsEditor() {
         setCreationMethod(response.data.creationMethod as CreationMethodEnum);
         setHandlebarsCode(response.data.templateContent as string);
         setHandlebarsJson(JSON.stringify(response.data.templateSampleData));
+        setIsTemplateLoaded(true);
       } catch (error) {
         console.error('Failed to load template for editing:', error);
       }
     };
 
     fetchTemplate();
-  }, [templateId]);
+  }, [templateId, isTemplateLoaded, setTemplateName, setTemplateDescription, setCreationMethod, setHandlebarsCode, setHandlebarsJson]);
 
   // Update the useEffect that renders the template to handle async rendering
   useEffect(() => {
@@ -248,7 +315,7 @@ export default function HandlebarsEditor() {
 
   return (
     <>
-      {templateId && (
+      {templateId && !isInFrame && (
         <div className="flex items-center justify-between px-4 py-2">
           <h2 className="text-2xl font-semibold">
             Edit Template:
