@@ -8,7 +8,6 @@ import { toast } from 'sonner';
 import { fetchTemplateById, PublishTemplateToProd, UpsertTemplate } from '@/libs/actions/templates';
 import { HandlebarsService } from '@/libs/services/HandlebarService';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
-import type { CreationMethodEnum } from '@/types/Enum';
 import { SaveStatusEnum, UpdateTypeEnum } from '@/types/Enum';
 import type { PostMessagePayload } from '@/types/PostMessage';
 import { TemplateType } from '@/types/Template';
@@ -29,10 +28,8 @@ export default function HandlebarsEditor() {
     handlebarsJson,
     creationMethod,
     setTemplateName,
-    setTemplateDescription,
     setHandlebarsCode,
     setHandlebarsJson,
-    setCreationMethod,
     resetTemplate,
   } = useTemplateStore();
 
@@ -74,11 +71,8 @@ export default function HandlebarsEditor() {
 
       if (type === 'TEMPLATE_DATA_RESPONSE') {
         if (data) {
-          setTemplateName(data.templateName);
-          setTemplateDescription(data.templateDescription);
           setHandlebarsCode(data.handlebarsCode);
           setHandlebarsJson(data.handlebarsJson);
-          setCreationMethod(data.creationMethod);
           setDataReceived(true);
         }
       }
@@ -98,8 +92,6 @@ export default function HandlebarsEditor() {
       const message: PostMessagePayload = {
         type: 'TEMPLATE_UPDATE',
         data: {
-          templateName,
-          templateDescription,
           handlebarsCode,
           handlebarsJson,
         },
@@ -109,7 +101,7 @@ export default function HandlebarsEditor() {
     }, 500); // Debounce updates
 
     return () => clearTimeout(timeoutId);
-  }, [isInFrame, dataReceived, templateName, templateDescription, handlebarsCode, handlebarsJson]);
+  }, [isInFrame, dataReceived, handlebarsCode, handlebarsJson]);
 
   // Set default template and data if not in iframe or no data received
   useEffect(() => {
@@ -140,10 +132,7 @@ export default function HandlebarsEditor() {
         if (!response?.data) {
           return;
         }
-
         setTemplateName(response.data.templateName as string);
-        setTemplateDescription(response.data.description as string);
-        setCreationMethod(response.data.creationMethod as CreationMethodEnum);
         setHandlebarsCode(response.data.templateContent as string);
         setHandlebarsJson(JSON.stringify(response.data.templateSampleData));
         setIsTemplateLoaded(true);
@@ -153,7 +142,7 @@ export default function HandlebarsEditor() {
     };
 
     fetchTemplate();
-  }, [templateId, isTemplateLoaded, setTemplateName, setTemplateDescription, setCreationMethod, setHandlebarsCode, setHandlebarsJson]);
+  }, [templateId, isTemplateLoaded, setTemplateName, setHandlebarsCode, setHandlebarsJson]);
 
   // Update the useEffect that renders the template to handle async rendering
   useEffect(() => {

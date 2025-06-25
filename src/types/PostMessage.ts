@@ -4,10 +4,7 @@ export type PostMessagePayload = {
   source?: 'parent' | 'iframe';
 };
 
-export type TemplateData = {
-  templateName: string;
-  templateDescription: string;
+export type HandlebarTemplateData = {
   handlebarsCode: string;
   handlebarsJson: string;
-  creationMethod: string;
 };

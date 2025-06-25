@@ -7,7 +7,7 @@ import ConfirmationDialog from '@/components/ui/confirmation-dialog';
 import { Tabs } from '@/components/ui/tabs';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 import { EditorTypeEnum } from '@/types/Enum';
-import type { PostMessagePayload, TemplateData } from '@/types/PostMessage';
+import type { HandlebarTemplateData, PostMessagePayload } from '@/types/PostMessage';
 
 import EditorSwitchHeader from '../EditorSwitchHeader';
 
@@ -15,13 +15,8 @@ export default function TemplateEditorStep() {
   const {
     activeTab,
     setActiveTab,
-    templateName,
-    templateDescription,
     handlebarsCode,
     handlebarsJson,
-    creationMethod,
-    setTemplateName,
-    setTemplateDescription,
     setHandlebarsCode,
     setHandlebarsJson,
   } = useTemplateStore();
@@ -30,7 +25,7 @@ export default function TemplateEditorStep() {
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
   // Send data to iframe
-  const sendDataToIframe = (templateData: TemplateData) => {
+  const sendDataToIframe = (templateData: HandlebarTemplateData) => {
     const message: PostMessagePayload = {
       type: 'TEMPLATE_DATA_RESPONSE',
       data: templateData,
@@ -56,11 +51,8 @@ export default function TemplateEditorStep() {
         case 'IFRAME_LOADED':
           if (source === 'iframe') {
             sendDataToIframe({
-              templateName,
-              templateDescription,
               handlebarsCode,
               handlebarsJson,
-              creationMethod,
             });
           }
           break;
@@ -68,12 +60,6 @@ export default function TemplateEditorStep() {
         case 'TEMPLATE_UPDATE':
           // Update parent state with data from iframe
           if (data) {
-            if (data.templateName !== undefined) {
-              setTemplateName(data.templateName);
-            }
-            if (data.templateDescription !== undefined) {
-              setTemplateDescription(data.templateDescription);
-            }
             if (data.handlebarsCode !== undefined) {
               setHandlebarsCode(data.handlebarsCode);
             }
@@ -91,13 +77,8 @@ export default function TemplateEditorStep() {
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
   }, [
-    templateName,
-    templateDescription,
     handlebarsCode,
     handlebarsJson,
-    creationMethod,
-    setTemplateName,
-    setTemplateDescription,
     setHandlebarsCode,
     setHandlebarsJson,
   ]);
@@ -142,8 +123,8 @@ export default function TemplateEditorStep() {
           className="min-h-[900px] w-full border-0"
           src={
             activeTab === EditorTypeEnum.VISUAL
-              ? '/editor-frame/visual-editor'
-              : '/editor-frame/code-editor'
+              ? '/editor/visual-editor'
+              : '/editor/code-editor'
           }
           sandbox="allow-same-origin allow-scripts"
         />
