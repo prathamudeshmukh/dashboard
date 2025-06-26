@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 'use client';
 
 import '@grapesjs/studio-sdk/style';
@@ -42,6 +43,7 @@ export default function HTMLBuilder() {
         type: 'IFRAME_LOADED',
         source: 'iframe',
       };
+      console.debug('IFRAME_LOADED emitted:', message);
       window.parent.postMessage(message, '*');
     }
   }, []);
@@ -50,7 +52,7 @@ export default function HTMLBuilder() {
   useEffect(() => {
     const handleMessage = (event: MessageEvent<PostMessagePayload>) => {
       const { type, data } = event.data;
-
+      console.debug('TEMPLATE_DATA_RESPONSE received:', data);
       if (type === 'TEMPLATE_DATA_RESPONSE') {
         if (data?.htmlContent) {
           setHtmlContent(data.htmlContent);
@@ -77,6 +79,7 @@ export default function HTMLBuilder() {
         },
         source: 'iframe',
       };
+      console.debug('TEMPLATE_UPDATE emitted:', message);
       window.parent.postMessage(message, '*');
     }, 500);
 

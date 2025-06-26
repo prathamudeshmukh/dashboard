@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
@@ -38,6 +39,7 @@ export default function TemplateEditorStep() {
     if (!iframeRef.current) {
       return;
     }
+    console.debug('TEMPLATE_DATA_RESPONSE emitted:', message);
     iframeRef?.current?.contentWindow?.postMessage(message);
   };
 
