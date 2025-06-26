@@ -39,7 +39,7 @@ export default function TemplateEditorStep() {
     if (!iframeRef.current) {
       return;
     }
-    console.debug('TEMPLATE_DATA_RESPONSE emitted:', message);
+    console.info('TEMPLATE_DATA_RESPONSE emitted:', message);
     iframeRef?.current?.contentWindow?.postMessage(message);
   };
 
