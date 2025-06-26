@@ -93,24 +93,17 @@ export default function HTMLBuilder() {
       if (templateId && !isTemplateLoaded) {
         try {
           const response = await fetchTemplateById(templateId);
-          if (!response) {
-            return;
-          }
-          const content = response.data?.templateContent as string;
-          const style = response.data?.templateStyle as string;
-
-          setHtmlContent(content);
-          setHtmlStyle(style);
-          setCreationMethod(response.data?.creationMethod as CreationMethodEnum);
-          setTemplateName(response.data?.templateName as string);
-          setTemplateDescription(response.data?.description as string);
-          setIsTemplateLoaded(true);
-          // Load into editor
-          if (content) {
+          if (response?.data) {
+            const content = response.data.templateContent as string;
+            const style = response.data.templateStyle as string;
+            setHtmlContent(content);
+            setHtmlStyle(style);
+            setCreationMethod(response.data.creationMethod as CreationMethodEnum);
+            setTemplateName(response.data.templateName as string);
+            setTemplateDescription(response.data.description as string);
             editor.setComponents(content);
-          }
-          if (style) {
             editor.setStyle(style);
+            setIsTemplateLoaded(true);
           }
         } catch (error) {
           console.error('Failed to load template for editing:', error);
@@ -124,7 +117,7 @@ export default function HTMLBuilder() {
     };
 
     loadTemplate();
-  }, [templateId, editor, isTemplateLoaded]); // Make sure to depend on both
+  }, [templateId, editor, isTemplateLoaded, htmlContent]); // Make sure to depend on both
 
   const onReady = (editor: Editor) => {
     setEditor(editor);
