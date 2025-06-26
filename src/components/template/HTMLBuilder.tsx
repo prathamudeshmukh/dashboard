@@ -14,6 +14,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { fetchTemplateById, PublishTemplateToProd, UpsertTemplate } from '@/libs/actions/templates';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 import { type CreationMethodEnum, SaveStatusEnum, UpdateTypeEnum } from '@/types/Enum';
+import type { PostMessagePayload } from '@/types/PostMessage';
 import { TemplateType } from '@/types/Template';
 
 import { Button } from '../ui/button';
@@ -25,9 +26,62 @@ export default function HTMLBuilder() {
   const searchParams = useSearchParams();
   const templateId = searchParams.get('templateId');
   const [saveStatus, setSaveStatus] = useState<SaveStatusEnum>(SaveStatusEnum.IDLE);
+  const [isInFrame, setIsInFrame] = useState(false);
+  const [dataReceived, setDataReceived] = useState(false);
+  const [isTemplateLoaded, setIsTemplateLoaded] = useState(false);
+
   const router = useRouter();
 
   const containerRef = useRef(null);
+
+  useEffect(() => {
+    const inFrame = window !== window.parent;
+    setIsInFrame(inFrame);
+    if (inFrame) {
+      const message: PostMessagePayload = {
+        type: 'IFRAME_LOADED',
+        source: 'iframe',
+      };
+      window.parent.postMessage(message, '*');
+    }
+  }, []);
+
+  // === Receive data from parent ===
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent<PostMessagePayload>) => {
+      const { type, data } = event.data;
+
+      if (type === 'TEMPLATE_DATA_RESPONSE') {
+        if (data?.htmlContent) {
+          setHtmlContent(data.htmlContent);
+          setDataReceived(true);
+        }
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
+
+  useEffect(() => {
+    if (!isInFrame || !dataReceived) {
+      return;
+    }
+
+    const timeoutId = setTimeout(() => {
+      const message: PostMessagePayload = {
+        type: 'TEMPLATE_UPDATE',
+        data: {
+          htmlContent,
+          htmlStyle,
+        },
+        source: 'iframe',
+      };
+      window.parent.postMessage(message, '*');
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [htmlContent, htmlStyle, isInFrame, dataReceived]);
 
   useEffect(() => {
     const loadTemplate = async () => {
@@ -36,7 +90,7 @@ export default function HTMLBuilder() {
       }
 
       // If templateId exists, fetch the template
-      if (templateId) {
+      if (templateId && !isTemplateLoaded) {
         try {
           const response = await fetchTemplateById(templateId);
           if (!response) {
@@ -50,7 +104,7 @@ export default function HTMLBuilder() {
           setCreationMethod(response.data?.creationMethod as CreationMethodEnum);
           setTemplateName(response.data?.templateName as string);
           setTemplateDescription(response.data?.description as string);
-
+          setIsTemplateLoaded(true);
           // Load into editor
           if (content) {
             editor.setComponents(content);
@@ -70,7 +124,7 @@ export default function HTMLBuilder() {
     };
 
     loadTemplate();
-  }, [templateId, editor]); // Make sure to depend on both
+  }, [templateId, editor, isTemplateLoaded]); // Make sure to depend on both
 
   const onReady = (editor: Editor) => {
     setEditor(editor);

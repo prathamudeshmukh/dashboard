@@ -7,7 +7,7 @@ import ConfirmationDialog from '@/components/ui/confirmation-dialog';
 import { Tabs } from '@/components/ui/tabs';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 import { EditorTypeEnum } from '@/types/Enum';
-import type { HandlebarTemplateData, PostMessagePayload } from '@/types/PostMessage';
+import type { PostMessagePayload, TemplateData } from '@/types/PostMessage';
 
 import EditorSwitchHeader from '../EditorSwitchHeader';
 
@@ -17,15 +17,19 @@ export default function TemplateEditorStep() {
     setActiveTab,
     handlebarsCode,
     handlebarsJson,
+    htmlContent,
+    htmlStyle,
     setHandlebarsCode,
     setHandlebarsJson,
+    setHtmlContent,
+    setHtmlStyle,
   } = useTemplateStore();
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [pendingTab, setPendingTab] = useState<EditorTypeEnum | null>(null);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
   // Send data to iframe
-  const sendDataToIframe = (templateData: HandlebarTemplateData) => {
+  const sendDataToIframe = (templateData: TemplateData) => {
     const message: PostMessagePayload = {
       type: 'TEMPLATE_DATA_RESPONSE',
       data: templateData,
@@ -53,6 +57,8 @@ export default function TemplateEditorStep() {
             sendDataToIframe({
               handlebarsCode,
               handlebarsJson,
+              htmlContent,
+              htmlStyle,
             });
           }
           break;
@@ -65,6 +71,12 @@ export default function TemplateEditorStep() {
             }
             if (data.handlebarsJson !== undefined) {
               setHandlebarsJson(data.handlebarsJson);
+            }
+            if (data.htmlContent !== undefined) {
+              setHtmlContent(data.htmlContent);
+            }
+            if (data.htmlStyle !== undefined) {
+              setHtmlStyle(data.htmlStyle);
             }
           }
           break;
@@ -79,8 +91,12 @@ export default function TemplateEditorStep() {
   }, [
     handlebarsCode,
     handlebarsJson,
+    htmlContent,
+    htmlStyle,
     setHandlebarsCode,
     setHandlebarsJson,
+    setHtmlContent,
+    setHtmlStyle,
   ]);
 
   const handleTabChange = (tabName: string) => {
