@@ -1,7 +1,9 @@
 'use client';
 
 import { Lightbulb } from 'lucide-react';
+import { ErrorBoundary } from 'react-error-boundary';
 
+import { ErrorFallback } from '@/components/template/ErrorFallback';
 import HTMLBuilder from '@/components/template/HTMLBuilder';
 
 export default function HTMLBuilderFrame() {
@@ -11,7 +13,14 @@ export default function HTMLBuilderFrame() {
         <InfoMessage text="Drag and drop elements to build your template visually. This editor doesn’t reflect changes made in the code editor." />
       </div>
       <div className="flex-1 overflow-auto p-4">
-        <HTMLBuilder />
+        <ErrorBoundary
+          FallbackComponent={ErrorFallback}
+          onReset={() => {
+            // Reset any state or trigger reload
+          }}
+        >
+          <HTMLBuilder />
+        </ErrorBoundary>
       </div>
     </>
   );
