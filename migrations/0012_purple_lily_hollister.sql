@@ -1,0 +1,1 @@
+CREATE INDEX IF NOT EXISTS "template_email_env_created_idx" ON "templates" USING btree ("email","environment");
