@@ -88,13 +88,16 @@ export default function HTMLBuilder() {
     try {
       const inFrame = window !== window.parent;
       setIsInFrame(inFrame);
+
       if (inFrame) {
-        const message: PostMessagePayload = {
-          type: 'IFRAME_LOADED',
-          source: 'iframe',
-        };
-        console.info('IFRAME_LOADED emitted:', message);
-        window.parent.postMessage(message, '*');
+        setTimeout(() => {
+          const message: PostMessagePayload = {
+            type: 'IFRAME_LOADED',
+            source: 'iframe',
+          };
+          console.info('IFRAME_LOADED emitted:', message);
+          window.parent.postMessage(message, '*');
+        }, 100);
       }
     } catch (err) {
       console.error('Failed to send IFRAME_LOADED message:', err);
