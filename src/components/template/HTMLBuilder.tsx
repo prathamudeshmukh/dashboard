@@ -24,6 +24,25 @@ import { Button } from '../ui/button';
 const StudioEditor = dynamic(() => import('@grapesjs/studio-sdk/react'), {
   ssr: false,
 });
+
+if (typeof window !== 'undefined') {
+  const OriginalMutationObserver = window.MutationObserver;
+
+  window.MutationObserver = class extends OriginalMutationObserver {
+    constructor(callback: MutationCallback) {
+      super(callback);
+    }
+
+    observe(target: Node, options: MutationObserverInit) {
+      if (!(target instanceof Node)) {
+        console.error('Invalid observe() target:', target);
+        throw new Error('observe called with non-Node target');
+      }
+      return super.observe(target, options);
+    }
+  };
+}
+
 export default function HTMLBuilder() {
   const { user } = useUser();
   const { templateName, templateDescription, htmlContent, htmlStyle, creationMethod, setTemplateName, setTemplateDescription, resetTemplate, setCreationMethod, setHtmlContent, setHtmlStyle } = useTemplateStore();
