@@ -4,11 +4,12 @@
 import '@grapesjs/studio-sdk/style';
 
 import { useUser } from '@clerk/nextjs';
-import StudioEditor from '@grapesjs/studio-sdk/react';
+// import StudioEditor from '@grapesjs/studio-sdk/react';
 import type { Editor } from 'grapesjs';
 import { debounce } from 'lodash';
+import dynamic from 'next/dynamic';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -20,19 +21,20 @@ import { TemplateType } from '@/types/Template';
 
 import { Button } from '../ui/button';
 
+const StudioEditor = dynamic(() => import('@grapesjs/studio-sdk/react'), {
+  ssr: false,
+});
 export default function HTMLBuilder() {
   const { user } = useUser();
   const { templateName, templateDescription, htmlContent, htmlStyle, creationMethod, setTemplateName, setTemplateDescription, resetTemplate, setCreationMethod, setHtmlContent, setHtmlStyle } = useTemplateStore();
   const searchParams = useSearchParams();
   const templateId = searchParams.get('templateId');
   const [saveStatus, setSaveStatus] = useState<SaveStatusEnum>(SaveStatusEnum.IDLE);
-  const [isInFrame, setIsInFrame] = useState(false);
+  const [isInFrame] = useState(false);
   const [dataReceived, setDataReceived] = useState(false);
   const [isTemplateLoaded, setIsTemplateLoaded] = useState(false);
 
   const router = useRouter();
-
-  const containerRef = useRef(null);
 
   // === Receive data from parent ===
   useEffect(() => {
@@ -86,16 +88,13 @@ export default function HTMLBuilder() {
 
   const onReady = async (editor: Editor) => {
     try {
-      const inFrame = window !== window.parent;
-      setIsInFrame(inFrame);
-      if (inFrame) {
-        const message: PostMessagePayload = {
-          type: 'IFRAME_LOADED',
-          source: 'iframe',
-        };
-        console.info('IFRAME_LOADED emitted:', message);
-        window.parent.postMessage(message, '*');
-      }
+      console.info('!!!!onReady!!!!');
+      const message: PostMessagePayload = {
+        type: 'IFRAME_LOADED',
+        source: 'iframe',
+      };
+      console.info('IFRAME_LOADED emitted:', message);
+      window.parent.postMessage(message, '*');
     } catch (err) {
       console.error('Failed to send IFRAME_LOADED message:', err);
     }
@@ -124,6 +123,7 @@ export default function HTMLBuilder() {
     // Fetch template and populate editor
     try {
       if (templateId && !isTemplateLoaded) {
+        console.info('Fetching template data');
         const response = await fetchTemplateById(templateId);
         if (response?.data) {
           const content = response.data.templateContent as string;
@@ -222,28 +222,27 @@ export default function HTMLBuilder() {
       )}
       <div className="m-0 w-full rounded-md border p-0">
         <div className="gjs-editor-cont w-full">
+          <div id="studio-editor-container" className="h-[700px] w-full" />
           {/* GrapesJS StudioEditor container */}
-          <div ref={containerRef} className="h-[700px] w-full">
-            <StudioEditor
-              key="studio-editor"
-              onReady={onReady}
-              options={{
-                licenseKey: process.env.NEXT_PUBLIC_GRAPE_STUDIO_KEY as string,
-                theme: 'light',
-                pages: false,
-                autoHeight: false,
-                devices: { selected: 'desktop' },
-                settingsMenu: false,
-                project: {
-                  type: 'web',
-                  id: uuidv4(),
-                },
-                identity: {
-                  id: user?.id,
-                },
-              }}
-            />
-          </div>
+          <StudioEditor
+            key="studio-editor"
+            onReady={onReady}
+            options={{
+              licenseKey: process.env.NEXT_PUBLIC_GRAPE_STUDIO_KEY as string,
+              theme: 'light',
+              pages: false,
+              autoHeight: false,
+              devices: { selected: 'desktop' },
+              settingsMenu: false,
+              project: {
+                type: 'web',
+                id: uuidv4(),
+              },
+              identity: {
+                id: user?.id,
+              },
+            }}
+          />
         </div>
       </div>
       {templateId && (
