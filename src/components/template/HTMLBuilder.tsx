@@ -22,7 +22,6 @@ import { Button } from '../ui/button';
 
 export default function HTMLBuilder() {
   const { user } = useUser();
-  const [editor, setEditor] = useState<Editor>();
   const { templateName, templateDescription, htmlContent, htmlStyle, creationMethod, setTemplateName, setTemplateDescription, resetTemplate, setCreationMethod, setHtmlContent, setHtmlStyle } = useTemplateStore();
   const searchParams = useSearchParams();
   const templateId = searchParams.get('templateId');
@@ -108,45 +107,7 @@ export default function HTMLBuilder() {
     return () => clearTimeout(timeoutId);
   }, [htmlContent, htmlStyle, isInFrame, dataReceived]);
 
-  useEffect(() => {
-    const loadTemplate = async () => {
-      if (!editor) {
-        return;
-      }
-
-      // If templateId exists, fetch the template
-      if (templateId && !isTemplateLoaded) {
-        try {
-          const response = await fetchTemplateById(templateId);
-          if (response?.data) {
-            const content = response.data.templateContent as string;
-            const style = response.data.templateStyle as string;
-            setHtmlContent(content);
-            setHtmlStyle(style);
-            setCreationMethod(response.data.creationMethod as CreationMethodEnum);
-            setTemplateName(response.data.templateName as string);
-            setTemplateDescription(response.data.description as string);
-            editor.setComponents(content);
-            editor.setStyle(style);
-            setIsTemplateLoaded(true);
-          }
-        } catch (error) {
-          console.error('Failed to load template for editing:', error);
-        }
-      } else {
-        // No templateId → use current state
-        if (htmlContent) {
-          editor.setComponents(htmlContent);
-        }
-      }
-    };
-
-    loadTemplate();
-  }, [templateId, editor, isTemplateLoaded, htmlContent]); // Make sure to depend on both
-
-  const onReady = (editor: Editor) => {
-    setEditor(editor);
-
+  const onReady = async (editor: Editor) => {
     // Save HTML content when editor changes
     const updateContent = debounce(() => {
       const html = editor.getHtml();
@@ -168,6 +129,29 @@ export default function HTMLBuilder() {
       }
     });
 
+    // Fetch template and populate editor
+    try {
+      if (templateId && !isTemplateLoaded) {
+        const response = await fetchTemplateById(templateId);
+        if (response?.data) {
+          const content = response.data.templateContent as string;
+          const style = response.data.templateStyle as string;
+          editor.setComponents(content);
+          editor.setStyle(style);
+          setHtmlContent(content);
+          setHtmlStyle(style);
+          setCreationMethod(response.data.creationMethod as CreationMethodEnum);
+          setTemplateName(response.data.templateName as string);
+          setTemplateDescription(response.data.description as string);
+          setIsTemplateLoaded(true);
+        }
+      } else if (htmlContent) {
+        editor.setComponents(htmlContent);
+      }
+    } catch (err) {
+      console.error('Failed to load template for editing:', err);
+    }
+
     // Check if canvas is empty and add placeholder
     if (editor.getComponents().length === 0) {
       editor.setComponents(`
@@ -184,6 +168,8 @@ export default function HTMLBuilder() {
         placeholder[0]?.remove();
       }
     });
+
+    editor.render();
   };
 
   const handleSave = async (type: UpdateTypeEnum) => {
