@@ -38,6 +38,7 @@ export default function HTMLBuilder() {
 
   // === Receive data from parent ===
   useEffect(() => {
+    console.info('::::useEffect1::::');
     const handleMessage = (event: MessageEvent<PostMessagePayload>) => {
       try {
         const { type, data } = event.data;
@@ -62,6 +63,7 @@ export default function HTMLBuilder() {
   }, []);
 
   useEffect(() => {
+    console.info('::::useEffect2::::');
     if (!isInFrame || !dataReceived) {
       return;
     }
