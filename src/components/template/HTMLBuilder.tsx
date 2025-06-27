@@ -34,29 +34,6 @@ export default function HTMLBuilder() {
 
   const containerRef = useRef(null);
 
-  useEffect(() => {
-    try {
-      const inFrame = window !== window.parent;
-      setIsInFrame(inFrame);
-      if (inFrame) {
-        const timeout = setTimeout(() => {
-          const message: PostMessagePayload = {
-            type: 'IFRAME_LOADED',
-            source: 'iframe',
-          };
-          console.info('IFRAME_LOADED emitted:', message);
-          window.parent.postMessage(message, '*');
-        }, 0);
-
-        return () => clearTimeout(timeout);
-      }
-    } catch (err) {
-      console.error('Failed to send IFRAME_LOADED message:', err);
-    }
-
-    return undefined;
-  }, []);
-
   // === Receive data from parent ===
   useEffect(() => {
     const handleMessage = (event: MessageEvent<PostMessagePayload>) => {
@@ -108,6 +85,21 @@ export default function HTMLBuilder() {
   }, [htmlContent, htmlStyle, isInFrame, dataReceived]);
 
   const onReady = async (editor: Editor) => {
+    try {
+      const inFrame = window !== window.parent;
+      setIsInFrame(inFrame);
+      if (inFrame) {
+        const message: PostMessagePayload = {
+          type: 'IFRAME_LOADED',
+          source: 'iframe',
+        };
+        console.info('IFRAME_LOADED emitted:', message);
+        window.parent.postMessage(message, '*');
+      }
+    } catch (err) {
+      console.error('Failed to send IFRAME_LOADED message:', err);
+    }
+
     // Save HTML content when editor changes
     const updateContent = debounce(() => {
       const html = editor.getHtml();
@@ -122,7 +114,7 @@ export default function HTMLBuilder() {
     const blockManager = editor.BlockManager;
 
     // Remove specific blocks
-    const blocksToRemove = ['video', 'form', 'input', 'textarea', 'select', 'button', 'checkbox,', 'radio', 'label'];
+    const blocksToRemove = ['video', 'form', 'input', 'textarea', 'select', 'button', 'checkbox', 'radio', 'label'];
     blocksToRemove.forEach((blockId) => {
       if (blockManager.get(blockId)) {
         blockManager.remove(blockId);
@@ -233,6 +225,7 @@ export default function HTMLBuilder() {
           {/* GrapesJS StudioEditor container */}
           <div ref={containerRef} className="h-[700px] w-full">
             <StudioEditor
+              key="studio-editor"
               onReady={onReady}
               options={{
                 licenseKey: process.env.NEXT_PUBLIC_GRAPE_STUDIO_KEY as string,
