@@ -31,60 +31,72 @@ export default function TemplateEditorStep() {
 
   // Send data to iframe
   const sendDataToIframe = (templateData: TemplateData) => {
-    const message: PostMessagePayload = {
-      type: 'TEMPLATE_DATA_RESPONSE',
-      data: templateData,
-      source: 'parent',
-    };
-    if (!iframeRef.current) {
-      return;
-    }
-    console.info('TEMPLATE_DATA_RESPONSE emitted:', message);
-    iframeRef?.current?.contentWindow?.postMessage(message);
-  };
-
-  // Listen for messages from iframe
-  useEffect(() => {
-    const handleMessage = (event: MessageEvent<PostMessagePayload>) => {
-      // Verify origin for security
-      if (!event.origin.includes(window.location.origin)) {
+    try {
+      if (!iframeRef.current || !iframeRef.current.contentWindow) {
+        console.warn('No iframe found or iframe is not ready to receive data.');
         return;
       }
 
-      const { type, data, source } = event.data;
+      const message: PostMessagePayload = {
+        type: 'TEMPLATE_DATA_RESPONSE',
+        data: templateData,
+        source: 'parent',
+      };
 
-      switch (type) {
-        case 'IFRAME_LOADED':
-          if (source === 'iframe') {
-            sendDataToIframe({
-              handlebarsCode,
-              handlebarsJson,
-              htmlContent,
-              htmlStyle,
-            });
-          }
-          break;
+      console.info('TEMPLATE_DATA_RESPONSE emitted:', message);
+      iframeRef.current.contentWindow.postMessage(message, '*');
+    } catch (err) {
+      console.error('Failed to send TEMPLATE_DATA_RESPONSE to iframe:', err);
+    }
+  };
 
-        case 'TEMPLATE_UPDATE':
-          // Update parent state with data from iframe
-          if (data) {
-            if (data.handlebarsCode !== undefined) {
-              setHandlebarsCode(data.handlebarsCode);
-            }
-            if (data.handlebarsJson !== undefined) {
-              setHandlebarsJson(data.handlebarsJson);
-            }
-            if (data.htmlContent !== undefined) {
-              setHtmlContent(data.htmlContent);
-            }
-            if (data.htmlStyle !== undefined) {
-              setHtmlStyle(data.htmlStyle);
-            }
-          }
-          break;
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent<PostMessagePayload>) => {
+      try {
+        // Optional: verify origin for security
+        if (!event.origin.includes(window.location.origin)) {
+          console.warn('Message ignored: invalid origin', event.origin);
+          return;
+        }
 
-        default:
-          break;
+        const { type, data, source } = event.data;
+
+        switch (type) {
+          case 'IFRAME_LOADED':
+            if (source === 'iframe') {
+              sendDataToIframe({
+                handlebarsCode,
+                handlebarsJson,
+                htmlContent,
+                htmlStyle,
+              });
+            }
+            break;
+
+          case 'TEMPLATE_UPDATE':
+            console.info('TEMPLATE_UPDATE received:', data);
+            if (data) {
+              if (data.handlebarsCode !== undefined) {
+                setHandlebarsCode(data.handlebarsCode);
+              }
+              if (data.handlebarsJson !== undefined) {
+                setHandlebarsJson(data.handlebarsJson);
+              }
+              if (data.htmlContent !== undefined) {
+                setHtmlContent(data.htmlContent);
+              }
+              if (data.htmlStyle !== undefined) {
+                setHtmlStyle(data.htmlStyle);
+              }
+            }
+            break;
+
+          default:
+            console.info('Unhandled message type:', type);
+            break;
+        }
+      } catch (err) {
+        console.error('Error handling postMessage from iframe:', err);
       }
     };
 

@@ -36,28 +36,44 @@ export default function HTMLBuilder() {
   const containerRef = useRef(null);
 
   useEffect(() => {
-    const inFrame = window !== window.parent;
-    setIsInFrame(inFrame);
-    if (inFrame) {
-      const message: PostMessagePayload = {
-        type: 'IFRAME_LOADED',
-        source: 'iframe',
-      };
-      console.info('IFRAME_LOADED emitted:', message);
-      window.parent.postMessage(message, '*');
+    try {
+      const inFrame = window !== window.parent;
+      setIsInFrame(inFrame);
+      if (inFrame) {
+        const timeout = setTimeout(() => {
+          const message: PostMessagePayload = {
+            type: 'IFRAME_LOADED',
+            source: 'iframe',
+          };
+          console.info('IFRAME_LOADED emitted:', message);
+          window.parent.postMessage(message, '*');
+        }, 0);
+
+        return () => clearTimeout(timeout);
+      }
+    } catch (err) {
+      console.error('Failed to send IFRAME_LOADED message:', err);
     }
   }, []);
 
   // === Receive data from parent ===
   useEffect(() => {
     const handleMessage = (event: MessageEvent<PostMessagePayload>) => {
-      const { type, data } = event.data;
-      console.info('TEMPLATE_DATA_RESPONSE received:', data);
-      if (type === 'TEMPLATE_DATA_RESPONSE') {
-        if (data?.htmlContent) {
-          setHtmlContent(data.htmlContent);
+      try {
+        const { type, data } = event.data;
+
+        if (type === 'TEMPLATE_DATA_RESPONSE') {
+          console.info('TEMPLATE_DATA_RESPONSE received:', data);
+          if (data?.htmlContent) {
+            setHtmlContent(data.htmlContent);
+          }
+          if (data?.htmlStyle) {
+            setHtmlStyle(data.htmlStyle);
+          }
           setDataReceived(true);
         }
+      } catch (err) {
+        console.error('Failed to handle TEMPLATE_DATA_RESPONSE:', err);
       }
     };
 
@@ -71,16 +87,20 @@ export default function HTMLBuilder() {
     }
 
     const timeoutId = setTimeout(() => {
-      const message: PostMessagePayload = {
-        type: 'TEMPLATE_UPDATE',
-        data: {
-          htmlContent,
-          htmlStyle,
-        },
-        source: 'iframe',
-      };
-      console.info('TEMPLATE_UPDATE emitted:', message);
-      window.parent.postMessage(message, '*');
+      try {
+        const message: PostMessagePayload = {
+          type: 'TEMPLATE_UPDATE',
+          data: {
+            htmlContent,
+            htmlStyle,
+          },
+          source: 'iframe',
+        };
+        console.info('TEMPLATE_UPDATE emitted:', message);
+        window.parent.postMessage(message, '*');
+      } catch (err) {
+        console.error('Failed to emit TEMPLATE_UPDATE:', err);
+      }
     }, 500);
 
     return () => clearTimeout(timeoutId);
