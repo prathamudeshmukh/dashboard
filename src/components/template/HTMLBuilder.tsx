@@ -54,6 +54,8 @@ export default function HTMLBuilder() {
     } catch (err) {
       console.error('Failed to send IFRAME_LOADED message:', err);
     }
+
+    return undefined;
   }, []);
 
   // === Receive data from parent ===
