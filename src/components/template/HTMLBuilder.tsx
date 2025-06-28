@@ -9,14 +9,13 @@ import type { Editor } from 'grapesjs';
 import { debounce } from 'lodash';
 import dynamic from 'next/dynamic';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
 
 import { fetchTemplateById, PublishTemplateToProd, UpsertTemplate } from '@/libs/actions/templates';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 import { type CreationMethodEnum, SaveStatusEnum, UpdateTypeEnum } from '@/types/Enum';
-import type { PostMessagePayload } from '@/types/PostMessage';
 import { TemplateType } from '@/types/Template';
 
 import { Button } from '../ui/button';
@@ -25,101 +24,18 @@ const StudioEditor = dynamic(() => import('@grapesjs/studio-sdk/react'), {
   ssr: false,
 });
 
-if (typeof window !== 'undefined') {
-  const OriginalMutationObserver = window.MutationObserver;
-
-  window.MutationObserver = class extends OriginalMutationObserver {
-    constructor(callback: MutationCallback) {
-      super(callback);
-    }
-
-    observe(target: Node, options: MutationObserverInit) {
-      if (!(target instanceof Node)) {
-        console.error('Invalid observe() target:', target);
-        throw new Error('observe called with non-Node target');
-      }
-      return super.observe(target, options);
-    }
-  };
-}
-
 export default function HTMLBuilder() {
   const { user } = useUser();
   const { templateName, templateDescription, htmlContent, htmlStyle, creationMethod, setTemplateName, setTemplateDescription, resetTemplate, setCreationMethod, setHtmlContent, setHtmlStyle } = useTemplateStore();
   const searchParams = useSearchParams();
   const templateId = searchParams.get('templateId');
   const [saveStatus, setSaveStatus] = useState<SaveStatusEnum>(SaveStatusEnum.IDLE);
-  const [isInFrame] = useState(false);
-  const [dataReceived, setDataReceived] = useState(false);
   const [isTemplateLoaded, setIsTemplateLoaded] = useState(false);
 
   const router = useRouter();
-
-  // === Receive data from parent ===
-  useEffect(() => {
-    console.info('::::useEffect1::::');
-    const handleMessage = (event: MessageEvent<PostMessagePayload>) => {
-      try {
-        const { type, data } = event.data;
-
-        if (type === 'TEMPLATE_DATA_RESPONSE') {
-          console.info('TEMPLATE_DATA_RESPONSE received:', data);
-          if (data?.htmlContent) {
-            setHtmlContent(data.htmlContent);
-          }
-          if (data?.htmlStyle) {
-            setHtmlStyle(data.htmlStyle);
-          }
-          setDataReceived(true);
-        }
-      } catch (err) {
-        console.error('Failed to handle TEMPLATE_DATA_RESPONSE:', err);
-      }
-    };
-
-    window.addEventListener('message', handleMessage);
-    return () => window.removeEventListener('message', handleMessage);
-  }, []);
-
-  useEffect(() => {
-    console.info('::::useEffect2::::');
-    if (!isInFrame || !dataReceived) {
-      return;
-    }
-
-    const timeoutId = setTimeout(() => {
-      try {
-        const message: PostMessagePayload = {
-          type: 'TEMPLATE_UPDATE',
-          data: {
-            htmlContent,
-            htmlStyle,
-          },
-          source: 'iframe',
-        };
-        console.info('TEMPLATE_UPDATE emitted:', message);
-        window.parent.postMessage(message, '*');
-      } catch (err) {
-        console.error('Failed to emit TEMPLATE_UPDATE:', err);
-      }
-    }, 500);
-
-    return () => clearTimeout(timeoutId);
-  }, [htmlContent, htmlStyle, isInFrame, dataReceived]);
+  const containerRef = useRef(null);
 
   const onReady = async (editor: Editor) => {
-    try {
-      console.info('!!!!onReady!!!!');
-      const message: PostMessagePayload = {
-        type: 'IFRAME_LOADED',
-        source: 'iframe',
-      };
-      console.info('IFRAME_LOADED emitted:', message);
-      window.parent.postMessage(message, '*');
-    } catch (err) {
-      console.error('Failed to send IFRAME_LOADED message:', err);
-    }
-
     // Save HTML content when editor changes
     const updateContent = debounce(() => {
       const html = editor.getHtml();
@@ -243,27 +159,28 @@ export default function HTMLBuilder() {
       )}
       <div className="m-0 w-full rounded-md border p-0">
         <div className="gjs-editor-cont w-full">
-          <div id="studio-editor-container" className="h-[700px] w-full" />
-          {/* GrapesJS StudioEditor container */}
-          <StudioEditor
-            key="studio-editor"
-            onReady={onReady}
-            options={{
-              licenseKey: process.env.NEXT_PUBLIC_GRAPE_STUDIO_KEY as string,
-              theme: 'light',
-              pages: false,
-              autoHeight: false,
-              devices: { selected: 'desktop' },
-              settingsMenu: false,
-              project: {
-                type: 'web',
-                id: uuidv4(),
-              },
-              identity: {
-                id: user?.id,
-              },
-            }}
-          />
+          <div ref={containerRef} id="studio-editor-container" className="h-[700px] w-full">
+            {/* GrapesJS StudioEditor container */}
+            <StudioEditor
+              key="studio-editor"
+              onReady={onReady}
+              options={{
+                licenseKey: process.env.NEXT_PUBLIC_GRAPE_STUDIO_KEY as string,
+                theme: 'light',
+                pages: false,
+                autoHeight: false,
+                devices: { selected: 'desktop' },
+                settingsMenu: false,
+                project: {
+                  type: 'web',
+                  id: uuidv4(),
+                },
+                identity: {
+                  id: user?.id,
+                },
+              }}
+            />
+          </div>
         </div>
       </div>
       {templateId && (

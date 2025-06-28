@@ -7,6 +7,4 @@ export type PostMessagePayload = {
 export type TemplateData = {
   handlebarsCode: string;
   handlebarsJson: string;
-  htmlContent: string;
-  htmlStyle: string;
 };
