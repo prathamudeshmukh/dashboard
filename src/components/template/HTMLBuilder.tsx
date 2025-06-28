@@ -97,12 +97,15 @@ export default function HTMLBuilder() {
 
       // Check if canvas is empty and add placeholder
       try {
-        if (editor.getComponents && editor.getComponents().length === 0) {
-          editor.setComponents(`
-          <div id="placeholder" style="text-align: center; padding: 50px; font-size: 18px; color: #aaa;">
-            ✨ Click on <strong>"+"</strong> to get started!
-          </div>
-        `);
+        if (editor && typeof editor.getComponents === 'function') {
+          const comps = editor.getComponents();
+          if (comps.length === 0) {
+            editor.setComponents(`
+        <div id="placeholder" style="text-align: center; padding: 50px; font-size: 18px; color: #aaa;">
+          ✨ Click on <strong>"+"</strong> to get started!
+        </div>
+      `);
+          }
         }
       } catch (err) {
         console.error('Failed to set placeholder content:', err);
