@@ -36,69 +36,99 @@ export default function HTMLBuilder() {
   const containerRef = useRef(null);
 
   const onReady = async (editor: Editor) => {
-    // Save HTML content when editor changes
-    const updateContent = debounce(() => {
-      const html = editor.getHtml();
-      const css = editor.getCss();
-      setHtmlContent(html);
-      setHtmlStyle(css as string);
-    }, 500); // adjust debounce timing
-
-    editor.on('update', updateContent);
-
-    // Block Manager
-    const blockManager = editor.BlockManager;
-
-    // Remove specific blocks
-    const blocksToRemove = ['video', 'form', 'input', 'textarea', 'select', 'button', 'checkbox', 'radio', 'label'];
-    blocksToRemove.forEach((blockId) => {
-      if (blockManager.get(blockId)) {
-        blockManager.remove(blockId);
-      }
-    });
-
-    // Fetch template and populate editor
     try {
-      if (templateId && !isTemplateLoaded) {
-        console.info('Fetching template data');
-        const response = await fetchTemplateById(templateId);
-        if (response?.data) {
-          const content = response.data.templateContent as string;
-          const style = response.data.templateStyle as string;
-          editor.setComponents(content);
-          editor.setStyle(style);
-          setHtmlContent(content);
-          setHtmlStyle(style);
-          setCreationMethod(response.data.creationMethod as CreationMethodEnum);
-          setTemplateName(response.data.templateName as string);
-          setTemplateDescription(response.data.description as string);
-          setIsTemplateLoaded(true);
+      // Wrap entire onReady logic
+      console.info('Editor is ready, initializing...');
+
+      // Save HTML content when editor changes
+      try {
+        const updateContent = debounce(() => {
+          const html = editor.getHtml();
+          const css = editor.getCss();
+          setHtmlContent(html);
+          setHtmlStyle(css as string);
+        }, 500);
+
+        editor.on('update', updateContent);
+      } catch (err) {
+        console.error('Failed to attach update listener:', err);
+      }
+
+      // Block Manager
+      try {
+        const blockManager = editor.BlockManager;
+        // Remove specific blocks
+        const blocksToRemove = ['video', 'form', 'input', 'textarea', 'select', 'button', 'checkbox', 'radio', 'label'];
+
+        blocksToRemove.forEach((blockId) => {
+          if (blockManager.get(blockId)) {
+            blockManager.remove(blockId);
+          }
+        });
+      } catch (err) {
+        console.error('Failed to configure block manager:', err);
+      }
+
+      // Fetch and load template
+      try {
+        if (templateId && !isTemplateLoaded) {
+          console.info('Fetching template data...');
+          const response = await fetchTemplateById(templateId);
+          if (response?.data) {
+            const content = response.data.templateContent as string;
+            const style = response.data.templateStyle as string;
+
+            editor.setComponents(content);
+            editor.setStyle(style);
+
+            setHtmlContent(content);
+            setHtmlStyle(style);
+            setCreationMethod(response.data.creationMethod as CreationMethodEnum);
+            setTemplateName(response.data.templateName as string);
+            setTemplateDescription(response.data.description as string);
+            setIsTemplateLoaded(true);
+          }
+        } else if (htmlContent) {
+          editor.setComponents(htmlContent);
         }
-      } else if (htmlContent) {
-        editor.setComponents(htmlContent);
+      } catch (err) {
+        console.error('Failed to load template for editing:', err);
+      }
+
+      // Check if canvas is empty and add placeholder
+      try {
+        if (editor.getComponents && editor.getComponents().length === 0) {
+          editor.setComponents(`
+          <div id="placeholder" style="text-align: center; padding: 50px; font-size: 18px; color: #aaa;">
+            ✨ Click on <strong>"+"</strong> to get started!
+          </div>
+        `);
+        }
+      } catch (err) {
+        console.error('Failed to set placeholder content:', err);
+      }
+
+      // Remove placeholder on component add
+      try {
+        editor.on('component:add', () => {
+          const placeholder = editor?.Components?.getWrapper()?.find('#placeholder');
+          if (placeholder?.length) {
+            placeholder[0]?.remove();
+          }
+        });
+      } catch (err) {
+        console.error('Failed to register component:add listener:', err);
+      }
+
+      // Final render
+      try {
+        editor.render();
+      } catch (err) {
+        console.error('Failed to render editor:', err);
       }
     } catch (err) {
-      console.error('Failed to load template for editing:', err);
+      console.error('Unexpected error in onReady handler:', err);
     }
-
-    // Check if canvas is empty and add placeholder
-    if (editor.getComponents().length === 0) {
-      editor.setComponents(`
-            <div id="placeholder" style="text-align: center; padding: 50px; font-size: 18px; color: #aaa;">
-              ✨ Click on <strong>"+"</strong> to get started!
-            </div>
-          `);
-    }
-
-    // Listen for component add event to remove placeholder
-    editor.on('component:add', () => {
-      const placeholder = editor?.Components?.getWrapper()?.find('#placeholder');
-      if (placeholder?.length) {
-        placeholder[0]?.remove();
-      }
-    });
-
-    editor.render();
   };
 
   const handleSave = async (type: UpdateTypeEnum) => {
