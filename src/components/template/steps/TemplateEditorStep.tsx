@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 'use client';
 
+import { useLocale } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -25,6 +26,7 @@ export default function TemplateEditorStep() {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [pendingTab, setPendingTab] = useState<EditorTypeEnum | null>(null);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
+  const locale = useLocale();
 
   // Send data to iframe
   const sendDataToIframe = (templateData: TemplateData) => {
@@ -137,7 +139,7 @@ export default function TemplateEditorStep() {
             key={activeTab}
             title="Template Editor"
             className="min-h-[900px] w-full border-0"
-            src="/editor/code-editor"
+            src={`/${locale}/editor/code-editor`}
             sandbox="allow-same-origin allow-scripts"
           />
         )}
