@@ -11,6 +11,7 @@ import { EditorTypeEnum } from '@/types/Enum';
 import type { PostMessagePayload, TemplateData } from '@/types/PostMessage';
 
 import EditorSwitchHeader from '../EditorSwitchHeader';
+import HTMLBuilder from '../HTMLBuilder';
 
 export default function TemplateEditorStep() {
   const {
@@ -18,12 +19,8 @@ export default function TemplateEditorStep() {
     setActiveTab,
     handlebarsCode,
     handlebarsJson,
-    htmlContent,
-    htmlStyle,
     setHandlebarsCode,
     setHandlebarsJson,
-    setHtmlContent,
-    setHtmlStyle,
   } = useTemplateStore();
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [pendingTab, setPendingTab] = useState<EditorTypeEnum | null>(null);
@@ -67,8 +64,6 @@ export default function TemplateEditorStep() {
               sendDataToIframe({
                 handlebarsCode,
                 handlebarsJson,
-                htmlContent,
-                htmlStyle,
               });
             }
             break;
@@ -81,12 +76,6 @@ export default function TemplateEditorStep() {
               }
               if (data.handlebarsJson !== undefined) {
                 setHandlebarsJson(data.handlebarsJson);
-              }
-              if (data.htmlContent !== undefined) {
-                setHtmlContent(data.htmlContent);
-              }
-              if (data.htmlStyle !== undefined) {
-                setHtmlStyle(data.htmlStyle);
               }
             }
             break;
@@ -105,12 +94,8 @@ export default function TemplateEditorStep() {
   }, [
     handlebarsCode,
     handlebarsJson,
-    htmlContent,
-    htmlStyle,
     setHandlebarsCode,
     setHandlebarsJson,
-    setHtmlContent,
-    setHtmlStyle,
   ]);
 
   const handleTabChange = (tabName: string) => {
@@ -146,18 +131,20 @@ export default function TemplateEditorStep() {
           <EditorSwitchHeader activeTab={activeTab} onTabChange={handleTabChange} />
         </Tabs>
 
-        <iframe
-          ref={iframeRef}
-          key={activeTab}
-          title="Template Editor"
-          className="min-h-[900px] w-full border-0"
-          src={
-            activeTab === EditorTypeEnum.VISUAL
-              ? '/editor/visual-editor'
-              : '/editor/code-editor'
-          }
-          sandbox="allow-same-origin allow-scripts"
-        />
+        {activeTab === EditorTypeEnum.HANDLEBARS && (
+          <iframe
+            ref={iframeRef}
+            key={activeTab}
+            title="Template Editor"
+            className="min-h-[900px] w-full border-0"
+            src="/editor/code-editor"
+            sandbox="allow-same-origin allow-scripts"
+          />
+        )}
+
+        {activeTab === EditorTypeEnum.VISUAL && (
+          <HTMLBuilder />
+        )}
       </CardContent>
 
       <ConfirmationDialog
