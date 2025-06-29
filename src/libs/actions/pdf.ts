@@ -3,7 +3,7 @@
 import { put } from '@vercel/blob';
 import { v4 as uuidv4 } from 'uuid';
 
-const inngestBaseUrl = process.env.INNGEST_BASE_URL;
+const inngestBaseUrl = process.env.INNGEST_GET_RUNS_BASE_URL;
 
 export async function uploadPdf(formData: FormData) {
   const file = formData.get('pdf') as File;
