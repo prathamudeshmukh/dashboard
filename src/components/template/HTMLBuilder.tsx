@@ -89,7 +89,7 @@ export default function HTMLBuilder() {
     const blockManager = editor.BlockManager;
 
     // Remove specific blocks
-    const blocksToRemove = ['video', 'form', 'input', 'textarea', 'select', 'button', 'checkbox,', 'radio', 'label'];
+    const blocksToRemove = ['video', 'form', 'input', 'textarea', 'select', 'button', 'checkbox', 'radio', 'label'];
     blocksToRemove.forEach((blockId) => {
       if (blockManager.get(blockId)) {
         blockManager.remove(blockId);

@@ -1,15 +1,27 @@
 'use client';
 
+import { Lightbulb } from 'lucide-react';
+import { useLocale } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import ConfirmationDialog from '@/components/ui/confirmation-dialog';
-import { Tabs } from '@/components/ui/tabs';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 import { EditorTypeEnum } from '@/types/Enum';
-import type { HandlebarTemplateData, PostMessagePayload } from '@/types/PostMessage';
+import type { PostMessagePayload, TemplateData } from '@/types/PostMessage';
 
 import EditorSwitchHeader from '../EditorSwitchHeader';
+import HTMLBuilder from '../HTMLBuilder';
+
+function InfoMessage({ text }: { text: string }) {
+  return (
+    <div className="flex items-center gap-2">
+      <Lightbulb className="text-orange-300" />
+      <p className="text-base font-normal text-muted-foreground">{text}</p>
+    </div>
+  );
+}
 
 export default function TemplateEditorStep() {
   const {
@@ -23,54 +35,63 @@ export default function TemplateEditorStep() {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [pendingTab, setPendingTab] = useState<EditorTypeEnum | null>(null);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
+  const locale = useLocale();
 
   // Send data to iframe
-  const sendDataToIframe = (templateData: HandlebarTemplateData) => {
-    const message: PostMessagePayload = {
-      type: 'TEMPLATE_DATA_RESPONSE',
-      data: templateData,
-      source: 'parent',
-    };
-    if (!iframeRef.current) {
-      return;
-    }
-    iframeRef?.current?.contentWindow?.postMessage(message);
-  };
-
-  // Listen for messages from iframe
-  useEffect(() => {
-    const handleMessage = (event: MessageEvent<PostMessagePayload>) => {
-      // Verify origin for security
-      if (!event.origin.includes(window.location.origin)) {
+  const sendDataToIframe = (templateData: TemplateData) => {
+    try {
+      if (!iframeRef.current || !iframeRef.current.contentWindow) {
+        console.warn('No iframe found or iframe is not ready to receive data.');
         return;
       }
 
-      const { type, data, source } = event.data;
+      const message: PostMessagePayload = {
+        type: 'TEMPLATE_DATA_RESPONSE',
+        data: templateData,
+        source: 'parent',
+      };
 
-      switch (type) {
-        case 'IFRAME_LOADED':
-          if (source === 'iframe') {
-            sendDataToIframe({
-              handlebarsCode,
-              handlebarsJson,
-            });
-          }
-          break;
+      iframeRef.current.contentWindow.postMessage(message, '*');
+    } catch (err) {
+      console.error('Failed to send TEMPLATE_DATA_RESPONSE to iframe:', err);
+    }
+  };
 
-        case 'TEMPLATE_UPDATE':
-          // Update parent state with data from iframe
-          if (data) {
-            if (data.handlebarsCode !== undefined) {
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent<PostMessagePayload>) => {
+      try {
+        // Optional: verify origin for security
+        if (!event.origin.includes(window.location.origin)) {
+          console.warn('Message ignored: invalid origin', event.origin);
+          return;
+        }
+
+        const { type, data, source } = event.data;
+
+        switch (type) {
+          case 'IFRAME_LOADED':
+            if (source === 'iframe') {
+              sendDataToIframe({
+                handlebarsCode,
+                handlebarsJson,
+              });
+            }
+            break;
+
+          case 'TEMPLATE_UPDATE':
+            if (data.handlebarsCode) {
               setHandlebarsCode(data.handlebarsCode);
             }
-            if (data.handlebarsJson !== undefined) {
+            if (data.handlebarsJson) {
               setHandlebarsJson(data.handlebarsJson);
             }
-          }
-          break;
+            break;
 
-        default:
-          break;
+          default:
+            break;
+        }
+      } catch (err) {
+        console.error('Error handling postMessage from iframe:', err);
       }
     };
 
@@ -114,20 +135,29 @@ export default function TemplateEditorStep() {
       <CardContent className="p-0">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <EditorSwitchHeader activeTab={activeTab} onTabChange={handleTabChange} />
-        </Tabs>
 
-        <iframe
-          ref={iframeRef}
-          key={activeTab}
-          title="Template Editor"
-          className="min-h-[900px] w-full border-0"
-          src={
-            activeTab === EditorTypeEnum.VISUAL
-              ? '/editor/visual-editor'
-              : '/editor/code-editor'
-          }
-          sandbox="allow-same-origin allow-scripts"
-        />
+          <TabsContent value={EditorTypeEnum.VISUAL} className="mt-0 border-0 p-0">
+            <div className="border-b bg-amber-50/50 p-4">
+              <InfoMessage text="Drag and drop elements to build your template visually. Changes here will not affect your Handlebars template." />
+            </div>
+            <div className="p-4">
+              <div className="min-h-[700px]">
+                <HTMLBuilder />
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value={EditorTypeEnum.HANDLEBARS} className="mt-0 border-0 p-0">
+            <iframe
+              ref={iframeRef}
+              key={activeTab}
+              title="Template Editor"
+              className="min-h-[900px] w-full border-0"
+              src={`/${locale}/editor/code-editor`}
+              sandbox="allow-same-origin allow-scripts"
+            />
+          </TabsContent>
+        </Tabs>
       </CardContent>
 
       <ConfirmationDialog
