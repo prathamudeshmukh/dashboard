@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 'use client';
 
 import { Lightbulb } from 'lucide-react';
@@ -52,7 +51,6 @@ export default function TemplateEditorStep() {
         source: 'parent',
       };
 
-      console.info('TEMPLATE_DATA_RESPONSE emitted:', message);
       iframeRef.current.contentWindow.postMessage(message, '*');
     } catch (err) {
       console.error('Failed to send TEMPLATE_DATA_RESPONSE to iframe:', err);
@@ -81,19 +79,15 @@ export default function TemplateEditorStep() {
             break;
 
           case 'TEMPLATE_UPDATE':
-            console.info('TEMPLATE_UPDATE received:', data);
-            if (data) {
-              if (data.handlebarsCode !== undefined) {
-                setHandlebarsCode(data.handlebarsCode);
-              }
-              if (data.handlebarsJson !== undefined) {
-                setHandlebarsJson(data.handlebarsJson);
-              }
+            if (data.handlebarsCode) {
+              setHandlebarsCode(data.handlebarsCode);
+            }
+            if (data.handlebarsJson) {
+              setHandlebarsJson(data.handlebarsJson);
             }
             break;
 
           default:
-            console.info('Unhandled message type:', type);
             break;
         }
       } catch (err) {
