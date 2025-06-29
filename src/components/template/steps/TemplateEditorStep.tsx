@@ -12,7 +12,7 @@ import { EditorTypeEnum } from '@/types/Enum';
 import type { PostMessagePayload, TemplateData } from '@/types/PostMessage';
 
 import EditorSwitchHeader from '../EditorSwitchHeader';
-import HTMLBuilder from '../HTMLBuilder';
+import HTMLBuilder from '../html-builder/HTMLBuilder';
 
 function InfoMessage({ text }: { text: string }) {
   return (

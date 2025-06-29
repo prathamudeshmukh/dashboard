@@ -11,13 +11,13 @@ import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
 
+import { Button } from '@/components/ui/button';
 import { PublishTemplateToProd, UpsertTemplate } from '@/libs/actions/templates';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 import { SaveStatusEnum, UpdateTypeEnum } from '@/types/Enum';
 import { TemplateType } from '@/types/Template';
 
-import { Button } from '../ui/button';
-import { loadTemplateContent } from './html-builder/LoadTemplateContent';
+import { loadTemplateContent } from './LoadTemplateContent';
 
 export default function HTMLBuilder() {
   const { user } = useUser();
