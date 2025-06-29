@@ -50,10 +50,8 @@ const NextConfig = withSentryConfig(
     // FIXME: Add your Sentry organization and project names
     org: 'templify',
     project: 'javascript-nextjs',
-    compress: false,
     // Only print logs for uploading source maps in CI
     silent: !process.env.CI,
-    sourcemaps: { disable: true },
     // For all available options, see:
     // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
 
