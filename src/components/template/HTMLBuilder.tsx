@@ -1,15 +1,13 @@
-/* eslint-disable no-console */
 'use client';
 
 import '@grapesjs/studio-sdk/style';
 
 import { useUser } from '@clerk/nextjs';
-// import StudioEditor from '@grapesjs/studio-sdk/react';
+import StudioEditor from '@grapesjs/studio-sdk/react';
 import type { Editor } from 'grapesjs';
 import { debounce } from 'lodash';
-import dynamic from 'next/dynamic';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -20,118 +18,100 @@ import { TemplateType } from '@/types/Template';
 
 import { Button } from '../ui/button';
 
-const StudioEditor = dynamic(() => import('@grapesjs/studio-sdk/react'), {
-  ssr: false,
-});
-
 export default function HTMLBuilder() {
   const { user } = useUser();
+  const [editor, setEditor] = useState<Editor>();
   const { templateName, templateDescription, htmlContent, htmlStyle, creationMethod, setTemplateName, setTemplateDescription, resetTemplate, setCreationMethod, setHtmlContent, setHtmlStyle } = useTemplateStore();
   const searchParams = useSearchParams();
   const templateId = searchParams.get('templateId');
   const [saveStatus, setSaveStatus] = useState<SaveStatusEnum>(SaveStatusEnum.IDLE);
-  const [isTemplateLoaded, setIsTemplateLoaded] = useState(false);
-
   const router = useRouter();
+
   const containerRef = useRef(null);
 
-  const onReady = async (editor: Editor) => {
-    try {
-      // Wrap entire onReady logic
-      console.info('Editor is ready, initializing...');
-
-      // Save HTML content when editor changes
-      try {
-        const updateContent = debounce(() => {
-          const html = editor.getHtml();
-          const css = editor.getCss();
-          setHtmlContent(html);
-          setHtmlStyle(css as string);
-        }, 500);
-
-        editor.on('update', updateContent);
-      } catch (err) {
-        console.error('Failed to attach update listener:', err);
+  useEffect(() => {
+    const loadTemplate = async () => {
+      if (!editor) {
+        return;
       }
 
-      // Block Manager
-      try {
-        const blockManager = editor.BlockManager;
-        // Remove specific blocks
-        const blocksToRemove = ['video', 'form', 'input', 'textarea', 'select', 'button', 'checkbox', 'radio', 'label'];
-
-        blocksToRemove.forEach((blockId) => {
-          if (blockManager.get(blockId)) {
-            blockManager.remove(blockId);
-          }
-        });
-      } catch (err) {
-        console.error('Failed to configure block manager:', err);
-      }
-
-      // Fetch and load template
-      try {
-        if (templateId && !isTemplateLoaded) {
-          console.info('Fetching template data...');
+      // If templateId exists, fetch the template
+      if (templateId) {
+        try {
           const response = await fetchTemplateById(templateId);
-          if (response?.data) {
-            const content = response.data.templateContent as string;
-            const style = response.data.templateStyle as string;
-
-            editor.setComponents(content);
-            editor.setStyle(style);
-
-            setHtmlContent(content);
-            setHtmlStyle(style);
-            setCreationMethod(response.data.creationMethod as CreationMethodEnum);
-            setTemplateName(response.data.templateName as string);
-            setTemplateDescription(response.data.description as string);
-            setIsTemplateLoaded(true);
+          if (!response) {
+            return;
           }
-        } else if (htmlContent) {
+          const content = response.data?.templateContent as string;
+          const style = response.data?.templateStyle as string;
+
+          setHtmlContent(content);
+          setHtmlStyle(style);
+          setCreationMethod(response.data?.creationMethod as CreationMethodEnum);
+          setTemplateName(response.data?.templateName as string);
+          setTemplateDescription(response.data?.description as string);
+
+          // Load into editor
+          if (content) {
+            editor.setComponents(content);
+          }
+          if (style) {
+            editor.setStyle(style);
+          }
+        } catch (error) {
+          console.error('Failed to load template for editing:', error);
+        }
+      } else {
+        // No templateId → use current state
+        if (htmlContent) {
           editor.setComponents(htmlContent);
         }
-      } catch (err) {
-        console.error('Failed to load template for editing:', err);
       }
+    };
 
-      // Check if canvas is empty and add placeholder
-      try {
-        if (editor && typeof editor.getComponents === 'function') {
-          const comps = editor.getComponents();
-          if (comps.length === 0) {
-            editor.setComponents(`
-        <div id="placeholder" style="text-align: center; padding: 50px; font-size: 18px; color: #aaa;">
-          ✨ Click on <strong>"+"</strong> to get started!
-        </div>
-      `);
-          }
-        }
-      } catch (err) {
-        console.error('Failed to set placeholder content:', err);
-      }
+    loadTemplate();
+  }, [templateId, editor]); // Make sure to depend on both
 
-      // Remove placeholder on component add
-      try {
-        editor.on('component:add', () => {
-          const placeholder = editor?.Components?.getWrapper()?.find('#placeholder');
-          if (placeholder?.length) {
-            placeholder[0]?.remove();
-          }
-        });
-      } catch (err) {
-        console.error('Failed to register component:add listener:', err);
-      }
+  const onReady = (editor: Editor) => {
+    setEditor(editor);
 
-      // Final render
-      try {
-        editor.render();
-      } catch (err) {
-        console.error('Failed to render editor:', err);
+    // Save HTML content when editor changes
+    const updateContent = debounce(() => {
+      const html = editor.getHtml();
+      const css = editor.getCss();
+      setHtmlContent(html);
+      setHtmlStyle(css as string);
+    }, 500); // adjust debounce timing
+
+    editor.on('update', updateContent);
+
+    // Block Manager
+    const blockManager = editor.BlockManager;
+
+    // Remove specific blocks
+    const blocksToRemove = ['video', 'form', 'input', 'textarea', 'select', 'button', 'checkbox', 'radio', 'label'];
+    blocksToRemove.forEach((blockId) => {
+      if (blockManager.get(blockId)) {
+        blockManager.remove(blockId);
       }
-    } catch (err) {
-      console.error('Unexpected error in onReady handler:', err);
+    });
+
+    // Check if canvas is empty and add placeholder
+    if (editor.getComponents().length === 0) {
+      editor.setComponents(`
+            <div id="placeholder" style="text-align: center; padding: 50px; font-size: 18px; color: #aaa;">
+              ✨ Click on <strong>"+"</strong> to get started!
+            </div>
+          `);
     }
+
+    // Listen for component add event to remove placeholder
+    editor.on('component:add', () => {
+      const placeholder = editor?.Components?.getWrapper()?.find('#placeholder');
+      if (placeholder?.length) {
+        placeholder[0]?.remove();
+      }
+    });
   };
 
   const handleSave = async (type: UpdateTypeEnum) => {
@@ -192,10 +172,9 @@ export default function HTMLBuilder() {
       )}
       <div className="m-0 w-full rounded-md border p-0">
         <div className="gjs-editor-cont w-full">
-          <div ref={containerRef} id="studio-editor-container" className="h-[700px] w-full">
-            {/* GrapesJS StudioEditor container */}
+          {/* GrapesJS StudioEditor container */}
+          <div ref={containerRef} className="h-[700px] w-full">
             <StudioEditor
-              key="studio-editor"
               onReady={onReady}
               options={{
                 licenseKey: process.env.NEXT_PUBLIC_GRAPE_STUDIO_KEY as string,
