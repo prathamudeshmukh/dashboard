@@ -1,18 +1,28 @@
 /* eslint-disable no-console */
 'use client';
 
+import { Lightbulb } from 'lucide-react';
 import { useLocale } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import ConfirmationDialog from '@/components/ui/confirmation-dialog';
-import { Tabs } from '@/components/ui/tabs';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 import { EditorTypeEnum } from '@/types/Enum';
 import type { PostMessagePayload, TemplateData } from '@/types/PostMessage';
 
 import EditorSwitchHeader from '../EditorSwitchHeader';
 import HTMLBuilder from '../HTMLBuilder';
+
+function InfoMessage({ text }: { text: string }) {
+  return (
+    <div className="flex items-center gap-2">
+      <Lightbulb className="text-orange-300" />
+      <p className="text-base font-normal text-muted-foreground">{text}</p>
+    </div>
+  );
+}
 
 export default function TemplateEditorStep() {
   const {
@@ -131,22 +141,29 @@ export default function TemplateEditorStep() {
       <CardContent className="p-0">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <EditorSwitchHeader activeTab={activeTab} onTabChange={handleTabChange} />
+
+          <TabsContent value={EditorTypeEnum.VISUAL} className="mt-0 border-0 p-0">
+            <div className="border-b bg-amber-50/50 p-4">
+              <InfoMessage text="Drag and drop elements to build your template visually. Changes here will not affect your Handlebars template." />
+            </div>
+            <div className="p-4">
+              <div className="min-h-[700px]">
+                <HTMLBuilder />
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value={EditorTypeEnum.HANDLEBARS} className="mt-0 border-0 p-0">
+            <iframe
+              ref={iframeRef}
+              key={activeTab}
+              title="Template Editor"
+              className="min-h-[900px] w-full border-0"
+              src={`/${locale}/editor/code-editor`}
+              sandbox="allow-same-origin allow-scripts"
+            />
+          </TabsContent>
         </Tabs>
-
-        {activeTab === EditorTypeEnum.HANDLEBARS && (
-          <iframe
-            ref={iframeRef}
-            key={activeTab}
-            title="Template Editor"
-            className="min-h-[900px] w-full border-0"
-            src={`/${locale}/editor/code-editor`}
-            sandbox="allow-same-origin allow-scripts"
-          />
-        )}
-
-        {activeTab === EditorTypeEnum.VISUAL && (
-          <HTMLBuilder />
-        )}
       </CardContent>
 
       <ConfirmationDialog
