@@ -28,6 +28,7 @@ export default function HandlebarsEditor() {
     handlebarsJson,
     creationMethod,
     setTemplateName,
+    setTemplateDescription,
     setHandlebarsCode,
     setHandlebarsJson,
     resetTemplate,
@@ -135,6 +136,7 @@ export default function HandlebarsEditor() {
         setTemplateName(response.data.templateName as string);
         setHandlebarsCode(response.data.templateContent as string);
         setHandlebarsJson(JSON.stringify(response.data.templateSampleData));
+        setTemplateDescription(response.data.description as string);
         setIsTemplateLoaded(true);
       } catch (error) {
         console.error('Failed to load template for editing:', error);
