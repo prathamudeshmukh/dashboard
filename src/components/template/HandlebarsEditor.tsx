@@ -1,7 +1,7 @@
 'use client';
 
 import { useUser } from '@clerk/nextjs';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -45,9 +45,8 @@ export default function HandlebarsEditor() {
   const [dataReceived, setDataReceived] = useState(false);
   const { user } = useUser();
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [isInFrame, setIsInFrame] = useState<boolean>(false);
-  const templateId = searchParams.get('templateId');
+  const [templateId, setTemplateId] = useState<string>('');
 
   const handlebarsService = new HandlebarsService();
   const [isTemplateLoaded, setIsTemplateLoaded] = useState(false);
@@ -75,6 +74,12 @@ export default function HandlebarsEditor() {
           setHandlebarsCode(data.handlebarsCode);
           setHandlebarsJson(data.handlebarsJson);
           setDataReceived(true);
+        }
+      }
+
+      if (type === 'TEMPLATE_ID_RESPONSE') {
+        if (data) {
+          setTemplateId(data);
         }
       }
     };
@@ -306,7 +311,7 @@ export default function HandlebarsEditor() {
 
   return (
     <>
-      {templateId && !isInFrame && (
+      {templateId && (
         <div className="flex items-center justify-between px-4 py-2">
           <h2 className="text-2xl font-semibold">
             Edit Template:
