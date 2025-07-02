@@ -1,13 +1,13 @@
 import React from 'react';
 
-import HandlebarsEditor from '@/components/template/HandlebarsEditor';
+import EditHandlebarTemplate from '@/components/template/handlebars-editor/EditHandlebarTemplate';
 
-const page = () => {
+const Page = () => {
   return (
     <div>
-      <HandlebarsEditor />
+      <EditHandlebarTemplate />
     </div>
   );
 };
 
-export default page;
+export default Page;

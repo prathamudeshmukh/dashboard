@@ -1,23 +1,27 @@
 'use client';
 
-import { useUser } from '@clerk/nextjs';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { Lightbulb } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
 
-import { fetchTemplateById, PublishTemplateToProd, UpsertTemplate } from '@/libs/actions/templates';
+import { fetchTemplateById } from '@/libs/actions/templates';
 import { HandlebarsService } from '@/libs/services/HandlebarService';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
-import { SaveStatusEnum, UpdateTypeEnum } from '@/types/Enum';
+import type { CreationMethodEnum } from '@/types/Enum';
 import type { PostMessagePayload } from '@/types/PostMessage';
-import { TemplateType } from '@/types/Template';
 
-import { Button } from '../ui/button';
-import { DEFAULT_TEMPLATE } from './handlebars-editor/constants';
 import { EditorToolbar } from './handlebars-editor/EditorToolbar';
 import { JsonEditor } from './handlebars-editor/JsonEditor';
 import { PreviewPanel } from './handlebars-editor/PreviewPanel';
 import { TemplateEditor } from './handlebars-editor/TemplateEditor';
+
+function InfoMessage({ text }: { text: string }) {
+  return (
+    <div className="flex items-center gap-2">
+      <Lightbulb className="text-orange-300" />
+      <p className="text-base font-normal text-muted-foreground">{text}</p>
+    </div>
+  );
+}
 
 export default function HandlebarsEditor() {
   // Get page settings from the store
@@ -31,7 +35,7 @@ export default function HandlebarsEditor() {
     setTemplateDescription,
     setHandlebarsCode,
     setHandlebarsJson,
-    resetTemplate,
+    setCreationMethod,
   } = useTemplateStore();
 
   const [handlebarsPreview, setHandlebarsPreview] = useState('');
@@ -41,13 +45,8 @@ export default function HandlebarsEditor() {
   const [isEditorReady, setIsEditorReady] = useState(false);
   const [activeTab, setActiveTab] = useState('editor');
   const [renderCount, setRenderCount] = useState(0);
-  const [saveStatus, setSaveStatus] = useState<SaveStatusEnum>(SaveStatusEnum.IDLE);
-  const [dataReceived, setDataReceived] = useState(false);
-  const { user } = useUser();
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const [isInFrame, setIsInFrame] = useState<boolean>(false);
-  const templateId = searchParams.get('templateId');
+  const [templateId, setTemplateId] = useState<string>('');
 
   const handlebarsService = new HandlebarsService();
   const [isTemplateLoaded, setIsTemplateLoaded] = useState(false);
@@ -74,7 +73,13 @@ export default function HandlebarsEditor() {
         if (data) {
           setHandlebarsCode(data.handlebarsCode);
           setHandlebarsJson(data.handlebarsJson);
-          setDataReceived(true);
+          setIsEditorReady(true);
+        }
+      }
+
+      if (type === 'TEMPLATE_ID_RESPONSE') {
+        if (data) {
+          setTemplateId(data);
         }
       }
     };
@@ -85,7 +90,7 @@ export default function HandlebarsEditor() {
 
   // Send updates to parent when data changes (debounced)
   useEffect(() => {
-    if (!isInFrame || !dataReceived) {
+    if (!isInFrame) {
       return;
     }
 
@@ -93,8 +98,11 @@ export default function HandlebarsEditor() {
       const message: PostMessagePayload = {
         type: 'TEMPLATE_UPDATE',
         data: {
+          templateName,
+          templateDescription,
           handlebarsCode,
           handlebarsJson,
+          creationMethod,
         },
         source: 'iframe',
       };
@@ -102,26 +110,9 @@ export default function HandlebarsEditor() {
     }, 500); // Debounce updates
 
     return () => clearTimeout(timeoutId);
-  }, [isInFrame, dataReceived, handlebarsCode, handlebarsJson]);
+  }, [isInFrame, templateName, templateDescription, handlebarsCode, handlebarsJson, creationMethod]);
 
-  // Set default template and data if not in iframe or no data received
-  useEffect(() => {
-    // Skip if we're waiting for iframe data or if template is being loaded
-    if ((isInFrame && !dataReceived) || (templateId && !isTemplateLoaded)) {
-      return;
-    }
-    if (!handlebarsCode) {
-      setHandlebarsCode(DEFAULT_TEMPLATE);
-    }
-
-    if (!handlebarsJson) {
-      const defaultData = handlebarsService.getDatasetJson('default');
-      setHandlebarsJson(JSON.stringify(defaultData, null, 2));
-    }
-
-    setIsEditorReady(true);
-  }, [handlebarsCode, handlebarsJson, setHandlebarsCode, setHandlebarsJson]);
-
+  // fetch data if template id is available
   useEffect(() => {
     const fetchTemplate = async () => {
       if (!templateId || isTemplateLoaded) {
@@ -137,14 +128,26 @@ export default function HandlebarsEditor() {
         setHandlebarsCode(response.data.templateContent as string);
         setHandlebarsJson(JSON.stringify(response.data.templateSampleData));
         setTemplateDescription(response.data.description as string);
+        setCreationMethod(response.data.creationMethod as CreationMethodEnum);
         setIsTemplateLoaded(true);
+        setIsEditorReady(true);
       } catch (error) {
         console.error('Failed to load template for editing:', error);
       }
     };
 
     fetchTemplate();
-  }, [templateId, isTemplateLoaded, setTemplateName, setHandlebarsCode, setHandlebarsJson]);
+  }, [
+    templateId,
+    isTemplateLoaded,
+    setTemplateName,
+    setTemplateDescription,
+    setHandlebarsCode,
+    setHandlebarsJson,
+    setCreationMethod,
+    setIsTemplateLoaded,
+    setIsEditorReady,
+  ]);
 
   // Update the useEffect that renders the template to handle async rendering
   useEffect(() => {
@@ -259,77 +262,11 @@ export default function HandlebarsEditor() {
     }
   };
 
-  const handleSave = async (type: UpdateTypeEnum) => {
-    setSaveStatus(SaveStatusEnum.SAVING);
-    if (!user) {
-      setSaveStatus(SaveStatusEnum.ERROR);
-      return;
-    }
-    try {
-      const templateData = {
-        templateId,
-        description: templateDescription,
-        email: user?.emailAddresses[0]?.emailAddress,
-        templateName,
-        templateContent: handlebarsCode,
-        templateSampleData: handlebarsJson,
-        templateType: TemplateType.HANDLBARS_TEMPLATE,
-        creationMethod,
-      };
-      const response = await UpsertTemplate(templateData);
-
-      if (!response) {
-        setSaveStatus(SaveStatusEnum.ERROR);
-        return;
-      }
-      if (type === UpdateTypeEnum.UPDATE) {
-        toast.success('Template updated successfully');
-        router.push('/dashboard');
-        resetTemplate();
-      } else if (type === UpdateTypeEnum.UPDATE_PUBLISH) {
-        if (response?.templateId) {
-          await PublishTemplateToProd(response?.templateId);
-          toast.success('Template updated and published successfully');
-          router.push('/dashboard');
-          resetTemplate();
-        } else {
-          toast.error('Template ID not found after update, cannot publish.');
-          setSaveStatus(SaveStatusEnum.ERROR);
-        }
-      }
-      setSaveStatus(SaveStatusEnum.SUCCESS);
-    } catch (error) {
-      setSaveStatus(SaveStatusEnum.ERROR);
-      toast.error(`Error: ${error}`);
-    }
-  };
-
   return (
     <>
-      {templateId && !isInFrame && (
-        <div className="flex items-center justify-between px-4 py-2">
-          <h2 className="text-2xl font-semibold">
-            Edit Template:
-            {' '}
-            {templateName || 'Unnamed'}
-          </h2>
-          <div className="flex justify-end gap-2">
-            <Button
-              className="rounded-full text-lg"
-              onClick={() => handleSave(UpdateTypeEnum.UPDATE)}
-              disabled={saveStatus === SaveStatusEnum.SAVING}
-            >
-              {saveStatus === SaveStatusEnum.SAVING ? 'Updating...' : 'Update'}
-            </Button>
-
-            <Button
-              className="rounded-full text-lg"
-              onClick={() => handleSave(UpdateTypeEnum.UPDATE_PUBLISH)}
-              disabled={saveStatus === SaveStatusEnum.SAVING}
-            >
-              {saveStatus === SaveStatusEnum.SAVING ? 'Updating & Publishing...' : 'Update & Publish'}
-            </Button>
-          </div>
+      {!templateId && (
+        <div className="border-b bg-amber-50/50 p-4">
+          <InfoMessage text="You're using the Code Editor. Use Handlebars syntax for full control. Prefer a visual approach? Try the Visual Editor." />
         </div>
       )}
       <div className="flex h-[800px] flex-col overflow-hidden rounded-md border text-black">
