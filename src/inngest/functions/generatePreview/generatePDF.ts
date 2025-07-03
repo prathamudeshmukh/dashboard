@@ -13,7 +13,8 @@ export async function generatePDF(templateId: string, logger: any): Promise<Arra
     if (!result.pdf) {
       throw new Error('PDF generation returned empty result');
     }
-
+    // eslint-disable-next-line no-console
+    console.log('PDF Buffer', result.pdf);
     return result.pdf;
   } catch (error) {
     logger.error('PDF generation error', { templateId, error });
