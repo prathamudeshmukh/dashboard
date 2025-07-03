@@ -42,7 +42,7 @@ export const generateTemplatePreviewJob = inngest.createFunction(
       });
 
       const blobResult = await step.run('upload-to-blob', () =>
-        uploadPDF(pdfResult, templateId, logger));
+        uploadPDF(pdfResult as ArrayBuffer, templateId, logger));
 
       await step.run('update-database', () =>
         updatePreviewURL(templateId, blobResult.url, logger));

@@ -5,9 +5,9 @@ import { and, desc, eq, gte, ilike, lte, sql } from 'drizzle-orm';
 import { inngest } from '@/inngest/client';
 import { generated_templates, templateGallery, templates, users } from '@/models/Schema';
 import contentGenerator from '@/service/contentGenerator';
+import { generatePDFBuffer } from '@/service/generatePDFBuffer';
 import type { FetchTemplateResponse, FetchTemplatesRequest, GeneratedTemplates, GeneratePdfRequest, JsonObject, JsonValue, PaginatedResponse, TemplateType, UpdatePreviewURLParams, UpdatePreviewURLResult, UsageMetric, UsageMetricRequest } from '@/types/Template';
 
-import { LeanPuppeteerHTMLPDF } from '../../leanPuppeteerHtmlPDF/index';
 import { db } from '../DB';
 import { deductCredit } from './user';
 
@@ -248,7 +248,7 @@ export async function generatePdf({
   templateData,
   devMode = true,
   isApi = false,
-}: GeneratePdfRequest): Promise<{ pdf?: string; error?: string }> {
+}: GeneratePdfRequest): Promise<{ pdf?: ArrayBuffer; error?: string }> {
   try {
     let template;
 
@@ -272,11 +272,6 @@ export async function generatePdf({
       templateData: dataForContentGenerator,
     });
 
-    const htmlPdf = new LeanPuppeteerHTMLPDF({
-      format: 'A4',
-      printBackground: true,
-    });
-
     // check for balance
     if (
       isApi
@@ -285,7 +280,7 @@ export async function generatePdf({
       return { error: 'Insufficient credits.' };
     }
 
-    const pdf = await htmlPdf.create(content);
+    const pdfBuffer = await generatePDFBuffer(content);
 
     if (template?.data?.id && isApi) {
       await deductCredit(template.data.user?.cliendId as string);
@@ -295,9 +290,7 @@ export async function generatePdf({
       });
     }
 
-    const pdfBase64 = pdf.toString('base64');
-
-    return { pdf: pdfBase64 };
+    return { pdf: pdfBuffer };
   } catch (error: any) {
     console.error('Error generating PDF:', error);
     return { error: `Failed to generate PDF: ${error.message}` };

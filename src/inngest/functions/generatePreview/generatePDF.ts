@@ -1,6 +1,6 @@
 import { generatePdf } from '@/libs/actions/templates';
 
-export async function generatePDF(templateId: string, logger: any): Promise<string> {
+export async function generatePDF(templateId: string, logger: any): Promise<ArrayBuffer> {
   logger.info('Generating PDF for template', { templateId });
 
   try {
@@ -14,7 +14,7 @@ export async function generatePDF(templateId: string, logger: any): Promise<stri
       throw new Error('PDF generation returned empty result');
     }
 
-    return result.pdf as string;
+    return result.pdf;
   } catch (error) {
     logger.error('PDF generation error', { templateId, error });
     throw error;
