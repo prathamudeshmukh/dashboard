@@ -1,12 +1,9 @@
-import { Buffer } from 'node:buffer';
-
 import { put } from '@vercel/blob';
 
-export async function uploadPDF(base64Pdf: string, templateId: string, logger: any) {
+export async function uploadPDF(pdfBuffer: ArrayBuffer, templateId: string, logger: any) {
   logger.info('Uploading PDF to Vercel Blob', { templateId });
 
   try {
-    const pdfBuffer = Buffer.from(base64Pdf, 'base64');
     const filename = `${templateId}.pdf`;
 
     const blob = await put(filename, pdfBuffer, {
@@ -18,7 +15,6 @@ export async function uploadPDF(base64Pdf: string, templateId: string, logger: a
     logger.info('PDF uploaded successfully', {
       templateId,
       url: blob.url,
-      size: pdfBuffer.length,
     });
 
     return blob;
