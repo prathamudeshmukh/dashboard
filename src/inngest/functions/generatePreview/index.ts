@@ -1,9 +1,8 @@
 import { inngest } from '@/inngest/client';
 import type { TemplatePreviewJobData } from '@/types/Template';
 
-import { generatePDF } from './generatePDF';
+import { GenerateAnduploadPDF } from './generateAndUploadPDF';
 import { updatePreviewURL } from './updatePreviewURL';
-import { uploadPDF } from './uploadPDF';
 
 type GenerateTemplatePreviewResult = {
   success: boolean;
@@ -28,21 +27,8 @@ export const generateTemplatePreviewJob = inngest.createFunction(
     logger.info('Starting template preview generation', { templateId });
 
     try {
-      const pdfResult = await step.run('generate-pdf', async () => {
-        try {
-          return await generatePDF(templateId, logger);
-        } catch (error) {
-          if (error instanceof Error && error.message.includes('ENOSPC')) {
-            logger.error('Disk space error during PDF generation', { templateId, error: error.message });
-            // You might want to trigger a cleanup job or alert here
-            throw new Error('Server storage full. Please try again later.');
-          }
-          throw error;
-        }
-      });
-
-      const blobResult = await step.run('upload-to-blob', () =>
-        uploadPDF(pdfResult as ArrayBuffer, templateId, logger));
+      const blobResult = await step.run('generate-pdf-and-upload-to-blob', () =>
+        GenerateAnduploadPDF(templateId, logger));
 
       await step.run('update-database', () =>
         updatePreviewURL(templateId, blobResult.url, logger));
