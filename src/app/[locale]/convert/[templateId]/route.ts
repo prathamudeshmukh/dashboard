@@ -1,5 +1,3 @@
-import { Buffer } from 'node:buffer';
-
 import { type NextRequest, NextResponse } from 'next/server';
 
 import { generatePdf } from '@/libs/actions/templates';
@@ -55,10 +53,8 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
       return NextResponse.json({ error: response.error }, { status: 400 });
     }
 
-    const pdfBuffer = Buffer.from(response.pdf as string, 'base64');
-
     // Return the binary PDF file in the response
-    return new NextResponse(pdfBuffer, {
+    return new NextResponse(response.pdf, {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': 'attachment; filename="document.pdf"',
