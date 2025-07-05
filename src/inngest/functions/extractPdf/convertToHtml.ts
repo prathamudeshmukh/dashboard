@@ -15,7 +15,7 @@ export async function convertToHTML(downloadUrl: string, logger: any) {
         },
       },
     );
-
+    logger.info('Response from Job Runner', response.data);
     return response.data;
   } catch (error) {
     console.error('Error Fetching Extracted PDF content:', error);
