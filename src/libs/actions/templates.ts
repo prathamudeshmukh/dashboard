@@ -178,7 +178,7 @@ export async function fetchTemplates({
       .where(and(...conditions))
       .limit(pageSize)
       .offset(offest)
-      .orderBy(desc(templates.id));
+      .orderBy(desc(templates.createdAt));
 
     const totalRecords = userTemplates[0]?.totalRecords || 0;
 
