@@ -47,10 +47,16 @@ export default function ApiUsagePage() {
 
   const lastCreditedDate = lastCreditedAt ? new Date(lastCreditedAt) : null;
   const daysAgo = lastCreditedDate ? differenceInDays(new Date(), lastCreditedDate) : null;
-  const totalRequests = useMemo(
-    () => dailyUsageData.reduce((sum, day) => sum + day.requests, 0),
-    [dailyUsageData],
-  );
+  const totalRequests = useMemo(() => {
+    const currentData
+    = selectedPeriod === 'weekly'
+      ? weeklyUsageData
+      : selectedPeriod === 'monthly'
+        ? monthlyUsageData
+        : dailyUsageData;
+
+    return currentData.reduce((sum, entry) => sum + entry.requests, 0);
+  }, [selectedPeriod, dailyUsageData, weeklyUsageData, monthlyUsageData]);
 
   const chartData = useMemo(() => {
     switch (selectedPeriod) {
@@ -62,6 +68,17 @@ export default function ApiUsagePage() {
         return dailyUsageData;
     }
   }, [selectedPeriod, dailyUsageData, weeklyUsageData, monthlyUsageData]);
+
+  const getDescriptionForPeriod = (period: string) => {
+    switch (period) {
+      case 'weekly':
+        return 'Last 8 weeks';
+      case 'monthly':
+        return 'Last 6 months';
+      default:
+        return 'Last 14 days';
+    }
+  };
 
   const chartDataKey = selectedPeriod === 'weekly' ? 'week' : selectedPeriod === 'monthly' ? 'month' : 'date';
 
@@ -77,7 +94,7 @@ export default function ApiUsagePage() {
           title="Total Requests"
           icon={<Activity />}
           value={totalRequests.toLocaleString()}
-          description="Last 14 days"
+          description={getDescriptionForPeriod(selectedPeriod)}
         />
         <SummaryCard
           title="Credits Left"
