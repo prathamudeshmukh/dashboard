@@ -32,6 +32,10 @@ export default function DashboardLayout(props: { children: React.ReactNode }) {
                 href: '/dashboard/settings',
                 label: 'Settings',
               },
+              {
+                href: '/dashboard/usage-metrics',
+                label: 'Usage Metrics',
+              },
             ]}
           />
         </div>

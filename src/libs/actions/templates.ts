@@ -3,12 +3,14 @@
 import { and, desc, eq, gte, ilike, lte, sql } from 'drizzle-orm';
 
 import { inngest } from '@/inngest/client';
-import { generated_templates, templateGallery, templates, users } from '@/models/Schema';
+import { creditTransactions, generated_templates, templateGallery, templates, users } from '@/models/Schema';
 import contentGenerator from '@/service/contentGenerator';
 import { generatePDFBuffer } from '@/service/generatePDFBuffer';
 import type { FetchTemplateResponse, FetchTemplatesRequest, GeneratedTemplates, GeneratePdfRequest, JsonObject, JsonValue, PaginatedResponse, TemplateType, UpdatePreviewURLParams, UpdatePreviewURLResult, UsageMetric, UsageMetricRequest } from '@/types/Template';
 
 import { db } from '../DB';
+import { FormatUsageData } from './template/FormatUsageData';
+import { groupUsageByPeriod } from './template/GroupUsageByPeriod';
 import { deductCredit } from './user';
 
 // Types
@@ -419,6 +421,46 @@ export async function fetchUsageMetrics({
   } catch (error) {
     throw new Error(`Failed to fetch usage metrics: ${error}`);
   }
+}
+
+export async function getUsageData(email: string) {
+  const user = await db.query.users.findFirst({
+    where: eq(users.email, email),
+  });
+
+  if (!user) {
+    throw new Error(`User with email ${email} not found`);
+  }
+
+  const records = await db
+    .select({ date: generated_templates.generated_date })
+    .from(generated_templates)
+    .innerJoin(templates, eq(generated_templates.template_id, templates.id))
+    .where(eq(templates.email, email));
+
+  // Group Usage By Period
+  const { dailyMap, weeklyMap, monthlyMap } = groupUsageByPeriod(records);
+
+  // Format usage data
+  const { dailyUsageData, weeklyUsageData, monthlyUsageData } = FormatUsageData(dailyMap, weeklyMap, monthlyMap);
+
+  // Get last credit transaction
+  const lastTransaction = await db.query.creditTransactions.findFirst({
+    where: eq(creditTransactions.clientId, user.clientId),
+    orderBy: desc(creditTransactions.creditedAt),
+  });
+
+  return {
+    // Usage
+    dailyUsageData,
+    weeklyUsageData,
+    monthlyUsageData,
+
+    // Credit Info
+    remainingBalance: user.remainingBalance,
+    lastCredited: lastTransaction?.credits ?? 0,
+    lastCreditedAt: lastTransaction?.creditedAt ?? null,
+  };
 }
 
 export async function deleteTemplate(templateId: string) {
