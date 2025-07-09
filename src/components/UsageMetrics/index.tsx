@@ -23,6 +23,11 @@ export default function ApiUsagePage() {
   const { user } = useUser();
   const [usageData, setUsageData] = useState<UsageData | null>(null);
   const [selectedPeriod, setSelectedPeriod] = useState<'daily' | 'weekly' | 'monthly'>('daily');
+  const chartDataKeyMap: Record<'daily' | 'weekly' | 'monthly', string> = {
+    daily: 'date',
+    weekly: 'week',
+    monthly: 'month',
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -80,7 +85,7 @@ export default function ApiUsagePage() {
     }
   };
 
-  const chartDataKey = selectedPeriod === 'weekly' ? 'week' : selectedPeriod === 'monthly' ? 'month' : 'date';
+  const chartDataKey = chartDataKeyMap[selectedPeriod];
 
   return (
     <div className="flex-1 space-y-6 p-8 pt-6">

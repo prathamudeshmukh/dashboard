@@ -73,7 +73,9 @@ export const creditTransactions = pgTable('credit_transactions', {
   credits: integer('credits').notNull(),
   creditedAt: timestamp('credited_at', { mode: 'date' }).defaultNow().notNull(),
   paymentId: varchar('payment_id', { length: 255 }), // Optional, only for paid credits
-});
+}, table => ({
+  clientIdIndex: index('creditTransactions_clientId_idx').on(table.clientId),
+}));
 
 export const templateGallery = pgTable('template_gallery', {
   id: uuid('id').primaryKey().defaultRandom(),
