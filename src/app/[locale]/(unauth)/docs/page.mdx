@@ -36,7 +36,7 @@ client_secret: CLIENT_SECRET_HERE
 **Request Body:**
 ```json
 {
-  "data": {
+  "templateData": {
     "name": "John Doe",
     "invoice_number": "INV-1001",
     "items": [
@@ -78,6 +78,62 @@ curl --location https://api.templify.cloud/convert/YOUR_TEMPLATE_ID_HERE' \
 ```
 </div>
 
+<div id='template-versioning'>
+## 📦Template Versioning
+
+Templify supports **template versioning**, enabling you to safely develop, test, and deploy updates to your templates without affecting the live (production) version.
+
+### 🚀Default Behavior
+
+- When you **create a new template**, it is **automatically published to production**.
+- The template becomes immediately available to your **generate PDF** API calls (unless in dev mode).
+
+### 🛠Updating Templates
+
+When editing a template, you have two options:
+
+1. **Update (Save Only)**
+    - Saves the changes in the **unpublished (dev) version**.
+    - Ideal for testing changes in **lower environments** (e.g., staging).
+    - These changes **do not affect** the live template used in production.
+2. **Update and Publish**
+    - Saves and **publishes the new version** to **production**.
+    - All future PDF generations (including from **generate** API) will use this updated version.
+
+
+### 🧪Previewing Unpublished Versions (Dev Mode)
+
+To preview changes made in dev (unpublished) mode:
+
+- Add **?devMode=true** to your preview or generation API calls.
+- This will render the latest saved (unpublished) version of the template.
+
+### Example **curl** to preview dev version:
+
+```bash
+curl --location https://api.templify.cloud/convert/YOUR_TEMPLATE_ID_HERE' \
+--header 'client_id: USER_ID_HERE' \
+--header 'client_secret: CLIENT_SECRET_HERE' \
+--header 'Content-Type: application/json' \
+--header 'Cookie: NEXT_LOCALE=en' \
+--data '{
+  "templateData": {
+         "name": "John Doe",
+         "invoice_number": "INV-1001",
+         "items": [
+           { "description": "Item 1", "price": 20 },
+           { "description": "Item 2", "price": 30 }
+         ]
+       }
+     }'
+```
+
+### ✅Production PDF Generation (Default Behavior)
+
+When you call the **/generate** API without **devMode=true**, Templify will **always use the latest published version** of the template.
+
+</div>
+
 <div id='error-handling'>
 ## Error Handling
 
@@ -100,7 +156,7 @@ Example error response:
 </div>
 
 <div id='security-best-practices'>
-## 6. Security & Best Practices
+## Security & Best Practices
 - Always **store API keys securely** and do not expose them in front-end code.
 - Use **HTTPS** for all API requests to ensure encryption.
 - Implement **rate limiting** to prevent abuse.
