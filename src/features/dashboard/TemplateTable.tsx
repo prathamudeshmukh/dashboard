@@ -126,8 +126,8 @@ const TemplateTable = () => {
         };
 
         return (
-          <div className="flex min-w-[300px] items-center gap-2">
-            <span className="max-w-[220px] truncate" title={templateId}>
+          <div className="flex items-center gap-2">
+            <span className="max-w-[140px] truncate" title={templateId}>
               {templateId}
             </span>
             <Button variant="ghost" size="sm" onClick={handleCopy}>
