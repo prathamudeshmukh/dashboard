@@ -126,8 +126,8 @@ const TemplateTable = () => {
         };
 
         return (
-          <div className="flex min-w-[300px] items-center gap-2">
-            <span className="max-w-[220px] truncate" title={templateId}>
+          <div className="flex items-center gap-2">
+            <span className="max-w-[140px] truncate" title={templateId}>
               {templateId}
             </span>
             <Button variant="ghost" size="sm" onClick={handleCopy}>
@@ -143,13 +143,12 @@ const TemplateTable = () => {
       cell: (info) => {
         const description = info.getValue();
         return (
-          <div className="min-w-[250px] max-w-[500px] whitespace-pre-wrap break-words">
-            {description as string}
+          <div className="flex">
+            <span className="max-w-[220px] truncate">
+              {description as string}
+            </span>
           </div>
         );
-      },
-      meta: {
-        size: 300, // Set default column width
       },
     },
     {
