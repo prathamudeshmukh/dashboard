@@ -1,12 +1,12 @@
 # Templify API Documentation
 
 <div id='introduction'>
-## Introduction
+## 🚀 Introduction
 Templify is an API-first SaaS that allows developers to create and manage templates and generate PDFs dynamically. This documentation provides the necessary details to integrate the Templify API seamlessly into your application.
 </div>
 
 <div id='authentication'>
-## Authentication
+## 🔐 Authentication
 Templify API requires authentication using a **Client ID** and **Secret ID**. These credentials must be included in the request headers.
 
 **Authentication Headers:**
@@ -18,9 +18,9 @@ To obtain your API key, sign in to your Templify account and navigate to the **A
 </div>
 
 <div id='api-endpoints'>
-## API Endpoints
+## 🔗 API Endpoints
 
-### **Generate PDF**
+### 📄 **Generate PDF**
 
 **Endpoint:**
 ```
@@ -56,7 +56,7 @@ client_secret: CLIENT_SECRET_HERE
 </div>
 
 <div id='request-response-examples'>
-## Request & Response Examples
+## 📬 Request & Response Examples
 
 **cURL Example:**
 ```
@@ -79,16 +79,16 @@ curl --location https://api.templify.cloud/convert/YOUR_TEMPLATE_ID_HERE' \
 </div>
 
 <div id='template-versioning'>
-## 📦Template Versioning
+## 📦 Template Versioning
 
 Templify supports **template versioning**, enabling you to safely develop, test, and deploy updates to your templates without affecting the live (production) version.
 
-### 🚀Default Behavior
+### 🚀 Default Behavior
 
 - When you **create a new template**, it is **automatically published to production**.
 - The template becomes immediately available to your **generate PDF** API calls (unless in dev mode).
 
-### 🛠Updating Templates
+### 🛠 Updating Templates
 
 When editing a template, you have two options:
 
@@ -101,7 +101,7 @@ When editing a template, you have two options:
     - All future PDF generations (including from **generate** API) will use this updated version.
 
 
-### 🧪Previewing Unpublished Versions (Dev Mode)
+### 🧪 Previewing Unpublished Versions (Dev Mode)
 
 To preview changes made in dev (unpublished) mode:
 
@@ -111,7 +111,7 @@ To preview changes made in dev (unpublished) mode:
 ### Example **curl** to preview dev version:
 
 ```bash
-curl --location https://api.templify.cloud/convert/YOUR_TEMPLATE_ID_HERE' \
+curl --location https://api.templify.cloud/convert/YOUR_TEMPLATE_ID_HERE?devMode=true' \
 --header 'client_id: USER_ID_HERE' \
 --header 'client_secret: CLIENT_SECRET_HERE' \
 --header 'Content-Type: application/json' \
@@ -128,14 +128,14 @@ curl --location https://api.templify.cloud/convert/YOUR_TEMPLATE_ID_HERE' \
      }'
 ```
 
-### ✅Production PDF Generation (Default Behavior)
+### ✅ Production PDF Generation (Default Behavior)
 
-When you call the **/generate** API without **devMode=true**, Templify will **always use the latest published version** of the template.
+When you call the **/convert** API without **devMode=true**, Templify will **always use the latest published version** of the template.
 
 </div>
 
 <div id='error-handling'>
-## Error Handling
+## ❌ Error Handling
 
 Templify API returns standard HTTP status codes.
 
@@ -156,7 +156,7 @@ Example error response:
 </div>
 
 <div id='security-best-practices'>
-## Security & Best Practices
+## 🔒 Security & Best Practices
 - Always **store API keys securely** and do not expose them in front-end code.
 - Use **HTTPS** for all API requests to ensure encryption.
 - Implement **rate limiting** to prevent abuse.
@@ -164,10 +164,10 @@ Example error response:
 </div>
 
 <div id='contact-support'>
-## Contact & Support
+## 📞 Contact & Support
 For any queries or issues, contact our support team:
 * **Email:** support@templify.cloud
-* **API Status:** https://status.templify.com
+* **API Status:** https://status.templify.cloud
 </div>
 
 Happy coding! 🚀
