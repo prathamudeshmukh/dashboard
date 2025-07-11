@@ -16,6 +16,7 @@ import { PublishTemplateToProd, UpsertTemplate } from '@/libs/actions/templates'
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 import { SaveStatusEnum, UpdateTypeEnum } from '@/types/Enum';
 import { TemplateType } from '@/types/Template';
+import { foregroundColor, primaryColor } from '@/utils/tailwindColor';
 
 import { loadTemplateContent } from './LoadTemplateContent';
 
@@ -153,6 +154,30 @@ export default function HTMLBuilder() {
               options={{
                 licenseKey: process.env.NEXT_PUBLIC_GRAPE_STUDIO_KEY as string,
                 theme: 'light',
+                customTheme: {
+                  default: {
+                    colors: {
+                      component: {
+                        background1: primaryColor,
+                        background2: foregroundColor,
+                      },
+                      primary: {
+                        background1: primaryColor,
+                        backgroundHover: primaryColor,
+                      },
+                      selector: {
+                        background1: primaryColor,
+                      },
+                      symbol: {
+                        background1: primaryColor,
+                      },
+                      global: {
+                        placeholder: primaryColor,
+                        text: primaryColor,
+                      },
+                    },
+                  },
+                },
                 pages: false,
                 autoHeight: false,
                 devices: { selected: 'desktop' },
