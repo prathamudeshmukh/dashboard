@@ -232,7 +232,9 @@ export async function fetchTemplateById(templateId: string, isDev: boolean = tru
       ).limit(1);
 
     if (result.length === 0) {
-      throw new Error('Template not found');
+      return {
+        error: { message: 'Template not found', status: 404 },
+      };
     }
 
     const template = result[0]?.templateData;
@@ -241,7 +243,9 @@ export async function fetchTemplateById(templateId: string, isDev: boolean = tru
     return { data: { ...template, user: userData } };
   } catch (error: any) {
     console.error('Error fetching template:', error);
-    return { success: false, error: error.message };
+    return {
+      error: { message: 'Error fetching template', status: 500 },
+    };
   }
 }
 
@@ -250,7 +254,7 @@ export async function generatePdf({
   templateData,
   devMode = true,
   isApi = false,
-}: GeneratePdfRequest): Promise<{ pdf?: ArrayBuffer; error?: string }> {
+}: GeneratePdfRequest): Promise<{ pdf?: ArrayBuffer; error?: { message: string; status?: number } }> {
   try {
     let template;
 
@@ -258,8 +262,8 @@ export async function generatePdf({
     if (templateId) {
       template = await fetchTemplateById(templateId, devMode);
 
-      if (!template) {
-        throw new Error('Template not found');
+      if (template.error) {
+        return { error: template.error };
       }
     }
     // Determine the data to be used by contentGenerator
@@ -279,7 +283,7 @@ export async function generatePdf({
       isApi
       && (!template?.data?.user || template?.data?.user?.remainingBalance == null || template?.data?.user?.remainingBalance <= 0)
     ) {
-      return { error: 'Insufficient credits.' };
+      return { error: { message: 'Insufficient credits.', status: 402 } };
     }
 
     const pdfBuffer = await generatePDFBuffer(content);
@@ -295,7 +299,7 @@ export async function generatePdf({
     return { pdf: pdfBuffer };
   } catch (error: any) {
     console.error('Error generating PDF:', error);
-    return { error: `Failed to generate PDF: ${error.message}` };
+    return { error: { message: 'Internal Server Error', status: 500 } };
   }
 }
 

@@ -17,28 +17,24 @@ export async function authenticateApi(req: NextRequest): Promise<true | NextResp
     );
   }
 
-  // Retrieve client details from the database by clientId
-  const client = await getClientById(clientId);
+  try {
+    // Retrieve client details from the database by clientId
+    const client = await getClientById(clientId);
 
-  // If no record is found, return 401
-  if (!client) {
-    return NextResponse.json(
-      { error: 'Invalid client_id' },
-      { status: 401 },
-    );
+    // Decrypt the stored secret and compare
+    const decryptedSecret = decrypt(client?.clientSecret as string);
+
+    // If the secret is invalid, return 401
+    if (clientSecret !== decryptedSecret) {
+      return NextResponse.json(
+        { error: 'Invalid client_secret' },
+        { status: 401 },
+      );
+    }
+
+    // Authentication is successful
+    return true;
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 401 });
   }
-
-  // Decrypt the stored secret and compare
-  const decryptedSecret = decrypt(client?.clientSecret as string);
-
-  // If the secret is invalid, return 401
-  if (clientSecret !== decryptedSecret) {
-    return NextResponse.json(
-      { error: 'Invalid client_secret' },
-      { status: 401 },
-    );
-  }
-
-  // Authentication is successful
-  return true;
 }
