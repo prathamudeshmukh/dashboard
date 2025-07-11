@@ -143,13 +143,12 @@ const TemplateTable = () => {
       cell: (info) => {
         const description = info.getValue();
         return (
-          <div className="min-w-[250px] max-w-[500px] whitespace-pre-wrap break-words">
-            {description as string}
+          <div className="flex">
+            <span className="max-w-[220px] truncate">
+              {description as string}
+            </span>
           </div>
         );
-      },
-      meta: {
-        size: 300, // Set default column width
       },
     },
     {
