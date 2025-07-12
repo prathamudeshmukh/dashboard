@@ -1,10 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-
-import { Button } from '@/components/ui/button';
 
 export const Hero = () => {
   const t = useTranslations('Hero');
@@ -19,17 +16,6 @@ export const Hero = () => {
           <p className="mt-6 max-w-2xl text-base text-gray-600">
             {t('subtitle')}
           </p>
-
-          <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-            <Button variant="outline" className="rounded-full border-black px-4 py-3 text-lg font-normal">
-              Get Demo
-            </Button>
-            <Link href="/sign-up">
-              <Button className="rounded-full bg-primary px-4 py-3 text-lg font-normal hover:bg-primary">
-                {t('primary_button')}
-              </Button>
-            </Link>
-          </div>
         </div>
 
         {/* Dashboard UI Mockup */}

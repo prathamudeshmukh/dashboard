@@ -20,8 +20,7 @@
     "subtitle": "Templify makes PDF templates easy—create, manage, and generate PDFs without complex code or libraries.",
     "description1": "Scalable, API-first infrastructure that handles PDF generation for you",
     "description2": "No huge dev effort needed for every new template",
-    "description3": "No more maintaining bulky PDF libraries",
-    "primary_button": "Sign up now!"
+    "description3": "No more maintaining bulky PDF libraries"
   },
   "Sponsors": {
     "title": "Sponsored by"
@@ -29,7 +28,6 @@
   "Features": {
     "title": "Why Templify is Different",
     "subtitle": "Templify streamlines PDF generation by combining powerful developer tools with a no-code experience — so anyone on your team can deliver production-ready documents in minutes.",
-    "cta": "Build your template",
     "feature1": {
       "id": "no-code",
       "title": "🔧 Developer-Friendly & No-Code Ready",
