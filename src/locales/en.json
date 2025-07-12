@@ -50,26 +50,63 @@
     "content_6": "Monitor your API usage with detailed analytics. Track template performance, generation times, and usage patterns to optimize your implementation."
   },
   "Steps": {
-    "step1": "sign-up",
-    "step1_title": "Sign up",
-    "step1_description": "Create your account and get started with Templify in just a few clicks.",
-    "step1_imageAlt": "Sign Up UI",
-    "step2": "create-template",
-    "step2_title": "Create your template",
-    "step2_description": "Use our intuitive template editor to design your PDF. Start from scratch or use one of our pre-built templates. Add your branding, layout, and dynamic content placeholders.",
-    "step2_imageAlt": "Template Editor Preview",
-    "step3": "get-template-id",
-    "step3_title": "Get your template ID",
-    "step3_description": "Once your template is saved, you'll receive a unique template ID. This ID is what you'll use to reference this specific template when making API calls.",
-    "step3_imageAlt": "Template ID Example",
-    "step4": "integrate-api",
-    "step4_title": "Integrate the API",
-    "step4_description": "Implement our simple REST API in your application. Send your data along with the template ID, and we'll handle the PDF generation for you.",
-    "step4_imageAlt": "API Integration Example",
-    "step5": "get-pdf",
-    "step5_title": "Get a ready-to-Use PDF",
-    "step5_description": "Receive your generated PDF instantly. You can download it directly, have it emailed to your users, or store it in your preferred cloud storage.",
-    "step5_imageAlt": "PDF Output Example"
+    "step1": {
+      "id": "choose-how-to-start",
+      "title": "Choose How You Want to Start",
+      "intro": "You have two flexible ways to build your template:",
+      "points": [
+        { "text": "Upload a PDF – We'll extract the layout and let you edit it" },
+        { "text": "Pick from Gallery – Choose a ready-made design to jumpstart your workflow" }
+      ],
+      "closing": "",
+      "imageAlt": "Sign Up UI"
+    },
+    "step2": {
+      "id": "customize-template",
+      "title": "Customize Your Template",
+      "intro": "Choose the editing experience that fits your style:",
+      "sections": [
+        {
+          "title": "Code Editor (default)",
+          "points": [
+            { "text": "Write HTML with Handlebars support" },
+            { "text": "Add sample JSON data" },
+            { "text": "Instantly preview the output" }
+          ]
+        },
+        {
+          "title": "Visual Editor (drag & drop)",
+          "points": [
+            { "text": "Build using pre-built blocks and layout tools" }
+          ]
+        }
+      ],
+      "imageAlt": "Template Editor Preview"
+    },
+    "step3": {
+      "id": "review-and-save",
+      "title": "Review and Save",
+      "intro": "Before publishing, Templify shows you a final summary:",
+      "points": [
+        { "text": "Template name and description" },
+        { "text": "Sample input JSON" },
+        { "text": "Real-time preview" }
+      ],
+      "closing": "Make sure everything looks good!",
+      "imageAlt": "Template Summary Review"
+    },
+    "step4": {
+      "id": "publish-and-integrate",
+      "title": "Publish and Integrate",
+      "intro": "Once ready, hit Save & Publish",
+      "points": [
+        { "text": "Get your Template ID" },
+        { "text": "Copy auto-generated API integration snippets" },
+        { "text": "(JS, Python, PHP, cURL)" },
+        { "text": "Start generating PDFs in your app within minutes" }
+      ],
+      "imageAlt": "Publish & Integrate"
+    }
   },
   "UseCase": {
     "title": "Who Uses Templify",

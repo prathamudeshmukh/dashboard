@@ -50,26 +50,89 @@
     "content_6": "Monitor your API usage with detailed analytics. Track template performance, generation times, and usage patterns to optimize your implementation."
   },
   "Steps": {
-    "step1": "sign-up",
-    "step1_title": "Sign up",
-    "step1_description": "Create your account and get started with Templify in just a few clicks.",
-    "step1_imageAlt": "Sign Up UI",
-    "step2": "create-template",
-    "step2_title": "Create your template",
-    "step2_description": "Use our intuitive template editor to design your PDF. Start from scratch or use one of our pre-built templates. Add your branding, layout, and dynamic content placeholders.",
-    "step2_imageAlt": "Template Editor Preview",
-    "step3": "get-template-id",
-    "step3_title": "Get your template ID",
-    "step3_description": "Once your template is saved, you'll receive a unique template ID. This ID is what you'll use to reference this specific template when making API calls.",
-    "step3_imageAlt": "Template ID Example",
-    "step4": "integrate-api",
-    "step4_title": "Integrate the API",
-    "step4_description": "Implement our simple REST API in your application. Send your data along with the template ID, and we'll handle the PDF generation for you.",
-    "step4_imageAlt": "API Integration Example",
-    "step5": "get-pdf",
-    "step5_title": "Get a ready-to-Use PDF",
-    "step5_description": "Receive your generated PDF instantly. You can download it directly, have it emailed to your users, or store it in your preferred cloud storage.",
-    "step5_imageAlt": "PDF Output Example"
+    "step1": {
+      "id": "choose-how-to-start",
+      "title": "Choisissez Comment Commencer",
+      "intro": "Vous avez deux façons flexibles de créer votre modèle :",
+      "points": [
+        {
+          "text": "Télécharger un PDF – Nous extrairons la mise en page et vous pourrez la modifier"
+        },
+        {
+          "text": "Choisir dans la Galerie – Sélectionnez un design prêt à l'emploi pour démarrer rapidement"
+        }
+      ],
+      "closing": "",
+      "imageAlt": "Interface d'Inscription"
+    },
+    "step2": {
+      "id": "customize-template",
+      "title": "Personnalisez Votre Modèle",
+      "intro": "Choisissez l'expérience d'édition qui correspond à votre style :",
+      "sections": [
+        {
+          "title": "Éditeur de Code (par défaut)",
+          "points": [
+            {
+              "text": "Écrivez du HTML avec le support Handlebars"
+            },
+            {
+              "text": "Ajoutez des données JSON d'exemple"
+            },
+            {
+              "text": "Prévisualisez instantanément le résultat"
+            }
+          ]
+        },
+        {
+          "title": "Éditeur Visuel (glisser-déposer)",
+          "points": [
+            {
+              "text": "Construisez en utilisant des blocs pré-construits et des outils de mise en page"
+            }
+          ]
+        }
+      ],
+      "imageAlt": "Aperçu de l'Éditeur de Modèle"
+    },
+    "step3": {
+      "id": "review-and-save",
+      "title": "Réviser et Sauvegarder",
+      "intro": "Avant de publier, Templify vous montre un résumé final :",
+      "points": [
+        {
+          "text": "Nom et description du modèle"
+        },
+        {
+          "text": "Exemple de JSON d'entrée"
+        },
+        {
+          "text": "Aperçu en temps réel"
+        }
+      ],
+      "closing": "Assurez-vous que tout semble correct !",
+      "imageAlt": "Révision du Résumé du Modèle"
+    },
+    "step4": {
+      "id": "publish-and-integrate",
+      "title": "Publier et Intégrer",
+      "intro": "Une fois prêt, cliquez sur Sauvegarder et Publier",
+      "points": [
+        {
+          "text": "Obtenez votre ID de Modèle"
+        },
+        {
+          "text": "Copiez les extraits d'intégration API générés automatiquement"
+        },
+        {
+          "text": "(JS, Python, PHP, cURL)"
+        },
+        {
+          "text": "Commencez à générer des PDF dans votre application en quelques minutes"
+        }
+      ],
+      "imageAlt": "Publier et Intégrer"
+    }
   },
   "UseCase": {
     "title": "Qui utilise Templify",
