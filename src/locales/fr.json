@@ -20,8 +20,7 @@
     "subtitle": "Créer et gérer des modèles PDF ne devrait pas être un casse-tête. <important>Templify</important> vous permet de créer, de gérer et de générer des PDF sans effort, sans maintenir de bibliothèques complexes ni écrire de code personnalisé pour chaque nouveau modèle.",
     "description1": "Infrastructure évolutive, axée sur l'API, qui gère la génération de PDF pour vous",
     "description2": "Aucun effort de développement important n'est nécessaire pour chaque nouveau modèle",
-    "description3": "Plus besoin de maintenir des bibliothèques PDF volumineuses",
-    "primary_button": "Inscrivez-vous gratuitement"
+    "description3": "Plus besoin de maintenir des bibliothèques PDF volumineuses"
   },
   "Sponsors": {
     "title": "Sponsorisé par"
@@ -29,7 +28,6 @@
   "Features": {
     "title": "Pourquoi Templify est Différent",
     "subtitle": "Templify simplifie la génération de PDF en combinant des outils de développement puissants avec une expérience sans code — ainsi n'importe qui dans votre équipe peut créer des documents prêts pour la production en quelques minutes.",
-    "cta": "Créez votre modèle",
     "feature1": {
       "id": "no-code",
       "title": "🔧 Convivial pour les Développeurs & Prêt Sans Code",

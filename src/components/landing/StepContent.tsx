@@ -1,8 +1,6 @@
 'use client';
 
-import { ChevronRight } from 'lucide-react';
 import Image from 'next/image';
-import Link from 'next/link';
 import type React from 'react';
 
 import type { StepContent as StepContentType } from '@/types/Steps';
@@ -30,11 +28,6 @@ export default function StepContent({
             {/* Left column: Title + Try Now button */}
             <div className="flex w-full flex-col justify-between md:w-1/3">
               <h3 className="text-2xl font-semibold">{content.title}</h3>
-              <Link href="#" className="mt-8 flex items-center text-lg font-semibold text-secondary md:mt-0">
-                Try Now
-                {' '}
-                <ChevronRight className="ml-1 size-4" />
-              </Link>
             </div>
 
             {/* Right column: Description + Image */}
