@@ -1,3 +1,6 @@
+'use client';
+
+import { useUser } from '@clerk/nextjs';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { SUPPORT_EMAIL } from 'templify.constants';
@@ -6,6 +9,7 @@ import { Button } from '@/components/ui/button';
 
 export const CTA = () => {
   const t = useTranslations('CTA');
+  const { isSignedIn } = useUser();
 
   return (
     <section id="contact" className="bg-templify-lightgray py-16">
@@ -18,9 +22,12 @@ export const CTA = () => {
               Contact us
             </Button>
           </Link>
-          <Link href="/sign-in">
-            <Button className="rounded-full bg-primary px-4 py-3 text-xl font-normal">Start free trial</Button>
-          </Link>
+          {!isSignedIn
+          && (
+            <Link href="/sign-in">
+              <Button className="rounded-full bg-primary px-4 py-3 text-xl font-normal">Start free trial</Button>
+            </Link>
+          )}
         </div>
       </div>
     </section>
