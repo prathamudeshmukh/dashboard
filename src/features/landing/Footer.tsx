@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { SUPPORT_EMAIL } from 'templify.constants';
 
 import { LogoFooter } from '../../components/landing/Logo';
 
@@ -35,7 +36,7 @@ export const Footer = () => {
           <span className="text-black">|</span>
           <Link href="#" className="hover:underline">Terms of service</Link>
           <span className="text-black">|</span>
-          <Link href="#" className="hover:underline">Contact us</Link>
+          <Link href={`mailto:${SUPPORT_EMAIL}`} className="hover:underline">Contact us</Link>
         </div>
       </div>
     </footer>
