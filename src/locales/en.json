@@ -32,7 +32,7 @@
     "cta": "Build your template",
     "feature1": {
       "id": "no-code",
-      "title": "🔧 Developer-Friendly & No-Code Ready",
+      "title": "Developer-Friendly & No-Code Ready",
       "content": "Whether you’re a coder or prefer visual design, Templify has you covered:",
       "points": [
         "Code-first: Build HTML templates with Handlebars and custom JSON.",
@@ -41,12 +41,12 @@
     },
     "feature2": {
       "id": "live-preview",
-      "title": "👁️ Real-Time Preview",
+      "title": "Real-Time Preview",
       "content": "See exactly how your PDF will look while you build. Instant feedback keeps your designs accurate and polished."
     },
     "feature3": {
       "id": "dynamic-content",
-      "title": "⚙️ Dynamic Content, Unmatched Flexibility",
+      "title": "Dynamic Content, Unmatched Flexibility",
       "content": "Bring templates to life with dynamic data:",
       "points": [
         "Inject variables, loops, conditionals, and more.",
@@ -55,7 +55,7 @@
     },
     "feature4": {
       "id": "scalable",
-      "title": "🚀 Enterprise-Scale Performance",
+      "title": "Enterprise-Scale Performance",
       "content": "Our infrastructure automatically scales to handle your peak loads. Generate thousands of PDFs simultaneously without performance degradation.",
       "points": [
         "Ultra-fast generation at scale.",
@@ -64,7 +64,7 @@
     },
     "feature5": {
       "id": "secure",
-      "title": "🔐 Secure & Reliable",
+      "title": "Secure & Reliable",
       "content": "Your data security is our priority. All communications are encrypted, and we maintain strict access controls. With 99.9% uptime, you can rely on our service to be there when you need it.",
       "points": [
         "API key authentication with role-based access.",
@@ -73,7 +73,7 @@
     },
     "feature6": {
       "id": "api-insights",
-      "title": "📊 Smart Insights & Usage Metrics",
+      "title": "Smart Insights & Usage Metrics",
       "content": "Stay in control with analytics:",
       "points": [
         "Track template usage and performance.",
@@ -82,7 +82,7 @@
     },
     "feature7": {
       "id": "support",
-      "title": "🛠️ Exceptional Support & Documentation",
+      "title": "Exceptional Support & Documentation",
       "content": "",
       "points": [
         "Rich, interactive developer docs and code samples.",
