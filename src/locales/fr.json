@@ -20,34 +20,73 @@
     "subtitle": "Créer et gérer des modèles PDF ne devrait pas être un casse-tête. <important>Templify</important> vous permet de créer, de gérer et de générer des PDF sans effort, sans maintenir de bibliothèques complexes ni écrire de code personnalisé pour chaque nouveau modèle.",
     "description1": "Infrastructure évolutive, axée sur l'API, qui gère la génération de PDF pour vous",
     "description2": "Aucun effort de développement important n'est nécessaire pour chaque nouveau modèle",
-    "description3": "Plus besoin de maintenir des bibliothèques PDF volumineuses",
-    "primary_button": "Inscrivez-vous gratuitement"
+    "description3": "Plus besoin de maintenir des bibliothèques PDF volumineuses"
   },
   "Sponsors": {
     "title": "Sponsorisé par"
   },
   "Features": {
-    "title": "Why Templify is Different",
-    "subtitle": "Templify makes PDF templates easy—create, manage, and generate PDFs without complex code or libraries.",
-    "cta": "Build your template",
-    "id_1": "no-code",
-    "title_1": "No-Code & Developer-Friendly",
-    "content_1": "Proven, scalable, and secure payment processing solutions provide a strong digital foundation that enables innovative service experiences and drives topline growth",
-    "id_2": "live-preview",
-    "title_2": "Live Template Preview",
-    "content_2": "See your templates come to life in real-time as you edit. No more guesswork or waiting for compilation. What you see is exactly what your users will get in the final PDF.",
-    "id_3": "dynamic-content",
-    "title_3": "Dynamic Content Support",
-    "content_3": "Easily inject dynamic data into your templates using our simple variable system. Support for conditional logic, loops, and nested data structures gives you complete flexibility.",
-    "id_4": "scalable",
-    "title_4": "Scalable & Fast",
-    "content_4": "Our infrastructure automatically scales to handle your peak loads. Generate thousands of PDFs simultaneously without performance degradation.",
-    "id_5": "secure",
-    "title_5": "Secure & Reliable",
-    "content_5": "Your data security is our priority. All communications are encrypted, and we maintain strict access controls. With 99.9% uptime, you can rely on our service to be there when you need it.",
-    "id_6": "api-insights",
-    "title_6": "API Usage Insights",
-    "content_6": "Monitor your API usage with detailed analytics. Track template performance, generation times, and usage patterns to optimize your implementation."
+    "title": "Pourquoi Templify est Différent",
+    "subtitle": "Templify simplifie la génération de PDF en combinant des outils de développement puissants avec une expérience sans code — ainsi n'importe qui dans votre équipe peut créer des documents prêts pour la production en quelques minutes.",
+    "feature1": {
+      "id": "no-code",
+      "title": "🔧 Convivial pour les Développeurs & Prêt Sans Code",
+      "content": "Que vous soyez un développeur ou que vous préfériez le design visuel, Templify vous couvre :",
+      "points": [
+        "Code en premier : Créez des modèles HTML avec Handlebars et JSON personnalisé.",
+        "Sans code : Utilisez l'éditeur visuel glisser-déposer pour un contrôle instantané de la mise en page."
+      ]
+    },
+    "feature2": {
+      "id": "live-preview",
+      "title": "👁️ Aperçu en Temps Réel",
+      "content": "Voyez exactement à quoi ressemblera votre PDF pendant que vous le construisez. Un retour instantané garde vos designs précis et soignés."
+    },
+    "feature3": {
+      "id": "dynamic-content",
+      "title": "⚙️ Contenu Dynamique, Flexibilité Inégalée",
+      "content": "Donnez vie à vos modèles avec des données dynamiques :",
+      "points": [
+        "Injectez des variables, des boucles, des conditions, et plus encore.",
+        "Parfait pour des cas d'usage comme les factures, contrats, rapports, certificats, et documents personnalisés."
+      ]
+    },
+    "feature4": {
+      "id": "scalable",
+      "title": "🚀 Performance à l'Échelle Entreprise",
+      "content": "Notre infrastructure s'adapte automatiquement pour gérer vos pics de charge. Générez des milliers de PDF simultanément sans dégradation de performance.",
+      "points": [
+        "Génération ultra-rapide à grande échelle.",
+        "Soutenu par une infrastructure auto-évolutive et un SLA de disponibilité de 99,9%, même pendant les pics d'utilisation."
+      ]
+    },
+    "feature5": {
+      "id": "secure",
+      "title": "🔐 Sécurisé & Fiable",
+      "content": "La sécurité de vos données est notre priorité. Toutes les communications sont chiffrées, et nous maintenons des contrôles d'accès stricts. Avec 99,9% de disponibilité, vous pouvez compter sur notre service pour être là quand vous en avez besoin.",
+      "points": [
+        "Authentification par clé API avec accès basé sur les rôles.",
+        "Une infrastructure sécurisée garantit que vos documents et données restent protégés."
+      ]
+    },
+    "feature6": {
+      "id": "api-insights",
+      "title": "📊 Insights Intelligents & Métriques d'Utilisation",
+      "content": "Gardez le contrôle avec les analyses :",
+      "points": [
+        "Suivez l'utilisation et les performances des modèles.",
+        "Optimisez pour l'efficacité des coûts et des ressources."
+      ]
+    },
+    "feature7": {
+      "id": "support",
+      "title": "🛠️ Support Exceptionnel & Documentation",
+      "content": "",
+      "points": [
+        "Documentation développeur riche et interactive avec des exemples de code.",
+        "Support par email réactif pour vous aider à intégrer en douceur."
+      ]
+    }
   },
   "Steps": {
     "step1": {

@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react';
 
 import StepContent from '@/components/landing/StepContent';
 import StepNavigation from '@/components/landing/StepNavigation';
-import { Button } from '@/components/ui/button';
 import { useSteps } from '@/hooks/UseStep';
 
 export default function Steps() {
@@ -56,7 +55,6 @@ export default function Steps() {
             <br />
             Idea to PDF in Minutes
           </h2>
-          <Button variant="outline" className="mt-8 flex flex-col items-end rounded-full border-black bg-secondary text-lg font-normal text-primary hover:bg-secondary">Build your template</Button>
         </div>
 
         <div className="mt-16 grid md:grid-cols-4 md:gap-32">
