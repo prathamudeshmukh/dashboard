@@ -99,12 +99,12 @@ export async function getClientById(clientId: string): Promise<ClientConfigs> {
       });
 
     if (!client) {
-      throw new Error(`Client with ID ${clientId} not found`);
+      throw new Error(`Invalid client_id`);
     }
 
     return client as ClientConfigs;
   } catch (error: any) {
-    throw new Error(`Error fetching client: ${error.message}`);
+    throw new Error(error.message);
   }
 }
 

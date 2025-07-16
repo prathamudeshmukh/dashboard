@@ -50,7 +50,10 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
     });
 
     if (response.error) {
-      return NextResponse.json({ error: response.error }, { status: 400 });
+      return NextResponse.json(
+        { error: response.error.message },
+        { status: response.error.status },
+      );
     }
 
     // Return the binary PDF file in the response
