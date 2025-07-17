@@ -34,7 +34,10 @@ export default function MonacoEditor({
     editorRef.current = editor;
 
     editor.setValue(value);
-    editor.getAction('editor.action.formatDocument')?.run();
+
+    setTimeout(() => {
+      editor.getAction('editor.action.formatDocument')?.run();
+    }, 100);
 
     // Focus the editor
     editor.focus();
