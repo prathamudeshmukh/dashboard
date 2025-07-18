@@ -27,7 +27,7 @@ const contentGenerator = async ({
   const hasData = templateData && Object.keys(templateData).length > 0;
 
   // Compile and generate content for Handlebars templates
-  if (templateType === TemplateType.HANDLBARS_TEMPLATE || (templateType === TemplateType.HTML_BUILDER && hasData)) {
+  if (templateType === TemplateType.HANDLBARS_TEMPLATE || (hasData)) {
     try {
       const compiledTemplate = hbs.compile(templateContent);
       const renderedBody = compiledTemplate(templateData);
