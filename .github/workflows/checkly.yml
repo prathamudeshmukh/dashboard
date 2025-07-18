@@ -63,6 +63,7 @@ jobs:
             echo "Creating tests/auth.json from secret..."
             # Ensure the 'tests' directory exists before trying to write to it.
             mkdir -p tests
+            ls
             # Decode the Base64 secret and write it to the specified file path.
             echo "$AUTH_STATE_BASE64" | base64 -d > tests/auth.json
             echo "tests/auth.json created successfully."
