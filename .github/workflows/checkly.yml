@@ -46,6 +46,28 @@ jobs:
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: npm ci
 
+        # --- NEW STEP ADDED HERE ---
+      # This step creates the auth.json file from your GitHub Secret
+      # before Checkly runs the tests.
+      - name: Create auth.json for authenticated tests
+        env:
+          # This makes the GitHub Secret available as an environment variable in this step
+          AUTH_STATE_BASE64: ${{ secrets.AUTH_STATE_BASE64 }}
+        run: |
+          # Check if the secret is set. This is good practice to avoid errors.
+          if [ -z "$AUTH_STATE_BASE64" ]; then
+            echo "AUTH_STATE_BASE64 secret not found. Skipping auth.json creation."
+            # If your tests can run in a logged-out state, this is fine.
+            # If they require login, the tests will fail later, indicating a missing secret.
+          else
+            echo "Creating tests/auth.json from secret..."
+            # Ensure the 'tests' directory exists before trying to write to it.
+            mkdir -p tests
+            # Decode the Base64 secret and write it to the specified file path.
+            echo "$AUTH_STATE_BASE64" | base64 -d > tests/auth.json
+            echo "tests/auth.json created successfully."
+          fi
+
       - name: Run checks # run the checks passing in the ENVIRONMENT_URL and recording a test session.
         id: run-checks
         run: npx checkly test --reporter=github --record
