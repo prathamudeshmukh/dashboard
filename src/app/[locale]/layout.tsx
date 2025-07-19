@@ -10,6 +10,8 @@ import { unstable_setRequestLocale } from 'next-intl/server';
 import { Toaster } from '@/components/ui/sonner';
 import { AllLocales, AppConfig } from '@/utils/AppConfig';
 
+import { PostHogProvider } from './providers';
+
 // Import Inter Tight font
 const interTight = Inter_Tight({
   subsets: ['latin'],
@@ -82,23 +84,25 @@ export default function RootLayout(props: {
     <html lang={props.params.locale} suppressHydrationWarning>
       <body className={`${interTight.variable} font-sans`} suppressHydrationWarning>
         {/* PRO: Dark mode support for Shadcn UI */}
-        <ClerkProvider
-          localization={clerkLocale}
-          signInUrl={signInUrl}
-          signUpUrl={signUpUrl}
-          signInFallbackRedirectUrl={dashboardUrl}
-          signUpFallbackRedirectUrl={dashboardUrl}
-          afterSignOutUrl={afterSignOutUrl}
-        >
-          <NextIntlClientProvider
-            locale={props.params.locale}
-            messages={messages}
+        <PostHogProvider>
+          <ClerkProvider
+            localization={clerkLocale}
+            signInUrl={signInUrl}
+            signUpUrl={signUpUrl}
+            signInFallbackRedirectUrl={dashboardUrl}
+            signUpFallbackRedirectUrl={dashboardUrl}
+            afterSignOutUrl={afterSignOutUrl}
           >
-            {props.children}
+            <NextIntlClientProvider
+              locale={props.params.locale}
+              messages={messages}
+            >
+              {props.children}
 
-            <Toaster position="top-center" />
-          </NextIntlClientProvider>
-        </ClerkProvider>
+              <Toaster position="top-center" />
+            </NextIntlClientProvider>
+          </ClerkProvider>
+        </PostHogProvider>
       </body>
     </html>
   );

@@ -1,17 +1,23 @@
-import path from 'node:path';
+import axios from 'axios';
 
-import { PDFNet } from '@pdftron/pdfnet-node';
-
-export async function convertToHtml(localPdfPath: string, outputHtmlPath: string, resourceBasePath: string) {
-  const main = async () => {
-    await PDFNet.initialize();
-    const resourcePath = path.join(resourceBasePath, '/Lib/Linux');
-    await PDFNet.addResourceSearchPath(resourcePath);
-    const htmlOptions = new PDFNet.Convert.HTMLOutputOptions();
-    htmlOptions.setContentReflowSetting(PDFNet.Convert.HTMLOutputOptions.ContentReflowSetting.e_reflow_full);
-    htmlOptions.setEmbedImages(false);
-    await PDFNet.Convert.fileToHtml(localPdfPath, outputHtmlPath, htmlOptions);
-  };
-
-  await PDFNet.runWithCleanup(main, process.env.PDFTRON_LICENSE_KEY as string);
+export async function convertToHTML(downloadUrl: string, pdfId: string, logger: any) {
+  try {
+    const baseUrl = process.env.JOB_RUNNER_BASE_URL;
+    const token = process.env.JOB_RUNNER_TOKEN;
+    logger.info('Extracting html from pdf');
+    const response = await axios.post(
+      `${baseUrl}/extract-html`,
+      { downloadUrl, pdfId },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      },
+    );
+    return response.data.htmlContent;
+  } catch (error) {
+    console.error('Error Fetching Extracted PDF content:', error);
+    throw error;
+  }
 }

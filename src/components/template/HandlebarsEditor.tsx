@@ -1,23 +1,27 @@
 'use client';
 
-import { useUser } from '@clerk/nextjs';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { Lightbulb } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
 
-import { fetchTemplateById, PublishTemplateToProd, UpsertTemplate } from '@/libs/actions/templates';
+import { fetchTemplateById } from '@/libs/actions/templates';
 import { HandlebarsService } from '@/libs/services/HandlebarService';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 import type { CreationMethodEnum } from '@/types/Enum';
-import { SaveStatusEnum, UpdateTypeEnum } from '@/types/Enum';
-import { TemplateType } from '@/types/Template';
+import type { PostMessagePayload } from '@/types/PostMessage';
 
-import { Button } from '../ui/button';
-import { DEFAULT_TEMPLATE } from './handlebars-editor/constants';
 import { EditorToolbar } from './handlebars-editor/EditorToolbar';
 import { JsonEditor } from './handlebars-editor/JsonEditor';
 import { PreviewPanel } from './handlebars-editor/PreviewPanel';
 import { TemplateEditor } from './handlebars-editor/TemplateEditor';
+
+function InfoMessage({ text }: { text: string }) {
+  return (
+    <div className="flex items-center gap-2">
+      <Lightbulb className="text-orange-300" />
+      <p className="text-base font-normal text-muted-foreground">{text}</p>
+    </div>
+  );
+}
 
 export default function HandlebarsEditor() {
   // Get page settings from the store
@@ -32,7 +36,6 @@ export default function HandlebarsEditor() {
     setHandlebarsCode,
     setHandlebarsJson,
     setCreationMethod,
-    resetTemplate,
   } = useTemplateStore();
 
   const [handlebarsPreview, setHandlebarsPreview] = useState('');
@@ -42,51 +45,109 @@ export default function HandlebarsEditor() {
   const [isEditorReady, setIsEditorReady] = useState(false);
   const [activeTab, setActiveTab] = useState('editor');
   const [renderCount, setRenderCount] = useState(0);
-  const [saveStatus, setSaveStatus] = useState<SaveStatusEnum>(SaveStatusEnum.IDLE);
-  const { user } = useUser();
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const templateId = searchParams.get('templateId');
+  const [isInFrame, setIsInFrame] = useState<boolean>(false);
+  const [templateId, setTemplateId] = useState<string>('');
 
   const handlebarsService = new HandlebarsService();
+  const [isTemplateLoaded, setIsTemplateLoaded] = useState(false);
 
-  // Set default template and data if none exists
+  // Check if running in iframe and signal parent when ready
   useEffect(() => {
-    if (!handlebarsCode) {
-      setHandlebarsCode(DEFAULT_TEMPLATE);
+    const inIframe = window !== window.parent;
+    setIsInFrame(inIframe);
+    if (inIframe) {
+      const message: PostMessagePayload = {
+        type: 'IFRAME_LOADED',
+        source: 'iframe',
+      };
+      window.parent.postMessage(message, '*');
+    }
+  }, []);
+
+  // Listen for messages from parent (when in iframe)
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent<PostMessagePayload>) => {
+      const { type, data } = event.data;
+
+      if (type === 'TEMPLATE_DATA_RESPONSE') {
+        if (data) {
+          setHandlebarsCode(data.handlebarsCode);
+          setHandlebarsJson(data.handlebarsJson);
+          setIsEditorReady(true);
+        }
+      }
+
+      if (type === 'TEMPLATE_ID_RESPONSE') {
+        if (data) {
+          setTemplateId(data);
+        }
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
+
+  // Send updates to parent when data changes (debounced)
+  useEffect(() => {
+    if (!isInFrame) {
+      return;
     }
 
-    if (!handlebarsJson) {
-      const defaultData = handlebarsService.getDatasetJson('default');
-      setHandlebarsJson(JSON.stringify(defaultData, null, 2));
-    }
+    const timeoutId = setTimeout(() => {
+      const message: PostMessagePayload = {
+        type: 'TEMPLATE_UPDATE',
+        data: {
+          templateName,
+          templateDescription,
+          handlebarsCode,
+          handlebarsJson,
+          creationMethod,
+        },
+        source: 'iframe',
+      };
+      window.parent.postMessage(message, '*');
+    }, 500); // Debounce updates
 
-    setIsEditorReady(true);
-  }, [handlebarsCode, handlebarsJson, setHandlebarsCode, setHandlebarsJson]);
+    return () => clearTimeout(timeoutId);
+  }, [isInFrame, templateName, templateDescription, handlebarsCode, handlebarsJson, creationMethod]);
 
+  // fetch data if template id is available
   useEffect(() => {
     const fetchTemplate = async () => {
-      if (!templateId) {
+      if (!templateId || isTemplateLoaded) {
         return;
       }
+
       try {
         const response = await fetchTemplateById(templateId);
         if (!response?.data) {
           return;
         }
-
         setTemplateName(response.data.templateName as string);
-        setTemplateDescription(response.data.description as string);
-        setCreationMethod(response.data.creationMethod as CreationMethodEnum);
         setHandlebarsCode(response.data.templateContent as string);
         setHandlebarsJson(JSON.stringify(response.data.templateSampleData));
+        setTemplateDescription(response.data.description as string);
+        setCreationMethod(response.data.creationMethod as CreationMethodEnum);
+        setIsTemplateLoaded(true);
+        setIsEditorReady(true);
       } catch (error) {
         console.error('Failed to load template for editing:', error);
       }
     };
 
     fetchTemplate();
-  }, [templateId]);
+  }, [
+    templateId,
+    isTemplateLoaded,
+    setTemplateName,
+    setTemplateDescription,
+    setHandlebarsCode,
+    setHandlebarsJson,
+    setCreationMethod,
+    setIsTemplateLoaded,
+    setIsEditorReady,
+  ]);
 
   // Update the useEffect that renders the template to handle async rendering
   useEffect(() => {
@@ -201,77 +262,11 @@ export default function HandlebarsEditor() {
     }
   };
 
-  const handleSave = async (type: UpdateTypeEnum) => {
-    setSaveStatus(SaveStatusEnum.SAVING);
-    if (!user) {
-      setSaveStatus(SaveStatusEnum.ERROR);
-      return;
-    }
-    try {
-      const templateData = {
-        templateId,
-        description: templateDescription,
-        email: user?.emailAddresses[0]?.emailAddress,
-        templateName,
-        templateContent: handlebarsCode,
-        templateSampleData: handlebarsJson,
-        templateType: TemplateType.HANDLBARS_TEMPLATE,
-        creationMethod,
-      };
-      const response = await UpsertTemplate(templateData);
-
-      if (!response) {
-        setSaveStatus(SaveStatusEnum.ERROR);
-        return;
-      }
-      if (type === UpdateTypeEnum.UPDATE) {
-        toast.success('Template updated successfully');
-        router.push('/dashboard');
-        resetTemplate();
-      } else if (type === UpdateTypeEnum.UPDATE_PUBLISH) {
-        if (response?.templateId) {
-          await PublishTemplateToProd(response?.templateId);
-          toast.success('Template updated and published successfully');
-          router.push('/dashboard');
-          resetTemplate();
-        } else {
-          toast.error('Template ID not found after update, cannot publish.');
-          setSaveStatus(SaveStatusEnum.ERROR);
-        }
-      }
-      setSaveStatus(SaveStatusEnum.SUCCESS);
-    } catch (error) {
-      setSaveStatus(SaveStatusEnum.ERROR);
-      toast.error(`Error: ${error}`);
-    }
-  };
-
   return (
     <>
-      {templateId && (
-        <div className="flex items-center justify-between px-4 py-2">
-          <h2 className="text-2xl font-semibold">
-            Edit Template:
-            {' '}
-            {templateName || 'Unnamed'}
-          </h2>
-          <div className="flex justify-end gap-2">
-            <Button
-              className="rounded-full text-lg"
-              onClick={() => handleSave(UpdateTypeEnum.UPDATE)}
-              disabled={saveStatus === SaveStatusEnum.SAVING}
-            >
-              {saveStatus === SaveStatusEnum.SAVING ? 'Updating...' : 'Update'}
-            </Button>
-
-            <Button
-              className="rounded-full text-lg"
-              onClick={() => handleSave(UpdateTypeEnum.UPDATE_PUBLISH)}
-              disabled={saveStatus === SaveStatusEnum.SAVING}
-            >
-              {saveStatus === SaveStatusEnum.SAVING ? 'Updating & Publishing...' : 'Update & Publish'}
-            </Button>
-          </div>
+      {!templateId && (
+        <div className="border-b bg-amber-50/50 p-4">
+          <InfoMessage text="You're using the Code Editor. Use Handlebars syntax for full control. Prefer a visual approach? Try the Visual Editor." />
         </div>
       )}
       <div className="flex h-[800px] flex-col overflow-hidden rounded-md border text-black">

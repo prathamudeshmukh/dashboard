@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Check, FileUp, Loader2, TriangleAlert, Upload } from 'lucide-react';
+import { Check, FileUp, Loader2, Upload } from 'lucide-react';
 import React, { useRef, useState } from 'react';
 
 import { getStatus } from '@/libs/actions/pdf';
@@ -33,19 +33,27 @@ const PDFExtractor = () => {
   const { setHtmlContent, setHandlebarsCode } = useTemplateStore();
 
   async function pollJobStatus(runID: string) {
-    let response = await getStatus(runID);
+    try {
+    // Initial fetch before starting the loop
+      let response = await getStatus(runID);
 
-    while (response.status !== 'Completed') {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      response = await getStatus(runID);
-      if (response.status === 'Failed' || response.status === 'Cancelled') {
+      // Poll until the job is in a terminal state
+      while (response.status !== 'Completed' && response.status !== 'Failed' && response.status !== 'Cancelled') {
+      // Wait for a second before the next poll
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        response = await getStatus(runID);
+      }
+
+      if (response.status === 'Completed') {
+        setpdfExtractionStatus(PdfExtractionStatusEnum.COMPLETED);
+        setHtmlContent(response.output.htmlContent);
+        setHandlebarsCode(response.output.htmlContent);
+      } else if (response.status === 'Failed' || response.status === 'Cancelled') {
         setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED);
       }
-    }
-    if (response.status === 'Completed') {
-      setpdfExtractionStatus(PdfExtractionStatusEnum.COMPLETED);
-      setHtmlContent(response.output.htmlContent);
-      setHandlebarsCode(response.output.htmlContent);
+    } catch (error) {
+      console.error('An error occurred while polling job status:', error);
+      setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED);
     }
   }
 
@@ -119,7 +127,7 @@ const PDFExtractor = () => {
 
   return (
     <div>
-      <div className="mb-4 flex items-start rounded-md border border-amber-200 bg-amber-50 p-3 text-sm">
+      {/* <div className="mb-4 flex items-start rounded-md border border-amber-200 bg-amber-50 p-3 text-sm">
         <TriangleAlert className="mr-3 mt-0.5 text-amber-600" />
         <div>
           <p className="text-base font-normal text-amber-800">Free Plan Limit</p>
@@ -133,7 +141,7 @@ const PDFExtractor = () => {
             for unlimited template extraction and additional features.
           </p>
         </div>
-      </div>
+      </div> */}
 
       {pdfExtractionStatus === PdfExtractionStatusEnum.NOT_STARTED && (
         <div

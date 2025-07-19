@@ -3,12 +3,14 @@
 import { and, desc, eq, gte, ilike, lte, sql } from 'drizzle-orm';
 
 import { inngest } from '@/inngest/client';
-import { generated_templates, templateGallery, templates, users } from '@/models/Schema';
+import { creditTransactions, generated_templates, templateGallery, templates, users } from '@/models/Schema';
 import contentGenerator from '@/service/contentGenerator';
+import { generatePDFBuffer } from '@/service/generatePDFBuffer';
 import type { FetchTemplateResponse, FetchTemplatesRequest, GeneratedTemplates, GeneratePdfRequest, JsonObject, JsonValue, PaginatedResponse, TemplateType, UpdatePreviewURLParams, UpdatePreviewURLResult, UsageMetric, UsageMetricRequest } from '@/types/Template';
 
-import { LeanPuppeteerHTMLPDF } from '../../leanPuppeteerHtmlPDF/index';
 import { db } from '../DB';
+import { FormatUsageData } from './template/FormatUsageData';
+import { groupUsageByPeriod } from './template/GroupUsageByPeriod';
 import { deductCredit } from './user';
 
 // Types
@@ -178,7 +180,7 @@ export async function fetchTemplates({
       .where(and(...conditions))
       .limit(pageSize)
       .offset(offest)
-      .orderBy(desc(templates.id));
+      .orderBy(desc(templates.createdAt));
 
     const totalRecords = userTemplates[0]?.totalRecords || 0;
 
@@ -230,7 +232,9 @@ export async function fetchTemplateById(templateId: string, isDev: boolean = tru
       ).limit(1);
 
     if (result.length === 0) {
-      throw new Error('Template not found');
+      return {
+        error: { message: 'Template not found', status: 404 },
+      };
     }
 
     const template = result[0]?.templateData;
@@ -239,7 +243,9 @@ export async function fetchTemplateById(templateId: string, isDev: boolean = tru
     return { data: { ...template, user: userData } };
   } catch (error: any) {
     console.error('Error fetching template:', error);
-    return { success: false, error: error.message };
+    return {
+      error: { message: 'Error fetching template', status: 500 },
+    };
   }
 }
 
@@ -248,7 +254,7 @@ export async function generatePdf({
   templateData,
   devMode = true,
   isApi = false,
-}: GeneratePdfRequest): Promise<{ pdf?: string; error?: string }> {
+}: GeneratePdfRequest): Promise<{ pdf?: ArrayBuffer; error?: { message: string; status?: number } }> {
   try {
     let template;
 
@@ -256,8 +262,8 @@ export async function generatePdf({
     if (templateId) {
       template = await fetchTemplateById(templateId, devMode);
 
-      if (!template) {
-        throw new Error('Template not found');
+      if (template.error) {
+        return { error: template.error };
       }
     }
     // Determine the data to be used by contentGenerator
@@ -272,20 +278,15 @@ export async function generatePdf({
       templateData: dataForContentGenerator,
     });
 
-    const htmlPdf = new LeanPuppeteerHTMLPDF({
-      format: 'A4',
-      printBackground: true,
-    });
-
     // check for balance
     if (
       isApi
       && (!template?.data?.user || template?.data?.user?.remainingBalance == null || template?.data?.user?.remainingBalance <= 0)
     ) {
-      return { error: 'Insufficient credits.' };
+      return { error: { message: 'Insufficient credits.', status: 402 } };
     }
 
-    const pdf = await htmlPdf.create(content);
+    const pdfBuffer = await generatePDFBuffer(content);
 
     if (template?.data?.id && isApi) {
       await deductCredit(template.data.user?.cliendId as string);
@@ -295,12 +296,10 @@ export async function generatePdf({
       });
     }
 
-    const pdfBase64 = pdf.toString('base64');
-
-    return { pdf: pdfBase64 };
+    return { pdf: pdfBuffer };
   } catch (error: any) {
     console.error('Error generating PDF:', error);
-    return { error: `Failed to generate PDF: ${error.message}` };
+    return { error: { message: 'Internal Server Error', status: 500 } };
   }
 }
 
@@ -426,6 +425,46 @@ export async function fetchUsageMetrics({
   } catch (error) {
     throw new Error(`Failed to fetch usage metrics: ${error}`);
   }
+}
+
+export async function getUsageData(email: string) {
+  const user = await db.query.users.findFirst({
+    where: eq(users.email, email),
+  });
+
+  if (!user) {
+    throw new Error(`User with email ${email} not found`);
+  }
+
+  const records = await db
+    .select({ date: generated_templates.generated_date })
+    .from(generated_templates)
+    .innerJoin(templates, eq(generated_templates.template_id, templates.id))
+    .where(eq(templates.email, email));
+
+  // Group Usage By Period
+  const { dailyMap, weeklyMap, monthlyMap } = groupUsageByPeriod(records);
+
+  // Format usage data
+  const { dailyUsageData, weeklyUsageData, monthlyUsageData } = FormatUsageData(dailyMap, weeklyMap, monthlyMap);
+
+  // Get last credit transaction
+  const lastTransaction = await db.query.creditTransactions.findFirst({
+    where: eq(creditTransactions.clientId, user.clientId),
+    orderBy: desc(creditTransactions.creditedAt),
+  });
+
+  return {
+    // Usage
+    dailyUsageData,
+    weeklyUsageData,
+    monthlyUsageData,
+
+    // Credit Info
+    remainingBalance: user.remainingBalance,
+    lastCredited: lastTransaction?.credits ?? 0,
+    lastCreditedAt: lastTransaction?.creditedAt ?? null,
+  };
 }
 
 export async function deleteTemplate(templateId: string) {

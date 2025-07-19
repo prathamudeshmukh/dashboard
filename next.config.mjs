@@ -31,13 +31,14 @@ const NextConfig = withSentryConfig(
   withMDX(
     bundleAnalyzer(
       withNextIntlConfig({
+        compress: false,
         eslint: {
           dirs: ['.'],
         },
         poweredByHeader: false,
         reactStrictMode: true,
         experimental: {
-          serverComponentsExternalPackages: ['@electric-sql/pglite', 'puppeteer-core', '@sparticuz/chromium', '@pdftron/pdfnet-node'],
+          serverComponentsExternalPackages: ['@electric-sql/pglite'],
         },
         pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
       }),
@@ -49,10 +50,8 @@ const NextConfig = withSentryConfig(
     // FIXME: Add your Sentry organization and project names
     org: 'templify',
     project: 'javascript-nextjs',
-
     // Only print logs for uploading source maps in CI
     silent: !process.env.CI,
-
     // For all available options, see:
     // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
 

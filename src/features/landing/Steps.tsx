@@ -1,55 +1,16 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 
 import StepContent from '@/components/landing/StepContent';
 import StepNavigation from '@/components/landing/StepNavigation';
-import { Button } from '@/components/ui/button';
+import { useSteps } from '@/hooks/UseStep';
 
 export default function Steps() {
-  const t = useTranslations('Steps');
-  const [activeStep, setActiveStep] = useState(t('step1'));
+  const steps = useSteps();
+  const [activeStep, setActiveStep] = useState(steps[0]?.id);
   const stepRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const observerRef = useRef<IntersectionObserver | null>(null);
-
-  const steps = [
-    {
-      id: t('step1'),
-      title: t('step1_title'),
-      description: t('step1_description'),
-      image: '/images/login-ui.png',
-      imageAlt: t('step1_imageAlt'),
-    },
-    {
-      id: t('step2'),
-      title: t('step2_title'),
-      description: t('step2_description'),
-      image: '/images/dashboard.png',
-      imageAlt: t('step2_imageAlt'),
-    },
-    {
-      id: t('step3'),
-      title: t('step3_title'),
-      description: t('step3_description'),
-      image: '/images/payment-form.png',
-      imageAlt: t('step3_imageAlt'),
-    },
-    {
-      id: t('step4'),
-      title: t('step4_title'),
-      description: t('step4_description'),
-      image: '/images/dashboard.png',
-      imageAlt: t('step4_imageAlt'),
-    },
-    {
-      id: t('step5'),
-      title: t('step5_title'),
-      description: t('step5_description'),
-      image: '/images/payment-form.png',
-      imageAlt: t('step5_imageAlt'),
-    },
-  ];
 
   useEffect(() => {
     const options = {
@@ -90,26 +51,21 @@ export default function Steps() {
       <div className="container px-5 md:px-0">
         <div className="mb-12 flex flex-col items-center justify-between md:flex-row md:items-start">
           <h2 className="text-4xl font-semibold tracking-tight xl:text-6xl">
-            How Templify Works in
+            How Templify Works — From
             <br />
-            5 Simple Steps
+            Idea to PDF in Minutes
           </h2>
-          <Button variant="outline" className="mt-8 flex flex-col items-end rounded-full border-black bg-secondary text-lg font-normal text-primary hover:bg-secondary">Build your template</Button>
         </div>
 
         <div className="mt-16 grid md:grid-cols-4 md:gap-32">
 
-          <StepNavigation steps={steps} activeStep={activeStep} onStepClick={handleStepClick} />
+          <StepNavigation steps={steps} activeStep={activeStep as string} onStepClick={handleStepClick} />
 
           <div className="col-span-3 space-y-16 md:space-y-32">
             {steps.map(step => (
               <StepContent
                 key={step.id}
-                id={step.id}
-                title={step.title}
-                description={step.description}
-                image={step.image}
-                imageAlt={step.imageAlt}
+                content={step}
                 innerRef={el => (stepRefs.current[step.id] = el)}
               />
             ))}

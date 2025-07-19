@@ -11,12 +11,14 @@ import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
 
-import { fetchTemplateById, PublishTemplateToProd, UpsertTemplate } from '@/libs/actions/templates';
+import { Button } from '@/components/ui/button';
+import { PublishTemplateToProd, UpsertTemplate } from '@/libs/actions/templates';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
-import { type CreationMethodEnum, SaveStatusEnum, UpdateTypeEnum } from '@/types/Enum';
+import { SaveStatusEnum, UpdateTypeEnum } from '@/types/Enum';
 import { TemplateType } from '@/types/Template';
+import { foregroundColor, primaryColor } from '@/utils/tailwindColor';
 
-import { Button } from '../ui/button';
+import { loadTemplateContent } from './LoadTemplateContent';
 
 export default function HTMLBuilder() {
   const { user } = useUser();
@@ -30,47 +32,20 @@ export default function HTMLBuilder() {
   const containerRef = useRef(null);
 
   useEffect(() => {
-    const loadTemplate = async () => {
-      if (!editor) {
-        return;
-      }
-
-      // If templateId exists, fetch the template
-      if (templateId) {
-        try {
-          const response = await fetchTemplateById(templateId);
-          if (!response) {
-            return;
-          }
-          const content = response.data?.templateContent as string;
-          const style = response.data?.templateStyle as string;
-
-          setHtmlContent(content);
-          setHtmlStyle(style);
-          setCreationMethod(response.data?.creationMethod as CreationMethodEnum);
-          setTemplateName(response.data?.templateName as string);
-          setTemplateDescription(response.data?.description as string);
-
-          // Load into editor
-          if (content) {
-            editor.setComponents(content);
-          }
-          if (style) {
-            editor.setStyle(style);
-          }
-        } catch (error) {
-          console.error('Failed to load template for editing:', error);
-        }
-      } else {
-        // No templateId → use current state
-        if (htmlContent) {
-          editor.setComponents(htmlContent);
-        }
-      }
-    };
-
-    loadTemplate();
-  }, [templateId, editor]); // Make sure to depend on both
+    if (!editor) {
+      return;
+    }
+    loadTemplateContent({
+      editor,
+      templateId,
+      htmlContent,
+      setHtmlContent,
+      setHtmlStyle,
+      setCreationMethod,
+      setTemplateName,
+      setTemplateDescription,
+    });
+  }, [editor, templateId]);
 
   const onReady = (editor: Editor) => {
     setEditor(editor);
@@ -89,7 +64,7 @@ export default function HTMLBuilder() {
     const blockManager = editor.BlockManager;
 
     // Remove specific blocks
-    const blocksToRemove = ['video', 'form', 'input', 'textarea', 'select', 'button', 'checkbox,', 'radio', 'label'];
+    const blocksToRemove = ['video', 'form', 'input', 'textarea', 'select', 'button', 'checkbox', 'radio', 'label', 'map', 'link', 'linkBox', 'navbar'];
     blocksToRemove.forEach((blockId) => {
       if (blockManager.get(blockId)) {
         blockManager.remove(blockId);
@@ -179,6 +154,30 @@ export default function HTMLBuilder() {
               options={{
                 licenseKey: process.env.NEXT_PUBLIC_GRAPE_STUDIO_KEY as string,
                 theme: 'light',
+                customTheme: {
+                  default: {
+                    colors: {
+                      component: {
+                        background1: primaryColor,
+                        background2: foregroundColor,
+                      },
+                      primary: {
+                        background1: primaryColor,
+                        backgroundHover: primaryColor,
+                      },
+                      selector: {
+                        background1: primaryColor,
+                      },
+                      symbol: {
+                        background1: primaryColor,
+                      },
+                      global: {
+                        placeholder: primaryColor,
+                        text: primaryColor,
+                      },
+                    },
+                  },
+                },
                 pages: false,
                 autoHeight: false,
                 devices: { selected: 'desktop' },

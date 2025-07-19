@@ -1,0 +1,1 @@
+CREATE INDEX IF NOT EXISTS "creditTransactions_clientId_idx" ON "credit_transactions" USING btree ("client_id");

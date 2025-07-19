@@ -45,10 +45,10 @@
       "company": "TechForward Solutions",
       "location": "San Francisco, CA",
       "period": "January 2022 - Present",
-      "description": "Lead engineer for the company's flagship SaaS platform serving 500,000+ users.",
+      "description": "Lead engineer for the companys flagship SaaS platform serving 500,000+ users.",
       "achievements": [
         "Architected and implemented a microservices-based backend that improved system scalability by 300% and reduced API response times by 65%",
-        "Led a team of 6 engineers in redesigning the application's frontend using React and TypeScript, resulting in a 40% increase in user engagement",
+        "Led a team of 6 engineers in redesigning the applications frontend using React and TypeScript, resulting in a 40% increase in user engagement",
         "Implemented comprehensive CI/CD pipelines that reduced deployment time from hours to minutes and decreased production bugs by 45%",
         "Optimized database queries and implemented caching strategies that reduced server costs by $15,000 annually",
         "Mentored junior developers through code reviews, pair programming, and technical workshops"
@@ -91,7 +91,7 @@
         "Specialization in Artificial Intelligence and Machine Learning",
         "GPA: 3.85/4.0",
         "Teaching Assistant for Advanced Algorithms course",
-        "Thesis: 'Optimizing Neural Networks for Edge Computing Applications'"
+        "Thesis: Optimizing Neural Networks for Edge Computing Applications"
       ]
     },
     {
@@ -102,7 +102,7 @@
       "details": [
         "Minor in Mathematics",
         "GPA: 3.7/4.0",
-        "Dean's List: 7 semesters",
+        "Deans List: 7 semesters",
         "President of the Computer Science Club"
       ]
     }

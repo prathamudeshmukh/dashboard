@@ -22,8 +22,10 @@ import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/data-table';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
+import { Skeleton } from '@/components/ui/skeleton';
 import { deleteTemplate, fetchTemplates } from '@/libs/actions/templates';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
+import { TemplateTableState } from '@/types/Enum';
 import { type Template, TemplateType } from '@/types/Template';
 
 import AsyncActionButton from '../../components/AsyncActionButton';
@@ -35,8 +37,8 @@ const TemplateTable = () => {
   const { user } = useUser();
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [openDialog, setOpenDialog] = useState(false);
-  const [searchTriggered, setSearchTriggered] = useState(false);
+  const [templateToDelete, setTemplateToDelete] = useState<Template | null>(null);
+  const [tableState, setTableState] = useState<TemplateTableState>(TemplateTableState.Loading);
   const { selectTemplate } = useTemplateStore();
 
   const t = useTranslations('TemplateTable');
@@ -44,9 +46,25 @@ const TemplateTable = () => {
     if (!email) {
       return;
     }
-    const response = await fetchTemplates({ email, page, pageSize: 10, searchQuery: search });
-    setTotalPages(response.totalPages);
-    setTemplateData(response.data);
+    const start = performance.now();
+    setTableState(TemplateTableState.Loading);
+    try {
+      const response = await fetchTemplates({ email, page, pageSize: 10, searchQuery: search });
+      const end = performance.now();
+      // eslint-disable-next-line no-console
+      console.log(`Fetching templates took ${end - start} ms`);
+      if (response.data.length === 0) {
+        setTableState(search ? TemplateTableState.SearchNoResults : TemplateTableState.FTUX);
+      } else {
+        setTableState(TemplateTableState.Success);
+      }
+
+      setTotalPages(response.totalPages);
+      setTemplateData(response.data);
+    } catch (err) {
+      setTableState(TemplateTableState.Error);
+      console.error(err);
+    }
   };
 
   useEffect(() => {
@@ -90,7 +108,7 @@ const TemplateTable = () => {
       cell: (info) => {
         const templateName = info.getValue();
         return (
-          <div className="font-medium">
+          <div>
             {templateName as string}
           </div>
         );
@@ -108,8 +126,10 @@ const TemplateTable = () => {
         };
 
         return (
-          <div className="flex min-w-[300px] items-center gap-2">
-            <span className="text-xs">{templateId}</span>
+          <div className="flex items-center gap-2">
+            <span className="max-w-[140px] truncate" title={templateId}>
+              {templateId}
+            </span>
             <Button variant="ghost" size="sm" onClick={handleCopy}>
               <Copy />
             </Button>
@@ -123,13 +143,12 @@ const TemplateTable = () => {
       cell: (info) => {
         const description = info.getValue();
         return (
-          <div className="min-w-[250px] max-w-[500px] whitespace-pre-wrap break-words">
-            {description as string}
+          <div className="flex">
+            <span className="max-w-[220px] truncate">
+              {description as string}
+            </span>
           </div>
         );
-      },
-      meta: {
-        size: 300, // Set default column width
       },
     },
     {
@@ -144,13 +163,7 @@ const TemplateTable = () => {
         const template = row.original;
 
         const openDeleteDialog = () => {
-          setTimeout(() => {
-            setOpenDialog(true);
-          }, 100);
-        };
-
-        const closeDeleteDialog = () => {
-          setOpenDialog(false);
+          setTemplateToDelete(template);
         };
 
         return (
@@ -189,30 +202,39 @@ const TemplateTable = () => {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Confirm Delete</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Are you sure you want to delete this template? This action cannot be undone.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
+            {templateToDelete && (
+              <AlertDialog
+                open={!!templateToDelete}
+                onOpenChange={(open) => {
+                  if (!open) {
+                    setTemplateToDelete(null);
+                  }
+                }}
+              >
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Confirm Delete</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Are you sure you want to delete this template? This action cannot be undone.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
 
-                <AlertDialogFooter>
-                  <AlertDialogCancel onClick={closeDeleteDialog}>
-                    Cancel
-                  </AlertDialogCancel>
-                  <AsyncActionButton
-                    onClick={async () => {
-                      await handleDelete(template.templateId as string);
-                      setOpenDialog(false);
-                    }}
-                  >
-                    Delete
-                  </AsyncActionButton>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel onClick={() => setTemplateToDelete(null)}>
+                      Cancel
+                    </AlertDialogCancel>
+                    <AsyncActionButton
+                      onClick={async () => {
+                        await handleDelete(templateToDelete.templateId as string);
+                        setTemplateToDelete(null);
+                      }}
+                    >
+                      Delete
+                    </AsyncActionButton>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            )}
           </>
         );
       },
@@ -226,62 +248,80 @@ const TemplateTable = () => {
 
   return (
     <div className="container mx-auto py-10">
-      {templateData.length === 0 && !searchTriggered && page === 1
-        ? (
-            <div className="flex h-96 flex-col items-center justify-center text-center">
-              <h2 className="mb-2 text-6xl font-semibold">Welcome to Templify</h2>
-              <p className="mb-4 text-base font-normal text-gray-600">
-                Your one-stop solution to your dynamic PDF generation needs.
-              </p>
-              <Button onClick={handleCreateTemplate} className="rounded-full bg-primary text-lg">
-                Create your first template
-              </Button>
+      {tableState === TemplateTableState.Loading && (
+        <div className="space-y-4">
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="flex items-center justify-between gap-4 border-b pb-4">
+              <Skeleton className="h-6 w-1/3" />
+              <Skeleton className="h-6 w-1/4" />
+              <Skeleton className="h-6 w-1/5" />
+              <Skeleton className="h-6 w-20" />
             </div>
-          )
-        : (
-            <>
-              <div className="mt-5 flex items-end justify-end">
-                <Link href="/dashboard/create-template">
-                  <Button className="rounded-full bg-primary text-lg">
-                    <Plus />
-                    {' '}
-                    Create Template
-                  </Button>
-                </Link>
-              </div>
-              <div className="mb-4 flex items-center gap-4">
-                <Input
-                  type="text"
-                  value={searchQuery}
-                  onChange={e => setSearchQuery(e.target.value)}
-                  placeholder="Search templates..."
-                  className="w-1/3 rounded-md border p-2"
-                />
+          ))}
+        </div>
+      )}
 
-                <Button
-                  size="sm"
-                  variant="secondary"
-                  onClick={() => {
-                    setSearchTriggered(true);
-                    const email = user?.emailAddresses[0]?.emailAddress;
-                    if (email) {
-                      fetchTemplateData(email, page, searchQuery);
-                    }
-                  }}
-                >
-                  <Search />
-                </Button>
-              </div>
+      {tableState === TemplateTableState.FTUX && (
+        <div className="flex h-96 flex-col items-center justify-center text-center">
+          <h2 className="mb-2 text-6xl font-semibold">Welcome to Templify</h2>
+          <p className="mb-4 text-base font-normal text-gray-600">
+            Your one-stop solution to your dynamic PDF generation needs.
+          </p>
+          <Button onClick={handleCreateTemplate} className="rounded-full bg-primary text-lg">
+            Create your first template
+          </Button>
+        </div>
+      )}
 
-              <DataTable
-                data={templateData}
-                columns={columns}
-                page={page}
-                pageCount={totalPages}
-                onPageChange={setPage}
-              />
-            </>
-          )}
+      {tableState !== TemplateTableState.Loading && tableState !== TemplateTableState.FTUX && (
+        <>
+          <div className="mt-5 flex items-end justify-end">
+            <Link href="/dashboard/create-template">
+              <Button className="rounded-full bg-primary text-lg">
+                <Plus />
+                Create Template
+              </Button>
+            </Link>
+          </div>
+          <div className="mb-4 flex items-center gap-4">
+            <Input
+              type="text"
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              placeholder="Search templates..."
+              className="w-1/3 rounded-md border p-2"
+            />
+            <Button
+              size="sm"
+              variant="secondary"
+              onClick={() => {
+                const email = user?.emailAddresses[0]?.emailAddress;
+                if (email) {
+                  fetchTemplateData(email, page, searchQuery);
+                }
+              }}
+            >
+              <Search />
+            </Button>
+          </div>
+        </>
+      )}
+
+      {tableState === TemplateTableState.SearchNoResults && (
+        <p className="mt-10 text-center text-muted-foreground">
+          No results found for this search.
+        </p>
+      )}
+
+      {tableState === TemplateTableState.Success && (
+        <DataTable
+          data={templateData}
+          columns={columns}
+          page={page}
+          pageCount={totalPages}
+          onPageChange={setPage}
+        />
+      )}
     </div>
   );
 };
