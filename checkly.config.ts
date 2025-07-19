@@ -1,14 +1,14 @@
 import { defineConfig } from 'checkly';
 import { EmailAlertChannel, Frequency } from 'checkly/constructs';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const sendDefaults = {
   sendFailure: true,
   sendRecovery: true,
   sendDegraded: true,
 };
-
-// FIXME: Add your production URL
-const productionURL = 'https://templify-dashboard-dev.vercel.app/';
 
 const emailChannel = new EmailAlertChannel('email-channel-1', {
   // FIXME: add your own email address, Checkly will send you an email notification if a check fails
@@ -32,7 +32,7 @@ export const config = defineConfig({
     },
     playwrightConfig: {
       use: {
-        baseURL: process.env.ENVIRONMENT_URL || productionURL,
+        baseURL: process.env.ENVIRONMENT_URL,
         extraHTTPHeaders: {
           'x-vercel-protection-bypass': process.env.VERCEL_BYPASS_TOKEN,
         },

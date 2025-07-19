@@ -4,7 +4,7 @@ import { defineConfig, devices } from '@playwright/test';
 // const PORT = process.env.PORT || 3000;
 
 // Set webServer.url and use.baseURL with the location of the WebServer respecting the correct set port
-const baseURL = `https://templify-dashboard-dev.vercel.app`;
+const baseURL = process.env.ENVIRONMENT_URL;
 
 /**
  * See https://playwright.dev/docs/test-configuration.
