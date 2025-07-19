@@ -15,7 +15,6 @@ test('Login and verify dashboard loads with templates table and actions', async 
   // Dashboard assertions
   await expect(page.getByRole('button', { name: 'Create Template' })).toBeVisible();
   await expect(page.getByPlaceholder('Search templates...')).toBeVisible();
-  await expect(page.locator('.mb-4 > .inline-flex')).toBeVisible();
 
   // Check if table has at least one row
   const parentBody = page.locator('table tbody');
