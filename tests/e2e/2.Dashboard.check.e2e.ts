@@ -7,7 +7,9 @@ console.log({ email, password });
 
 test('Login and verify dashboard loads with templates table and actions', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Sign Up' }).click();
+  const signUpButton = page.getByRole('button', { name: 'Sign Up' });
+  await signUpButton.waitFor({ state: 'visible' });
+  await signUpButton.click();
   await page.getByRole('link', { name: 'Sign in' }).click();
   await page.getByPlaceholder('Enter your email address').fill(email!);
   await page.getByRole('button', { name: 'Continue' }).click();
