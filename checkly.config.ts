@@ -20,9 +20,9 @@ export const config = defineConfig({
   // FIXME: Add your own project name, logical ID, and repository URL
   projectName: 'Templify dashboard',
   logicalId: 'templify-dashboard',
-  repoUrl: 'https://github.com/ixartz/Next-js-Boilerplate',
+  repoUrl: 'https://github.com/prathamudeshmukh/dashboard',
   checks: {
-    locations: ['us-east-1', 'eu-west-1'],
+    locations: ['ap-south-1'],
     tags: ['website'],
     runtimeId: '2024.02',
     browserChecks: {
@@ -40,7 +40,7 @@ export const config = defineConfig({
     },
   },
   cli: {
-    runLocation: 'eu-west-1',
+    runLocation: 'ap-south-1',
     reporters: ['list'],
   },
 });
