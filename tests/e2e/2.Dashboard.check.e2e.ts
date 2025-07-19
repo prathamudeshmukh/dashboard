@@ -2,6 +2,8 @@ import { expect, test } from '@playwright/test';
 
 const email = process.env.E2E_CLERK_USER_USERNAME;
 const password = process.env.E2E_CLERK_USER_PASSWORD;
+// eslint-disable-next-line no-console
+console.log({ email, password });
 
 test('Login and verify dashboard loads with templates table and actions', async ({ page }) => {
   await page.goto('/');
