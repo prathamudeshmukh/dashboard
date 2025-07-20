@@ -1,14 +1,14 @@
 import { defineConfig } from 'checkly';
 import { EmailAlertChannel, Frequency } from 'checkly/constructs';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const sendDefaults = {
   sendFailure: true,
   sendRecovery: true,
   sendDegraded: true,
 };
-
-// FIXME: Add your production URL
-const productionURL = 'https://templify-dashboard-dev.vercel.app/';
 
 const emailChannel = new EmailAlertChannel('email-channel-1', {
   // FIXME: add your own email address, Checkly will send you an email notification if a check fails
@@ -20,19 +20,21 @@ export const config = defineConfig({
   // FIXME: Add your own project name, logical ID, and repository URL
   projectName: 'Templify dashboard',
   logicalId: 'templify-dashboard',
-  repoUrl: 'https://github.com/ixartz/Next-js-Boilerplate',
+  repoUrl: 'https://github.com/prathamudeshmukh/dashboard',
   checks: {
+    activated: true,
     locations: ['us-east-1', 'eu-west-1'],
     tags: ['website'],
+    checkMatch: '**/__checks__/*.check.ts',
     runtimeId: '2024.02',
     browserChecks: {
-      frequency: Frequency.EVERY_5M,
-      testMatch: '**/tests/e2e/**/*.check.e2e.ts',
+      frequency: Frequency.EVERY_10M,
+      testMatch: '**/__checks__/*.spec.ts',
       alertChannels: [emailChannel],
     },
     playwrightConfig: {
       use: {
-        baseURL: process.env.ENVIRONMENT_URL || productionURL,
+        baseURL: process.env.ENVIRONMENT_URL,
         extraHTTPHeaders: {
           'x-vercel-protection-bypass': process.env.VERCEL_BYPASS_TOKEN,
         },
@@ -40,7 +42,7 @@ export const config = defineConfig({
     },
   },
   cli: {
-    runLocation: 'eu-west-1',
+    runLocation: 'us-east-1',
     reporters: ['list'],
   },
 });
