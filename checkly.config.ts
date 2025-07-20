@@ -22,12 +22,14 @@ export const config = defineConfig({
   logicalId: 'templify-dashboard',
   repoUrl: 'https://github.com/prathamudeshmukh/dashboard',
   checks: {
-    locations: ['ap-south-1'],
+    activated: true,
+    locations: ['us-east-1', 'eu-west-1'],
     tags: ['website'],
+    checkMatch: '**/__checks__/*.check.ts',
     runtimeId: '2024.02',
     browserChecks: {
-      frequency: Frequency.EVERY_5M,
-      testMatch: '**/tests/e2e/**/*.check.e2e.ts',
+      frequency: Frequency.EVERY_10M,
+      testMatch: '**/__checks__/*.spec.ts',
       alertChannels: [emailChannel],
     },
     playwrightConfig: {
@@ -40,7 +42,7 @@ export const config = defineConfig({
     },
   },
   cli: {
-    runLocation: 'ap-south-1',
+    runLocation: 'us-east-1',
     reporters: ['list'],
   },
 });
