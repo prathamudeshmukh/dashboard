@@ -23,7 +23,7 @@ export const config = defineConfig({
   repoUrl: 'https://github.com/prathamudeshmukh/dashboard',
   checks: {
     activated: true,
-    locations: ['us-east-1', 'eu-west-1'],
+    locations: ['ap-south-1'],
     tags: ['website'],
     checkMatch: '**/__checks__/*.check.ts',
     runtimeId: '2024.02',
@@ -42,7 +42,7 @@ export const config = defineConfig({
     },
   },
   cli: {
-    runLocation: 'us-east-1',
+    runLocation: 'ap-south-1',
     reporters: ['list'],
   },
 });

@@ -5,8 +5,8 @@ const password = process.env.E2E_CLERK_USER_PASSWORD;
 // eslint-disable-next-line no-console
 console.log({ email, password });
 
-test('Login and verify dashboard loads with templates table and actions', async ({ page, baseURL }) => {
-  await page.goto(`${baseURL}/sign-in`);
+test('Login and verify dashboard loads with templates table and actions', async ({ page }) => {
+  await page.goto('https://templify-dashboard-dev.vercel.app/sign-in');
   await page.getByPlaceholder('Enter your email address').fill(email as string);
   await page.getByRole('button', { name: 'Continue' }).click();
   await page.getByPlaceholder('Enter your password').fill(password as string);
