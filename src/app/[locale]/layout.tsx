@@ -92,6 +92,7 @@ export default function RootLayout(props: {
             signInFallbackRedirectUrl={dashboardUrl}
             signUpFallbackRedirectUrl={dashboardUrl}
             afterSignOutUrl={afterSignOutUrl}
+            clerkJSVariant="headless"
           >
             <NextIntlClientProvider
               locale={props.params.locale}
