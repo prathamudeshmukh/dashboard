@@ -1,11 +1,7 @@
 # .github/workflows/playwright.yml
 name: Playwright Tests
 
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+on: [deployment_status]
 
 env:
   CHECKLY_TEST_ENVIRONMENT: ${{ github.event.deployment_status.environment }}
