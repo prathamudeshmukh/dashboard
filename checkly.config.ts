@@ -26,7 +26,7 @@ export const config = defineConfig({
     locations: ['ap-south-1'],
     tags: ['website'],
     checkMatch: '**/__checks__/*.check.ts',
-    runtimeId: '2024.02',
+    runtimeId: '2025.04',
     browserChecks: {
       frequency: Frequency.EVERY_10M,
       testMatch: '**/__checks__/*.spec.ts',
