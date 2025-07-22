@@ -91,6 +91,11 @@
   "Steps": {
     "step1": {
       "id": "choose-how-to-start",
+      "media": {
+        "type": "video",
+        "src": "/videos/step-extract-from-pdf.mp4",
+        "alt": "Choose how to start"
+      },
       "title": "Choose How You Want to Start",
       "intro": "You have two flexible ways to build your template:",
       "points": [
@@ -101,11 +106,15 @@
           "text": "Pick from Gallery – Choose a ready-made design to jumpstart your workflow"
         }
       ],
-      "closing": "",
-      "imageAlt": "Sign Up UI"
+      "closing": ""
     },
     "step2": {
       "id": "customize-template",
+      "media": {
+        "type": "video",
+        "src": "/videos/step-customize-your-template.mp4",
+        "alt": "Customize template"
+      },
       "title": "Customize Your Template",
       "intro": "Choose the editing experience that fits your style:",
       "sections": [
@@ -131,29 +140,15 @@
             }
           ]
         }
-      ],
-      "imageAlt": "Template Editor Preview"
+      ]
     },
     "step3": {
-      "id": "review-and-save",
-      "title": "Review and Save",
-      "intro": "Before publishing, Templify shows you a final summary:",
-      "points": [
-        {
-          "text": "Template name and description"
-        },
-        {
-          "text": "Sample input JSON"
-        },
-        {
-          "text": "Real-time preview"
-        }
-      ],
-      "closing": "Make sure everything looks good!",
-      "imageAlt": "Template Summary Review"
-    },
-    "step4": {
       "id": "publish-and-integrate",
+      "media": {
+        "type": "image",
+        "src": "/images/publish-and-integrate.png",
+        "alt": "Publish & Integrate"
+      },
       "title": "Publish and Integrate",
       "intro": "Once ready, hit Save & Publish",
       "points": [
@@ -164,13 +159,12 @@
           "text": "Copy auto-generated API integration snippets"
         },
         {
-          "text": "(JS, Python, PHP, cURL)"
+          "text": "(Javascript, Python, PHP, cURL)"
         },
         {
           "text": "Start generating PDFs in your app within minutes"
         }
-      ],
-      "imageAlt": "Publish & Integrate"
+      ]
     }
   },
   "UseCase": {

@@ -34,14 +34,31 @@ export default function StepContent({
             <div className="flex w-full flex-col justify-start space-y-8 md:w-2/3">
               <StepDescription content={content} />
               <div>
-                <Image
-                  src={`/images/${content.id}.png`}
-                  alt={content.imageAlt}
-                  width={476}
-                  height={295}
-                  className="w-full rounded-md"
-                  priority={content.id === 'choose-how-to-start'}
-                />
+                {content.media.type === 'image' && (
+                  <Image
+                    src={content.media.src}
+                    alt={content.media.alt}
+                    width={476}
+                    height={295}
+                    className="w-full rounded-md"
+                    priority={content.id === 'choose-how-to-start'}
+                  />
+                )}
+
+                {content.media.type === 'video' && (
+
+                  <video
+                    width="100%"
+                    controls={false}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                  >
+                    <source src={content.media.src} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                )}
               </div>
             </div>
           </div>
