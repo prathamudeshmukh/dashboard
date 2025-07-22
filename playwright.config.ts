@@ -8,6 +8,7 @@ dotenv.config();
 
 // Set webServer.url and use.baseURL with the location of the WebServer respecting the correct set port
 const baseURL = process.env.ENVIRONMENT_URL;
+const isDeployedEnv = !!process.env.ENVIRONMENT_URL && process.env.CI;
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -30,12 +31,16 @@ export default defineConfig({
 
   // Run your local dev server before starting the tests:
   // https://playwright.dev/docs/test-advanced#launching-a-development-web-server-during-the-tests
-  webServer: {
-    command: process.env.CI ? 'npm run start' : 'npm run dev:next',
-    url: baseURL,
-    timeout: 2 * 60 * 1000,
-    reuseExistingServer: !process.env.CI,
-  },
+  ...(isDeployedEnv
+    ? {}
+    : {
+        webServer: {
+          command: process.env.CI ? 'npm run start' : 'npm run dev:next',
+          url: baseURL,
+          timeout: 2 * 60 * 1000,
+          reuseExistingServer: !process.env.CI,
+        },
+      }),
 
   // Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions.
   use: {
