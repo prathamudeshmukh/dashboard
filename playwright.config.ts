@@ -66,14 +66,24 @@ export default defineConfig({
     { name: 'teardown', testMatch: /.*\.teardown\.ts/ },
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+
+        // Use prepared Clerk auth state
+        storageState: 'playwright/.clerk/user.json',
+      },
       dependencies: ['setup'],
     },
     ...(process.env.CI
       ? [
           {
             name: 'firefox',
-            use: { ...devices['Desktop Firefox'] },
+            use: {
+              ...devices['Desktop Firefox'],
+
+              // Use prepared Clerk auth state
+              storageState: 'playwright/.clerk/user.json',
+            },
             dependencies: ['setup'],
           },
         ]

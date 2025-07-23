@@ -28,6 +28,9 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
+      - name: Create directory to store user data
+        run: mkdir -p playwright/.clerk
+
       - name: Run Playwright tests
         run: npx playwright test
         env:

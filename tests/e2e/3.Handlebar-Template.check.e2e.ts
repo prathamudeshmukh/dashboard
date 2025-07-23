@@ -8,20 +8,11 @@ test.describe('Handlebar Template creation flow using Template Gallery', () => {
   let selectedTemplateName: string;
   let createdTemplateId: string;
 
-  test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+  test.beforeEach(async ({ page, baseURL }) => {
+    await page.goto(`${baseURL}/dashboard`);
   });
 
   test('Complete template creation and verify dashboard entry', async ({ page }) => {
-    await test.step('Sign in process', async () => {
-      await page.getByRole('button', { name: 'Sign Up' }).click();
-      await page.getByRole('link', { name: 'Sign in' }).click();
-      await page.getByRole('textbox', { name: 'Email address' }).fill(TestUsers.email!);
-      await page.getByRole('button', { name: 'Continue' }).click();
-      await page.getByRole('textbox', { name: 'Password' }).fill(TestUsers.password!);
-      await page.getByRole('button', { name: 'Continue' }).click();
-    });
-
     await test.step('Navigate to template creation', async () => {
       await page.getByRole('button', { name: 'Create Template' }).click();
       await page.getByText('Template GalleryChoose from').click(); ;

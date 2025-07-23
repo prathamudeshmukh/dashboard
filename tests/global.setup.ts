@@ -1,3 +1,5 @@
+import path from 'node:path';
+
 import { clerk, clerkSetup } from '@clerk/testing/playwright';
 import { test as setup } from '@playwright/test';
 
@@ -8,6 +10,8 @@ setup('setup', async () => {
 
 setup('authenticate and save state to storage', async ({ page }) => {
   // Perform authentication steps.
+  const authFile = path.join(__dirname, '../playwright/.clerk/user.json');
+
   await page.goto('/');
   await clerk.signIn({
     page,
@@ -18,5 +22,6 @@ setup('authenticate and save state to storage', async ({ page }) => {
     },
   });
   await page.goto('/dashboard');
+  await page.context().storageState({ path: authFile });
   await page.close();
 });
