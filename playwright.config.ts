@@ -23,7 +23,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   // Reporter to use. See https://playwright.dev/docs/test-reporters
   reporter: process.env.CI
-    ? [['github'], ['html', { outputFolder: 'playwright-report', open: 'never' }]]
+    ? [['list'], ['github'], ['html', { outputFolder: 'playwright-report', open: 'never' }], ['junit', { outputFile: 'results.xml' }]]
     : 'list',
 
   expect: {
