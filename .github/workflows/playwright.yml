@@ -46,3 +46,8 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action@v2
         with:
           files: results.xml
+
+permissions:
+  checks: write
+  pull-requests: write
+  contents: read
