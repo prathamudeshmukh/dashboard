@@ -1,10 +1,14 @@
 import { defineConfig, devices } from '@playwright/test';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 // Use process.env.PORT by default and fallback to port 3000
-const PORT = process.env.PORT || 3000;
+// const PORT = process.env.PORT || 3000;
 
 // Set webServer.url and use.baseURL with the location of the WebServer respecting the correct set port
-const baseURL = `http://localhost:${PORT}`;
+const baseURL = process.env.ENVIRONMENT_URL;
+const isDeployedEnv = !!process.env.ENVIRONMENT_URL && process.env.CI;
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -27,12 +31,16 @@ export default defineConfig({
 
   // Run your local dev server before starting the tests:
   // https://playwright.dev/docs/test-advanced#launching-a-development-web-server-during-the-tests
-  webServer: {
-    command: process.env.CI ? 'npm run start' : 'npm run dev:next',
-    url: baseURL,
-    timeout: 2 * 60 * 1000,
-    reuseExistingServer: !process.env.CI,
-  },
+  ...(isDeployedEnv
+    ? {}
+    : {
+        webServer: {
+          command: process.env.CI ? 'npm run start' : 'npm run dev:next',
+          url: baseURL,
+          timeout: 2 * 60 * 1000,
+          reuseExistingServer: !process.env.CI,
+        },
+      }),
 
   // Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions.
   use: {
@@ -54,7 +62,7 @@ export default defineConfig({
     // For each test, an organization can be created within this account to ensure total isolation.
     // After all tests are completed, the `teardown` file can delete the account and all associated organizations.
     // You can find the `setup` and `teardown` files at: https://nextjs-boilerplate.com/pro-saas-starter-kit
-    { name: 'setup', testMatch: /.*\.setup\.ts/, teardown: 'teardown' },
+    { name: 'setup', testMatch: /global\.setup\.ts/, teardown: 'teardown' },
     { name: 'teardown', testMatch: /.*\.teardown\.ts/ },
     {
       name: 'chromium',

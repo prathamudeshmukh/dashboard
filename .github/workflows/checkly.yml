@@ -6,12 +6,11 @@ env:
   CHECKLY_API_KEY: ${{ secrets.CHECKLY_API_KEY }}
   CHECKLY_ACCOUNT_ID: ${{ secrets.CHECKLY_ACCOUNT_ID }}
   CHECKLY_TEST_ENVIRONMENT: ${{ github.event.deployment_status.environment }}
-
 jobs:
   test-e2e:
     strategy:
       matrix:
-        node-version: [20.x]
+        node-version: [22.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     # Only run when the deployment was successful
@@ -52,6 +51,8 @@ jobs:
         env:
           VERCEL_BYPASS_TOKEN: ${{ secrets.VERCEL_BYPASS_TOKEN }}
           ENVIRONMENT_URL: ${{ github.event.deployment_status.environment_url }}
+          E2E_CLERK_USER_USERNAME: ${{ secrets.E2E_CLERK_USER_USERNAME }}
+          E2E_CLERK_USER_PASSWORD: ${{ secrets.E2E_CLERK_USER_PASSWORD }}
 
       - name: Create summary # export the markdown report to the job summary.
         id: create-summary
