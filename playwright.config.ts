@@ -14,6 +14,8 @@ const isDeployedEnv = !!process.env.ENVIRONMENT_URL && process.env.CI;
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
+  // Limit the number of workers on CI, use default locally
+  workers: process.env.CI ? 1 : undefined,
   testDir: './tests',
   // Look for files with the .spec.js or .e2e.js extension
   testMatch: '*.@(spec|e2e).?(c|m)[jt]s?(x)',
