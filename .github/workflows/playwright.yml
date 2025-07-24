@@ -34,7 +34,7 @@ jobs:
       - name: Run Playwright tests
         run: npx playwright test
         env:
-          ENVIRONMENT_URL: ${{ github.event.deployment_status.environment_url }}
+          ENVIRONMENT_URL: ${{ github.event_name == 'push' && github.ref_name == 'main' && 'http://templify.cloud' || github.event.deployment_status.environment_url }}
           CLERK_SECRET_KEY: ${{ github.ref_name == 'main' && secrets.PRODUCTION_CLERK_SECRET_KEY || secrets.PREVIEW_CLERK_SECRET_KEY }}
           E2E_CLERK_USER_USERNAME: ${{ secrets.E2E_CLERK_USER_USERNAME }}
           E2E_CLERK_USER_PASSWORD: ${{ secrets.E2E_CLERK_USER_PASSWORD }}
