@@ -76,19 +76,5 @@ export default defineConfig({
       },
       dependencies: ['setup'],
     },
-    ...(process.env.CI
-      ? [
-          {
-            name: 'firefox',
-            use: {
-              ...devices['Desktop Firefox'],
-
-              // Use prepared Clerk auth state
-              storageState: 'playwright/.clerk/user.json',
-            },
-            dependencies: ['setup'],
-          },
-        ]
-      : []),
   ],
 });
