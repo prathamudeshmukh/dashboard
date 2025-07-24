@@ -4,6 +4,7 @@ import { SignOutButton, SignUpButton, useUser } from '@clerk/nextjs';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import { useEffect } from 'react';
 
 import { CenteredMenu } from '@/components/landing/CenteredMenu';
 import { Button } from '@/components/ui/button';
@@ -12,10 +13,17 @@ import type { NavbarProps } from '@/types/Navbar';
 import { Logo } from '../../components/landing/Logo';
 
 export const Navbar = ({ menuList, basePath = ' ' }: NavbarProps) => {
-  const { isSignedIn } = useUser();
+  const { isSignedIn, isLoaded } = useUser();
   const t = useTranslations('Navbar');
   const pathname = usePathname();
   const isLandingPage = pathname === '/';
+
+  useEffect(() => {
+    // eslint-disable-next-line no-console
+    console.log('isLoaded', isLoaded);
+    // eslint-disable-next-line no-console
+    console.log('isSignedIn', isSignedIn);
+  }, [isLoaded, isSignedIn]);
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-primary-foreground py-4">

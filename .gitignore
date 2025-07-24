@@ -21,6 +21,7 @@ storybook-static
 /playwright/.cache/
 /tests/chrome-user-data
 /tests/auth.json
+/playwright/.clerk
 
 # next.js
 /.next
@@ -55,3 +56,4 @@ local
 
 # Sentry Config File
 .env.sentry-build-plugin
+tests/e2e/3.Handlebar-Template.check.e2e.ts

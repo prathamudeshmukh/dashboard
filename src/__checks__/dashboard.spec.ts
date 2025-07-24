@@ -1,3 +1,4 @@
+import { clerk, clerkSetup } from '@clerk/testing/playwright';
 import { expect, test } from '@playwright/test';
 
 const email = process.env.E2E_CLERK_USER_USERNAME;
@@ -5,12 +6,20 @@ const password = process.env.E2E_CLERK_USER_PASSWORD;
 // eslint-disable-next-line no-console
 console.log({ email, password });
 
-test('Login and verify dashboard loads with templates table and actions', async ({ page, baseURL }) => {
-  await page.goto(`${baseURL}/sign-in`);
-  await page.getByPlaceholder('Enter your email address').fill(email as string);
-  await page.getByRole('button', { name: 'Continue' }).click();
-  await page.getByPlaceholder('Enter your password').fill(password as string);
-  await page.getByRole('button', { name: 'Continue' }).click();
+test('global setup', async ({}) => {
+  await clerkSetup();
+});
+
+test('Login and verify dashboard loads with templates table and actions', async ({ page }) => {
+  await page.goto('/');
+  await clerk.signIn({
+    page,
+    signInParams: {
+      strategy: 'password',
+      identifier: process.env.E2E_CLERK_USER_USERNAME!,
+      password: process.env.E2E_CLERK_USER_PASSWORD!,
+    },
+  });
 
   // Dashboard assertions
   await expect(page.getByRole('button', { name: 'Create Template' })).toBeVisible();

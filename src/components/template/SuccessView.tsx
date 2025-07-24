@@ -94,14 +94,14 @@ export default function SuccessView() {
 
   return (
     <div className="space-y-6">
-      <Card className="border-green-100 bg-green-50">
+      <Card data-testid="success-card" className="border-green-100 bg-green-50">
         <CardContent className="pt-6">
           <div className="flex flex-col items-center text-center">
             <div className="mb-4 rounded-full bg-green-100 p-3">
               <Check className="size-8 text-green-600" />
             </div>
-            <h2 className="mb-2 text-4xl font-bold text-green-800">Template Created Successfully!</h2>
-            <p className="max-w-md text-base text-green-700">
+            <h2 data-testid="success-title" className="mb-2 text-4xl font-bold text-green-800">Template Created Successfully!</h2>
+            <p data-testid="success-message" className="max-w-md text-base text-green-700">
               Your template "
               {successData?.templateName}
               " has been created and is ready to use.
@@ -110,13 +110,13 @@ export default function SuccessView() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card data-testid="template-id-card">
         <CardHeader>
           <CardTitle>Your Template ID</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="mb-4 flex items-center justify-between rounded-md bg-muted p-3">
-            <code className="font-mono text-base">{successData?.templateId}</code>
+            <code data-testid="template-id" className="font-mono text-base">{successData?.templateId}</code>
             <Button
               variant="ghost"
               size="sm"
@@ -205,10 +205,10 @@ export default function SuccessView() {
       </Card>
 
       <div className="flex flex-col gap-4 sm:flex-row">
-        <Button variant="outline" onClick={handleCreateAnother} className="flex-1 rounded-full text-lg font-medium">
+        <Button data-testid="create-another-btn" variant="outline" onClick={handleCreateAnother} className="flex-1 rounded-full text-lg font-medium">
           Create Another Template
         </Button>
-        <Button onClick={handleViewDashboard} className="flex-1 rounded-full text-lg font-medium">
+        <Button data-testid="dashboard-btn" onClick={handleViewDashboard} className="flex-1 rounded-full text-lg font-medium">
           Go to Dashboard
           <ChevronRight className="ml-2 size-4" />
         </Button>
