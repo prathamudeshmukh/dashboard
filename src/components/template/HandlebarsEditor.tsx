@@ -214,7 +214,7 @@ export default function HandlebarsEditor() {
             {/* Left section (Editors) */}
             <div className="flex w-3/5 flex-col border-r border-gray-300">
               {/* Template Editor (top half) */}
-              <div className="h-1/2">
+              <div className="h-1/2" data-testid="code-editor">
                 <TemplateEditor
                   code={handlebarsCode}
                   onChange={setHandlebarsCode}
@@ -224,7 +224,7 @@ export default function HandlebarsEditor() {
               </div>
 
               {/* JSON Editor (bottom half) */}
-              <div className="h-1/2">
+              <div className="h-1/2" data-testid="json-editor">
                 <JsonEditor
                   json={handlebarsJson}
                   onChange={setHandlebarsJson}
@@ -235,7 +235,7 @@ export default function HandlebarsEditor() {
             </div>
 
             {/* Right section (Preview) */}
-            <div className="h-[770px] w-2/4">
+            <div className="h-[770px] w-2/4" data-testid="preview-panel">
               <PreviewPanel
                 preview={handlebarsPreview}
                 isLoading={isHandlebarsLoading}

@@ -11,7 +11,7 @@ export default function TemplateDetailsStep() {
     <div className="grid gap-6">
       <div className="grid gap-2">
         <Label className="text-base font-normal">Name</Label>
-        <Input className="text-base font-normal" value={templateName} onChange={e => setTemplateName(e.target.value)} />
+        <Input data-testid="template-name-input" className="text-base font-normal" value={templateName} onChange={e => setTemplateName(e.target.value)} />
       </div>
 
       <div className="grid gap-2">
