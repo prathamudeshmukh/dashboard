@@ -12,6 +12,11 @@ export type StepContent = {
   id: string;
   title: string;
   intro: string;
+  media: {
+    alt: string;
+    type: 'image' | 'video';
+    src: string;
+  };
   sections?: StepSection[];
   points?: StepPoint[];
   closing?: string;
