@@ -145,14 +145,6 @@ export default function HTMLBuilder() {
     }
   };
 
-  const confirmAndSave = async () => {
-    if (pendingSaveType) {
-      await handleSave(pendingSaveType);
-      setPendingSaveType(null);
-      setShowJsonDialog(false);
-    }
-  };
-
   const handleSaveRequest = async (type: UpdateTypeEnum) => {
     const extracted = extractJsonFromHtml(htmlContent);
     const hasVars = Object.keys(extracted).length > 0;
@@ -171,6 +163,14 @@ export default function HTMLBuilder() {
     }
 
     await handleSave(type); // proceed without dialog
+  };
+
+  const confirmAndSave = async () => {
+    if (pendingSaveType) {
+      await handleSave(pendingSaveType);
+      setPendingSaveType(null);
+      setShowJsonDialog(false);
+    }
   };
 
   return (
@@ -259,7 +259,6 @@ export default function HTMLBuilder() {
         defaultJson={jsonPreview}
         isOpen={showJsonDialog}
         onClose={() => setShowJsonDialog(false)}
-        disableConfirm={saveStatus === SaveStatusEnum.SAVING}
       />
     </div>
   );
