@@ -15,10 +15,9 @@ type SampleJsonSchemaDialogProps = {
   onClose: () => void;
   defaultJson?: string | undefined;
   onConfirm: () => void;
-  disableConfirm?: boolean;
 };
 
-export default function SampleJsonSchemaDialog({ isOpen, onClose, defaultJson, onConfirm, disableConfirm }: SampleJsonSchemaDialogProps) {
+export default function SampleJsonSchemaDialog({ isOpen, onClose, defaultJson, onConfirm }: SampleJsonSchemaDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-lg rounded-2xl shadow-lg">
@@ -45,7 +44,7 @@ export default function SampleJsonSchemaDialog({ isOpen, onClose, defaultJson, o
         </div>
 
         <div className="mt-4 flex justify-end">
-          <Button onClick={onConfirm} disabled={disableConfirm}>Got it</Button>
+          <Button onClick={onConfirm}>Got it</Button>
         </div>
       </DialogContent>
     </Dialog>
