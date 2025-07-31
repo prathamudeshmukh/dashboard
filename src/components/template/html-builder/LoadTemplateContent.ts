@@ -43,7 +43,7 @@ export async function loadTemplateContent({
       setCreationMethod(response.data.creationMethod as CreationMethodEnum);
       setTemplateName(response.data.templateName as string);
       setTemplateDescription(response.data.description as string);
-      setHtmlTemplateJson(response.data.templateSampleData as string);
+      setHtmlTemplateJson(JSON.stringify(response.data.templateSampleData));
       if (content) {
         editor.setComponents(content);
       }
