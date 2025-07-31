@@ -10,13 +10,13 @@ import { TemplateType } from '@/types/Template';
 
 export default function TemplateReviewStep() {
   const [compiledHtml, setCompiledHtml] = useState<string>('');
-  const { creationMethod, templateName, templateDescription, htmlContent, htmlStyle, handlebarsCode, handlebarsJson, activeTab } = useTemplateStore();
+  const { creationMethod, templateName, templateDescription, htmlContent, htmlStyle, htmlTemplateJson, handlebarsCode, handlebarsTemplateJson, activeTab } = useTemplateStore();
 
   useEffect(() => {
     const generate = async () => {
       try {
-        if (handlebarsCode && handlebarsJson && activeTab === EditorTypeEnum.HANDLEBARS) {
-          const parsedJson = JSON.parse(handlebarsJson);
+        if (handlebarsCode && handlebarsTemplateJson && activeTab === EditorTypeEnum.HANDLEBARS) {
+          const parsedJson = JSON.parse(handlebarsTemplateJson);
           const result = await contentGenerator({
             templateType: TemplateType.HANDLBARS_TEMPLATE,
             templateContent: handlebarsCode,
@@ -38,7 +38,7 @@ export default function TemplateReviewStep() {
     };
 
     generate();
-  }, [handlebarsCode, handlebarsJson, htmlContent, htmlStyle]);
+  }, [handlebarsCode, handlebarsTemplateJson, htmlContent, htmlStyle]);
 
   return (
     <div className="flex h-[80vh] flex-col gap-6 lg:flex-row">
@@ -67,13 +67,13 @@ export default function TemplateReviewStep() {
           </CardContent>
         </Card>
 
-        {(handlebarsJson && handlebarsCode && activeTab === EditorTypeEnum.HANDLEBARS) && (
+        {(handlebarsTemplateJson || htmlTemplateJson) && (
           <Card className="max-h-[40vh] overflow-auto">
             <CardHeader>
-              <CardTitle className="text-2xl font-medium">Handlebars JSON</CardTitle>
+              <CardTitle className="text-2xl font-medium">Template Sample Data</CardTitle>
             </CardHeader>
             <CardContent>
-              <pre className="whitespace-pre-wrap text-base font-normal">{handlebarsJson}</pre>
+              <pre className="whitespace-pre-wrap text-base font-normal">{activeTab === EditorTypeEnum.HANDLEBARS ? handlebarsTemplateJson : htmlTemplateJson}</pre>
             </CardContent>
           </Card>
         )}

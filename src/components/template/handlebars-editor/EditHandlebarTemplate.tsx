@@ -17,12 +17,12 @@ const EditHandlebarTemplate = () => {
     templateName,
     templateDescription,
     handlebarsCode,
-    handlebarsJson,
+    handlebarsTemplateJson,
     creationMethod,
     setTemplateName,
     setTemplateDescription,
     setHandlebarsCode,
-    setHandlebarsJson,
+    setHandlebarsTemplateJson,
     setCreationMethod,
     resetTemplate,
   } = useTemplateStore();
@@ -75,7 +75,7 @@ const EditHandlebarTemplate = () => {
           case 'TEMPLATE_UPDATE':
             if (data) {
               setHandlebarsCode(data.handlebarsCode);
-              setHandlebarsJson(data.handlebarsJson);
+              setHandlebarsTemplateJson(data.handlebarsTemplateJson);
               setTemplateName(data.templateName);
               setTemplateDescription(data.templateDescription);
               setCreationMethod(data.creationMethod);
@@ -107,7 +107,7 @@ const EditHandlebarTemplate = () => {
         email: user?.emailAddresses[0]?.emailAddress,
         templateName,
         templateContent: handlebarsCode,
-        templateSampleData: handlebarsJson,
+        templateSampleData: handlebarsTemplateJson,
         templateType: TemplateType.HANDLBARS_TEMPLATE,
         creationMethod,
       };
