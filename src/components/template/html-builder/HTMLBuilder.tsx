@@ -158,11 +158,11 @@ export default function HTMLBuilder() {
     const hasVars = Object.keys(extracted).length > 0;
 
     if (hasVars) {
-      const updatedJson = syncJsonStructure(htmlTemplateJson, extracted);
+      const updatedJson = syncJsonStructure(JSON.parse(htmlTemplateJson), extracted);
       const hasChanges = JSON.stringify(htmlTemplateJson) !== JSON.stringify(updatedJson);
 
       if (hasChanges) {
-        setHtmlTemplateJson(updatedJson);
+        setHtmlTemplateJson(JSON.stringify(updatedJson));
         setJsonPreview(JSON.stringify(updatedJson, null, 2));
         setPendingSaveType(type);
         setShowJsonDialog(true);
