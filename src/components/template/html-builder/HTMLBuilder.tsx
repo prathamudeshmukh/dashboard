@@ -14,19 +14,26 @@ import { v4 as uuidv4 } from 'uuid';
 import { Button } from '@/components/ui/button';
 import { PublishTemplateToProd, UpsertTemplate } from '@/libs/actions/templates';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
+import { extractJsonFromHtml } from '@/service/extractJsonFromHtml';
+import { syncJsonStructure } from '@/service/syncJsonStructure';
 import { SaveStatusEnum, UpdateTypeEnum } from '@/types/Enum';
 import { TemplateType } from '@/types/Template';
 import { foregroundColor, primaryColor } from '@/utils/tailwindColor';
 
+import { VariableInfoMessage } from '../steps/TemplateEditorStep';
 import { loadTemplateContent } from './LoadTemplateContent';
+import SampleJsonSchemaDialog from './SampleJsonSchemaDialog';
 
 export default function HTMLBuilder() {
   const { user } = useUser();
   const [editor, setEditor] = useState<Editor>();
-  const { templateName, templateDescription, htmlContent, htmlStyle, creationMethod, setTemplateName, setTemplateDescription, resetTemplate, setCreationMethod, setHtmlContent, setHtmlStyle } = useTemplateStore();
+  const { templateName, templateDescription, htmlContent, htmlStyle, creationMethod, htmlTemplateJson, setTemplateName, setTemplateDescription, resetTemplate, setCreationMethod, setHtmlContent, setHtmlStyle, setHtmlTemplateJson } = useTemplateStore();
   const searchParams = useSearchParams();
   const templateId = searchParams.get('templateId');
   const [saveStatus, setSaveStatus] = useState<SaveStatusEnum>(SaveStatusEnum.IDLE);
+  const [showJsonDialog, setShowJsonDialog] = useState(false);
+  const [pendingSaveType, setPendingSaveType] = useState<UpdateTypeEnum | null>(null);
+  const [jsonPreview, setJsonPreview] = useState('');
   const router = useRouter();
 
   const containerRef = useRef(null);
@@ -44,6 +51,7 @@ export default function HTMLBuilder() {
       setCreationMethod,
       setTemplateName,
       setTemplateDescription,
+      setHtmlTemplateJson,
     });
   }, [editor, templateId]);
 
@@ -103,6 +111,7 @@ export default function HTMLBuilder() {
         templateName,
         templateContent: htmlContent,
         templateStyle: htmlStyle,
+        templateSampleData: htmlTemplateJson,
         templateType: TemplateType.HTML_BUILDER,
         creationMethod,
       };
@@ -136,6 +145,34 @@ export default function HTMLBuilder() {
     }
   };
 
+  const confirmAndSave = async () => {
+    if (pendingSaveType) {
+      await handleSave(pendingSaveType);
+      setPendingSaveType(null);
+      setShowJsonDialog(false);
+    }
+  };
+
+  const handleSaveRequest = async (type: UpdateTypeEnum) => {
+    const extracted = extractJsonFromHtml(htmlContent);
+    const hasVars = Object.keys(extracted).length > 0;
+
+    if (hasVars) {
+      const updatedJson = syncJsonStructure(htmlTemplateJson, extracted);
+      const hasChanges = JSON.stringify(htmlTemplateJson) !== JSON.stringify(updatedJson);
+
+      if (hasChanges) {
+        setHtmlTemplateJson(updatedJson);
+        setJsonPreview(JSON.stringify(updatedJson, null, 2));
+        setPendingSaveType(type);
+        setShowJsonDialog(true);
+        return;
+      }
+    }
+
+    await handleSave(type); // proceed without dialog
+  };
+
   return (
     <div className="flex w-full flex-col space-y-4">
       {templateId && (
@@ -145,6 +182,9 @@ export default function HTMLBuilder() {
           <span className="text-primary">{templateName}</span>
         </h2>
       )}
+      <div className="bg-amber-50/50 p-4">
+        <VariableInfoMessage />
+      </div>
       <div className="m-0 w-full rounded-md border p-0">
         <div className="gjs-editor-cont w-full">
           {/* GrapesJS StudioEditor container */}
@@ -198,7 +238,7 @@ export default function HTMLBuilder() {
         <div className="flex justify-end gap-2">
           <Button
             className="rounded-full text-lg"
-            onClick={() => handleSave(UpdateTypeEnum.UPDATE)}
+            onClick={() => handleSaveRequest(UpdateTypeEnum.UPDATE)}
             disabled={saveStatus === SaveStatusEnum.SAVING}
           >
             {saveStatus === SaveStatusEnum.SAVING ? 'Updating...' : 'Update'}
@@ -206,13 +246,21 @@ export default function HTMLBuilder() {
 
           <Button
             className="rounded-full text-lg"
-            onClick={() => handleSave(UpdateTypeEnum.UPDATE_PUBLISH)}
+            onClick={() => handleSaveRequest(UpdateTypeEnum.UPDATE_PUBLISH)}
             disabled={saveStatus === SaveStatusEnum.SAVING}
           >
             {saveStatus === SaveStatusEnum.SAVING ? 'Updating & Publishing...' : 'Update & Publish'}
           </Button>
         </div>
       )}
+
+      <SampleJsonSchemaDialog
+        onConfirm={confirmAndSave}
+        defaultJson={jsonPreview}
+        isOpen={showJsonDialog}
+        onClose={() => setShowJsonDialog(false)}
+        disableConfirm={saveStatus === SaveStatusEnum.SAVING}
+      />
     </div>
   );
 }

@@ -8,11 +8,13 @@ import { toast } from 'sonner';
 
 import { PublishTemplateToProd, UpsertTemplate } from '@/libs/actions/templates';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
+import { extractJsonFromHtml } from '@/service/extractJsonFromHtml';
 import { CreationMethodEnum, EditorTypeEnum, SaveStatusEnum } from '@/types/Enum';
 import { TemplateType } from '@/types/Template';
 
 import { Wizard } from '../Wizard';
 import { WizardNavigation } from '../WizardNavigation';
+import SampleJsonSchemaDialog from './html-builder/SampleJsonSchemaDialog';
 import TemplateCreationMethodSelector from './steps/TemplateCreationMethodSelector';
 import TemplateDetailsStep from './steps/TemplateDetailsStep';
 import TemplateEditorStep from './steps/TemplateEditorStep';
@@ -24,9 +26,33 @@ export default function CreateTemplateWizard() {
   const router = useRouter();
   const [saveStatus, setSaveStatus] = useState<SaveStatusEnum>(SaveStatusEnum.IDLE);
   const [currentStep, setCurrentStep] = useState(0);
-  const { creationMethod, selectedTemplate, templateName, templateDescription, htmlContent, htmlStyle, handlebarsCode, activeTab, handlebarsJson, setSuccessData } = useTemplateStore();
-  const handleNext = () => setCurrentStep(prev => prev + 1);
+  const { creationMethod, selectedTemplate, templateName, templateDescription, htmlContent, htmlStyle, handlebarsCode, handlebarsTemplateJson, activeTab, htmlTemplateJson, setSuccessData, setHtmlTemplateJson } = useTemplateStore();
+  const [showJsonDialog, setShowJsonDialog] = useState(false);
+
+  const handleNext = () => {
+    const isGoingToReview = currentStep === 3;
+    const isVisualEditor = activeTab === EditorTypeEnum.VISUAL;
+
+    if (isGoingToReview && isVisualEditor) {
+      const extracted = extractJsonFromHtml(htmlContent);
+      const hasVars = Object.keys(extracted).length > 0;
+
+      if (hasVars) {
+        const json = JSON.stringify(extracted, null, 2);
+        setHtmlTemplateJson(json);
+        setShowJsonDialog(true);
+        return;
+      }
+    }
+    setCurrentStep(prev => prev + 1);
+  };
+
   const handlePrevious = () => setCurrentStep(prev => prev - 1);
+
+  const handleConfirm = () => {
+    setShowJsonDialog(false);
+    setCurrentStep(prev => prev + 1);
+  };
 
   const steps = [
     { id: 'method', title: 'Choose Method' },
@@ -92,7 +118,7 @@ export default function CreateTemplateWizard() {
         email: user?.emailAddresses[0]?.emailAddress,
         templateName,
         templateContent: activeTab === EditorTypeEnum.VISUAL ? htmlContent : handlebarsCode,
-        templateSampleData: activeTab === EditorTypeEnum.HANDLEBARS ? handlebarsJson : '{}',
+        templateSampleData: activeTab === EditorTypeEnum.HANDLEBARS ? handlebarsTemplateJson : htmlTemplateJson,
         templateStyle: activeTab === EditorTypeEnum.VISUAL ? htmlStyle : '',
         templateType: activeTab === EditorTypeEnum.VISUAL ? TemplateType.HTML_BUILDER : TemplateType.HANDLBARS_TEMPLATE,
         creationMethod,
@@ -143,6 +169,12 @@ export default function CreateTemplateWizard() {
           saveStatus={saveStatus}
         />
       </div>
+      <SampleJsonSchemaDialog
+        isOpen={showJsonDialog}
+        onConfirm={handleConfirm}
+        onClose={() => setShowJsonDialog(false)}
+        defaultJson={htmlTemplateJson ?? ''}
+      />
     </div>
   );
 }

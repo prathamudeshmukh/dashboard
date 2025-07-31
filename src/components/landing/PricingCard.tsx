@@ -1,8 +1,16 @@
-import { Icon } from '@iconify-icon/react/dist/iconify.mjs';
+import { Check } from 'lucide-react';
+import Link from 'next/link';
 import React from 'react';
 
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 
 export type Feature = {
   text: string;
@@ -11,10 +19,13 @@ export type Feature = {
 export type PricingPlan = {
   id: string;
   name: string;
-  price: number;
+  price: number | string;
+  icon: React.ReactNode;
   isPopular?: boolean;
   features: Feature[];
   cta: string;
+  href: string;
+  description?: string;
 };
 
 type PricingCardProps = {
@@ -22,40 +33,52 @@ type PricingCardProps = {
 };
 
 export const PricingCard: React.FC<PricingCardProps> = ({ plan }) => {
-  const { name, price, isPopular, features, cta } = plan;
+  const { name, price, icon, href, isPopular, features, cta, description } = plan;
 
   return (
-    <Card
-      className={`overflow-hidden ${isPopular
-        ? 'relative z-10 -mt-4 rounded-3xl border-0 bg-templify-lightgray'
-        : 'h-[480px] rounded-3xl border-0 bg-templify-lightgray'
-      }`}
-    >
-      <div className="p-8">
-        <h3 className="text-2xl font-semibold text-primary">{name}</h3>
-        <div className="mt-4 flex items-baseline">
-          <span className="text-6xl font-semibold text-primary">
-            Rs.
-            {price}
+    <Card className={`${isPopular ? ' relative border-2 border-primary shadow-xl' : 'flex flex-col'}`}>
+      {isPopular && (
+        <div className="absolute top-0 flex w-full -translate-y-1/2 justify-center">
+          <span className="rounded-full bg-primary px-4 py-1 text-sm font-semibold text-white">Most Popular</span>
+        </div>
+      )}
+      <CardHeader className="pb-4">
+        <div className="mb-2 flex items-center gap-3">
+          {icon}
+          <CardTitle className="text-2xl font-bold">{name}</CardTitle>
+        </div>
+        {description && (
+          <CardDescription className="ml-2 text-gray-600">{description}</CardDescription>
+        )}
+      </CardHeader>
+
+      <CardContent className="grow">
+        <div className="flex items-baseline">
+          <span className="text-5xl font-bold">
+            {typeof price === 'number' ? `$${price}` : price}
           </span>
-          <span className="ml-2 text-base font-normal text-gray-600">/Monthly</span>
+          <span className="ml-2 text-gray-600">{typeof price === 'number' ? `/month` : ''}</span>
         </div>
 
-        <div className="mt-8">
-          <h4 className="mb-4 text-xl font-semibold text-gray-700">What we cover</h4>
-          <div className="space-y-4">
-            {features.map((feature, index) => (
-              <div key={index} className="flex items-start gap-3">
-                <Icon icon="teenyicons:tick-circle-outline" width="24" height="24" />
-                <p className="text-base font-normal text-gray-600">{feature.text}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="flex items-center justify-center">
-          <Button className="mt-8 rounded-full text-xl font-normal">{cta}</Button>
-        </div>
-      </div>
+        <ul className="mt-6 space-y-4">
+          {features.map((feature, index) => (
+            <li key={index} className="flex items-start gap-3">
+              <Check className="mt-1 size-5 shrink-0 text-green-600" />
+              <p className="text-sm text-gray-700">{feature.text}</p>
+            </li>
+          ))}
+        </ul>
+      </CardContent>
+
+      <CardFooter>
+
+        <Button variant={isPopular ? 'default' : 'outline'} className={`${isPopular ? 'w-full rounded-full text-sm' : 'w-full rounded-full text-sm text-black'}`}>
+          <Link href={href}>
+            {cta}
+          </Link>
+        </Button>
+
+      </CardFooter>
     </Card>
   );
 };

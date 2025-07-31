@@ -1,6 +1,6 @@
 'use client';
 
-import { Lightbulb } from 'lucide-react';
+import { Lightbulb, Sparkles } from 'lucide-react';
 import { useLocale } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 
@@ -16,9 +16,30 @@ import HTMLBuilder from '../html-builder/HTMLBuilder';
 
 function InfoMessage({ text }: { text: string }) {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-start gap-2">
       <Lightbulb className="text-orange-300" />
       <p className="text-base font-normal text-muted-foreground">{text}</p>
+    </div>
+  );
+}
+
+export function VariableInfoMessage() {
+  return (
+    <div className="flex items-start gap-3">
+      <Sparkles className="mt-0.5 size-5 shrink-0 text-blue-500" />
+      <div>
+        <p className="text-base font-normal text-muted-foreground">Using Dynamic Data</p>
+        <p className="text-base text-muted-foreground">
+          You can add dynamic placeholders (variables) into text blocks. Use double curly braces like
+          {' '}
+          <code className="rounded bg-blue-100 px-1 py-0.5 text-blue-800">{'{{variable_name}}'}</code>
+          .
+          To use data that is grouped together, use a dot like
+          {' '}
+          <code className="rounded bg-blue-100 px-1 py-0.5 text-blue-800">{'{{customer.name}}'}</code>
+          .
+        </p>
+      </div>
     </div>
   );
 }
@@ -28,9 +49,9 @@ export default function TemplateEditorStep() {
     activeTab,
     setActiveTab,
     handlebarsCode,
-    handlebarsJson,
+    handlebarsTemplateJson,
     setHandlebarsCode,
-    setHandlebarsJson,
+    setHandlebarsTemplateJson,
   } = useTemplateStore();
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [pendingTab, setPendingTab] = useState<EditorTypeEnum | null>(null);
@@ -73,7 +94,7 @@ export default function TemplateEditorStep() {
             if (source === 'iframe') {
               sendDataToIframe({
                 handlebarsCode,
-                handlebarsJson,
+                handlebarsTemplateJson,
               });
             }
             break;
@@ -82,8 +103,8 @@ export default function TemplateEditorStep() {
             if (data.handlebarsCode) {
               setHandlebarsCode(data.handlebarsCode);
             }
-            if (data.handlebarsJson) {
-              setHandlebarsJson(data.handlebarsJson);
+            if (data.handlebarsTemplateJson) {
+              setHandlebarsTemplateJson(data.handlebarsTemplateJson);
             }
             break;
 
@@ -99,9 +120,9 @@ export default function TemplateEditorStep() {
     return () => window.removeEventListener('message', handleMessage);
   }, [
     handlebarsCode,
-    handlebarsJson,
+    handlebarsTemplateJson,
     setHandlebarsCode,
-    setHandlebarsJson,
+    setHandlebarsTemplateJson,
   ]);
 
   const handleTabChange = (tabName: string) => {

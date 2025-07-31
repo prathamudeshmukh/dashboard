@@ -12,6 +12,7 @@ export async function loadTemplateContent({
   setCreationMethod,
   setTemplateName,
   setTemplateDescription,
+  setHtmlTemplateJson,
 }: {
   editor: Editor;
   templateId: string | null;
@@ -21,6 +22,7 @@ export async function loadTemplateContent({
   setCreationMethod: (val: CreationMethodEnum) => void;
   setTemplateName: (val: string) => void;
   setTemplateDescription: (val: string) => void;
+  setHtmlTemplateJson: (val: string) => void;
 }) {
   if (!editor) {
     return;
@@ -41,7 +43,7 @@ export async function loadTemplateContent({
       setCreationMethod(response.data.creationMethod as CreationMethodEnum);
       setTemplateName(response.data.templateName as string);
       setTemplateDescription(response.data.description as string);
-
+      setHtmlTemplateJson(response.data.templateSampleData as string);
       if (content) {
         editor.setComponents(content);
       }
