@@ -37,9 +37,9 @@ export default function CreateTemplateWizard() {
       const extracted = extractJsonFromHtml(htmlContent);
       const hasVars = Object.keys(extracted).length > 0;
 
+      const json = JSON.stringify(extracted, null, 2);
+      setHtmlTemplateJson(json);
       if (hasVars) {
-        const json = JSON.stringify(extracted, null, 2);
-        setHtmlTemplateJson(json);
         setShowJsonDialog(true);
         return;
       }

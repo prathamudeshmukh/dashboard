@@ -15,7 +15,6 @@ import { Button } from '@/components/ui/button';
 import { PublishTemplateToProd, UpsertTemplate } from '@/libs/actions/templates';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 import { extractJsonFromHtml } from '@/service/extractJsonFromHtml';
-import { syncJsonStructure } from '@/service/syncJsonStructure';
 import { SaveStatusEnum, UpdateTypeEnum } from '@/types/Enum';
 import { TemplateType } from '@/types/Template';
 import { foregroundColor, primaryColor } from '@/utils/tailwindColor';
@@ -27,7 +26,7 @@ import SampleJsonSchemaDialog from './SampleJsonSchemaDialog';
 export default function HTMLBuilder() {
   const { user } = useUser();
   const [editor, setEditor] = useState<Editor>();
-  const { templateName, templateDescription, htmlContent, htmlStyle, creationMethod, htmlTemplateJson, setTemplateName, setTemplateDescription, resetTemplate, setCreationMethod, setHtmlContent, setHtmlStyle, setHtmlTemplateJson } = useTemplateStore();
+  const { templateName, templateDescription, htmlContent, htmlStyle, creationMethod, setTemplateName, setTemplateDescription, resetTemplate, setCreationMethod, setHtmlContent, setHtmlStyle, setHtmlTemplateJson } = useTemplateStore();
   const searchParams = useSearchParams();
   const templateId = searchParams.get('templateId');
   const [saveStatus, setSaveStatus] = useState<SaveStatusEnum>(SaveStatusEnum.IDLE);
@@ -97,7 +96,7 @@ export default function HTMLBuilder() {
     });
   };
 
-  const handleSave = async (type: UpdateTypeEnum) => {
+  const handleSave = async (type: UpdateTypeEnum, extractedJson: string) => {
     setSaveStatus(SaveStatusEnum.SAVING);
     if (!user) {
       setSaveStatus(SaveStatusEnum.ERROR);
@@ -111,7 +110,7 @@ export default function HTMLBuilder() {
         templateName,
         templateContent: htmlContent,
         templateStyle: htmlStyle,
-        templateSampleData: htmlTemplateJson,
+        templateSampleData: extractedJson,
         templateType: TemplateType.HTML_BUILDER,
         creationMethod,
       };
@@ -149,28 +148,19 @@ export default function HTMLBuilder() {
     const extracted = extractJsonFromHtml(htmlContent);
     const hasVars = Object.keys(extracted).length > 0;
 
+    setJsonPreview(JSON.stringify(extracted, null, 2));
+    setPendingSaveType(type);
     if (hasVars) {
-      const updatedJson = syncJsonStructure(JSON.parse(htmlTemplateJson), extracted);
-      const hasChanges = JSON.stringify(htmlTemplateJson) !== JSON.stringify(updatedJson);
-
-      if (hasChanges) {
-        setHtmlTemplateJson(JSON.stringify(updatedJson));
-        setJsonPreview(JSON.stringify(updatedJson, null, 2));
-        setPendingSaveType(type);
-        setShowJsonDialog(true);
-        return;
-      }
+      setShowJsonDialog(true);
+      return;
     }
-
-    await handleSave(type); // proceed without dialog
+    await handleSave(type, JSON.stringify(extracted));
   };
 
   const confirmAndSave = async () => {
-    if (pendingSaveType) {
-      await handleSave(pendingSaveType);
-      setPendingSaveType(null);
-      setShowJsonDialog(false);
-    }
+    await handleSave(pendingSaveType as UpdateTypeEnum, jsonPreview);
+    setPendingSaveType(null);
+    setShowJsonDialog(false);
   };
 
   return (
