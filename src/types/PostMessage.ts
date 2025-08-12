@@ -6,5 +6,5 @@ export type PostMessagePayload = {
 
 export type TemplateData = {
   handlebarsCode: string;
-  handlebarsJson: string;
+  handlebarTemplateJson: string;
 };

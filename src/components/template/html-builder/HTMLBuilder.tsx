@@ -4,6 +4,7 @@ import '@grapesjs/studio-sdk/style';
 
 import { useUser } from '@clerk/nextjs';
 import StudioEditor from '@grapesjs/studio-sdk/react';
+import { dataSourceHandlebars } from '@grapesjs/studio-sdk-plugins';
 import type { Editor } from 'grapesjs';
 import { debounce } from 'lodash';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -18,12 +19,13 @@ import { SaveStatusEnum, UpdateTypeEnum } from '@/types/Enum';
 import { TemplateType } from '@/types/Template';
 import { foregroundColor, primaryColor } from '@/utils/tailwindColor';
 
+import { exportToHandlebars } from './ExportToHandlebar';
 import { loadTemplateContent } from './LoadTemplateContent';
 
 export default function HTMLBuilder() {
   const { user } = useUser();
   const [editor, setEditor] = useState<Editor>();
-  const { templateName, templateDescription, htmlContent, htmlStyle, creationMethod, setTemplateName, setTemplateDescription, resetTemplate, setCreationMethod, setHtmlContent, setHtmlStyle } = useTemplateStore();
+  const { templateName, templateDescription, htmlContent, htmlStyle, htmlTemplateJson, creationMethod, setTemplateName, setTemplateDescription, resetTemplate, setCreationMethod, setHtmlContent, setHtmlStyle } = useTemplateStore();
   const searchParams = useSearchParams();
   const templateId = searchParams.get('templateId');
   const [saveStatus, setSaveStatus] = useState<SaveStatusEnum>(SaveStatusEnum.IDLE);
@@ -39,6 +41,7 @@ export default function HTMLBuilder() {
       editor,
       templateId,
       htmlContent,
+      htmlTemplateJson,
       setHtmlContent,
       setHtmlStyle,
       setCreationMethod,
@@ -47,14 +50,19 @@ export default function HTMLBuilder() {
     });
   }, [editor, templateId]);
 
+  // Get Handlebars format from editor
+  function getHandlebarsFromEditor(editor: Editor) {
+    return exportToHandlebars(editor);
+  }
+
   const onReady = (editor: Editor) => {
     setEditor(editor);
 
     // Save HTML content when editor changes
     const updateContent = debounce(() => {
-      const html = editor.getHtml();
+      const hbs = getHandlebarsFromEditor(editor);
       const css = editor.getCss();
-      setHtmlContent(html);
+      setHtmlContent(hbs);
       setHtmlStyle(css as string);
     }, 500); // adjust debounce timing
 
@@ -154,6 +162,10 @@ export default function HTMLBuilder() {
               options={{
                 licenseKey: process.env.NEXT_PUBLIC_GRAPE_STUDIO_KEY as string,
                 theme: 'light',
+                plugins: [dataSourceHandlebars],
+                dataSources: {
+                  blocks: true,
+                },
                 customTheme: {
                   default: {
                     colors: {
