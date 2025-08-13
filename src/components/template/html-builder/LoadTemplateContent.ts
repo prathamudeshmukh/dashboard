@@ -16,7 +16,7 @@ export async function loadTemplateContent({
 }: {
   editor: Editor;
   templateId: string | null;
-  htmlContent?: string;
+  htmlContent: string;
   htmlTemplateJson: string;
   setHtmlContent: (val: string) => void;
   setHtmlStyle: (val: string) => void;

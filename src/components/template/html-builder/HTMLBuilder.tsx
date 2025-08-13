@@ -50,17 +50,12 @@ export default function HTMLBuilder() {
     });
   }, [editor, templateId]);
 
-  // Get Handlebars format from editor
-  function getHandlebarsFromEditor(editor: Editor) {
-    return exportToHandlebars(editor);
-  }
-
   const onReady = (editor: Editor) => {
     setEditor(editor);
 
     // Save HTML content when editor changes
     const updateContent = debounce(() => {
-      const hbs = getHandlebarsFromEditor(editor);
+      const hbs = exportToHandlebars(editor);
       const css = editor.getCss();
       setHtmlContent(hbs);
       setHtmlStyle(css as string);

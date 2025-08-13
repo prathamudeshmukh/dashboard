@@ -6,7 +6,19 @@ import { inngest } from '@/inngest/client';
 import { creditTransactions, generated_templates, templateGallery, templates, users } from '@/models/Schema';
 import contentGenerator from '@/service/contentGenerator';
 import { generatePDFBuffer } from '@/service/generatePDFBuffer';
-import type { FetchTemplateResponse, FetchTemplatesRequest, GeneratedTemplates, GeneratePdfRequest, JsonObject, JsonValue, PaginatedResponse, UpdatePreviewURLParams, UpdatePreviewURLResult, UsageMetric, UsageMetricRequest } from '@/types/Template';
+import type {
+  GeneratedTemplates,
+  GeneratePdfRequest,
+  JsonObject,
+  JsonValue,
+  PaginatedResponse,
+  UpdatePreviewURLParams,
+  UpdatePreviewURLResult,
+  UsageMetric,
+  UsageMetricRequest,
+} from '@/types/Template';
+import type { FetchTemplatesRequest } from '@/types/Template/TemplateRequest';
+import type { FetchTemplateResponse } from '@/types/Template/TemplateResponse';
 
 import { db } from '../DB';
 import { FormatUsageData } from './template/FormatUsageData';
