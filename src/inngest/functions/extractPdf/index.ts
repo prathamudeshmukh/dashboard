@@ -4,10 +4,7 @@ import { convertToHTML } from './convertToHtml';
 import { fetchBlobMetadata } from './fetchBlobMetadata';
 
 export const extractPdfContent = inngest.createFunction(
-  {
-    id: 'extract-html',
-    timeouts: { finish: '60s' }, // function-level timeout
-  },
+  { id: 'extract-html' },
   { event: 'upload/extract.html' },
   async ({ event, step, logger }) => {
     process.env.LC_ALL = 'C';
