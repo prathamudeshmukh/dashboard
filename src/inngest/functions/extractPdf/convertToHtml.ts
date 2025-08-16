@@ -1,13 +1,13 @@
 import axios from 'axios';
 
-export async function convertToHTML(downloadUrl: string, pdfId: string, logger: any) {
+export async function convertToHTML(downloadUrl: string, logger: any) {
   try {
     const baseUrl = process.env.JOB_RUNNER_BASE_URL;
     const token = process.env.JOB_RUNNER_TOKEN;
     logger.info('Extracting html from pdf');
     const response = await axios.post(
-      `${baseUrl}/extract-html`,
-      { downloadUrl, pdfId },
+      `${baseUrl}/convert`,
+      { pdf_url: downloadUrl },
       {
         headers: {
           'Content-Type': 'application/json',
@@ -15,7 +15,7 @@ export async function convertToHTML(downloadUrl: string, pdfId: string, logger: 
         },
       },
     );
-    return response.data.htmlContent;
+    return response.data.html;
   } catch (error) {
     console.error('Error Fetching Extracted PDF content:', error);
     throw error;
