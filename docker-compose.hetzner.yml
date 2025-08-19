@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  # Staging Environment Worker
+  templify-worker-staging:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+      args:
+        NODE_ENV: staging
+        INNGEST_ENV: staging
+    container_name: templify-worker-staging
+    environment:
+      - NODE_ENV=staging
+      - INNGEST_ENV=staging
+      - INNGEST_EVENT_KEY=${INNGEST_EVENT_KEY_STAGING}
+      - INNGEST_SIGNING_KEY=${INNGEST_SIGNING_KEY_STAGING}
+      - INNGEST_BASE_URL=${INNGEST_BASE_URL}
+      - JOB_RUNNER_BASE_URL=${JOB_RUNNER_BASE_URL_STAGING}
+      - JOB_RUNNER_TOKEN=${JOB_RUNNER_TOKEN_STAGING}
+      - DATABASE_URL=${DATABASE_URL_STAGING}
+      - CLERK_SECRET_KEY=${CLERK_SECRET_KEY_STAGING}
+      - NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY_STAGING}
+    ports:
+      - '3001:3001'
+    restart: unless-stopped
+    networks:
+      - templify-network
+    healthcheck:
+      test: [CMD, curl, -f, 'http://localhost:3001/health']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Production Environment Worker
+  templify-worker-production:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+      args:
+        NODE_ENV: production
+        INNGEST_ENV: production
+    container_name: templify-worker-production
+    environment:
+      - NODE_ENV=production
+      - INNGEST_ENV=production
+      - INNGEST_EVENT_KEY=${INNGEST_EVENT_KEY_PRODUCTION}
+      - INNGEST_SIGNING_KEY=${INNGEST_SIGNING_KEY_PRODUCTION}
+      - INNGEST_BASE_URL=${INNGEST_BASE_URL}
+      - JOB_RUNNER_BASE_URL=${JOB_RUNNER_BASE_URL_PRODUCTION}
+      - JOB_RUNNER_TOKEN=${JOB_RUNNER_TOKEN_PRODUCTION}
+      - DATABASE_URL=${DATABASE_URL_PRODUCTION}
+      - CLERK_SECRET_KEY=${CLERK_SECRET_KEY_PRODUCTION}
+      - NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY_PRODUCTION}
+    ports:
+      - '3002:3001'
+    restart: unless-stopped
+    networks:
+      - templify-network
+    healthcheck:
+      test: [CMD, curl, -f, 'http://localhost:3001/health']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  templify-network:
+    driver: bridge
