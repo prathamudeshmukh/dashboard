@@ -179,7 +179,7 @@ jobs:
 
           echo "Extract files and install dependencies on server"
           # Extract files and install production dependencies on server
-          ssh $HETZNER_USER@$HETZNER_HOST "cd $HETZNER_PROJECT_PATH && tar -xzf worker-build.tar.gz && rm worker-build.tar.gz && npm ci --only=production"
+          ssh $HETZNER_USER@$HETZNER_HOST "cd $HETZNER_PROJECT_PATH && tar -xzf worker-build.tar.gz && rm worker-build.tar.gz"
 
           echo "Copy deployment script to server and execute"
           # Copy deployment script to server and execute
