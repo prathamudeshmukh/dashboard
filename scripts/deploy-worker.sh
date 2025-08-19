@@ -58,14 +58,7 @@ if [ ! -d "dist" ]; then
     exit 1
 fi
 
-print_status "Pre-built files found. Skipping build step..."
-
-# Install dependencies (only production)
-print_status "Installing production dependencies..."
-npm ci --only=production || {
-    print_error "Failed to install dependencies"
-    exit 1
-}
+print_status "Pre-built files found. Skipping build and install steps..."
 
 # Stop existing containers
 print_status "Stopping existing containers..."
