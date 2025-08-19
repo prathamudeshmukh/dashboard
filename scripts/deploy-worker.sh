@@ -52,24 +52,18 @@ cd "$HETZNER_PROJECT_PATH" || {
     exit 1
 }
 
-# Pull latest changes
-print_status "Pulling latest changes from git..."
-git pull origin "$GITHUB_REF_NAME" || {
-    print_error "Failed to pull latest changes"
+# Verify pre-built files exist
+if [ ! -d "dist" ]; then
+    print_error "Pre-built dist directory not found. Deployment files may be missing."
     exit 1
-}
+fi
 
-# Install dependencies
-print_status "Installing dependencies..."
+print_status "Pre-built files found. Skipping build step..."
+
+# Install dependencies (only production)
+print_status "Installing production dependencies..."
 npm ci --only=production || {
     print_error "Failed to install dependencies"
-    exit 1
-}
-
-# Build worker
-print_status "Building worker..."
-npm run worker:build || {
-    print_error "Failed to build worker"
     exit 1
 }
 
