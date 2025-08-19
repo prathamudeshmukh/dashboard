@@ -11,11 +11,8 @@ ENV PORT=$WORKER_PORT
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Copy package files first for better caching
-COPY package.json package-lock.json* ./
-
-# Install only production dependencies
-RUN npm ci --only=production
+# Copy package.json for npm run worker:start command
+COPY package.json ./
 
 # Copy pre-built files (these will be copied from CI artifacts)
 COPY dist/ ./dist/
