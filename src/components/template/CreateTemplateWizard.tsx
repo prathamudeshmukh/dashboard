@@ -24,7 +24,7 @@ export default function CreateTemplateWizard() {
   const router = useRouter();
   const [saveStatus, setSaveStatus] = useState<SaveStatusEnum>(SaveStatusEnum.IDLE);
   const [currentStep, setCurrentStep] = useState(0);
-  const { creationMethod, selectedTemplate, templateName, templateDescription, htmlContent, htmlStyle, handlebarsCode, activeTab, handlebarsJson, setSuccessData } = useTemplateStore();
+  const { creationMethod, selectedTemplate, templateName, templateDescription, htmlContent, htmlTemplateJson, htmlStyle, handlebarsCode, activeTab, handlebarTemplateJson, setSuccessData } = useTemplateStore();
   const handleNext = () => setCurrentStep(prev => prev + 1);
   const handlePrevious = () => setCurrentStep(prev => prev - 1);
 
@@ -92,7 +92,7 @@ export default function CreateTemplateWizard() {
         email: user?.emailAddresses[0]?.emailAddress,
         templateName,
         templateContent: activeTab === EditorTypeEnum.VISUAL ? htmlContent : handlebarsCode,
-        templateSampleData: activeTab === EditorTypeEnum.HANDLEBARS ? handlebarsJson : '{}',
+        templateSampleData: activeTab === EditorTypeEnum.HANDLEBARS ? handlebarTemplateJson : htmlTemplateJson,
         templateStyle: activeTab === EditorTypeEnum.VISUAL ? htmlStyle : '',
         templateType: activeTab === EditorTypeEnum.VISUAL ? TemplateType.HTML_BUILDER : TemplateType.HANDLBARS_TEMPLATE,
         creationMethod,

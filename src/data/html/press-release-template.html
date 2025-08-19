@@ -1,176 +1,188 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <style>
-    body {
-      font-family: 'Georgia', serif;
-      color: #333;
-      line-height: 1.6;
-      margin: 0;
-      padding: 20px;
-      background-color: #f9f9f9;
-    }
-    .press-release {
-      max-width: 800px;
-      margin: 0 auto;
-      background-color: #fff;
-      padding: 40px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-    .header {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    .company-logo {
-      max-width: 200px;
-      margin-bottom: 20px;
-    }
-    .release-info {
-      font-size: 14px;
-      color: #666;
-      margin-bottom: 10px;
-    }
-    .release-type {
-      font-weight: bold;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    .headline {
-      font-size: 28px;
-      font-weight: bold;
-      margin-bottom: 20px;
-      line-height: 1.3;
-    }
-    .subheadline {
-      font-size: 18px;
-      font-style: italic;
-      margin-bottom: 30px;
-      color: #555;
-    }
-    .dateline {
-      font-weight: bold;
-      margin-bottom: 20px;
-    }
-    .lead-paragraph {
-      font-size: 18px;
-      margin-bottom: 30px;
-    }
-    .body-text p {
-      margin-bottom: 20px;
-    }
-    .quote {
-      margin: 30px 0;
-      padding: 20px;
-      background-color: #f5f5f5;
-      border-left: 4px solid #333;
-    }
-    .quote-text {
-      font-style: italic;
-      margin-bottom: 10px;
-    }
-    .quote-attribution {
-      font-weight: bold;
-    }
-    .boilerplate {
-      margin-top: 40px;
-      padding-top: 20px;
-      border-top: 1px solid #ddd;
-    }
-    .boilerplate-title {
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-    .contact-info {
-      margin-top: 30px;
-      padding-top: 20px;
-      border-top: 1px solid #ddd;
-    }
-    .contact-title {
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-    .contact-details {
-      margin-bottom: 5px;
-    }
-    .footer {
-      margin-top: 30px;
-      text-align: center;
-      font-size: 12px;
-      color: #666;
-    }
-  </style>
+<style>
+body {
+  font-family: 'Georgia', serif;
+  line-height: 1.6;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+}
+.press-release {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px;
+}
+.letterhead {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.company-logo {
+  margin-bottom: 15px;
+}
+.logo-placeholder {
+  display: inline-block;
+  width: 200px;
+  height: 60px;
+  background-color: #f2f2f2;
+  line-height: 60px;
+  text-align: center;
+  color: #666;
+  font-size: 16px;
+}
+.company-name {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #1a365d;
+}
+.company-tagline {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 15px;
+}
+.release-info {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.release-label {
+  display: inline-block;
+  background-color: #1a365d;
+  color: #fff;
+  padding: 5px 15px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.release-date {
+  font-weight: bold;
+}
+.headline {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 20px 0;
+  text-align: center;
+  line-height: 1.4;
+}
+.subheadline {
+  font-size: 18px;
+  font-style: italic;
+  margin-bottom: 30px;
+  text-align: center;
+  color: #555;
+}
+.dateline {
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+.content {
+  margin-bottom: 30px;
+}
+.content p {
+  margin-bottom: 20px;
+  text-align: justify;
+}
+.quote {
+  border-left: 4px solid #1a365d;
+  padding-left: 20px;
+  margin: 30px 0;
+  font-style: italic;
+}
+.quote-text {
+  font-size: 18px;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+.quote-attribution {
+  font-weight: bold;
+}
+.boilerplate {
+  border-top: 1px solid #ddd;
+  margin-top: 30px;
+  padding-top: 20px;
+}
+.boilerplate-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.contact-info {
+  border-top: 1px solid #ddd;
+  margin-top: 30px;
+  padding-top: 20px;
+  font-size: 14px;
+}
+.contact-title {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.contact-person {
+  margin-bottom: 5px;
+}
+.contact-details {
+  margin-bottom: 5px;
+}
+</style>
 </head>
 <body>
-  <div class="press-release">
-    <div class="header">
-      <div class="release-info">
-        <span class="release-type">Press Release</span> | For Immediate Release
-      </div>
+<div class="press-release">
+  <div class="letterhead">
+    {{#if SampleJSON.Records.company.logoUrl}}
+      <img src="{{SampleJSON.Records.company.logoUrl}}" alt="{{company.name}} Logo" class="company-logo" height="60"/>
+    {{else}}
+    <div class="company-logo">
+      <div class="logo-placeholder">{{SampleJSON.Records.company.name}} LOGO</div>
     </div>
-    
-    <div class="headline">
-      Company Announces Revolutionary New Product That Will Transform the Industry
-    </div>
-    
-    <div class="subheadline">
-      Innovative technology promises to increase efficiency by 50% while reducing costs
-    </div>
-    
-    <div class="dateline">
-      SAN FRANCISCO, CA — April 23, 2025
-    </div>
-    
-    <div class="lead-paragraph">
-      <p>Today, Company Name, a leader in industry solutions, announced the launch of Product Name, a groundbreaking new solution that promises to revolutionize how businesses approach their operations. This innovative product combines cutting-edge technology with user-friendly design to deliver unprecedented value to customers.</p>
-    </div>
-    
-    <div class="body-text">
-      <p>Product Name represents a significant advancement in the industry, offering features and capabilities that were previously unavailable in the market. Developed after extensive research and customer feedback, the product addresses key pain points experienced by businesses in the sector.</p>
-      
-      <p>Key features of Product Name include:</p>
-      <ul>
-        <li>Advanced AI-powered analytics that provide real-time insights</li>
-        <li>Seamless integration with existing systems and workflows</li>
-        <li>Customizable dashboards that can be tailored to specific business needs</li>
-        <li>Enhanced security features to protect sensitive data</li>
-        <li>Cloud-based architecture that enables access from anywhere</li>
-      </ul>
-      
-      <div class="quote">
-        <div class="quote-text">"We're incredibly excited to bring Product Name to market. This represents years of development and close collaboration with our customers to create a solution that truly addresses their needs. We believe this product will set a new standard in the industry and help businesses achieve their goals more efficiently than ever before."</div>
-        <div class="quote-attribution">— John Smith, CEO of Company Name</div>
-      </div>
-      
-      <p>Early adopters of Product Name have reported significant improvements in their operations, with some seeing efficiency gains of up to 50% and cost reductions of 30%. These results highlight the transformative potential of the product for businesses of all sizes.</p>
-      
-      <div class="quote">
-        <div class="quote-text">"We've been using Product Name for the past three months, and the impact on our business has been remarkable. Our team is more productive, our costs are down, and we're able to make better decisions based on the insights provided by the platform."</div>
-        <div class="quote-attribution">— Jane Doe, CTO of Client Company</div>
-      </div>
-      
-      <p>Product Name will be available starting May 15, 2025, with pricing options designed to accommodate businesses of all sizes. The company will also offer comprehensive onboarding and support services to ensure customers can maximize the value of their investment.</p>
-      
-      <p>For more information about Product Name or to schedule a demonstration, visit www.companywebsite.com or contact the media relations team.</p>
-    </div>
-    
-    <div class="boilerplate">
-      <div class="boilerplate-title">About Company Name</div>
-      <p>Company Name is a leading provider of innovative solutions for the industry. Founded in 2010, the company has established itself as a pioneer in developing cutting-edge technologies that help businesses improve their operations and achieve their goals. With a team of experienced professionals and a commitment to excellence, Company Name serves clients across the globe, ranging from small businesses to Fortune 500 companies.</p>
-    </div>
-    
-    <div class="contact-info">
-      <div class="contact-title">Media Contact:</div>
-      <div class="contact-details">Sarah Johnson</div>
-      <div class="contact-details">Director of Communications</div>
-      <div class="contact-details">Company Name</div>
-      <div class="contact-details">Email: sarah.johnson@companyname.com</div>
-      <div class="contact-details">Phone: (555) 123-4567</div>
-    </div>
-    
-    <div class="footer">
-      <p>###</p>
-      <p>This press release contains forward-looking statements. Actual results may differ materially from those projected.</p>
-    </div>
+    {{/if}}
+    <div class="company-name">{{SampleJSON.Records.company.name}}</div>
+    <div class="company-tagline">{{SampleJSON.Records.company.tagline}}</div>
   </div>
+  
+  <div class="release-info">
+    <div class="release-label">PRESS RELEASE</div>
+    <div class="release-date">{{SampleJSON.Records.releaseInfo.date}}</div>
+    {{#if SampleJSON.Records.releaseInfo.embargo}}
+    <div class="release-embargo">EMBARGO UNTIL: {{SampleJSON.Records.releaseInfo.embargo}}</div>
+    {{/if}}
+  </div>
+  
+  <div class="headline">{{SampleJSON.Records.headline}}</div>
+  <div class="subheadline">{{SampleJSON.Records.subheadline}}</div>
+  
+  <div class="dateline">{{SampleJSON.Records.dateline}}</div>
+  
+  <div class="content">
+    {{#each SampleJSON.Records.contentParagraphs}}
+    <p>{{this}}</p>
+    {{/each}}
+    
+    {{#if quote}}
+    <div class="quote">
+      <div class="quote-text">{{SampleJSON.Records.quote.text}}</div>
+      <div class="quote-attribution">{{SampleJSON.Records.quote.attribution}}</div>
+    </div>
+    {{/if}}
+    
+    {{#each SampleJSON.Records.additionalParagraphs}}
+    <p>{{this}}</p>
+    {{/each}}
+  </div>
+  
+  <div class="boilerplate">
+    <div class="boilerplate-title">About {{SampleJSON.Records.company.name}}:</div>
+    <p>{{SampleJSON.Records.companyDescription}}</p>
+  </div>
+  
+  <div class="contact-info">
+    <div class="contact-title">Media Contact:</div>
+    <div class="contact-person">{{SampleJSON.Records.contact.name}}</div>
+    <div class="contact-details">{{SampleJSON.Records.contact.title}}, {{SampleJSON.Records.company.name}}</div>
+    <div class="contact-details">Phone: {{SampleJSON.Records.contact.phone}}</div>
+    <div class="contact-details">Email: {{SampleJSON.Records.contact.email}}</div>
+    {{#if SampleJSON.Records.contact.additionalInfo}}
+    <div class="contact-details">{{SampleJSON.Records.contact.additionalInfo}}</div>
+    {{/if}}
+  </div>
+</div>
 </body>
 </html>

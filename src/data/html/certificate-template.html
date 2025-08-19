@@ -1,146 +1,148 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <style>
-    body {
-      font-family: 'Times New Roman', Times, serif;
-      color: #333;
-      line-height: 1.5;
-      margin: 0;
-      padding: 20px;
-      background-color: #f9f9f9;
-    }
-    .certificate-container {
-      max-width: 800px;
-      margin: 0 auto;
-      border: 12px solid #f8d568;
-      padding: 20px;
-      text-align: center;
-      background-color: #fff;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    }
-    .certificate-header {
-      margin-bottom: 20px;
-    }
-    .certificate-title {
-      font-size: 36px;
-      font-weight: bold;
-      color: #333;
-      margin-bottom: 10px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-    }
-    .certificate-subtitle {
-      font-size: 18px;
-      color: #666;
-      font-style: italic;
-    }
-    .divider {
-      width: 50%;
-      height: 1px;
-      background-color: #f8d568;
-      margin: 20px auto;
-    }
-    .certificate-body {
-      margin: 30px 0;
-    }
-    .certificate-text {
-      font-size: 16px;
-      margin-bottom: 10px;
-    }
-    .recipient-name {
-      font-size: 30px;
-      font-weight: bold;
-      color: #333;
-      margin: 20px 0;
-      font-style: italic;
-    }
-    .certificate-course {
-      font-size: 22px;
-      font-weight: bold;
-      margin: 20px 0;
-    }
-    .certificate-date {
-      font-size: 16px;
-      margin: 20px 0;
-    }
-    .signature-section {
-      display: flex;
-      justify-content: space-around;
-      margin-top: 50px;
-    }
-    .signature {
-      width: 200px;
-    }
-    .signature-line {
-      width: 100%;
-      height: 1px;
-      background-color: #333;
-      margin-bottom: 5px;
-    }
-    .signature-name {
-      font-weight: bold;
-    }
-    .signature-title {
-      font-size: 14px;
-      color: #666;
-    }
-    .certificate-footer {
-      margin-top: 30px;
-      font-size: 12px;
-      color: #999;
-    }
-    .certificate-seal {
-      width: 100px;
-      height: 100px;
-      border: 2px solid #f8d568;
-      border-radius: 50%;
-      margin: 20px auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      color: #999;
-      transform: rotate(-15deg);
-    }
-  </style>
+ <style>
+  body {
+    font-family: 'Times New Roman', Times, serif;
+    color: #333;
+    line-height: 1.5;
+    margin: 0;
+    padding: 20px;
+    background-color: #f9f9f9;
+  }
+  .certificate-container {
+    max-width: 800px;
+    margin: 0 auto;
+    border: 12px solid #f8d568;
+    padding: 20px;
+    text-align: center;
+    background-color: #fff;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  }
+  .certificate-header {
+    margin-bottom: 20px;
+  }
+  .certificate-title {
+    font-size: 36px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  .certificate-subtitle {
+    font-size: 18px;
+    color: #666;
+    font-style: italic;
+  }
+  .divider {
+    width: 50%;
+    height: 1px;
+    background-color: #f8d568;
+    margin: 20px auto;
+  }
+  .certificate-body {
+    margin: 30px 0;
+  }
+  .certificate-text {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  .recipient-name {
+    font-size: 30px;
+    font-weight: bold;
+    color: #333;
+    margin: 20px 0;
+    font-style: italic;
+  }
+  .certificate-course {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 20px 0;
+  }
+  .certificate-date {
+    font-size: 16px;
+    margin: 20px 0;
+  }
+  .signature-section {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 50px;
+  }
+  .signature {
+    width: 200px;
+  }
+  .signature-line {
+    width: 100%;
+    height: 1px;
+    background-color: #333;
+    margin-bottom: 5px;
+  }
+  .signature-name {
+    font-weight: bold;
+  }
+  .signature-title {
+    font-size: 14px;
+    color: #666;
+  }
+  .certificate-footer {
+    margin-top: 30px;
+    font-size: 12px;
+    color: #999;
+  }
+  .certificate-seal {
+    width: 100px;
+    height: 100px;
+    border: 2px solid #f8d568;
+    border-radius: 50%;
+    margin: 20px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #999;
+    transform: rotate(-15deg);
+  }
+</style>
 </head>
 <body>
-  <div class="certificate-container">
-    <div class="certificate-header">
-      <div class="certificate-title">Certificate of Achievement</div>
-      <div class="certificate-subtitle">This certifies that</div>
-    </div>
-    
-    <div class="divider"></div>
-    
-    <div class="certificate-body">
-      <div class="recipient-name">John Doe</div>
-      <div class="certificate-text">has successfully completed</div>
-      <div class="certificate-course">Advanced Web Development Course</div>
-      <div class="certificate-text">with distinction and is awarded this certificate in recognition of this achievement</div>
-      <div class="certificate-date">April 2025</div>
-      
-      <div class="certificate-seal">OFFICIAL SEAL</div>
-    </div>
-    
-    <div class="signature-section">
-      <div class="signature">
-        <div class="signature-line"></div>
-        <div class="signature-name">Jane Smith</div>
-        <div class="signature-title">Instructor</div>
-      </div>
-      
-      <div class="signature">
-        <div class="signature-line"></div>
-        <div class="signature-name">Robert Johnson</div>
-        <div class="signature-title">Director</div>
-      </div>
-    </div>
-    
-    <div class="certificate-footer">
-      <p>Certificate ID: CERT-2025-0042 • Verify at example.com/verify</p>
-    </div>
+<div class="certificate-container">
+  <div class="certificate-header">
+    <div class="certificate-title">{{SampleJSON.Records.certificate.title}}</div>
+    <div class="certificate-subtitle">{{SampleJSON.Records.certificate.type}}</div>
   </div>
+  
+  <div class="divider"></div>
+  
+  <div class="certificate-body">
+    <div class="recipient-name">{{SampleJSON.Records.recipient.prefix}} {{SampleJSON.Records.recipient.fullName}}</div>
+    <div class="certificate-text">{{SampleJSON.Records.achievement.description}}</div>
+    <div class="certificate-course">{{SampleJSON.Records.achievement.programName}}</div>
+    <div class="certificate-text">{{SampleJSON.Records.achievement.additionalText}}</div>
+    <div class="certificate-date">Completed on: {{SampleJSON.Records.details.completionDate}}</div>
+    
+    {{#if SampleJSON.Records.verification.id}}
+    <div class="certificate-seal">ID: {{SampleJSON.Records.verification.id}}</div>
+    {{/if}}
+  </div>
+  
+  <div class="signature-section">
+    {{#each SampleJSON.Records.signatures}}
+    <div class="signature">
+      <div class="signature-line"></div>
+      <div class="signature-name">{{name}}</div>
+      <div class="signature-title">{{title}}</div>
+    </div>
+    {{/each}}
+  </div>
+  
+  <div class="certificate-footer">
+    <p>{{SampleJSON.Records.issuer.organization}} | {{SampleJSON.Records.footer.address}}</p>
+    <p>{{SampleJSON.Records.footer.contact}}</p>
+    {{#if SampleJSON.Records.verification.verificationText}}
+      <p>{{SampleJSON.Records.verification.verificationText}}</p>
+    {{/if}}
+  </div>
+</div>
 </body>
 </html>

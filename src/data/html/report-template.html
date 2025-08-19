@@ -115,107 +115,67 @@
 <body>
   <div class="report-container">
     <div class="report-header">
-      <div class="report-title">QUARTERLY REPORT</div>
-      <div class="report-subtitle">Q1 2025 Business Performance</div>
-      <div class="report-date">April 15, 2025</div>
+      <div class="report-title">{{SampleJSON.Records.header.title}}</div>
+      <div class="report-subtitle">{{SampleJSON.Records.header.subtitle}}</div>
+      <div class="report-date">{{SampleJSON.Records.header.date}}</div>
     </div>
     
     <div class="divider"></div>
     
     <div class="section">
-      <div class="section-title">Executive Summary</div>
-      <p>This report provides an overview of our company's performance during the first quarter of 2025. Overall, we have seen significant growth in revenue and customer acquisition, while maintaining operational costs within budget.</p>
-      <p>Key highlights include a 15% increase in revenue compared to the previous quarter, successful launch of two new product features, and expansion into two new market segments.</p>
+      <div class="section-title">{{SampleJSON.Records.executiveSummary.title}}</div>
+      {{#each SampleJSON.Records.executiveSummary.paragraphs}}
+        <p>{{this}}</p>
+      {{/each}}
     </div>
     
     <div class="section">
-      <div class="section-title">Financial Overview</div>
+      <div class="section-title">{{SampleJSON.Records.financialOverview.title}}</div>
       <div class="chart-container">
+        {{#each SampleJSON.Records.financialOverview.chartData}}
         <div class="chart-bar">
-          <div class="bar" style="height: 40%;"></div>
-          <div class="bar-label">Q1 2024</div>
+          <div class="bar" style="height: {{percentage}};"></div>
+          <div class="bar-label">{{label}}</div>
         </div>
-        <div class="chart-bar">
-          <div class="bar" style="height: 55%;"></div>
-          <div class="bar-label">Q2 2024</div>
-        </div>
-        <div class="chart-bar">
-          <div class="bar" style="height: 65%;"></div>
-          <div class="bar-label">Q3 2024</div>
-        </div>
-        <div class="chart-bar">
-          <div class="bar" style="height: 75%;"></div>
-          <div class="bar-label">Q4 2024</div>
-        </div>
-        <div class="chart-bar">
-          <div class="bar" style="height: 90%;"></div>
-          <div class="bar-label">Q1 2025</div>
-        </div>
+        {{/each}}
       </div>
       
       <table class="data-table">
         <thead>
           <tr>
-            <th>Metric</th>
-            <th>Q4 2024</th>
-            <th>Q1 2025</th>
-            <th>Change</th>
+            {{#each SampleJSON.Records.financialOverview.tableHeaders}}
+              <th>{{this}}</th>
+            {{/each}}
           </tr>
         </thead>
         <tbody>
+          {{#each SampleJSON.Records.financialOverview.tableRows}}
           <tr>
-            <td>Revenue</td>
-            <td>$1,245,000</td>
-            <td>$1,432,000</td>
-            <td>+15%</td>
+            <td>{{metric}}</td>
+            <td>{{previousValue}}</td>
+            <td>{{currentValue}}</td>
+            <td>{{change}}</td>
           </tr>
-          <tr>
-            <td>Operating Expenses</td>
-            <td>$876,000</td>
-            <td>$912,000</td>
-            <td>+4%</td>
-          </tr>
-          <tr>
-            <td>Net Profit</td>
-            <td>$369,000</td>
-            <td>$520,000</td>
-            <td>+41%</td>
-          </tr>
-          <tr>
-            <td>Customer Acquisition</td>
-            <td>1,250</td>
-            <td>1,780</td>
-            <td>+42%</td>
-          </tr>
+          {{/each}}
         </tbody>
       </table>
     </div>
     
     <div class="section">
-      <div class="section-title">Recommendations</div>
+      <div class="section-title">{{SampleJSON.Records.recommendations.title}}</div>
       <div class="recommendations">
+        {{#each SampleJSON.Records.recommendations.items}}
         <div class="recommendation-item">
           <span class="bullet"></span>
-          <div>Increase marketing budget by 20% to capitalize on current growth momentum</div>
+          <div>{{this}}</div>
         </div>
-        <div class="recommendation-item">
-          <span class="bullet"></span>
-          <div>Expand product line with three new offerings targeted at enterprise customers</div>
-        </div>
-        <div class="recommendation-item">
-          <span class="bullet"></span>
-          <div>Invest in additional customer success personnel to maintain high satisfaction rates</div>
-        </div>
-        <div class="recommendation-item">
-          <span class="bullet"></span>
-          <div>Explore partnership opportunities with complementary service providers</div>
-        </div>
+        {{/each}}
       </div>
     </div>
     
     <div class="report-footer">
-      <p>Prepared by: Strategic Planning Team</p>
-      <p>For internal use only. Confidential.</p>
+      <p>{{SampleJSON.Records.footer.preparedBy}}</p>
+      <p>{{SampleJSON.Records.footer.confidentiality}}</p>
     </div>
   </div>
 </body>
