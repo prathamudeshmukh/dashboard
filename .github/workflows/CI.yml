@@ -181,6 +181,26 @@ jobs:
           # Extract files and install production dependencies on server
           ssh $HETZNER_USER@$HETZNER_HOST "cd $HETZNER_PROJECT_PATH && tar -xzf worker-build.tar.gz && rm worker-build.tar.gz"
 
+          echo "Create environment file on server"
+          # Create environment file with necessary variables
+          if [ "$DEPLOY_ENV" = "staging" ]; then
+            ssh $HETZNER_USER@$HETZNER_HOST "echo 'INNGEST_EVENT_KEY=${{ secrets.INNGEST_EVENT_KEY_STAGING }}' > $HETZNER_PROJECT_PATH/.env"
+            ssh $HETZNER_USER@$HETZNER_HOST "echo 'INNGEST_SIGNING_KEY=${{ secrets.INNGEST_SIGNING_KEY_STAGING }}' >> $HETZNER_PROJECT_PATH/.env"
+            ssh $HETZNER_USER@$HETZNER_HOST "echo 'INNGEST_BASE_URL=https://api.inngest.com' >> $HETZNER_PROJECT_PATH/.env"
+            ssh $HETZNER_USER@$HETZNER_HOST "echo 'JOB_RUNNER_TOKEN=${{ secrets.JOB_RUNNER_TOKEN_STAGING }}' >> $HETZNER_PROJECT_PATH/.env"
+            ssh $HETZNER_USER@$HETZNER_HOST "echo 'DATABASE_URL=${{ secrets.PREVIEW_DATABASE_URL }}' >> $HETZNER_PROJECT_PATH/.env"
+            ssh $HETZNER_USER@$HETZNER_HOST "echo 'CLERK_SECRET_KEY=${{ secrets.PREVIEW_CLERK_SECRET_KEY }}' >> $HETZNER_PROJECT_PATH/.env"
+            ssh $HETZNER_USER@$HETZNER_HOST "echo 'NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${{ secrets.PREVIEW_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}' >> $HETZNER_PROJECT_PATH/.env"
+          else
+            ssh $HETZNER_USER@$HETZNER_HOST "echo 'INNGEST_EVENT_KEY=${{ secrets.INNGEST_EVENT_KEY_PRODUCTION }}' > $HETZNER_PROJECT_PATH/.env"
+            ssh $HETZNER_USER@$HETZNER_HOST "echo 'INNGEST_SIGNING_KEY=${{ secrets.INNGEST_SIGNING_KEY_PRODUCTION }}' >> $HETZNER_PROJECT_PATH/.env"
+            ssh $HETZNER_USER@$HETZNER_HOST "echo 'INNGEST_BASE_URL=https://api.inngest.com' >> $HETZNER_PROJECT_PATH/.env"
+            ssh $HETZNER_USER@$HETZNER_HOST "echo 'JOB_RUNNER_TOKEN=${{ secrets.JOB_RUNNER_TOKEN_PRODUCTION }}' >> $HETZNER_PROJECT_PATH/.env"
+            ssh $HETZNER_USER@$HETZNER_HOST "echo 'DATABASE_URL=${{ secrets.PRODUCTION_DATABASE_URL }}' >> $HETZNER_PROJECT_PATH/.env"
+            ssh $HETZNER_USER@$HETZNER_HOST "echo 'CLERK_SECRET_KEY=${{ secrets.PRODUCTION_CLERK_SECRET_KEY }}' >> $HETZNER_PROJECT_PATH/.env"
+            ssh $HETZNER_USER@$HETZNER_HOST "echo 'NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${{ secrets.PRODUCTION_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}' >> $HETZNER_PROJECT_PATH/.env"
+          fi
+
           echo "Copy deployment script to server and execute"
           # Copy deployment script to server and execute
           scp scripts/deploy-worker.sh $HETZNER_USER@$HETZNER_HOST:/tmp/
