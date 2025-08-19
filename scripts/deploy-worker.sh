@@ -34,10 +34,10 @@ fi
 # Set port based on environment
 if [ "$DEPLOY_ENV" = "staging" ]; then
     WORKER_PORT=3002
-    CONTAINER_NAME="inngest-worker-staging"
+    CONTAINER_NAME="templify-worker-staging"
 elif [ "$DEPLOY_ENV" = "production" ]; then
     WORKER_PORT=3003
-    CONTAINER_NAME="inngest-worker-production"
+    CONTAINER_NAME="templify-worker-production"
 else
     print_error "Invalid DEPLOY_ENV: $DEPLOY_ENV. Must be 'staging' or 'production'"
     exit 1
@@ -69,13 +69,13 @@ docker-compose -f docker-compose.hetzner.yml down || {
 # Start new containers based on environment
 if [ "$DEPLOY_ENV" = "staging" ]; then
     print_status "Starting staging worker container..."
-    docker-compose -f docker-compose.hetzner.yml up -d inngest-worker-staging || {
+    docker-compose -f docker-compose.hetzner.yml up -d templify-worker-staging || {
         print_error "Failed to start staging worker container"
         exit 1
     }
 elif [ "$DEPLOY_ENV" = "production" ]; then
     print_status "Starting production worker container..."
-    docker-compose -f docker-compose.hetzner.yml up -d inngest-worker-production || {
+    docker-compose -f docker-compose.hetzner.yml up -d templify-worker-production || {
         print_error "Failed to start production worker container"
         exit 1
     }

@@ -11,15 +11,13 @@ services:
         INNGEST_ENV: staging
         WORKER_PORT: 3002
     container_name: templify-worker-staging
+    env_file:
+      - .env
     environment:
       - NODE_ENV=staging
       - INNGEST_ENV=staging
       - PORT=3002
-      - INNGEST_EVENT_KEY=${INNGEST_EVENT_KEY_STAGING}
-      - INNGEST_SIGNING_KEY=${INNGEST_SIGNING_KEY_STAGING}
-      - INNGEST_BASE_URL=${INNGEST_BASE_URL}
-      - JOB_RUNNER_BASE_URL=http://localhost:3001
-      - DATABASE_URL=${PREVIEW_DATABASE_URL}
+      - JOB_RUNNER_BASE_URL=http://localhost:4001
     ports:
       - '3002:3002'
     restart: unless-stopped
@@ -41,15 +39,13 @@ services:
         INNGEST_ENV: production
         WORKER_PORT: 3003
     container_name: templify-worker-production
+    env_file:
+      - .env
     environment:
       - NODE_ENV=production
       - INNGEST_ENV=production
       - PORT=3003
-      - INNGEST_EVENT_KEY=${INNGEST_EVENT_KEY_PRODUCTION}
-      - INNGEST_SIGNING_KEY=${INNGEST_SIGNING_KEY_PRODUCTION}
-      - INNGEST_BASE_URL=${INNGEST_BASE_URL}
-      - JOB_RUNNER_BASE_URL=http://localhost:3000
-      - DATABASE_URL=${PRODUCTION_DATABASE_URL}
+      - JOB_RUNNER_BASE_URL=http://localhost:4002
     ports:
       - '3003:3003'
     restart: unless-stopped
