@@ -144,7 +144,7 @@ jobs:
           echo "WORKER_PORT=3002" >> $GITHUB_ENV
           echo "HETZNER_HOST=${{ secrets.HETZNER_HOST }}" >> $GITHUB_ENV
           echo "HETZNER_USER=${{ secrets.HETZNER_USER }}" >> $GITHUB_ENV
-          echo "HETZNER_PROJECT_PATH=/home/${{ secrets.HETZNER_USER }}/job-runner-staging" >> $GITHUB_ENV
+          echo "HETZNER_PROJECT_PATH=/home/${{ secrets.HETZNER_USER }}/inngest-worker-staging" >> $GITHUB_ENV
 
       - name: Set environment variables for production
         if: github.ref == 'refs/heads/main'
@@ -153,7 +153,7 @@ jobs:
           echo "WORKER_PORT=3003" >> $GITHUB_ENV
           echo "HETZNER_HOST=${{ secrets.HETZNER_HOST }}" >> $GITHUB_ENV
           echo "HETZNER_USER=${{ secrets.HETZNER_USER }}" >> $GITHUB_ENV
-          echo "HETZNER_PROJECT_PATH=/home/${{ secrets.HETZNER_USER }}/job-runner-production" >> $GITHUB_ENV
+          echo "HETZNER_PROJECT_PATH=/home/${{ secrets.HETZNER_USER }}/inngest-worker-production" >> $GITHUB_ENV
 
       - name: Setup SSH
         run: |
