@@ -3,13 +3,12 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
-    "allowTopLevelAwait": true,
     "declaration": true,
     "declarationMap": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
-    "module": "ES2022",
+    "module": "Node16",
     "moduleResolution": "node16",
     "noEmit": false,
     "outDir": "./dist",
@@ -23,7 +22,6 @@
   "include": [
     "src/worker.ts",
     "src/inngest/**/*",
-    "src/libs/**/*",
     "src/types/**/*",
     "src/service/**/*"
   ],
@@ -31,6 +29,7 @@
     "node_modules",
     ".next",
     "dist",
+    "src/libs/**/*",
     "**/*.test.ts",
     "**/*.spec.ts",
     "src/app/**/*",
