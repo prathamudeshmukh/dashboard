@@ -67,6 +67,7 @@ jobs:
             src/inngest/
             src/types/
             src/service/
+            node_modules/
             package.json
             package-lock.json
             tsconfig.json
