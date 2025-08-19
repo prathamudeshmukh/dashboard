@@ -66,6 +66,20 @@ docker-compose -f docker-compose.hetzner.yml down || {
     print_warning "Failed to stop existing containers (might not exist)"
 }
 
+# Build new images to ensure latest package.json is used
+print_status "Building new Docker images..."
+if [ "$DEPLOY_ENV" = "staging" ]; then
+    docker-compose -f docker-compose.hetzner.yml build templify-worker-staging || {
+        print_error "Failed to build staging worker image"
+        exit 1
+    }
+elif [ "$DEPLOY_ENV" = "production" ]; then
+    docker-compose -f docker-compose.hetzner.yml build templify-worker-production || {
+        print_error "Failed to build production worker image"
+        exit 1
+    }
+fi
+
 # Start new containers based on environment
 if [ "$DEPLOY_ENV" = "staging" ]; then
     print_status "Starting staging worker container..."

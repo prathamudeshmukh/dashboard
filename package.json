@@ -29,15 +29,7 @@
     "worker:staging": "NODE_ENV=staging INNGEST_ENV=staging tsx src/worker.ts",
     "worker:prod": "NODE_ENV=production INNGEST_ENV=production tsx src/worker.ts",
     "worker:start": "NODE_ENV=production node dist/worker.js",
-    "worker:build": "tsc --project tsconfig.worker.json",
-    "worker:build:dev": "tsc --project tsconfig.worker.json --watch",
-    "worker:docker:staging": "docker-compose -f docker-compose.hetzner.yml up inngest-worker-staging",
-    "worker:docker:prod": "docker-compose -f docker-compose.hetzner.yml up inngest-worker-production",
-    "worker:docker:all": "docker-compose -f docker-compose.hetzner.yml up",
-    "worker:docker:down": "docker-compose -f docker-compose.hetzner.yml down",
-    "worker:docker:logs": "docker-compose -f docker-compose.hetzner.yml logs -f",
-    "worker:docker:logs:staging": "docker-compose -f docker-compose.hetzner.yml logs -f inngest-worker-staging",
-    "worker:docker:logs:prod": "docker-compose -f docker-compose.hetzner.yml logs -f inngest-worker-production"
+    "worker:build": "tsc --project tsconfig.worker.json"
   },
   "dependencies": {
     "@clerk/localizations": "^3.2.1",
