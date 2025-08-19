@@ -169,9 +169,11 @@ jobs:
           # Create project directory on server
           ssh $HETZNER_USER@$HETZNER_HOST "mkdir -p $HETZNER_PROJECT_PATH"
 
+          echo "Copy pre-built worker files to server"
           # Copy pre-built worker files to server
           scp -r ./worker-build/* $HETZNER_USER@$HETZNER_HOST:$HETZNER_PROJECT_PATH/
 
+          echo "Copy deployment script to server and execute"
           # Copy deployment script to server and execute
           scp scripts/deploy-worker.sh $HETZNER_USER@$HETZNER_HOST:/tmp/
           ssh $HETZNER_USER@$HETZNER_HOST "chmod +x /tmp/deploy-worker.sh && DEPLOY_ENV=$DEPLOY_ENV HETZNER_PROJECT_PATH=$HETZNER_PROJECT_PATH GITHUB_REF_NAME=${{ github.ref_name }} /tmp/deploy-worker.sh"
