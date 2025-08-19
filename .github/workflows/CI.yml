@@ -144,7 +144,7 @@ jobs:
           echo "WORKER_PORT=3002" >> $GITHUB_ENV
           echo "HETZNER_HOST=${{ secrets.HETZNER_HOST }}" >> $GITHUB_ENV
           echo "HETZNER_USER=${{ secrets.HETZNER_USER }}" >> $GITHUB_ENV
-          echo "HETZNER_PROJECT_PATH=/home/${{ secrets.HETZNER_USER }}/job-runner-staging" >> $GITHUB_ENV
+          echo "HETZNER_PROJECT_PATH=/home/${{ secrets.HETZNER_USER }}/inngest-worker-staging" >> $GITHUB_ENV
 
       - name: Set environment variables for production
         if: github.ref == 'refs/heads/main'
@@ -153,7 +153,7 @@ jobs:
           echo "WORKER_PORT=3003" >> $GITHUB_ENV
           echo "HETZNER_HOST=${{ secrets.HETZNER_HOST }}" >> $GITHUB_ENV
           echo "HETZNER_USER=${{ secrets.HETZNER_USER }}" >> $GITHUB_ENV
-          echo "HETZNER_PROJECT_PATH=/home/${{ secrets.HETZNER_USER }}/job-runner-production" >> $GITHUB_ENV
+          echo "HETZNER_PROJECT_PATH=/home/${{ secrets.HETZNER_USER }}/inngest-worker-production" >> $GITHUB_ENV
 
       - name: Setup SSH
         run: |
@@ -169,9 +169,11 @@ jobs:
           # Create project directory on server
           ssh $HETZNER_USER@$HETZNER_HOST "mkdir -p $HETZNER_PROJECT_PATH"
 
+          echo "Copy pre-built worker files to server"
           # Copy pre-built worker files to server
           scp -r ./worker-build/* $HETZNER_USER@$HETZNER_HOST:$HETZNER_PROJECT_PATH/
 
+          echo "Copy deployment script to server and execute"
           # Copy deployment script to server and execute
           scp scripts/deploy-worker.sh $HETZNER_USER@$HETZNER_HOST:/tmp/
           ssh $HETZNER_USER@$HETZNER_HOST "chmod +x /tmp/deploy-worker.sh && DEPLOY_ENV=$DEPLOY_ENV HETZNER_PROJECT_PATH=$HETZNER_PROJECT_PATH GITHUB_REF_NAME=${{ github.ref_name }} /tmp/deploy-worker.sh"
