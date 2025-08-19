@@ -64,8 +64,8 @@ jobs:
           name: worker-build
           path: |
             dist/
+            node_modules/
             src/inngest/
-            src/libs/
             src/types/
             src/service/
             package.json
