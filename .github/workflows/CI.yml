@@ -64,11 +64,11 @@ jobs:
           name: worker-build
           path: |
             dist/
-            node_modules/
             src/inngest/
             src/types/
             src/service/
             package.json
+            package-lock.json
             tsconfig.json
             docker-compose.hetzner.yml
             Dockerfile.worker
@@ -169,9 +169,17 @@ jobs:
           # Create project directory on server
           ssh $HETZNER_USER@$HETZNER_HOST "mkdir -p $HETZNER_PROJECT_PATH"
 
+          echo "Creating compressed archive of worker files"
+          # Create a compressed tar archive for faster transfer
+          tar -czf worker-build.tar.gz -C ./worker-build .
+
           echo "Copy pre-built worker files to server"
-          # Copy pre-built worker files to server
-          scp -r ./worker-build/* $HETZNER_USER@$HETZNER_HOST:$HETZNER_PROJECT_PATH/
+          # Copy compressed archive to server
+          scp worker-build.tar.gz $HETZNER_USER@$HETZNER_HOST:$HETZNER_PROJECT_PATH/
+
+          echo "Extract files and install dependencies on server"
+          # Extract files and install production dependencies on server
+          ssh $HETZNER_USER@$HETZNER_HOST "cd $HETZNER_PROJECT_PATH && tar -xzf worker-build.tar.gz && rm worker-build.tar.gz && npm ci --only=production"
 
           echo "Copy deployment script to server and execute"
           # Copy deployment script to server and execute
