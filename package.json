@@ -28,7 +28,7 @@
     "worker:dev": "NODE_ENV=development tsx src/worker.ts",
     "worker:staging": "NODE_ENV=staging INNGEST_ENV=staging tsx src/worker.ts",
     "worker:prod": "NODE_ENV=production INNGEST_ENV=production tsx src/worker.ts",
-    "worker:start": "NODE_ENV=production tsx src/worker.ts",
+    "worker:start": "NODE_ENV=production node dist/worker.js",
     "worker:build": "tsc --project tsconfig.worker.json",
     "worker:build:dev": "tsc --project tsconfig.worker.json --watch",
     "worker:docker:staging": "docker-compose -f docker-compose.hetzner.yml up inngest-worker-staging",
