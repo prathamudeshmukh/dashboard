@@ -5,9 +5,7 @@ WORKDIR /app
 
 # Set default port, will be overridden by environment
 ARG WORKER_PORT=3001
-ARG BUILD_DATE=unknown
 ENV PORT=$WORKER_PORT
-ENV BUILD_DATE=$BUILD_DATE
 
 # Create non-root user
 RUN addgroup --system --gid 1001 nodejs
