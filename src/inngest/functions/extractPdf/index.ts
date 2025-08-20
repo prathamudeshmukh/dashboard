@@ -7,7 +7,6 @@ export const extractPdfContent = inngest.createFunction(
   { event: 'upload/extract.html' },
   async ({ event, step, logger }) => {
     process.env.LC_ALL = 'C';
-
     const pdfId = event.data.pdfId;
 
     try {
@@ -15,7 +14,7 @@ export const extractPdfContent = inngest.createFunction(
         fetchBlobMetadata(pdfId));
 
       const htmlContent = await step.run('convert-to-html', () =>
-        convertToHTML(downloadUrl, pdfId, logger));
+        convertToHTML(downloadUrl, logger));
 
       logger.info('PDF Extraction Completed Succesfully');
 
