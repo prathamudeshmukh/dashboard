@@ -32,7 +32,8 @@ const server = createServer(async (req, res) => {
 
   // Handle Inngest requests
   if (req.url?.startsWith('/api/inngest')) {
-    const nextReq = new NextRequest(req.url, {
+    const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+    const nextReq = new NextRequest(url, {
       method: req.method,
       headers: req.headers as any,
       body: req.method !== 'GET' && req.method !== 'HEAD' ? (req as any) : undefined,
