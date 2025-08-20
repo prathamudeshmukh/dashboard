@@ -5,9 +5,9 @@ import { createServer } from 'node:http';
 import { serve } from 'inngest/next';
 import { NextRequest } from 'next/server';
 
-import { inngest } from '@/inngest/client';
-import { extractPdfContent } from '@/inngest/functions/extractPdf';
-import { generateTemplatePreviewJob } from '@/inngest/functions/generatePreview';
+import { inngest } from './inngest/client';
+import { extractPdfContent } from './inngest/functions/extractPdf';
+import { generateTemplatePreviewJob } from './inngest/functions/generatePreview';
 
 // Create the Inngest handler
 const handler = serve({
