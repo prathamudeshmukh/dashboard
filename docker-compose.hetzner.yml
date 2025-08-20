@@ -10,6 +10,7 @@ services:
         NODE_ENV: staging
         INNGEST_ENV: staging
         WORKER_PORT: 3002
+        BUILD_DATE: ${BUILD_DATE:-$(date +%Y%m%d_%H%M%S)}
     container_name: templify-worker-staging
     env_file:
       - .env
@@ -38,6 +39,7 @@ services:
         NODE_ENV: production
         INNGEST_ENV: production
         WORKER_PORT: 3003
+        BUILD_DATE: ${BUILD_DATE:-$(date +%Y%m%d_%H%M%S)}
     container_name: templify-worker-production
     env_file:
       - .env
