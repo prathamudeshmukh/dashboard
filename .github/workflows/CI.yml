@@ -60,7 +60,7 @@ jobs:
       - name: Create worker build zip
         if: github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main')
         run: |
-          zip -r worker-build.zip dist/ src/inngest/ src/types/ src/service/ src/libs/DB.ts src/libs/actions/templates.ts src/libs/actions/user.ts src/libs/actions/template/ node_modules/ package.json package-lock.json tsconfig.json docker-compose.hetzner.yml Dockerfile.worker
+          zip -r worker-build.zip dist/ src/inngest/ src/types/ src/service/ node_modules/ package.json package-lock.json tsconfig.json docker-compose.hetzner.yml
 
       # Upload worker build as zip artifact
       - name: Upload worker build zip
@@ -169,6 +169,11 @@ jobs:
           echo "Copy worker build zip to server"
           # Copy zip file to server
           scp ./worker-build/worker-build.zip $HETZNER_USER@$HETZNER_HOST:$HETZNER_PROJECT_PATH/
+
+          echo "Copy Docker files to server"
+          # Copy Dockerfile.worker and docker-compose.hetzner.yml to server
+          scp Dockerfile.worker $HETZNER_USER@$HETZNER_HOST:$HETZNER_PROJECT_PATH/
+          scp docker-compose.hetzner.yml $HETZNER_USER@$HETZNER_HOST:$HETZNER_PROJECT_PATH/
 
           echo "Create environment file on server"
           # Create environment file with necessary variables
