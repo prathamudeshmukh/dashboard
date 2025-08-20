@@ -2,11 +2,10 @@
 
 import { eq, sql } from 'drizzle-orm';
 
-import { apikeys, creditTransactions, users } from '@/models/Schema';
-import { decrypt } from '@/service/crypto';
-import { generateApiKeys } from '@/service/generateApiKeys';
-import type { ClientConfigs, User } from '@/types/User';
-
+import { apikeys, creditTransactions, users } from '../../models/Schema';
+import { decrypt } from '../../service/crypto';
+import { generateApiKeys } from '../../service/generateApiKeys';
+import type { ClientConfigs, User } from '../../types/User';
 import { db } from '../DB';
 
 export async function saveUser(user: User) {

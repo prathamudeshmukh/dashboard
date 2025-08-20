@@ -1,4 +1,4 @@
-import { updateTemplatePreviewURL } from '@/libs/actions/templates';
+import { updateTemplatePreviewURL } from '../../../libs/actions/templates';
 
 export async function updatePreviewURL(templateId: string, previewURL: string, logger: any) {
   logger.info('Updating database with preview URL', { templateId });
