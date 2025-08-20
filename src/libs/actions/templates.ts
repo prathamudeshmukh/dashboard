@@ -2,10 +2,10 @@
 
 import { and, desc, eq, gte, ilike, lte, sql } from 'drizzle-orm';
 
-import { inngest } from '@/inngest/client';
-import { creditTransactions, generated_templates, templateGallery, templates, users } from '@/models/Schema';
-import contentGenerator from '@/service/contentGenerator';
-import { generatePDFBuffer } from '@/service/generatePDFBuffer';
+import { inngest } from '../../inngest/client';
+import { creditTransactions, generated_templates, templateGallery, templates, users } from '../../models/Schema';
+import contentGenerator from '../../service/contentGenerator';
+import { generatePDFBuffer } from '../../service/generatePDFBuffer';
 import type {
   GeneratedTemplates,
   GeneratePdfRequest,
@@ -16,10 +16,9 @@ import type {
   UpdatePreviewURLResult,
   UsageMetric,
   UsageMetricRequest,
-} from '@/types/Template';
-import type { FetchTemplatesRequest } from '@/types/Template/TemplateRequest';
-import type { FetchTemplateResponse } from '@/types/Template/TemplateResponse';
-
+} from '../../types/Template';
+import type { FetchTemplatesRequest } from '../../types/Template/TemplateRequest';
+import type { FetchTemplateResponse } from '../../types/Template/TemplateResponse';
 import { db } from '../DB';
 import { FormatUsageData } from './template/FormatUsageData';
 import { groupUsageByPeriod } from './template/GroupUsageByPeriod';

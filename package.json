@@ -29,7 +29,8 @@
     "worker:staging": "NODE_ENV=staging INNGEST_ENV=staging tsx src/worker.ts",
     "worker:prod": "NODE_ENV=production INNGEST_ENV=production tsx src/worker.ts",
     "worker:start": "NODE_ENV=production node dist/worker.js",
-    "worker:build": "tsc --project tsconfig.worker.json"
+    "worker:build": "tsc --project tsconfig.worker.json",
+    "worker:test:local": "npm run worker:build && NODE_ENV=development INNGEST_ENV=development node dist/worker.js"
   },
   "dependencies": {
     "@clerk/localizations": "^3.2.1",

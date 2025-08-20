@@ -1,5 +1,4 @@
-import { inngest } from '@/inngest/client';
-
+import { inngest } from '../../client';
 import { convertToHTML } from './convertToHtml';
 import { fetchBlobMetadata } from './fetchBlobMetadata';
 
