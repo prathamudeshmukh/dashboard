@@ -16,6 +16,7 @@ COPY package.json ./
 
 # Copy pre-built files (these will be copied from CI artifacts)
 COPY dist/ ./dist/
+COPY node_modules/ ./node_modules/
 COPY src/inngest/ ./src/inngest/
 COPY src/types/ ./src/types/
 COPY src/service/ ./src/service/
