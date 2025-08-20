@@ -60,7 +60,7 @@ jobs:
       - name: Create worker build zip
         if: github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main')
         run: |
-          zip -r worker-build.zip dist/ src/inngest/ src/types/ src/service/ node_modules/ package.json package-lock.json tsconfig.json docker-compose.hetzner.yml Dockerfile.worker
+          zip -r worker-build.zip dist/ src/inngest/ src/types/ src/service/ src/libs/DB.ts src/libs/actions/templates.ts src/libs/actions/user.ts src/libs/actions/template/ node_modules/ package.json package-lock.json tsconfig.json docker-compose.hetzner.yml Dockerfile.worker
 
       # Upload worker build as zip artifact
       - name: Upload worker build zip
