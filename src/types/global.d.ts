@@ -1,4 +1,4 @@
-import type { OrgPermission, OrgRole } from '@/types/Auth';
+import type { OrgPermission, OrgRole } from './Auth';
 
 // Use type safe message keys with `next-intl`
 type Messages = typeof import('../locales/en.json');
