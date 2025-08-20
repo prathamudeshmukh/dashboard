@@ -60,6 +60,30 @@ const server = createServer(async (req, res) => {
     return;
   }
 
+  // Inngest registration endpoint
+  if (req.url === '/api/inngest/register') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({
+      functions: [
+        {
+          id: 'extract-html',
+          name: 'Extract PDF Content',
+          triggers: [{ event: 'upload/extract.html' }],
+        },
+        {
+          id: 'generate-preview',
+          name: 'Generate Template Preview',
+          triggers: [{ event: 'template/generate.preview' }],
+        },
+      ],
+      client: {
+        id: 'templify-app',
+        env: process.env.INNGEST_ENV || 'development',
+      },
+    }));
+    return;
+  }
+
   // Default response
   res.writeHead(404, { 'Content-Type': 'application/json' });
   res.end(JSON.stringify({ error: 'Not Found' }));
@@ -70,8 +94,12 @@ const environment = process.env.INNGEST_ENV || 'development';
 
 server.listen(port, () => {
   console.log(`🚀 Templify Worker running on port ${port} in ${environment} environment`);
-  console.log(`�� Health check: http://localhost:${port}/health`);
+  console.log(`🏥 Health check: http://localhost:${port}/health`);
   console.log(`🔗 Inngest endpoint: http://localhost:${port}/api/inngest`);
+  console.log(`📝 Inngest registration: http://localhost:${port}/api/inngest/register`);
+  console.log(`🔑 Inngest Event Key: ${process.env.INNGEST_EVENT_KEY ? 'Set' : 'Not set'}`);
+  console.log(`🔐 Inngest Signing Key: ${process.env.INNGEST_SIGNING_KEY ? 'Set' : 'Not set'}`);
+  console.log(`🌐 Inngest Base URL: ${process.env.INNGEST_BASE_URL || 'Not set'}`);
 });
 
 // Graceful shutdown
