@@ -2,8 +2,8 @@ import axios from 'axios';
 
 export async function convertToHTML(downloadUrl: string, pdfId: string, logger: any) {
   try {
-    const baseUrl = process.env.JOB_RUNNER_BASE_URL;
-    const token = process.env.JOB_RUNNER_TOKEN;
+    const baseUrl = process.env.PDF_TO_HTML_BASE_URL;
+    const token = process.env.PDF_TO_HTML_TOKEN;
     logger.info('Extracting html from pdf');
     const response = await axios.post(
       `${baseUrl}/extract-html`,
