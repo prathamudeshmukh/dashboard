@@ -11,16 +11,9 @@ ENV PORT=$WORKER_PORT
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Copy package.json for npm run worker:start command
-COPY package.json ./
-
-# Copy pre-built files (these will be copied from CI artifacts)
-COPY dist/ ./dist/
-COPY node_modules/ ./node_modules/
-COPY src/inngest/ ./src/inngest/
-COPY src/types/ ./src/types/
-COPY src/service/ ./src/service/
-COPY tsconfig.json ./
+# Copy worker build zip and extract it
+COPY worker-build.zip ./
+RUN unzip -o worker-build.zip && rm worker-build.zip
 
 # Switch to non-root user
 USER nextjs
