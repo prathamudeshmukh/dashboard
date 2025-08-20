@@ -32,12 +32,23 @@ const server = createServer(async (req, res) => {
 
   // Handle Inngest requests
   if (req.url?.startsWith('/api/inngest')) {
+    // Log the incoming request for debugging
+    console.log(`📥 Inngest request: ${req.method} ${req.url}`);
+    console.log(`📋 Headers:`, Object.keys(req.headers));
+
     const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
-    const nextReq = new NextRequest(url, {
+    const requestOptions: any = {
       method: req.method,
       headers: req.headers as any,
-      body: req.method !== 'GET' && req.method !== 'HEAD' ? (req as any) : undefined,
-    });
+    };
+
+    // Add body and duplex option for non-GET/HEAD requests
+    if (req.method !== 'GET' && req.method !== 'HEAD') {
+      requestOptions.body = req as any;
+      requestOptions.duplex = 'half';
+    }
+
+    const nextReq = new NextRequest(url, requestOptions);
 
     try {
       const response = await handler(nextReq, { req, res });
@@ -51,6 +62,7 @@ const server = createServer(async (req, res) => {
 
       // Copy response body
       const body = await response.text();
+      console.log(`📤 Inngest response: ${response.status} ${response.statusText}`);
       res.end(body);
     } catch (error) {
       console.error('Worker error:', error);
