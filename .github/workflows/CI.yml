@@ -56,23 +56,19 @@ jobs:
         if: github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main')
         run: npm run worker:build
 
-      # Upload worker build as artifact
-      - name: Upload worker build
+      # Create worker build zip
+      - name: Create worker build zip
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main')
+        run: |
+          zip -r worker-build.zip dist/ src/inngest/ src/types/ src/service/ node_modules/ package.json package-lock.json tsconfig.json docker-compose.hetzner.yml Dockerfile.worker
+
+      # Upload worker build as zip artifact
+      - name: Upload worker build zip
         if: github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main')
         uses: actions/upload-artifact@v4
         with:
           name: worker-build
-          path: |
-            dist/
-            src/inngest/
-            src/types/
-            src/service/
-            node_modules/
-            package.json
-            package-lock.json
-            tsconfig.json
-            docker-compose.hetzner.yml
-            Dockerfile.worker
+          path: worker-build.zip
           retention-days: 1
 
   test:
@@ -170,17 +166,9 @@ jobs:
           # Create project directory on server
           ssh $HETZNER_USER@$HETZNER_HOST "mkdir -p $HETZNER_PROJECT_PATH"
 
-          echo "Creating compressed archive of worker files"
-          # Create a compressed tar archive for faster transfer
-          tar -czf worker-build.tar.gz -C ./worker-build .
-
-          echo "Copy pre-built worker files to server"
-          # Copy compressed archive to server
-          scp worker-build.tar.gz $HETZNER_USER@$HETZNER_HOST:$HETZNER_PROJECT_PATH/
-
-          echo "Extract files and install dependencies on server"
-          # Extract files and install production dependencies on server
-          ssh $HETZNER_USER@$HETZNER_HOST "cd $HETZNER_PROJECT_PATH && tar -xzf worker-build.tar.gz && rm worker-build.tar.gz"
+          echo "Copy worker build zip to server"
+          # Copy zip file to server
+          scp ./worker-build/worker-build.zip $HETZNER_USER@$HETZNER_HOST:$HETZNER_PROJECT_PATH/
 
           echo "Create environment file on server"
           # Create environment file with necessary variables

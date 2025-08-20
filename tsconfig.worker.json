@@ -3,6 +3,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
     "declaration": true,
     "declarationMap": true,
     "esModuleInterop": true,
@@ -12,6 +13,9 @@
     "moduleResolution": "node16",
     "noEmit": false,
     "outDir": "./dist",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     "resolveJsonModule": true,
     "rootDir": "./src",
     "skipLibCheck": true,
