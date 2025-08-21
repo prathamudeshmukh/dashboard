@@ -13,6 +13,7 @@ env:
   GRAPE_STUDIO_KEY: ${{ secrets.PRODUCTION_GRAPE_STUDIO_KEY }}
   DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
   INNGEST_BASE_URL: https://api.inngest.com
+  HETZNER_HOST: ${{ secrets.HETZNER_HOST }}
 
 jobs:
   build:
@@ -42,12 +43,36 @@ jobs:
           echo "GRAPE_STUDIO_KEY=${{ secrets.PREVIEW_GRAPE_STUDIO_KEY }}" >> $GITHUB_ENV
           echo "DATABASE_URL=${{ secrets.PREVIEW_DATABASE_URL }}" >> $GITHUB_ENV
           echo "INNGEST_BASE_URL= https://api.inngest.com" >> $GITHUB_ENV
+          echo "HETZNER_HOST=${{ secrets.HETZNER_HOST }}" >> $GITHUB_ENV
       # TODO: Run database migration only on develop or main branch
       - name: Run databse migrations
         if: github.event_name == 'push'
         run: npm run db:migrate && npm run db:seed
 
       - run: npm run build
+
+      # Build worker for deployment
+      - name: Build worker
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main')
+        run: npm run worker:build
+
+      # Upload worker build as artifact
+      - name: Upload worker build
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main')
+        uses: actions/upload-artifact@v4
+        with:
+          name: worker-build
+          path: |
+            dist/
+            src/inngest/
+            src/libs/
+            src/types/
+            src/service/
+            package.json
+            tsconfig.json
+            docker-compose.hetzner.yml
+            Dockerfile.worker
+          retention-days: 1
 
   test:
     strategy:
@@ -96,21 +121,69 @@ jobs:
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4
 
-      - name: Install Playwright (used for Storybook and E2E tests)
-        run: npx playwright install --with-deps
+  deploy-worker:
+    name: Deploy Worker to Hetzner
+    runs-on: ubuntu-latest
+    needs: [build, test]
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main')
 
-      - name: Run storybook tests
-        run: npm run test-storybook:ci
+    steps:
+      - uses: actions/checkout@v3
 
-      # - name: Run E2E tests
-      #   run: npx percy exec -- npm run test:e2e
-      #   env:
-      #     PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
-      #     CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
+      # Download the pre-built worker artifacts
+      - name: Download worker build
+        uses: actions/download-artifact@v4
+        with:
+          name: worker-build
+          path: ./worker-build
 
-      # - uses: actions/upload-artifact@v4
-      #   if: always()
-      #   with:
-      #     name: test-results
-      #     path: test-results/
-      #     retention-days: 7
+      - name: Set environment variables for staging
+        if: github.ref == 'refs/heads/develop'
+        run: |
+          echo "DEPLOY_ENV=staging" >> $GITHUB_ENV
+          echo "WORKER_PORT=3002" >> $GITHUB_ENV
+          echo "HETZNER_HOST=${{ secrets.HETZNER_HOST }}" >> $GITHUB_ENV
+          echo "HETZNER_USER=${{ secrets.HETZNER_USER }}" >> $GITHUB_ENV
+          echo "HETZNER_PROJECT_PATH=/home/${{ secrets.HETZNER_USER }}/job-runner-staging" >> $GITHUB_ENV
+
+      - name: Set environment variables for production
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "DEPLOY_ENV=production" >> $GITHUB_ENV
+          echo "WORKER_PORT=3003" >> $GITHUB_ENV
+          echo "HETZNER_HOST=${{ secrets.HETZNER_HOST }}" >> $GITHUB_ENV
+          echo "HETZNER_USER=${{ secrets.HETZNER_USER }}" >> $GITHUB_ENV
+          echo "HETZNER_PROJECT_PATH=/home/${{ secrets.HETZNER_USER }}/job-runner-production" >> $GITHUB_ENV
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.HETZNER_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.HETZNER_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to Hetzner
+        run: |
+          echo "Deploying worker to $DEPLOY_ENV environment..."
+
+          # Create project directory on server
+          ssh $HETZNER_USER@$HETZNER_HOST "mkdir -p $HETZNER_PROJECT_PATH"
+
+          # Copy pre-built worker files to server
+          scp -r ./worker-build/* $HETZNER_USER@$HETZNER_HOST:$HETZNER_PROJECT_PATH/
+
+          # Copy deployment script to server and execute
+          scp scripts/deploy-worker.sh $HETZNER_USER@$HETZNER_HOST:/tmp/
+          ssh $HETZNER_USER@$HETZNER_HOST "chmod +x /tmp/deploy-worker.sh && DEPLOY_ENV=$DEPLOY_ENV HETZNER_PROJECT_PATH=$HETZNER_PROJECT_PATH GITHUB_REF_NAME=${{ github.ref_name }} /tmp/deploy-worker.sh"
+
+      - name: Verify deployment
+        run: |
+          echo "Verifying worker deployment..."
+          sleep 30
+
+          if curl -f "http://$HETZNER_HOST:$WORKER_PORT/health"; then
+            echo "✅ Worker is healthy and responding!"
+          else
+            echo "❌ Worker health check failed!"
+            exit 1
+          fi

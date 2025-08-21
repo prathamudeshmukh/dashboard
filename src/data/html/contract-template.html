@@ -85,75 +85,51 @@
 <body>
   <div class="contract-container">
     <div class="contract-header">
-      <div class="contract-title">Service Agreement</div>
-      <div class="contract-subtitle">This agreement is entered into as of the date of signing</div>
+      <div class="contract-title">{{SampleJSON.Records.header.title}}</div>
+      <div class="contract-subtitle">{{SampleJSON.Records.header.subtitle}}</div>
     </div>
     
     <div class="divider"></div>
     
     <div class="contract-parties">
-      <div class="section-title">1. Parties</div>
+      <div class="section-title">{{SampleJSON.Records.parties.sectionTitle}}</div>
       <div class="party">
-        <div class="party-title">Service Provider:</div>
-        <div>Acme Professional Services, Inc., a corporation organized under the laws of the State of Delaware, with its principal place of business at 123 Business Avenue, San Francisco, CA 94107 ("Provider").</div>
+        <div class="party-title">{{SampleJSON.Records.parties.provider.title}}:</div>
+        <div>{{SampleJSON.Records.parties.provider.description}}</div>
       </div>
       <div class="party">
-        <div class="party-title">Client:</div>
-        <div>Client Corporation, a corporation organized under the laws of the State of New York, with its principal place of business at 456 Client Street, New York, NY 10001 ("Client").</div>
+        <div class="party-title">{{SampleJSON.Records.parties.client.title}}:</div>
+        <div>{{SampleJSON.Records.parties.client.description}}</div>
       </div>
     </div>
     
+    {{#each SampleJSON.Records.sections}}
     <div class="section">
-      <div class="section-title">2. Services</div>
+      <div class="section-title">{{title}}</div>
       <div class="section-content">
-        <p>Provider agrees to perform the following services for Client (the "Services"):</p>
-        <p>Professional consulting services related to business strategy, operations optimization, and digital transformation, as further detailed in Exhibit A attached hereto and incorporated by reference.</p>
-        <p>Provider shall perform the Services in a professional and workmanlike manner, consistent with industry standards.</p>
+        {{#each paragraphs}}
+        <p>{{this}}</p>
+        {{/each}}
       </div>
     </div>
-    
-    <div class="section">
-      <div class="section-title">3. Payment Terms</div>
-      <div class="section-content">
-        <p>In consideration for the Services, Client shall pay Provider according to the following terms:</p>
-        <p>a) Service Fee: $10,000 per month for the duration of this Agreement.</p>
-        <p>b) Payment Schedule: Client shall pay Provider on the first business day of each month.</p>
-        <p>c) Expenses: Client shall reimburse Provider for reasonable expenses incurred in connection with the Services, provided that such expenses are approved in advance by Client.</p>
-        <p>d) Late Payments: Any payment not received within fifteen (15) days of the due date shall accrue interest at a rate of 1.5% per month.</p>
-      </div>
-    </div>
-    
-    <div class="section">
-      <div class="section-title">4. Term and Termination</div>
-      <div class="section-content">
-        <p>This Agreement shall commence on the date of signing and shall continue for a period of twelve (12) months, unless earlier terminated as provided herein.</p>
-        <p>Either party may terminate this Agreement upon thirty (30) days' written notice to the other party.</p>
-      </div>
-    </div>
-    
-    <div class="section">
-      <div class="section-title">5. Confidentiality</div>
-      <div class="section-content">
-        <p>Each party acknowledges that it may receive confidential information from the other party. Each party agrees to maintain the confidentiality of such information and not to disclose it to any third party without the prior written consent of the disclosing party.</p>
-      </div>
-    </div>
+    {{/each}}
     
     <div class="signature-section">
       <div class="signature-block">
-        <div class="party-title">Client:</div>
+        <div class="party-title">{{SampleJSON.Records.signatures.client.title}}:</div>
         <div class="signature-line"></div>
-        <div class="signature-name">Name: ______________________</div>
-        <div>Title: ______________________</div>
+        <div class="signature-name">Name: {{SampleJSON.Records.signatures.client.nameField}}</div>
+        <div>Title: {{SampleJSON.Records.signatures.client.titleField}}</div>
         <div class="signature-date">
           Date: <span class="date-line"></span>/<span class="date-line"></span>/<span class="date-line"></span>
         </div>
       </div>
       
       <div class="signature-block">
-        <div class="party-title">Provider:</div>
+        <div class="party-title">{{SampleJSON.Records.signatures.provider.title}}:</div>
         <div class="signature-line"></div>
-        <div class="signature-name">Name: ______________________</div>
-        <div>Title: ______________________</div>
+        <div class="signature-name">Name: {{SampleJSON.Records.signatures.provider.nameField}}</div>
+        <div>Title: {{SampleJSON.Records.signatures.provider.titleField}}</div>
         <div class="signature-date">
           Date: <span class="date-line"></span>/<span class="date-line"></span>/<span class="date-line"></span>
         </div>

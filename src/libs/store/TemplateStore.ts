@@ -11,8 +11,9 @@ type TemplateStore = {
 
   htmlContent: string;
   htmlStyle: string;
+  htmlTemplateJson: string;
   handlebarsCode: string;
-  handlebarsJson: string;
+  handlebarTemplateJson: string;
   templateGallery: TemplateGalleryProps[] | null;
 
   creationMethod: CreationMethodEnum;
@@ -25,8 +26,9 @@ type TemplateStore = {
   selectTemplate: (templateId: string) => void;
   setHtmlContent: (content: string) => void;
   setHtmlStyle: (htmlStyle: string) => void;
+  setHtmlTemplateJson: (json: string) => void;
   setHandlebarsCode: (code: string) => void;
-  setHandlebarsJson: (json: string) => void;
+  setHandlebarTemplateJson: (json: string) => void;
   setTemplateGallery: (template: TemplateGalleryProps[]) => void;
   setActiveTab: (tab: string) => void;
   setCreationMethod: (method: CreationMethodEnum) => void;
@@ -47,8 +49,9 @@ export const useTemplateStore = create<TemplateStore>((set, get) => ({
   // Template content
   htmlContent: '',
   htmlStyle: '',
+  htmlTemplateJson: '{}',
   handlebarsCode: '',
-  handlebarsJson: '{}',
+  handlebarTemplateJson: '{}',
   templateGallery: null,
 
   activeTab: EditorTypeEnum.HANDLEBARS,
@@ -63,8 +66,9 @@ export const useTemplateStore = create<TemplateStore>((set, get) => ({
 
   setHtmlContent: content => set({ htmlContent: content }),
   setHtmlStyle: style => set({ htmlStyle: style }),
+  setHtmlTemplateJson: json => set({ htmlTemplateJson: json }),
   setHandlebarsCode: code => set({ handlebarsCode: code }),
-  setHandlebarsJson: json => set({ handlebarsJson: json }),
+  setHandlebarTemplateJson: json => set({ handlebarTemplateJson: json }),
   setTemplateGallery: template => set({ templateGallery: template }),
   setActiveTab: tab => set({ activeTab: tab }),
   setCreationMethod: method => set({ creationMethod: method }),
@@ -86,8 +90,9 @@ export const useTemplateStore = create<TemplateStore>((set, get) => ({
 
       htmlContent: '',
       htmlStyle: '',
+      htmlTemplateJson: '{}',
       handlebarsCode: '',
-      handlebarsJson: '{}',
+      handlebarTemplateJson: '{}',
 
       activeTab: EditorTypeEnum.HANDLEBARS,
       creationMethod: CreationMethodEnum.EXTRACT_FROM_PDF,

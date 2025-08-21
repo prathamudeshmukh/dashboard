@@ -7,6 +7,7 @@ export async function loadTemplateContent({
   editor,
   templateId,
   htmlContent,
+  htmlTemplateJson,
   setHtmlContent,
   setHtmlStyle,
   setCreationMethod,
@@ -16,6 +17,7 @@ export async function loadTemplateContent({
   editor: Editor;
   templateId: string | null;
   htmlContent: string;
+  htmlTemplateJson: string;
   setHtmlContent: (val: string) => void;
   setHtmlStyle: (val: string) => void;
   setCreationMethod: (val: CreationMethodEnum) => void;
@@ -25,7 +27,6 @@ export async function loadTemplateContent({
   if (!editor) {
     return;
   }
-
   if (templateId) {
     try {
       const response = await fetchTemplateById(templateId);
@@ -53,5 +54,17 @@ export async function loadTemplateContent({
     }
   } else if (htmlContent) {
     editor.setComponents(htmlContent);
-  }
+    // Access the DataSources module
+    const dsm = editor.DataSources;
+    const data = JSON.parse(htmlTemplateJson);
+
+    dsm.add({
+      id: 'SampleJSON',
+      skipFromStorage: true,
+      records: {
+        id: 'Records',
+        ...data,
+      },
+    });
+  };
 }

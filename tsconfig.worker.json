@@ -1,0 +1,42 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "target": "ES2020",
+    "rootDir": "./src",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "strict": true,
+    "declaration": true,
+    "declarationMap": true,
+    "noEmit": false,
+    "outDir": "./dist",
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "skipLibCheck": true
+  },
+  "include": [
+    "src/worker.ts",
+    "src/inngest/**/*",
+    "src/libs/**/*",
+    "src/types/**/*",
+    "src/service/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    ".next",
+    "dist",
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "src/app/**/*",
+    "src/components/**/*",
+    "src/features/**/*",
+    "src/hooks/**/*",
+    "src/utils/**/*",
+    "src/styles/**/*",
+    "src/documentation/**/*"
+  ]
+}

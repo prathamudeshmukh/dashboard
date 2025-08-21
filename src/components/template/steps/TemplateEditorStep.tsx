@@ -28,9 +28,9 @@ export default function TemplateEditorStep() {
     activeTab,
     setActiveTab,
     handlebarsCode,
-    handlebarsJson,
+    handlebarTemplateJson,
     setHandlebarsCode,
-    setHandlebarsJson,
+    setHandlebarTemplateJson,
   } = useTemplateStore();
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [pendingTab, setPendingTab] = useState<EditorTypeEnum | null>(null);
@@ -73,7 +73,7 @@ export default function TemplateEditorStep() {
             if (source === 'iframe') {
               sendDataToIframe({
                 handlebarsCode,
-                handlebarsJson,
+                handlebarTemplateJson,
               });
             }
             break;
@@ -82,8 +82,8 @@ export default function TemplateEditorStep() {
             if (data.handlebarsCode) {
               setHandlebarsCode(data.handlebarsCode);
             }
-            if (data.handlebarsJson) {
-              setHandlebarsJson(data.handlebarsJson);
+            if (data.handlebarTemplateJson) {
+              setHandlebarTemplateJson(data.handlebarTemplateJson);
             }
             break;
 
@@ -99,9 +99,9 @@ export default function TemplateEditorStep() {
     return () => window.removeEventListener('message', handleMessage);
   }, [
     handlebarsCode,
-    handlebarsJson,
+    handlebarTemplateJson,
     setHandlebarsCode,
-    setHandlebarsJson,
+    setHandlebarTemplateJson,
   ]);
 
   const handleTabChange = (tabName: string) => {

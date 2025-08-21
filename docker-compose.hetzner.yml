@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  # Staging Environment Worker
+  templify-worker-staging:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+      args:
+        NODE_ENV: staging
+        INNGEST_ENV: staging
+        WORKER_PORT: 3002
+    container_name: templify-worker-staging
+    environment:
+      - NODE_ENV=staging
+      - INNGEST_ENV=staging
+      - PORT=3002
+      - INNGEST_EVENT_KEY=${INNGEST_EVENT_KEY_STAGING}
+      - INNGEST_SIGNING_KEY=${INNGEST_SIGNING_KEY_STAGING}
+      - INNGEST_BASE_URL=${INNGEST_BASE_URL}
+      - JOB_RUNNER_BASE_URL=http://localhost:3001
+      - DATABASE_URL=${PREVIEW_DATABASE_URL}
+    ports:
+      - '3002:3002'
+    restart: unless-stopped
+    networks:
+      - templify-network
+    healthcheck:
+      test: [CMD, curl, -f, 'http://localhost:3002/health']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Production Environment Worker
+  templify-worker-production:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+      args:
+        NODE_ENV: production
+        INNGEST_ENV: production
+        WORKER_PORT: 3003
+    container_name: templify-worker-production
+    environment:
+      - NODE_ENV=production
+      - INNGEST_ENV=production
+      - PORT=3003
+      - INNGEST_EVENT_KEY=${INNGEST_EVENT_KEY_PRODUCTION}
+      - INNGEST_SIGNING_KEY=${INNGEST_SIGNING_KEY_PRODUCTION}
+      - INNGEST_BASE_URL=${INNGEST_BASE_URL}
+      - JOB_RUNNER_BASE_URL=http://localhost:3000
+      - DATABASE_URL=${PRODUCTION_DATABASE_URL}
+    ports:
+      - '3003:3003'
+    restart: unless-stopped
+    networks:
+      - templify-network
+    healthcheck:
+      test: [CMD, curl, -f, 'http://localhost:3003/health']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  templify-network:
+    driver: bridge
