@@ -34,10 +34,10 @@ fi
 # Set port based on environment
 if [ "$DEPLOY_ENV" = "staging" ]; then
     WORKER_PORT=3002
-    CONTAINER_NAME="inngest-worker-staging"
+    CONTAINER_NAME="templify-worker-staging"
 elif [ "$DEPLOY_ENV" = "production" ]; then
     WORKER_PORT=3003
-    CONTAINER_NAME="inngest-worker-production"
+    CONTAINER_NAME="templify-worker-production"
 else
     print_error "Invalid DEPLOY_ENV: $DEPLOY_ENV. Must be 'staging' or 'production'"
     exit 1
@@ -58,14 +58,7 @@ if [ ! -d "dist" ]; then
     exit 1
 fi
 
-print_status "Pre-built files found. Skipping build step..."
-
-# Install dependencies (only production)
-print_status "Installing production dependencies..."
-npm ci --only=production || {
-    print_error "Failed to install dependencies"
-    exit 1
-}
+print_status "Pre-built files found. Skipping build and install steps..."
 
 # Stop existing containers
 print_status "Stopping existing containers..."
@@ -73,16 +66,30 @@ docker-compose -f docker-compose.hetzner.yml down || {
     print_warning "Failed to stop existing containers (might not exist)"
 }
 
+# Build new images to ensure latest package.json is used
+print_status "Building new Docker images..."
+if [ "$DEPLOY_ENV" = "staging" ]; then
+    docker-compose -f docker-compose.hetzner.yml build --no-cache templify-worker-staging || {
+        print_error "Failed to build staging worker image"
+        exit 1
+    }
+elif [ "$DEPLOY_ENV" = "production" ]; then
+    docker-compose -f docker-compose.hetzner.yml build --no-cache templify-worker-production || {
+        print_error "Failed to build production worker image"
+        exit 1
+    }
+fi
+
 # Start new containers based on environment
 if [ "$DEPLOY_ENV" = "staging" ]; then
     print_status "Starting staging worker container..."
-    docker-compose -f docker-compose.hetzner.yml up -d inngest-worker-staging || {
+    docker-compose -f docker-compose.hetzner.yml up -d templify-worker-staging || {
         print_error "Failed to start staging worker container"
         exit 1
     }
 elif [ "$DEPLOY_ENV" = "production" ]; then
     print_status "Starting production worker container..."
-    docker-compose -f docker-compose.hetzner.yml up -d inngest-worker-production || {
+    docker-compose -f docker-compose.hetzner.yml up -d templify-worker-production || {
         print_error "Failed to start production worker container"
         exit 1
     }

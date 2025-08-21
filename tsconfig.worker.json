@@ -1,34 +1,43 @@
+/* eslint-disable jsonc/sort-keys */
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "target": "ES2020",
-    "rootDir": "./src",
-    "module": "CommonJS",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
     "declaration": true,
     "declarationMap": true,
-    "noEmit": false,
-    "outDir": "./dist",
-    "sourceMap": true,
-    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
-    "skipLibCheck": true
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "noEmit": false,
+    "outDir": "./dist",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "resolveJsonModule": true,
+    "rootDir": "./src",
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "ES2022"
   },
   "include": [
     "src/worker.ts",
     "src/inngest/**/*",
-    "src/libs/**/*",
     "src/types/**/*",
-    "src/service/**/*"
+    "src/service/**/*",
+    "src/libs/DB.ts",
+    "src/libs/actions/templates.ts",
+    "src/libs/actions/user.ts",
+    "src/libs/actions/template/**/*"
   ],
   "exclude": [
     "node_modules",
     ".next",
     "dist",
+    "src/libs/**/*",
     "**/*.test.ts",
     "**/*.spec.ts",
     "src/app/**/*",

@@ -5,9 +5,9 @@ import { createServer } from 'node:http';
 import { serve } from 'inngest/next';
 import { NextRequest } from 'next/server';
 
-import { inngest } from '@/inngest/client';
-import { extractPdfContent } from '@/inngest/functions/extractPdf';
-import { generateTemplatePreviewJob } from '@/inngest/functions/generatePreview';
+import { inngest } from './inngest/client';
+import { extractPdfContent } from './inngest/functions/extractPdf';
+import { generateTemplatePreviewJob } from './inngest/functions/generatePreview';
 
 // Create the Inngest handler
 const handler = serve({
@@ -32,11 +32,23 @@ const server = createServer(async (req, res) => {
 
   // Handle Inngest requests
   if (req.url?.startsWith('/api/inngest')) {
-    const nextReq = new NextRequest(req.url, {
+    // Log the incoming request for debugging
+    console.log(`📥 Inngest request: ${req.method} ${req.url}`);
+    console.log(`📋 Headers:`, Object.keys(req.headers));
+
+    const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+    const requestOptions: any = {
       method: req.method,
       headers: req.headers as any,
-      body: req.method !== 'GET' && req.method !== 'HEAD' ? (req as any) : undefined,
-    });
+    };
+
+    // Add body and duplex option for non-GET/HEAD requests
+    if (req.method !== 'GET' && req.method !== 'HEAD') {
+      requestOptions.body = req as any;
+      requestOptions.duplex = 'half';
+    }
+
+    const nextReq = new NextRequest(url, requestOptions);
 
     try {
       const response = await handler(nextReq, { req, res });
@@ -50,12 +62,37 @@ const server = createServer(async (req, res) => {
 
       // Copy response body
       const body = await response.text();
+      console.log(`📤 Inngest response: ${response.status} ${response.statusText}`);
       res.end(body);
     } catch (error) {
       console.error('Worker error:', error);
       res.writeHead(500, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: 'Internal Server Error' }));
     }
+    return;
+  }
+
+  // Inngest registration endpoint
+  if (req.url === '/api/inngest/register') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({
+      functions: [
+        {
+          id: 'extract-html',
+          name: 'Extract PDF Content',
+          triggers: [{ event: 'upload/extract.html' }],
+        },
+        {
+          id: 'generate-preview',
+          name: 'Generate Template Preview',
+          triggers: [{ event: 'template/generate.preview' }],
+        },
+      ],
+      client: {
+        id: 'templify-app',
+        env: process.env.INNGEST_ENV || 'development',
+      },
+    }));
     return;
   }
 
@@ -69,8 +106,12 @@ const environment = process.env.INNGEST_ENV || 'development';
 
 server.listen(port, () => {
   console.log(`🚀 Templify Worker running on port ${port} in ${environment} environment`);
-  console.log(`�� Health check: http://localhost:${port}/health`);
+  console.log(`🏥 Health check: http://localhost:${port}/health`);
   console.log(`🔗 Inngest endpoint: http://localhost:${port}/api/inngest`);
+  console.log(`📝 Inngest registration: http://localhost:${port}/api/inngest/register`);
+  console.log(`🔑 Inngest Event Key: ${process.env.INNGEST_EVENT_KEY ? 'Set' : 'Not set'}`);
+  console.log(`🔐 Inngest Signing Key: ${process.env.INNGEST_SIGNING_KEY ? 'Set' : 'Not set'}`);
+  console.log(`🌐 Inngest Base URL: ${process.env.INNGEST_BASE_URL || 'Not set'}`);
 });
 
 // Graceful shutdown

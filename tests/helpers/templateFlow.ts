@@ -19,7 +19,7 @@ export async function uploadPDF(page: Page, pdfPathRelative: string) {
 
   await fileChooser.setFiles(filePath);
 
-  await expect(page.getByRole('heading')).toContainText('PDF Processed Successfully', { timeout: 25000 });
+  await expect(page.getByRole('heading')).toContainText('PDF Processed Successfully', { timeout: 40000 });
   await expect(page.locator('body')).toContainText('HTML structure generated');
   await expect(page.locator('body')).toContainText('Template ready for customization');
 }

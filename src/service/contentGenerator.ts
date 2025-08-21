@@ -1,7 +1,6 @@
 import hbs from 'handlebars';
 
-import type { JsonValue } from '@/types/Template';
-
+import type { JsonValue } from '../types/Template';
 import lintHTML from './lintHTML';
 
 type TemplateParams = {

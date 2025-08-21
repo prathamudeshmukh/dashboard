@@ -2,7 +2,7 @@ import { Pool } from '@neondatabase/serverless';
 import { config } from 'dotenv';
 import { drizzle } from 'drizzle-orm/neon-serverless';
 
-import * as schema from '@/models/Schema';
+import * as schema from '../models/Schema';
 
 config({ path: '.env' });
 

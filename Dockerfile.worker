@@ -1,52 +1,25 @@
-# Multi-stage build for efficient worker deployment
-FROM node:18-alpine AS base
+# Simple worker deployment for pre-built files
+FROM node:18-alpine
 
-# Install dependencies only when needed
-FROM base AS deps
-RUN apk add --no-cache libc6-compat
 WORKDIR /app
-
-# Copy package files
-COPY package.json package-lock.json* ./
-RUN npm ci --only=production
-
-# Rebuild the source code only when needed
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
-
-# Build TypeScript worker
-RUN npm run worker:build
-
-# Production image, copy all the files and run the worker
-FROM base AS runner
-WORKDIR /app
-
-ENV NODE_ENV=production
 
 # Set default port, will be overridden by environment
 ARG WORKER_PORT=3001
 ENV PORT=$WORKER_PORT
 
+# Create non-root user
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Copy built worker files
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
+# Copy worker build zip and extract it
+COPY worker-build.zip ./
+RUN unzip -o worker-build.zip && rm worker-build.zip
 
-# Copy necessary source files for runtime
-COPY --from=builder /app/src/inngest ./src/inngest
-COPY --from=builder /app/src/libs ./src/libs
-COPY --from=builder /app/src/types ./src/types
-COPY --from=builder /app/src/service ./src/service
-COPY --from=builder /app/tsconfig.json ./tsconfig.json
-
+# Switch to non-root user
 USER nextjs
 
 # Expose the port dynamically
 EXPOSE $PORT
 
+# Start the worker
 CMD ["npm", "run", "worker:start"]
