@@ -9,7 +9,7 @@ export async function GenerateAnduploadPDF(templateId: string, logger: any) {
     const result = await generatePdf({ templateId });
 
     if (result.error) {
-      throw new Error(`PDF generation failed: ${result.error}`);
+      throw new Error(`PDF generation failed: ${result.error.message}`);
     }
 
     if (!result.pdf) {
@@ -32,6 +32,6 @@ export async function GenerateAnduploadPDF(templateId: string, logger: any) {
     return blob;
   } catch (error) {
     logger.error('Failed to upload PDF to blob', { templateId, error });
-    throw new Error(`Blob upload failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    throw new Error(`Blob upload failed: ${error}`);
   }
 }
