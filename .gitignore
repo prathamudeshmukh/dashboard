@@ -55,5 +55,6 @@ local
 .idea/
 
 # Sentry Config File
+.env
 .env.sentry-build-plugin
 tests/e2e/3.Handlebar-Template.check.e2e.ts

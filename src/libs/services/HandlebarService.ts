@@ -1,9 +1,10 @@
 type DatasetExamples = Record<string, any>;
 
 declare global {
-  type Windows = {
+  // eslint-disable-next-line ts/consistent-type-definitions
+  interface Window {
     Handlebars?: typeof import('handlebars');
-  };
+  }
 }
 
 export class HandlebarsService {

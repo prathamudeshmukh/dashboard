@@ -1,6 +1,5 @@
 /* eslint-disable jsonc/sort-keys */
 {
-  "extends": "./tsconfig.json",
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
@@ -31,13 +30,13 @@
     "src/libs/DB.ts",
     "src/libs/actions/templates.ts",
     "src/libs/actions/user.ts",
-    "src/libs/actions/template/**/*"
+    "src/libs/actions/template/**/*",
+    "src/libs/services/**/*"
   ],
   "exclude": [
     "node_modules",
     ".next",
     "dist",
-    "src/libs/**/*",
     "**/*.test.ts",
     "**/*.spec.ts",
     "src/app/**/*",
