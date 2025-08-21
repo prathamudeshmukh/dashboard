@@ -10,16 +10,13 @@ config({ path: '.env' });
 
 console.log({ DATABASE_URL: process.env.DATABASE_URL });
 
-// Set WebSocket constructor globally for Neon serverless
-if (typeof globalThis !== 'undefined' && typeof WebSocket !== 'undefined') {
-  (globalThis as any).WebSocket = WebSocket;
-}
-
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL!,
   ssl: {
     rejectUnauthorized: false,
   },
+  // Pass WebSocket constructor directly if available
+  ...(typeof WebSocket !== 'undefined' && { WebSocketConstructor: WebSocket }),
 });
 
 export const db = drizzle(pool, { schema });
