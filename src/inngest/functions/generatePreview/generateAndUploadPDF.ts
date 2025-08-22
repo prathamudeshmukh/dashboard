@@ -1,20 +1,28 @@
 import { put } from '@vercel/blob';
 
-import { generatePdf } from '../../../libs/actions/templates';
+import { fetchTemplateById } from '@/libs/actions/templates';
+import type { JsonValue } from '@/types/Template';
+
+import { generatePdfWorker } from './generatePdfWorker';
 
 export async function GenerateAnduploadPDF(templateId: string, logger: any) {
   logger.info('Generating and Uploading PDF for template', { templateId });
 
   try {
-    const result = await generatePdf({ templateId });
+    const templateResult = await fetchTemplateById(templateId);
 
-    if (result.error) {
-      throw new Error(`PDF generation failed: ${result.error.message}`);
+    if (templateResult.error) {
+      throw new Error(`Template fetch failed: ${templateResult.error.message}`);
     }
 
-    if (!result.pdf) {
-      throw new Error('PDF generation returned empty result');
-    }
+    const template = templateResult.data;
+
+    // Generate PDF using worker-compatible function
+    const result = await generatePdfWorker({
+      templateContent: template.templateContent as string,
+      templateStyle: template.templateStyle || '',
+      templateData: template.templateSampleData as JsonValue,
+    });
 
     const filename = `${templateId}.pdf`;
 

@@ -2,10 +2,10 @@
 
 import { and, desc, eq, gte, ilike, lte, sql } from 'drizzle-orm';
 
+import { generatePdfCore } from '@/service/generatePdfCore';
+
 import { inngest } from '../../inngest/client';
 import { creditTransactions, generated_templates, templateGallery, templates, users } from '../../models/Schema';
-import contentGenerator from '../../service/contentGenerator';
-import { generatePDFBuffer } from '../../service/generatePDFBuffer';
 import type {
   GeneratedTemplates,
   GeneratePdfRequest,
@@ -277,16 +277,10 @@ export async function generatePdf({
         return { error: template.error };
       }
     }
-    // Determine the data to be used by contentGenerator
+    // Determine the data to be used by generatePdfCore
     const dataForContentGenerator = templateData !== undefined
       ? (templateData as JsonValue) // If templateData was passed, use it (even if it's an empty object {})
       : (template?.data?.templateSampleData as JsonValue); // Otherwise, use the sample data from the template
-
-    const content = await contentGenerator({
-      templateContent: template?.data?.templateContent as string,
-      templateStyle: template?.data?.templateStyle as string,
-      templateData: dataForContentGenerator,
-    });
 
     // check for balance
     if (
@@ -296,7 +290,12 @@ export async function generatePdf({
       return { error: { message: 'Insufficient credits.', status: 402 } };
     }
 
-    const pdfBuffer = await generatePDFBuffer(content);
+    // Use the core PDF generation service
+    const result = await generatePdfCore({
+      templateContent: template?.data?.templateContent as string,
+      templateStyle: template?.data?.templateStyle as string,
+      templateData: dataForContentGenerator,
+    });
 
     if (template?.data?.id && isApi) {
       await deductCredit(template.data.user?.cliendId as string);
@@ -306,7 +305,7 @@ export async function generatePdf({
       });
     }
 
-    return { pdf: pdfBuffer };
+    return { pdf: result.pdf };
   } catch (error: any) {
     console.error('Error generating PDF:', error);
     return { error: { message: 'Internal Server Error', status: 500 } };
