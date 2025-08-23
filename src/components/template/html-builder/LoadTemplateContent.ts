@@ -1,6 +1,6 @@
 import type { Editor } from 'grapesjs';
 
-import { fetchTemplateById } from '@/libs/actions/templates';
+import { fetchTemplateById } from '@/service/templateService';
 import type { CreationMethodEnum } from '@/types/Enum';
 
 export async function loadTemplateContent({

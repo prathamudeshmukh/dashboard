@@ -3,9 +3,9 @@
 import { Lightbulb } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-import { fetchTemplateById } from '@/libs/actions/templates';
 import { HandlebarsService } from '@/libs/services/HandlebarService';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
+import { fetchTemplateById } from '@/service/templateService';
 import type { CreationMethodEnum } from '@/types/Enum';
 import type { PostMessagePayload } from '@/types/PostMessage';
 

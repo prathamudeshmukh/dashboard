@@ -22,15 +22,16 @@
     "strict": true,
     "target": "ES2022"
   },
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
+  },
   "include": [
     "src/worker.ts",
     "src/inngest/**/*",
     "src/types/**/*",
     "src/service/**/*",
     "src/libs/DB.ts",
-    "src/libs/actions/templates.ts",
-    "src/libs/actions/user.ts",
-    "src/libs/actions/template/**/*",
     "src/libs/services/**/*"
   ],
   "exclude": [

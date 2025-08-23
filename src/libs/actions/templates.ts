@@ -2,18 +2,16 @@
 
 import { and, desc, eq, gte, ilike, lte, sql } from 'drizzle-orm';
 
-import { generatePdfCore } from '@/service/generatePdfCore';
-
 import { inngest } from '../../inngest/client';
 import { creditTransactions, generated_templates, templateGallery, templates, users } from '../../models/Schema';
+import { generatePdfCore } from '../../service/generatePdfCore';
+import { fetchTemplateById } from '../../service/templateService';
 import type {
   GeneratedTemplates,
   GeneratePdfRequest,
   JsonObject,
   JsonValue,
   PaginatedResponse,
-  UpdatePreviewURLParams,
-  UpdatePreviewURLResult,
   UsageMetric,
   UsageMetricRequest,
 } from '../../types/Template';
@@ -222,44 +220,6 @@ export async function fetchTemplatesFromGallery() {
   }
 }
 
-export async function fetchTemplateById(templateId: string, isDev: boolean = true) {
-  try {
-    const result = await db.select({
-      templateData: templates,
-      user: {
-        id: users.id,
-        email: users.email,
-        cliendId: users.clientId,
-        remainingBalance: users.remainingBalance,
-      },
-    })
-      .from(templates)
-      .innerJoin(users, eq(templates.email, users.email))
-      .where(
-        and(
-          eq(templates.templateId, templateId),
-          eq(templates.environment, isDev ? 'dev' : 'prod'),
-        ),
-      ).limit(1);
-
-    if (result.length === 0) {
-      return {
-        error: { message: 'Template not found', status: 404 },
-      };
-    }
-
-    const template = result[0]?.templateData;
-    const userData = result[0]?.user;
-
-    return { data: { ...template, user: userData } };
-  } catch (error: any) {
-    console.error('Error fetching template:', error);
-    return {
-      error: { message: 'Error fetching template', status: 500 },
-    };
-  }
-}
-
 export async function generatePdf({
   templateId,
   templateData,
@@ -309,57 +269,6 @@ export async function generatePdf({
   } catch (error: any) {
     console.error('Error generating PDF:', error);
     return { error: { message: 'Internal Server Error', status: 500 } };
-  }
-}
-
-export async function updateTemplatePreviewURL({
-  templateId,
-  previewURL,
-}: UpdatePreviewURLParams): Promise<UpdatePreviewURLResult> {
-  try {
-    if (!templateId) {
-      throw new Error('Template ID is required');
-    }
-
-    if (!previewURL) {
-      throw new Error('Preview URL is required');
-    }
-
-    // Update the template
-    const updateResult = await db
-      .update(templates)
-      .set({
-        previewURL,
-      })
-      .where(
-        and(
-          eq(templates.templateId, templateId),
-          eq(templates.environment, 'dev'),
-        ),
-      )
-      .returning({
-        id: templates.id,
-        templateId: templates.templateId,
-        previewURL: templates.previewURL,
-        updatedAt: templates.updatedAt,
-      });
-
-    if (!updateResult.length) {
-      throw new Error('Template not found or update failed');
-    }
-
-    const updatedTemplate = updateResult[0];
-    return {
-      data: {
-        templateId: updatedTemplate?.templateId as string,
-        previewURL: updatedTemplate?.previewURL as string,
-      },
-    };
-  } catch (error) {
-    console.error('Error updating template preview URL:', error);
-    return {
-      error: error instanceof Error ? error.message : 'Failed to update preview URL',
-    };
   }
 }
 

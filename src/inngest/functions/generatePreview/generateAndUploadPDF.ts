@@ -1,9 +1,8 @@
 import { put } from '@vercel/blob';
 
-import { fetchTemplateById } from '@/libs/actions/templates';
-import type { JsonValue } from '@/types/Template';
-
-import { generatePdfWorker } from './generatePdfWorker';
+import { generatePdfCore } from '../../../service/generatePdfCore';
+import { fetchTemplateById } from '../../../service/templateService';
+import type { JsonValue } from '../../../types/Template';
 
 export async function GenerateAnduploadPDF(templateId: string, logger: any) {
   logger.info('Generating and Uploading PDF for template', { templateId });
@@ -18,7 +17,7 @@ export async function GenerateAnduploadPDF(templateId: string, logger: any) {
     const template = templateResult.data;
 
     // Generate PDF using worker-compatible function
-    const result = await generatePdfWorker({
+    const result = await generatePdfCore({
       templateContent: template.templateContent as string,
       templateStyle: template.templateStyle || '',
       templateData: template.templateSampleData as JsonValue,

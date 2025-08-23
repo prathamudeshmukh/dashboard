@@ -9,10 +9,10 @@ import { BASE_API_URL } from 'templify.constants';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { fetchTemplateById } from '@/libs/actions/templates';
 import { getClientSecret } from '@/libs/actions/user';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 import { generateCodeSnippets } from '@/service/generateCodeSnippets';
+import { fetchTemplateById } from '@/service/templateService';
 import { type Template, TemplateType } from '@/types/Template';
 
 import MainContent from './MainContent';
