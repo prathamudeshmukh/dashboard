@@ -1,6 +1,6 @@
 import path from 'node:path';
 
-import type { Page } from '@playwright/test';
+import type { Locator, Page } from '@playwright/test';
 import { expect } from '@playwright/test';
 
 import { verifyDashboardEntry, verifyEditorComponents, verifySuccessPage, verifyVisualEditorComponents } from './assertions';
@@ -40,6 +40,18 @@ export async function finishEditorStep(page: Page, isVisualEditor: boolean) {
     await verifyEditorComponents(page);
   }
   await page.getByRole('button', { name: 'Next' }).click();
+}
+
+export async function getEditorContent(page: Page, editor: Locator) {
+  await editor.press('Control+A');
+  await editor.press('Control+C');
+  return page.evaluate(() => navigator.clipboard.readText());
+}
+
+export async function setEditorContent(page: Page, editor: Locator, content: string) {
+  await page.evaluate(text => navigator.clipboard.writeText(text), content);
+  await editor.press('Control+A');
+  await editor.press('Control+V');
 }
 
 export async function verifyPreviewAndPublish(page: Page, name: string): Promise<string> {
