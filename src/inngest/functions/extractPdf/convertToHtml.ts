@@ -1,6 +1,7 @@
 import axios from 'axios';
+import type { Logger } from 'inngest/middleware/logger';
 
-export async function convertToHTML(downloadUrl: string, logger: any) {
+export async function convertToHTML(downloadUrl: string, logger: Logger) {
   try {
     const baseUrl = process.env.PDF_TO_HTML_BASE_URL;
     const token = process.env.PDF_TO_HTML_TOKEN;
@@ -15,8 +16,10 @@ export async function convertToHTML(downloadUrl: string, logger: any) {
         },
       },
     );
+    logger.info('Conversion completed');
     return response.data.html;
   } catch (error) {
+    logger.error('Conversion error', error);
     console.error('Error Fetching Extracted PDF content:', error);
     throw error;
   }
