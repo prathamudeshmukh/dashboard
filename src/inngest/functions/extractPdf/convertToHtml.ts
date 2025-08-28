@@ -16,7 +16,6 @@ export async function convertToHTML(downloadUrl: string, logger: any) {
         timeout: 240000,
       },
     );
-    logger.info('Response', response);
     return response.data.html;
   } catch (error) {
     console.error('Error Fetching Extracted PDF content:', error);
