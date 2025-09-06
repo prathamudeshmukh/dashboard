@@ -12,11 +12,11 @@ export async function verifyEditorComponents(page: Page) {
 
 export async function verifyVisualEditorComponents(page: Page) {
   await expect(page.getByText('Visual Editor')).toBeVisible();
-  await expect(page.locator('.gjs-editor-wrapper')).toBeVisible();
   await expect(page.locator('iframe').first().contentFrame().locator('body')).toBeVisible();
-  await expect(page.getByText('Layers')).toBeVisible();
-  await expect(page.getByRole('tab', { name: 'Properties' })).toBeVisible();
-  await expect(page.getByRole('tab', { name: 'Styles' })).toBeVisible();
+  await expect(page.getByTitle('Open Blocks')).toBeVisible();
+  await expect(page.getByTitle('Open Layer Manager')).toBeVisible();
+  await expect(page.getByTitle('Settings')).toBeVisible();
+  await expect(page.getByTitle('Open Style Manager')).toBeVisible();
 }
 
 export async function verifySuccessPage(page: Page, templateName: string) {

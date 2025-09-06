@@ -16,7 +16,7 @@ import { loadTemplateContent } from './LoadTemplateContent';
 
 export default function HTMLBuilder() {
   const { user } = useUser();
-  const { templateName, templateDescription, htmlContent, handlebarsCode, htmlStyle, htmlTemplateJson, creationMethod, setHandlebarsCode, setTemplateName, setTemplateDescription, resetTemplate, setCreationMethod, setHtmlContent, setHtmlStyle } = useTemplateStore();
+  const { templateName, templateDescription, htmlContent, handlebarsCode, htmlStyle, htmlTemplateJson, creationMethod, setTemplateName, setTemplateDescription, resetTemplate, setCreationMethod, setHtmlContent, setHtmlStyle } = useTemplateStore();
   const searchParams = useSearchParams();
   const templateId = searchParams.get('templateId');
   const [saveStatus, setSaveStatus] = useState<SaveStatusEnum>(SaveStatusEnum.IDLE);
@@ -97,7 +97,7 @@ export default function HTMLBuilder() {
               dataSources={JSON.parse(htmlTemplateJson)}
               sampleData={JSON.parse(htmlTemplateJson)}
               initialHbs={handlebarsCode}
-              onChange={hbs => setHandlebarsCode(hbs)}
+              onChange={hbs => setHtmlContent(hbs)}
             />
           </div>
         </div>
