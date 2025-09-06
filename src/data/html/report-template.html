@@ -115,24 +115,24 @@
 <body>
   <div class="report-container">
     <div class="report-header">
-      <div class="report-title">{{SampleJSON.Records.header.title}}</div>
-      <div class="report-subtitle">{{SampleJSON.Records.header.subtitle}}</div>
-      <div class="report-date">{{SampleJSON.Records.header.date}}</div>
+      <div class="report-title">{{header.title}}</div>
+      <div class="report-subtitle">{{header.subtitle}}</div>
+      <div class="report-date">{{header.date}}</div>
     </div>
     
     <div class="divider"></div>
     
     <div class="section">
-      <div class="section-title">{{SampleJSON.Records.executiveSummary.title}}</div>
-      {{#each SampleJSON.Records.executiveSummary.paragraphs}}
+      <div class="section-title">{{executiveSummary.title}}</div>
+      {{#each executiveSummary.paragraphs}}
         <p>{{this}}</p>
       {{/each}}
     </div>
     
     <div class="section">
-      <div class="section-title">{{SampleJSON.Records.financialOverview.title}}</div>
+      <div class="section-title">{{financialOverview.title}}</div>
       <div class="chart-container">
-        {{#each SampleJSON.Records.financialOverview.chartData}}
+        {{#each financialOverview.chartData}}
         <div class="chart-bar">
           <div class="bar" style="height: {{percentage}};"></div>
           <div class="bar-label">{{label}}</div>
@@ -143,13 +143,13 @@
       <table class="data-table">
         <thead>
           <tr>
-            {{#each SampleJSON.Records.financialOverview.tableHeaders}}
+            {{#each financialOverview.tableHeaders}}
               <th>{{this}}</th>
             {{/each}}
           </tr>
         </thead>
         <tbody>
-          {{#each SampleJSON.Records.financialOverview.tableRows}}
+          {{#each financialOverview.tableRows}}
           <tr>
             <td>{{metric}}</td>
             <td>{{previousValue}}</td>
@@ -162,9 +162,9 @@
     </div>
     
     <div class="section">
-      <div class="section-title">{{SampleJSON.Records.recommendations.title}}</div>
+      <div class="section-title">{{recommendations.title}}</div>
       <div class="recommendations">
-        {{#each SampleJSON.Records.recommendations.items}}
+        {{#each recommendations.items}}
         <div class="recommendation-item">
           <span class="bullet"></span>
           <div>{{this}}</div>
@@ -174,8 +174,8 @@
     </div>
     
     <div class="report-footer">
-      <p>{{SampleJSON.Records.footer.preparedBy}}</p>
-      <p>{{SampleJSON.Records.footer.confidentiality}}</p>
+      <p>{{footer.preparedBy}}</p>
+      <p>{{footer.confidentiality}}</p>
     </div>
   </div>
 </body>

@@ -7,8 +7,6 @@ import { useTemplateStore } from '@/libs/store/TemplateStore';
 import contentGenerator from '@/service/contentGenerator';
 import { EditorTypeEnum } from '@/types/Enum';
 
-import { wrapJson } from '../html-builder/WrapJson';
-
 export default function TemplateReviewStep() {
   const [compiledHtml, setCompiledHtml] = useState<string>('');
   const { creationMethod, templateName, templateDescription, htmlContent, htmlStyle, htmlTemplateJson, handlebarsCode, handlebarTemplateJson, activeTab } = useTemplateStore();
@@ -24,7 +22,7 @@ export default function TemplateReviewStep() {
           });
           setCompiledHtml(result);
         } else if (htmlContent && activeTab === EditorTypeEnum.VISUAL) {
-          const parsedJson = wrapJson(JSON.parse(htmlTemplateJson));
+          const parsedJson = JSON.parse(htmlTemplateJson);
           const result = await contentGenerator({
             templateContent: htmlContent,
             templateStyle: htmlStyle as string,

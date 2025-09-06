@@ -1,162 +1,66 @@
 {
-  "personalInfo": {
-    "name": "Alexander J. Mitchell",
-    "title": "Senior Software Engineer",
-    "photoUrl": null,
-    "contact": {
-      "email": "alex.mitchell@example.com",
-      "phone": "(555) 123-4567",
-      "location": "San Francisco, CA",
-      "website": "www.alexmitchell.dev",
-      "linkedin": "linkedin.com/in/alexmitchell",
-      "github": "github.com/alexmitchell"
-    }
+  "person": {
+    "name": "Michael Anderson",
+    "title": "Frontend Developer",
+    "email": "michael.anderson@example.com",
+    "phone": "+1 415-987-6543",
+    "location": "San Francisco, CA, USA",
+    "linkedin": "linkedin.com/in/michaelanderson",
+    "website": "michaelanderson.dev"
   },
-  "summary": "Innovative Senior Software Engineer with 8+ years of experience developing scalable web applications and distributed systems. Specialized in cloud architecture, microservices, and performance optimization. Proven track record of leading technical teams and delivering complex projects that drive business growth.",
-  "skills": {
-    "technical": [
-      "JavaScript/TypeScript",
-      "React.js",
-      "Node.js",
-      "Python",
-      "Go",
-      "AWS",
-      "Docker",
-      "Kubernetes",
-      "GraphQL",
-      "MongoDB",
-      "PostgreSQL",
-      "Redis",
-      "CI/CD",
-      "Microservices Architecture"
-    ],
-    "soft": [
-      "Technical Leadership",
-      "Project Management",
-      "Agile Methodologies",
-      "Cross-functional Collaboration",
-      "Mentoring",
-      "Problem Solving"
-    ]
-  },
+  "summary": "Frontend Developer with 3.5 years of experience building responsive web apps using React, Next.js, and modern JavaScript frameworks.",
   "experience": [
     {
-      "position": "Senior Software Engineer",
-      "company": "TechForward Solutions",
-      "location": "San Francisco, CA",
-      "period": "January 2022 - Present",
-      "description": "Lead engineer for the companys flagship SaaS platform serving 500,000+ users.",
+      "title": "React Developer",
+      "company": "TechSolutions",
+      "dateRange": "2022 - Present",
+      "description": "Building scalable web applications with React and Next.js.",
       "achievements": [
-        "Architected and implemented a microservices-based backend that improved system scalability by 300% and reduced API response times by 65%",
-        "Led a team of 6 engineers in redesigning the applications frontend using React and TypeScript, resulting in a 40% increase in user engagement",
-        "Implemented comprehensive CI/CD pipelines that reduced deployment time from hours to minutes and decreased production bugs by 45%",
-        "Optimized database queries and implemented caching strategies that reduced server costs by $15,000 annually",
-        "Mentored junior developers through code reviews, pair programming, and technical workshops"
+        "Improved app performance by 30%",
+        "Led migration to Next.js 13"
       ]
     },
     {
-      "position": "Software Engineer",
-      "company": "DataStream Inc.",
-      "location": "Seattle, WA",
-      "period": "March 2019 - December 2021",
-      "description": "Full-stack developer for a real-time data processing platform.",
+      "title": "Frontend Engineer",
+      "company": "WebCorp",
+      "dateRange": "2020 - 2022",
+      "description": "Developed reusable UI components.",
       "achievements": [
-        "Developed a real-time analytics dashboard using React, D3.js, and WebSockets that processed over 10,000 events per second",
-        "Designed and implemented RESTful APIs using Node.js and Express that supported 200+ client integrations",
-        "Created a custom ETL pipeline that reduced data processing time by 75% and improved data accuracy by 30%",
-        "Collaborated with product managers and UX designers to implement new features that increased customer retention by 25%"
-      ]
-    },
-    {
-      "position": "Junior Software Developer",
-      "company": "InnovateTech",
-      "location": "Portland, OR",
-      "period": "June 2017 - February 2019",
-      "description": "Worked on web application development and maintenance.",
-      "achievements": [
-        "Contributed to the development of a customer-facing web application using Angular and Java Spring Boot",
-        "Implemented responsive design principles that improved mobile user experience and increased mobile traffic by 40%",
-        "Participated in code reviews and testing, reducing bug reports by 35% over six months",
-        "Assisted in database migration from MySQL to PostgreSQL, ensuring zero downtime during the transition"
+        "Built component library",
+        "Optimized UI rendering"
       ]
     }
   ],
   "education": [
     {
-      "degree": "Master of Science in Computer Science",
-      "institution": "Stanford University",
-      "location": "Stanford, CA",
-      "period": "2015 - 2017",
-      "details": [
-        "Specialization in Artificial Intelligence and Machine Learning",
-        "GPA: 3.85/4.0",
-        "Teaching Assistant for Advanced Algorithms course",
-        "Thesis: Optimizing Neural Networks for Edge Computing Applications"
-      ]
-    },
-    {
-      "degree": "Bachelor of Science in Computer Engineering",
-      "institution": "University of Washington",
-      "location": "Seattle, WA",
-      "period": "2011 - 2015",
-      "details": [
-        "Minor in Mathematics",
-        "GPA: 3.7/4.0",
-        "Deans List: 7 semesters",
-        "President of the Computer Science Club"
-      ]
+      "degree": "B.S. in Computer Science",
+      "institution": "University of California, Berkeley",
+      "dateRange": "2016 - 2020",
+      "details": "Specialized in Web Technologies and Human-Computer Interaction."
     }
   ],
+  "skills": ["React", "Next.js", "TypeScript", "Tailwind CSS", "Node.js"],
   "projects": [
     {
-      "name": "CloudScale",
-      "description": "Open-source auto-scaling solution for Kubernetes clusters",
-      "technologies": ["Go", "Kubernetes", "Prometheus", "Grafana"],
-      "link": "github.com/alexmitchell/cloudscale",
-      "details": "Developed a custom auto-scaling solution that analyzes application metrics and automatically adjusts Kubernetes resources. The project has 500+ stars on GitHub and is used by several startups."
+      "title": "E-commerce Platform",
+      "date": "2023",
+      "description": "Built a scalable online store with shopping cart and payment integration.",
+      "technologies": ["React", "Next.js", "Stripe"]
     },
     {
-      "name": "DevFlow",
-      "description": "Developer productivity toolkit",
-      "technologies": ["TypeScript", "Node.js", "Docker"],
-      "link": "github.com/alexmitchell/devflow",
-      "details": "Created a CLI tool that streamlines development workflows by automating common tasks like environment setup, testing, and deployment. Used by 1,000+ developers worldwide."
+      "title": "Portfolio Website",
+      "date": "2022",
+      "description": "Personal website showcasing projects and blogs.",
+      "technologies": ["Next.js", "Tailwind CSS"]
     }
   ],
   "certifications": [
-    {
-      "name": "AWS Certified Solutions Architect - Professional",
-      "issuer": "Amazon Web Services",
-      "date": "2023",
-      "link": "aws.amazon.com/certification/certified-solutions-architect-professional"
-    },
-    {
-      "name": "Google Cloud Professional Cloud Architect",
-      "issuer": "Google Cloud",
-      "date": "2022",
-      "link": "cloud.google.com/certification/cloud-architect"
-    },
-    {
-      "name": "Certified Kubernetes Administrator (CKA)",
-      "issuer": "Cloud Native Computing Foundation",
-      "date": "2021",
-      "link": "www.cncf.io/certification/cka"
-    }
+    { "name": "AWS Certified Developer", "issuer": "Amazon", "date": "2023" },
+    { "name": "React Advanced Course", "issuer": "Udemy", "date": "2022" }
   ],
   "languages": [
-    {
-      "name": "English",
-      "proficiency": "Native"
-    },
-    {
-      "name": "Spanish",
-      "proficiency": "Professional working proficiency"
-    },
-    {
-      "name": "Mandarin Chinese",
-      "proficiency": "Elementary proficiency"
-    }
+    { "language": "English", "proficiency": "Fluent" },
+    { "language": "Spanish", "proficiency": "Intermediate" }
   ],
-  "interests": ["Open Source Contribution", "Machine Learning", "Blockchain Technology", "Hiking", "Photography"],
   "references": "Available upon request"
 }
