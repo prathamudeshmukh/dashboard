@@ -287,25 +287,21 @@
 <div class="brochure-container">
   <div class="hero-section">
     <div class="company-logo">
-      {{#if SampleJSON.Records.company.logoUrl}}
-        <img src="" alt="Logo" height="60"/>
-      {{else}}
-        <div class="logo-placeholder">{{SampleJSON.Records.company.name}}</div>
-      {{/if}}
+        <div class="logo-placeholder">{{company.name}}</div>
     </div>
-    <div class="hero-title">{{SampleJSON.Records.hero.title}}</div>
-    <div class="hero-subtitle">{{SampleJSON.Records.hero.subtitle}}</div>
-    {{#if SampleJSON.Records.hero.ctaButton}}
-    <a href="" class="cta-button">{{SampleJSON.Records.hero.ctaButton.text}}</a>
+    <div class="hero-title">{{hero.title}}</div>
+    <div class="hero-subtitle">{{hero.subtitle}}</div>
+    {{#if hero.ctaButton}}
+    <a href="" class="cta-button">{{hero.ctaButton.text}}</a>
     {{/if}}
   </div>
   
   <div class="section">
-    <div class="section-title">{{SampleJSON.Records.features.title}}</div>
-    <div class="section-subtitle">{{SampleJSON.Records.features.subtitle}}</div>
+    <div class="section-title">{{features.title}}</div>
+    <div class="section-subtitle">{{features.subtitle}}</div>
     
     <div class="feature-grid">
-      {{#each SampleJSON.Records.features.items}}
+      {{#each features.items}}
       <div class="feature-item">
         <div class="feature-icon">{{icon}}</div>
         <div class="feature-title">{{title}}</div>
@@ -317,49 +313,39 @@
   
   <div class="section about-section">
     <div class="about-content">
-      <div class="section-title">{{SampleJSON.Records.about.title}}</div>
-      <p>{{SampleJSON.Records.about.description}}</p>
+      <div class="section-title">{{about.title}}</div>
+      <p>{{about.description}}</p>
       
-      {{#if SampleJSON.Records.about.bulletPoints}}
       <ul>
-        {{#each SampleJSON.Records.about.bulletPoints}}
+        {{#each about.bulletPoints}}
         <li>{{this}}</li>
         {{/each}}
       </ul>
-      {{/if}}
     </div>
     
     <div class="about-image">
-      {{#if SampleJSON.Records.about.imageUrl}}
-        <img src=""  width="100%"/>
-      {{else}}
         <div class="image-placeholder">COMPANY IMAGE</div>
-      {{/if}}
     </div>
   </div>
   
-  {{#if SampleJSON.Records.testimonial}}
+  {{#if testimonial}}
   <div class="testimonial-section">
-    <div class="testimonial-quote">{{SampleJSON.Records.testimonial.quote}}</div>
-    <div class="testimonial-author">{{SampleJSON.Records.testimonial.author}}</div>
-    <div class="testimonial-company">{{SampleJSON.Records.testimonial.company}}</div>
+    <div class="testimonial-quote">{{testimonial.quote}}</div>
+    <div class="testimonial-author">{{testimonial.author}}</div>
+    <div class="testimonial-company">{{testimonial.company}}</div>
   </div>
   {{/if}}
   
-  {{#if SampleJSON.Records.products}}
+  {{#if products}}
   <div class="section product-section">
-    <div class="section-title">{{SampleJSON.Records.products.title}}</div>
-    <div class="section-subtitle">{{SampleJSON.Records.products.subtitle}}</div>
+    <div class="section-title">{{products.title}}</div>
+    <div class="section-subtitle">{{products.subtitle}}</div>
     
     <div class="product-grid">
-      {{#each SampleJSON.Records.products.items}}
+      {{#each products.items}}
       <div class="product-item">
         <div class="product-image">
-          {{#if imageUrl}}
-            <img src="" alt="" width="100%" height="100%"/>
-          {{else}}
             PRODUCT IMAGE
-          {{/if}}
         </div>
         <div class="product-details">
           <div class="product-title">{{title}}</div>
@@ -374,11 +360,11 @@
   {{/if}}
   
   <div class="section contact-section">
-    <div class="section-title">{{SampleJSON.Records.contact.title}}</div>
-    <div class="section-subtitle">{{SampleJSON.Records.contact.subtitle}}</div>
+    <div class="section-title">{{contact.title}}</div>
+    <div class="section-subtitle">{{contact.subtitle}}</div>
     
     <div class="contact-methods">
-      {{#each SampleJSON.Records.contact.methods}}
+      {{#each contact.methods}}
       <div class="contact-method">
         <div class="contact-icon">{{icon}}</div>
         <div class="contact-title">{{title}}</div>
@@ -390,18 +376,18 @@
   
   <div class="footer">
     <div class="social-links">
-      {{#each SampleJSON.Records.socialLinks}}
+      {{#each socialLinks}}
       <a href="" class="social-link">{{platform}}</a>
       {{/each}}
     </div>
     
     <div class="footer-links">
-      {{#each SampleJSON.Records.footerLinks}}
+      {{#each footerLinks}}
       <a href="" class="footer-link">{{text}}</a>
       {{/each}}
     </div>
     
-    <div class="copyright">{{SampleJSON.Records.copyright}}</div>
+    <div class="copyright">{{copyright}}</div>
   </div>
 </div>
 </body>
