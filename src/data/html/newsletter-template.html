@@ -16,7 +16,7 @@
       background-color: #ffffff;
     }
     .header {
-      background-color: {{theme.primaryColor}};
+      background-color: #161676;
       color: white;
       padding: 20px;
       text-align: center;
@@ -40,7 +40,7 @@
       font-size: 18px;
       font-weight: bold;
       margin-bottom: 10px;
-      color: {{theme.primaryColor}};
+      color: #161676;
     }
     .featured-article {
       display: flex;
@@ -72,7 +72,7 @@
       flex: 1;
     }
     .cta-button {
-      background-color: {{theme.primaryColor}};
+      background-color: #161676;
       color: white;
       text-align: center;
       padding: 10px;
@@ -95,7 +95,7 @@
       display: inline-block;
       width: 30px;
       height: 30px;
-      background-color: {{theme.primaryColor}};
+      background-color: #161676;
       color: white;
       border-radius: 50%;
       margin: 0 5px;
@@ -108,24 +108,24 @@
 <body>
   <div class="newsletter-container">
     <div class="header">
-      <div class="header-title">{{SampleJSON.Records.header.title}}</div>
-      <div class="header-date">{{SampleJSON.Records.header.date}}</div>
+      <div class="header-title">{{header.title}}</div>
+      <div class="header-date">{{header.date}}</div>
     </div>
     
     <div class="content">
       <div class="section">
-        <div class="section-title">{{SampleJSON.Records.featuredArticle.sectionTitle}}</div>
+        <div class="section-title">{{featuredArticle.sectionTitle}}</div>
         <div class="featured-article">
           <div class="article-image">
-            {{#if SampleJSON.Records.featuredArticle.imageUrl}}
+            {{#if featuredArticle.imageUrl}}
               <img src="" alt="" width="200" height="150"/>
             {{else}}
               Image Placeholder
             {{/if}}
           </div>
           <div class="article-content">
-            <div class="article-title">{{SampleJSON.Records.featuredArticle.title}}</div>
-            {{#each SampleJSON.Records.featuredArticle.paragraphs}}
+            <div class="article-title">{{featuredArticle.title}}</div>
+            {{#each featuredArticle.paragraphs}}
               <p>{{this}}</p>
             {{/each}}
           </div>
@@ -135,14 +135,14 @@
       <div class="section">
         <div class="two-column">
           <div class="column">
-            <div class="section-title">{{SampleJSON.Records.companyUpdates.title}}</div>
+            <div class="section-title">{{companyUpdates.title}}</div>
             {{#each companyUpdates.paragraphs}}
               <p>{{this}}</p>
             {{/each}}
           </div>
           <div class="column">
-            <div class="section-title">{{SampleJSON.Records.upcomingEvents.title}}</div>
-            {{#each SampleJSON.Records.upcomingEvents.events}}
+            <div class="section-title">{{upcomingEvents.title}}</div>
+            {{#each upcomingEvents.events}}
               <p><strong>{{title}}</strong><br/>{{date}}<br/>{{location}}</p>
             {{/each}}
           </div>
@@ -150,28 +150,28 @@
       </div>
       
       <div class="section">
-        <div class="section-title">{{SampleJSON.Records.customerSpotlight.title}}</div>
-        <p>"{{SampleJSON.Records.customerSpotlight.quote}}" - {{SampleJSON.Records.customerSpotlight.author}}, {{SampleJSON.Records.customerSpotlight.position}} of {{SampleJSON.Records.customerSpotlight.company}}</p>
+        <div class="section-title">{{customerSpotlight.title}}</div>
+        <p>"{{customerSpotlight.quote}}" - {{customerSpotlight.author}}, {{customerSpotlight.position}} of {{customerSpotlight.company}}</p>
       </div>
       
-      <div class="cta-button">{{SampleJSON.Records.cta.text}}</div>
+      <div class="cta-button">{{cta.text}}</div>
       
       <div class="section">
-        <div class="section-title">{{SampleJSON.Records.quickTips.title}}</div>
-        <p>{{SampleJSON.Records.quickTips.content}}</p>
+        <div class="section-title">{{quickTips.title}}</div>
+        <p>{{quickTips.content}}</p>
       </div>
     </div>
     
     <div class="footer">
-      <p>{{SampleJSON.Records.footer.copyright}}</p>
-      <p>{{SampleJSON.Records.footer.subscriptionInfo}}</p>
+      <p>{{footer.copyright}}</p>
+      <p>{{footer.subscriptionInfo}}</p>
       <p>
-        {{#each SampleJSON.Records.footer.links}}
+        {{#each footer.links}}
           <a href="{{url}}">{{text}}</a>{{#unless @last}} | {{/unless}}
         {{/each}}
       </p>
       <div class="social-links">
-        {{#each SampleJSON.Records.footer.socialLinks}}
+        {{#each footer.socialLinks}}
           <span class="social-link">{{icon}}</span>
         {{/each}}
       </div>

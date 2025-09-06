@@ -108,26 +108,26 @@
 <body>
 <div class="certificate-container">
   <div class="certificate-header">
-    <div class="certificate-title">{{SampleJSON.Records.certificate.title}}</div>
-    <div class="certificate-subtitle">{{SampleJSON.Records.certificate.type}}</div>
+    <div class="certificate-title">{{certificate.title}}</div>
+    <div class="certificate-subtitle">{{certificate.type}}</div>
   </div>
   
   <div class="divider"></div>
   
   <div class="certificate-body">
-    <div class="recipient-name">{{SampleJSON.Records.recipient.prefix}} {{SampleJSON.Records.recipient.fullName}}</div>
-    <div class="certificate-text">{{SampleJSON.Records.achievement.description}}</div>
-    <div class="certificate-course">{{SampleJSON.Records.achievement.programName}}</div>
-    <div class="certificate-text">{{SampleJSON.Records.achievement.additionalText}}</div>
-    <div class="certificate-date">Completed on: {{SampleJSON.Records.details.completionDate}}</div>
+    <div class="recipient-name">{{recipient.prefix}} {{recipient.fullName}}</div>
+    <div class="certificate-text">{{achievement.description}}</div>
+    <div class="certificate-course">{{achievement.programName}}</div>
+    <div class="certificate-text">{{achievement.additionalText}}</div>
+    <div class="certificate-date">Completed on: {{details.completionDate}}</div>
     
-    {{#if SampleJSON.Records.verification.id}}
-    <div class="certificate-seal">ID: {{SampleJSON.Records.verification.id}}</div>
+    {{#if verification.id}}
+    <div class="certificate-seal">ID: {{verification.id}}</div>
     {{/if}}
   </div>
   
   <div class="signature-section">
-    {{#each SampleJSON.Records.signatures}}
+    {{#each signatures}}
     <div class="signature">
       <div class="signature-line"></div>
       <div class="signature-name">{{name}}</div>
@@ -137,10 +137,10 @@
   </div>
   
   <div class="certificate-footer">
-    <p>{{SampleJSON.Records.issuer.organization}} | {{SampleJSON.Records.footer.address}}</p>
-    <p>{{SampleJSON.Records.footer.contact}}</p>
-    {{#if SampleJSON.Records.verification.verificationText}}
-      <p>{{SampleJSON.Records.verification.verificationText}}</p>
+    <p>{{issuer.organization}} | {{footer.address}}</p>
+    <p>{{footer.contact}}</p>
+    {{#if verification.verificationText}}
+      <p>{{verification.verificationText}}</p>
     {{/if}}
   </div>
 </div>
