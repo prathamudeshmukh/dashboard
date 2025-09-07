@@ -1,6 +1,7 @@
 'use client';
 
 import { useUser } from '@clerk/nextjs';
+import type { Editor } from 'grapesjs';
 import { TemplateEditor } from 'grapesjs-hbs-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -16,7 +17,8 @@ import { loadTemplateContent } from './LoadTemplateContent';
 
 export default function HTMLBuilder() {
   const { user } = useUser();
-  const { templateName, templateDescription, htmlContent, handlebarsCode, htmlStyle, htmlTemplateJson, creationMethod, setTemplateName, setTemplateDescription, resetTemplate, setCreationMethod, setHtmlContent, setHtmlStyle } = useTemplateStore();
+  const [editor, setEditor] = useState<Editor>();
+  const { templateName, templateDescription, htmlContent, handlebarsCode, htmlStyle, htmlTemplateJson, creationMethod, setTemplateName, setHtmlTemplateJson, setTemplateDescription, resetTemplate, setCreationMethod, setHtmlContent, setHtmlStyle } = useTemplateStore();
   const searchParams = useSearchParams();
   const templateId = searchParams.get('templateId');
   const [saveStatus, setSaveStatus] = useState<SaveStatusEnum>(SaveStatusEnum.IDLE);
@@ -24,14 +26,16 @@ export default function HTMLBuilder() {
 
   useEffect(() => {
     loadTemplateContent({
+      editor: editor as Editor,
       templateId,
       setHtmlContent,
+      setHtmlTemplateJson,
       setHtmlStyle,
       setCreationMethod,
       setTemplateName,
       setTemplateDescription,
     });
-  }, [templateId]);
+  }, [editor, templateId]);
 
   const handleSave = async (type: UpdateTypeEnum) => {
     setSaveStatus(SaveStatusEnum.SAVING);
@@ -94,6 +98,7 @@ export default function HTMLBuilder() {
           {/* GrapesJS StudioEditor container */}
           <div className="w-full">
             <TemplateEditor
+              onEditor={editor => setEditor(editor)}
               dataSources={JSON.parse(htmlTemplateJson)}
               sampleData={JSON.parse(htmlTemplateJson)}
               initialHbs={handlebarsCode}
