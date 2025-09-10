@@ -1,8 +1,7 @@
 'use client';
 
 import { useUser } from '@clerk/nextjs';
-import type { Editor } from 'grapesjs';
-import { TemplateEditor } from 'grapesjs-hbs-react';
+import { TemplateEditor, type TemplateEditorApi } from 'grapesjs-hbs-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
@@ -17,16 +16,19 @@ import { loadTemplateContent } from './LoadTemplateContent';
 
 export default function HTMLBuilder() {
   const { user } = useUser();
-  const [editor, setEditor] = useState<Editor>();
-  const { templateName, templateDescription, htmlContent, handlebarsCode, htmlStyle, htmlTemplateJson, creationMethod, setTemplateName, setHtmlTemplateJson, setTemplateDescription, resetTemplate, setCreationMethod, setHtmlContent, setHtmlStyle } = useTemplateStore();
+  const [editorApi, setEditorApi] = useState<TemplateEditorApi>();
+  const { templateName, templateDescription, htmlContent, htmlStyle, htmlTemplateJson, creationMethod, setTemplateName, setHtmlTemplateJson, setTemplateDescription, resetTemplate, setCreationMethod, setHtmlContent, setHtmlStyle } = useTemplateStore();
   const searchParams = useSearchParams();
   const templateId = searchParams.get('templateId');
   const [saveStatus, setSaveStatus] = useState<SaveStatusEnum>(SaveStatusEnum.IDLE);
   const router = useRouter();
 
   useEffect(() => {
+    if (!editorApi || !templateId) {
+      return;
+    }
     loadTemplateContent({
-      editor: editor as Editor,
+      editorApi,
       templateId,
       setHtmlContent,
       setHtmlTemplateJson,
@@ -35,7 +37,7 @@ export default function HTMLBuilder() {
       setTemplateName,
       setTemplateDescription,
     });
-  }, [editor, templateId]);
+  }, [editorApi, templateId]);
 
   const handleSave = async (type: UpdateTypeEnum) => {
     setSaveStatus(SaveStatusEnum.SAVING);
@@ -98,10 +100,12 @@ export default function HTMLBuilder() {
           {/* GrapesJS StudioEditor container */}
           <div className="w-full">
             <TemplateEditor
-              onEditor={editor => setEditor(editor)}
+              onEditor={(api) => {
+                setEditorApi(api);
+              }}
               dataSources={JSON.parse(htmlTemplateJson)}
               sampleData={JSON.parse(htmlTemplateJson)}
-              initialHbs={handlebarsCode}
+              initialHbs={htmlContent}
               onChange={hbs => setHtmlContent(hbs)}
             />
           </div>
