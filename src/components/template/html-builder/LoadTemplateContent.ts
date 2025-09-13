@@ -1,10 +1,7 @@
-import type { TemplateEditorApi } from 'grapesjs-hbs-react';
-
 import { fetchTemplateById } from '@/libs/actions/templates';
 import type { CreationMethodEnum } from '@/types/Enum';
 
 export async function loadTemplateContent({
-  editorApi,
   templateId,
   setHtmlContent,
   setHtmlTemplateJson,
@@ -13,7 +10,6 @@ export async function loadTemplateContent({
   setTemplateName,
   setTemplateDescription,
 }: {
-  editorApi: TemplateEditorApi;
   templateId: string | null;
   setHtmlContent: (val: string) => void;
   setHtmlStyle: (val: string) => void;
@@ -44,9 +40,6 @@ export async function loadTemplateContent({
     setCreationMethod(creationMethod);
     setTemplateName(templateName);
     setTemplateDescription(templateDescription);
-
-    editorApi.clear();
-    editorApi.loadTemplate(content, JSON.parse(dataSource), JSON.parse(dataSource), style);
   } catch (error) {
     console.error('Failed to load template for editing:', error);
   }
