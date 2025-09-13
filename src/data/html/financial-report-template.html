@@ -151,15 +151,11 @@
 <div class="report-container">
   <div class="report-header">
     <div class="company-logo">
-      {{#if SampleJSON.Records.company.logoUrl}}
-        <img src="" alt="Logo" height="50"/>
-      {{else}}
-        <div class="logo-placeholder">{{SampleJSON.Records.company.name}} LOGO</div>
-      {{/if}}
+        <div class="logo-placeholder">{{company.name}} LOGO</div>
     </div>
-    <div class="report-title">{{SampleJSON.Records.company.name}} Financial Report</div>
-    <div class="report-subtitle">{{SampleJSON.Records.company.fiscalYear}} - {{SampleJSON.Records.company.reportPeriod}}</div>
-    <div class="report-date">{{SampleJSON.Records.company.reportDate}}</div>
+    <div class="report-title">{{company.name}} Financial Report</div>
+    <div class="report-subtitle">{{company.fiscalYear}} - {{company.reportPeriod}}</div>
+    <div class="report-date">{{company.reportDate}}</div>
   </div>
   
   <div class="section">
@@ -167,7 +163,7 @@
     <div class="summary-box">
       <div class="summary-title">Financial Performance Overview</div>
       <ul class="bullet-list">
-        {{#each SampleJSON.Records.executiveSummary.highlights}}
+        {{#each executiveSummary.highlights}}
         <li>{{this}}</li>
         {{/each}}
       </ul>
@@ -177,7 +173,7 @@
   <div class="section">
     <div class="section-title">Financial Highlights</div>
     <div class="financial-highlights">
-      {{#each SampleJSON.Records.financialHighlights.metrics}}
+      {{#each financialHighlights.metrics}}
       <div class="highlight-card">
         <div class="highlight-title">{{name}}</div>
         <div class="highlight-value">{{current}}</div>
@@ -190,8 +186,8 @@
   </div>
   
   <div class="section">
-    <div class="section-title">{{SampleJSON.Records.incomeStatement.title}}</div>
-    <div class="report-subtitle">{{SampleJSON.Records.incomeStatement.subtitle}}</div>
+    <div class="section-title">{{incomeStatement.title}}</div>
+    <div class="report-subtitle">{{incomeStatement.subtitle}}</div>
     <table>
       <thead>
         <tr>
@@ -202,7 +198,7 @@
         </tr>
       </thead>
       <tbody>
-        {{#each SampleJSON.Records.incomeStatement.items}}
+        {{#each incomeStatement.items}}
         <tr {{#if isSubtotal}}style="border-top: 1px solid #333; font-weight: bold;"{{/if}}>
           <td>{{category}}</td>
           <td class="text-right">{{amount}}</td>
@@ -221,8 +217,8 @@
   </div>
   
   <div class="section">
-    <div class="section-title">{{SampleJSON.Records.balanceSheet.title}}</div>
-    <div class="report-subtitle">{{SampleJSON.Records.balanceSheet.subtitle}}</div>
+    <div class="section-title">{{balanceSheet.title}}</div>
+    <div class="report-subtitle">{{balanceSheet.subtitle}}</div>
     <table>
       <thead>
         <tr>
@@ -232,7 +228,7 @@
         </tr>
       </thead>
       <tbody>
-        {{#each SampleJSON.Records.balanceSheet.assets}}
+        {{#each balanceSheet.assets}}
         <tr {{#if isSubtotal}}style="border-top: 1px solid #333; font-weight: bold;"{{/if}}>
           <td>{{category}}</td>
           <td class="text-right">{{amount}}</td>
@@ -251,14 +247,14 @@
         </tr>
       </thead>
       <tbody>
-        {{#each SampleJSON.Records.balanceSheet.liabilities}}
+        {{#each balanceSheet.liabilities}}
         <tr {{#if isSubtotal}}style="border-top: 1px solid #333; font-weight: bold;"{{/if}}>
           <td>{{category}}</td>
           <td class="text-right">{{amount}}</td>
           <td class="text-right">{{previousAmount}}</td>
         <tr/>
         {{/each}}
-        {{#each SampleJSON.Records.balanceSheet.equity}}
+        {{#each balanceSheet.equity}}
         <tr {{#if isSubtotal}}style="border-top: 1px solid #333; font-weight: bold;"{{/if}}>
           <td>{{category}}</td>
           <td class="text-right">{{amount}}</td>
@@ -270,8 +266,8 @@
   </div>
   
   <div class="section">
-    <div class="section-title">{{SampleJSON.Records.cashFlow.title}}</div>
-    <div class="report-subtitle">{{SampleJSON.Records.cashFlow.subtitle}}</div>
+    <div class="section-title">{{cashFlow.title}}</div>
+    <div class="report-subtitle">{{cashFlow.subtitle}}</div>
     <table>
       <thead>
         <tr>
@@ -280,7 +276,7 @@
         </tr>
       </thead>
       <tbody>
-        {{#each SampleJSON.Records.cashFlow.operations}}
+        {{#each cashFlow.operations}}
         <tr {{#if isSubtotal}}style="border-top: 1px solid #333; font-weight: bold;"{{/if}}>
           <td>{{category}}</td>
           <td class="text-right">{{amount}}</td>
@@ -297,7 +293,7 @@
         </tr>
       </thead>
       <tbody>
-        {{#each SampleJSON.Records.cashFlow.investing}}
+        {{#each cashFlow.investing}}
         <tr {{#if isSubtotal}}style="border-top: 1px solid #333; font-weight: bold;"{{/if}}>
           <td>{{category}}</td>
           <td class="text-right">{{amount}}</td>
@@ -314,7 +310,7 @@
         </tr>
       </thead>
       <tbody>
-        {{#each SampleJSON.Records.cashFlow.financing}}
+        {{#each cashFlow.financing}}
         <tr {{#if isSubtotal}}style="border-top: 1px solid #333; font-weight: bold;"{{/if}}>
           <td>{{category}}</td>
           <td class="text-right">{{amount}}</td>
@@ -331,7 +327,7 @@
         </tr>
       </thead>
       <tbody>
-        {{#each SampleJSON.Records.cashFlow.summary}}
+        {{#each cashFlow.summary}}
         <tr {{#if isSubtotal}}style="border-top: 1px solid #333; font-weight: bold;"{{/if}}>
           <td>{{category}}</td>
           <td class="text-right">{{amount}}</td>
@@ -341,9 +337,9 @@
     </table>
   </div>
   
-  {{#if SampleJSON.Records.segmentAnalysis}}
+  {{#if segmentAnalysis}}
   <div class="section">
-    <div class="section-title">{{SampleJSON.Records.segmentAnalysis.title}}</div>
+    <div class="section-title">{{segmentAnalysis.title}}</div>
     <table>
       <thead>
         <tr>
@@ -355,7 +351,7 @@
         </tr>
       </thead>
       <tbody>
-        {{#each SampleJSON.Records.segmentAnalysis.segments}}
+        {{#each segmentAnalysis.segments}}
         <tr>
           <td>{{name}}</td>
           <td class="text-right">{{revenue}}</td>
@@ -369,18 +365,18 @@
   </div>
   {{/if}}
   
-  {{#if SampleJSON.Records.outlook}}
+  {{#if outlook}}
   <div class="section">
     <div class="section-title">{{outlook.title}}</div>
-    {{#each SampleJSON.Records.outlook.paragraphs}}
+    {{#each outlook.paragraphs}}
     <p>{{this}}</p>
     {{/each}}
   </div>
   {{/if}}
   
   <div class="footer">
-    <p>{{SampleJSON.Records.footer.disclaimer}}</p>
-    <p>{{SampleJSON.Records.footer.contactInfo}}</p>
+    <p>{{footer.disclaimer}}</p>
+    <p>{{footer.contactInfo}}</p>
   </div>
 </div>
 </body>
