@@ -114,48 +114,25 @@
 <body>
 <div class="resume-container">
   <div class="header">
-    <div class="name">{{SampleJSON.Records.person.name}}</div>
-    <div class="title">{{SampleJSON.Records.person.title}}</div>
+    <div class="name">{{person.name}}</div>
+    <div class="title">{{person.title}}</div>
     <div class="contact-info">
-      {{#if SampleJSON.Records.person.email}}
-      <div class="contact-item">
-        <span>{{SampleJSON.Records.person.email}}</span>
-      </div>
-      {{/if}}
-      {{#if SampleJSON.Records.person.phone}}
-      <div class="contact-item">
-        <span>{{SampleJSON.Records.person.phone}}</span>
-      </div>
-      {{/if}}
-      {{#if SampleJSON.Records.person.location}}
-      <div class="contact-item">
-        <span>{{SampleJSON.Records.person.location}}</span>
-      </div>
-      {{/if}}
-      {{#if SampleJSON.Records.person.linkedin}}
-      <div class="contact-item">
-        <span>{{SampleJSON.Records.person.linkedin}}</span>
-      </div>
-      {{/if}}
-      {{#if SampleJSON.Records.person.website}}
-      <div class="contact-item">
-        <span>{{SampleJSON.Records.person.website}}</span>
-      </div>
-      {{/if}}
+      <div class="contact-item">{{person.email}}</div>
+      <div class="contact-item">{{person.phone}}</div>
+      <div class="contact-item">{{person.location}}</div>
+      <div class="contact-item">{{person.linkedin}}</div>
+      <div class="contact-item">{{person.website}}</div>
     </div>
   </div>
-  
-  {{#if SampleJSON.Records.summary}}
+
   <div class="section summary">
     <div class="section-title">Professional Summary</div>
-    <p>{SampleJSON.Records.{summary}}</p>
+    <p>{{summary}}</p>
   </div>
-  {{/if}}
-  
-  {{#if SampleJSON.Records.experience}}
+
   <div class="section">
     <div class="section-title">Experience</div>
-    {{#each SampleJSON.Records.experience}}
+    {{#each experience}}
     <div class="experience-item">
       <div class="item-header">
         <div>
@@ -165,26 +142,16 @@
         <div class="item-date">{{dateRange}}</div>
       </div>
       <div class="item-description">
-        {{#if description}}
         <p>{{description}}</p>
-        {{/if}}
-        {{#if achievements}}
-        <ul class="bullet-list">
-          {{#each achievements}}
-          <li class="bullet-item">{{this}}</li>
-          {{/each}}
-        </ul>
-        {{/if}}
+        <ul class="bullet-list">{{#each achievements}}<li>{{this}}</li>{{/each}}</ul>
       </div>
     </div>
     {{/each}}
   </div>
-  {{/if}}
-  
-  {{#if SampleJSON.Records.education}}
+
   <div class="section">
     <div class="section-title">Education</div>
-    {{#each SampleJSON.Records.education}}
+    {{#each education}}
     <div class="education-item">
       <div class="item-header">
         <div>
@@ -193,82 +160,46 @@
         </div>
         <div class="item-date">{{dateRange}}</div>
       </div>
-      {{#if details}}
-      <div class="item-description">
-        <p>{{details}}</p>
-      </div>
-      {{/if}}
+      <div class="item-description"><p>{{details}}</p></div>
     </div>
     {{/each}}
   </div>
-  {{/if}}
-  
-  {{#if SampleJSON.Records.skills}}
+
   <div class="section">
     <div class="section-title">Skills</div>
-    <div class="skills-list">
-      {{#each SampleJSON.Records.skills}}
-      <div class="skill-item">{{this}}</div>
-      {{/each}}
-    </div>
+    <div class="skills-list">{{#each skills}}<div class="skill-item">{{this}}</div>{{/each}}</div>
   </div>
-  {{/if}}
-  
-  {{#if SampleJSON.Records.projects}}
+
   <div class="section">
     <div class="section-title">Projects</div>
-    {{#each SampleJSON.Records.projects}}
+    {{#each projects}}
     <div class="project-item">
       <div class="item-header">
         <div class="item-title">{{title}}</div>
-        {{#if date}}
         <div class="item-date">{{date}}</div>
-        {{/if}}
       </div>
-      {{#if description}}
-      <div class="item-description">
-        <p>{{description}}</p>
-      </div>
-      {{/if}}
-      {{#if technologies}}
-      <div class="skills-list">
-        {{#each technologies}}
-        <div class="skill-item">{{this}}</div>
-        {{/each}}
-      </div>
-      {{/if}}
+      <div class="item-description"><p>{{description}}</p></div>
+      <div class="skills-list">{{#each technologies}}<div class="skill-item">{{this}}</div>{{/each}}</div>
     </div>
     {{/each}}
   </div>
-  {{/if}}
-  
-  {{#if SampleJSON.Records.certifications}}
+
   <div class="section">
     <div class="section-title">Certifications</div>
     <ul class="bullet-list">
-      {{#each SampleJSON.Records.certifications}}
-      <li class="bullet-item">{{name}} {{#if issuer}}({{issuer}}){{/if}} {{#if date}}• {{date}}{{/if}}</li>
+      {{#each certifications}}
+      <li>{{name}} ({{issuer}}) • {{date}}</li>
       {{/each}}
     </ul>
   </div>
-  {{/if}}
-  
-  {{#if SampleJSON.Records.languages}}
+
   <div class="section">
     <div class="section-title">Languages</div>
-    <ul class="bullet-list">
-      {{#each SampleJSON.Records.languages}}
-      <li class="bullet-item">{{language}}: {{proficiency}}</li>
-      {{/each}}
-    </ul>
+    <ul class="bullet-list">{{#each languages}}<li>{{language}}: {{proficiency}}</li>{{/each}}</ul>
   </div>
-  {{/if}}
-  
-  {{#if SampleJSON.Records.references}}
-  <div class="references">
-    {{references}}
-  </div>
-  {{/if}}
+
+  <div class="references">{{references}}</div>
 </div>
 </body>
+
 </html>
