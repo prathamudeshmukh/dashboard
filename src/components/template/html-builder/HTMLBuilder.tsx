@@ -52,6 +52,7 @@ export default function HTMLBuilder() {
         email: user?.emailAddresses[0]?.emailAddress,
         templateName,
         templateContent: htmlContent,
+        templateSampleData: htmlTemplateJson,
         templateStyle: htmlStyle,
         templateType: TemplateType.HTML_BUILDER,
         creationMethod,
