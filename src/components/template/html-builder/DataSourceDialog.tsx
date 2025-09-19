@@ -1,7 +1,5 @@
 'use client';
 
-import console from 'node:console';
-
 import { FileCode } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
