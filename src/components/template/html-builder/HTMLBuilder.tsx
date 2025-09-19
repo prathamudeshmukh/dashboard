@@ -12,6 +12,7 @@ import { useTemplateStore } from '@/libs/store/TemplateStore';
 import { SaveStatusEnum, UpdateTypeEnum } from '@/types/Enum';
 import { TemplateType } from '@/types/Template';
 
+import DataSourceDialog from './DataSourceDialog';
 import { loadTemplateContent } from './LoadTemplateContent';
 
 export default function HTMLBuilder() {
@@ -20,6 +21,7 @@ export default function HTMLBuilder() {
   const searchParams = useSearchParams();
   const templateId = searchParams.get('templateId');
   const [saveStatus, setSaveStatus] = useState<SaveStatusEnum>(SaveStatusEnum.IDLE);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -94,6 +96,14 @@ export default function HTMLBuilder() {
           <span className="text-primary">{templateName}</span>
         </h2>
       )}
+
+      {/* JSON Editor Button */}
+      <div className="flex justify-end">
+        <Button variant="secondary" onClick={() => setIsDialogOpen(true)}>
+          Edit Data Source JSON
+        </Button>
+      </div>
+
       <div className="m-0 w-full rounded-md border p-0">
         <div className="w-full">
           {/* GrapesJS StudioEditor container */}
@@ -125,6 +135,12 @@ export default function HTMLBuilder() {
           </Button>
         </div>
       )}
+      <DataSourceDialog
+        isOpen={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+        defaultJson={htmlTemplateJson}
+        onConfirm={json => setHtmlTemplateJson(json)}
+      />
     </div>
   );
 }
