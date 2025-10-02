@@ -90,17 +90,20 @@
       {
         "icon": "ICON",
         "title": "Call Us",
-        "detail": "+1 (555) 123-4567<br>Monday-Friday, 9am-5pm EST"
+        "detail_1": "+1 (555) 123-4567",
+        "detail_2": "Monday-Friday, 9am-5pm EST"
       },
       {
         "icon": "ICON",
         "title": "Email Us",
-        "detail": "info@techinnovate.com<br>We respond within 24 hours"
+        "detail_1": "info@techinnovate.com",
+        "detail_2": "We respond within 24 hours"
       },
       {
         "icon": "ICON",
         "title": "Visit Us",
-        "detail": "123 Tech Plaza, Suite 500<br>San Francisco, CA 94105"
+        "detail_1": "123 Tech Plaza, Suite 500",
+        "detail_2": "San Francisco, CA 94105"
       }
     ]
   },

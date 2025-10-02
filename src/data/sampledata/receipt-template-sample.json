@@ -2,7 +2,9 @@
   "receiptTitle": "Sales Receipt",
   "company": {
     "name": "Acme Retail Solutions",
-    "address": "123 Commerce Street<br>Business District<br>San Francisco, CA 94103",
+    "address_line1": "123 Commerce Street",
+    "address_line2": "Business District",
+    "address_line3": "San Francisco, CA 94103",
     "phone": "(555) 123-4567",
     "email": "receipts@acmeretail.com"
   },
