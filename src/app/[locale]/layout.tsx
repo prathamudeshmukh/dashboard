@@ -86,7 +86,7 @@ export default function RootLayout(props: {
         {/* PRO: Dark mode support for Shadcn UI */}
         <PostHogProvider>
           <ClerkProvider
-            localization={clerkLocale}
+            localization={clerkLocale as any}
             signInUrl={signInUrl}
             signUpUrl={signUpUrl}
             signInFallbackRedirectUrl={dashboardUrl}

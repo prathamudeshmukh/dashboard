@@ -117,42 +117,19 @@
     <div class="name">{{person.name}}</div>
     <div class="title">{{person.title}}</div>
     <div class="contact-info">
-      {{#if person.email}}
-      <div class="contact-item">
-        <span>{{person.email}}</span>
-      </div>
-      {{/if}}
-      {{#if person.phone}}
-      <div class="contact-item">
-        <span>{{person.phone}}</span>
-      </div>
-      {{/if}}
-      {{#if person.location}}
-      <div class="contact-item">
-        <span>{{person.location}}</span>
-      </div>
-      {{/if}}
-      {{#if person.linkedin}}
-      <div class="contact-item">
-        <span>{{person.linkedin}}</span>
-      </div>
-      {{/if}}
-      {{#if person.website}}
-      <div class="contact-item">
-        <span>{{person.website}}</span>
-      </div>
-      {{/if}}
+      <div class="contact-item">{{person.email}}</div>
+      <div class="contact-item">{{person.phone}}</div>
+      <div class="contact-item">{{person.location}}</div>
+      <div class="contact-item">{{person.linkedin}}</div>
+      <div class="contact-item">{{person.website}}</div>
     </div>
   </div>
-  
-  {{#if summary}}
+
   <div class="section summary">
     <div class="section-title">Professional Summary</div>
     <p>{{summary}}</p>
   </div>
-  {{/if}}
-  
-  {{#if experience}}
+
   <div class="section">
     <div class="section-title">Experience</div>
     {{#each experience}}
@@ -165,23 +142,13 @@
         <div class="item-date">{{dateRange}}</div>
       </div>
       <div class="item-description">
-        {{#if description}}
         <p>{{description}}</p>
-        {{/if}}
-        {{#if achievements}}
-        <ul class="bullet-list">
-          {{#each achievements}}
-          <li class="bullet-item">{{this}}</li>
-          {{/each}}
-        </ul>
-        {{/if}}
+        <ul class="bullet-list">{{#each achievements}}<li>{{this}}</li>{{/each}}</ul>
       </div>
     </div>
     {{/each}}
   </div>
-  {{/if}}
-  
-  {{#if education}}
+
   <div class="section">
     <div class="section-title">Education</div>
     {{#each education}}
@@ -193,82 +160,46 @@
         </div>
         <div class="item-date">{{dateRange}}</div>
       </div>
-      {{#if details}}
-      <div class="item-description">
-        <p>{{details}}</p>
-      </div>
-      {{/if}}
+      <div class="item-description"><p>{{details}}</p></div>
     </div>
     {{/each}}
   </div>
-  {{/if}}
-  
-  {{#if skills}}
+
   <div class="section">
     <div class="section-title">Skills</div>
-    <div class="skills-list">
-      {{#each skills}}
-      <div class="skill-item">{{this}}</div>
-      {{/each}}
-    </div>
+    <div class="skills-list">{{#each skills}}<div class="skill-item">{{this}}</div>{{/each}}</div>
   </div>
-  {{/if}}
-  
-  {{#if projects}}
+
   <div class="section">
     <div class="section-title">Projects</div>
     {{#each projects}}
     <div class="project-item">
       <div class="item-header">
         <div class="item-title">{{title}}</div>
-        {{#if date}}
         <div class="item-date">{{date}}</div>
-        {{/if}}
       </div>
-      {{#if description}}
-      <div class="item-description">
-        <p>{{description}}</p>
-      </div>
-      {{/if}}
-      {{#if technologies}}
-      <div class="skills-list">
-        {{#each technologies}}
-        <div class="skill-item">{{this}}</div>
-        {{/each}}
-      </div>
-      {{/if}}
+      <div class="item-description"><p>{{description}}</p></div>
+      <div class="skills-list">{{#each technologies}}<div class="skill-item">{{this}}</div>{{/each}}</div>
     </div>
     {{/each}}
   </div>
-  {{/if}}
-  
-  {{#if certifications}}
+
   <div class="section">
     <div class="section-title">Certifications</div>
     <ul class="bullet-list">
       {{#each certifications}}
-      <li class="bullet-item">{{name}} {{#if issuer}}({{issuer}}){{/if}} {{#if date}}• {{date}}{{/if}}</li>
+      <li>{{name}} ({{issuer}}) • {{date}}</li>
       {{/each}}
     </ul>
   </div>
-  {{/if}}
-  
-  {{#if languages}}
+
   <div class="section">
     <div class="section-title">Languages</div>
-    <ul class="bullet-list">
-      {{#each languages}}
-      <li class="bullet-item">{{language}}: {{proficiency}}</li>
-      {{/each}}
-    </ul>
+    <ul class="bullet-list">{{#each languages}}<li>{{language}}: {{proficiency}}</li>{{/each}}</ul>
   </div>
-  {{/if}}
-  
-  {{#if references}}
-  <div class="references">
-    {{references}}
-  </div>
-  {{/if}}
+
+  <div class="references">{{references}}</div>
 </div>
 </body>
+
 </html>

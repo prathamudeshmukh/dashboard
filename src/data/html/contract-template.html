@@ -85,25 +85,25 @@
 <body>
   <div class="contract-container">
     <div class="contract-header">
-      <div class="contract-title">{{SampleJSON.Records.header.title}}</div>
-      <div class="contract-subtitle">{{SampleJSON.Records.header.subtitle}}</div>
+      <div class="contract-title">{{header.title}}</div>
+      <div class="contract-subtitle">{{header.subtitle}}</div>
     </div>
     
     <div class="divider"></div>
     
     <div class="contract-parties">
-      <div class="section-title">{{SampleJSON.Records.parties.sectionTitle}}</div>
+      <div class="section-title">{{parties.sectionTitle}}</div>
       <div class="party">
-        <div class="party-title">{{SampleJSON.Records.parties.provider.title}}:</div>
-        <div>{{SampleJSON.Records.parties.provider.description}}</div>
+        <div class="party-title">{{parties.provider.title}}:</div>
+        <div>{{parties.provider.description}}</div>
       </div>
       <div class="party">
-        <div class="party-title">{{SampleJSON.Records.parties.client.title}}:</div>
-        <div>{{SampleJSON.Records.parties.client.description}}</div>
+        <div class="party-title">{{parties.client.title}}:</div>
+        <div>{{parties.client.description}}</div>
       </div>
     </div>
     
-    {{#each SampleJSON.Records.sections}}
+    {{#each sections}}
     <div class="section">
       <div class="section-title">{{title}}</div>
       <div class="section-content">
@@ -116,20 +116,20 @@
     
     <div class="signature-section">
       <div class="signature-block">
-        <div class="party-title">{{SampleJSON.Records.signatures.client.title}}:</div>
+        <div class="party-title">{{signatures.client.title}}:</div>
         <div class="signature-line"></div>
-        <div class="signature-name">Name: {{SampleJSON.Records.signatures.client.nameField}}</div>
-        <div>Title: {{SampleJSON.Records.signatures.client.titleField}}</div>
+        <div class="signature-name">Name: {{signatures.client.nameField}}</div>
+        <div>Title: {{signatures.client.titleField}}</div>
         <div class="signature-date">
           Date: <span class="date-line"></span>/<span class="date-line"></span>/<span class="date-line"></span>
         </div>
       </div>
       
       <div class="signature-block">
-        <div class="party-title">{{SampleJSON.Records.signatures.provider.title}}:</div>
+        <div class="party-title">{{signatures.provider.title}}:</div>
         <div class="signature-line"></div>
-        <div class="signature-name">Name: {{SampleJSON.Records.signatures.provider.nameField}}</div>
-        <div>Title: {{SampleJSON.Records.signatures.provider.titleField}}</div>
+        <div class="signature-name">Name: {{signatures.provider.nameField}}</div>
+        <div>Title: {{signatures.provider.titleField}}</div>
         <div class="signature-date">
           Date: <span class="date-line"></span>/<span class="date-line"></span>/<span class="date-line"></span>
         </div>

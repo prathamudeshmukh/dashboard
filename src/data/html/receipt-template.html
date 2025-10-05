@@ -133,23 +133,23 @@
 <body>
 <div class="receipt-container">
   <div class="receipt-header">
-    <div class="receipt-title">{{SampleJSON.Records.receiptTitle}}</div>
-    <div class="company-name">{{SampleJSON.Records.company.name}}</div>
-    <div class="company-details">{{SampleJSON.Records.{company.address}}}<br/>Tel: {{SampleJSON.Records.company.phone}}</div>
+    <div class="receipt-title">{{receiptTitle}}</div>
+    <div class="company-name">{{company.name}}</div>
+    <div class="company-details">{{{company.address}}}<br/>Tel: {{company.phone}}</div>
   </div>
   
   <div class="divider"></div>
   
   <div class="receipt-info">
-    <div>Receipt #: {{SampleJSON.Records.receipt.number}}</div>
-    <div>Date: {{SampleJSON.Records.receipt.date}}</div>
+    <div>Receipt #: {{receipt.number}}</div>
+    <div>Date: {{receipt.date}}</div>
   </div>
   
-  {{#if SampleJSON.Records.customer}}
+  {{#if customer}}
   <div class="customer-info">
     <div class="info-label">Customer:</div>
-    <div>{{SampleJSON.Records.customer.name}}</div>
-    <div>{{SampleJSON.Records.customer.email}}</div>
+    <div>{{customer.name}}</div>
+    <div>{{customer.email}}</div>
   </div>
   {{/if}}
   
@@ -165,7 +165,7 @@
       </tr>
     </thead>
     <tbody>
-      {{#each SampleJSON.Records.items}}
+      {{#each items}}
       <tr>
         <td>{{name}}</td>
         <td>{{quantity}}</td>
@@ -179,21 +179,21 @@
   <div class="totals">
     <div class="total-row">
       <div class="total-label">Subtotal:</div>
-      <div class="total-value">{{SampleJSON.Records.totals.subtotal}}</div>
+      <div class="total-value">{{totals.subtotal}}</div>
     </div>
     <div class="total-row">
-      <div class="total-label">Tax ({{SampleJSON.Records.totals.taxRate}}):</div>
-      <div class="total-value">{{SampleJSON.Records.totals.tax}}</div>
+      <div class="total-label">Tax ({{totals.taxRate}}):</div>
+      <div class="total-value">{{totals.tax}}</div>
     </div>
-    {{#if SampleJSON.Records.totals.discount}}
+    {{#if totals.discount}}
     <div class="total-row">
       <div class="total-label">Discount:</div>
-      <div class="total-value">{{SampleJSON.Records.totals.discount}}</div>
+      <div class="total-value">{{totals.discount}}</div>
     </div>
     {{/if}}
     <div class="total-row grand-total">
       <div class="total-label">Total:</div>
-      <div class="total-value">{{SampleJSON.Records.totals.total}}</div>
+      <div class="total-value">{{totals.total}}</div>
     </div>
   </div>
   
@@ -201,18 +201,18 @@
   
   <div class="payment-info">
     <div class="info-label">Payment Method:</div>
-    <div>{{SampleJSON.Records.payment.method}} {{#if SampleJSON.Records.payment.cardDetails}}{{SampleJSON.Records.payment.cardDetails}}{{/if}}</div>
+    <div>{{payment.method}} {{#if payment.cardDetails}}{{payment.cardDetails}}{{/if}}</div>
   </div>
   
-  {{#if SampleJSON.Records.barcode}}
+  {{#if barcode}}
   <div class="barcode">
-    <div class="barcode-img">{{SampleJSON.Records.barcode}}</div>
+    <div class="barcode-img">{{barcode}}</div>
   </div>
   {{/if}}
   
   <div class="receipt-footer">
-    <p>{{SampleJSON.Records.footer.thankYouMessage}}</p>
-    <p>{{SampleJSON.Records.footer.returnPolicy}}</p>
+    <p>{{footer.thankYouMessage}}</p>
+    <p>{{footer.returnPolicy}}</p>
   </div>
 </div>
 </body>

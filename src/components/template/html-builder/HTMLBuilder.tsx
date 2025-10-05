@@ -1,96 +1,41 @@
 'use client';
 
-import '@grapesjs/studio-sdk/style';
-
 import { useUser } from '@clerk/nextjs';
-import StudioEditor from '@grapesjs/studio-sdk/react';
-import { dataSourceHandlebars } from '@grapesjs/studio-sdk-plugins';
-import type { Editor } from 'grapesjs';
-import { debounce } from 'lodash';
+import { TemplateEditor } from 'grapesjs-hbs-react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { v4 as uuidv4 } from 'uuid';
 
 import { Button } from '@/components/ui/button';
 import { PublishTemplateToProd, UpsertTemplate } from '@/libs/actions/templates';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 import { SaveStatusEnum, UpdateTypeEnum } from '@/types/Enum';
 import { TemplateType } from '@/types/Template';
-import { foregroundColor, primaryColor } from '@/utils/tailwindColor';
 
-import { exportToHandlebars } from './ExportToHandlebar';
 import { loadTemplateContent } from './LoadTemplateContent';
 
 export default function HTMLBuilder() {
   const { user } = useUser();
-  const [editor, setEditor] = useState<Editor>();
-  const { templateName, templateDescription, htmlContent, htmlStyle, htmlTemplateJson, creationMethod, setTemplateName, setTemplateDescription, resetTemplate, setCreationMethod, setHtmlContent, setHtmlStyle } = useTemplateStore();
+  const { templateName, templateDescription, htmlContent, htmlStyle, htmlTemplateJson, creationMethod, setTemplateName, setHtmlTemplateJson, setTemplateDescription, resetTemplate, setCreationMethod, setHtmlContent, setHtmlStyle } = useTemplateStore();
   const searchParams = useSearchParams();
   const templateId = searchParams.get('templateId');
   const [saveStatus, setSaveStatus] = useState<SaveStatusEnum>(SaveStatusEnum.IDLE);
   const router = useRouter();
 
-  const containerRef = useRef(null);
-
   useEffect(() => {
-    if (!editor) {
+    if (!templateId) {
       return;
     }
     loadTemplateContent({
-      editor,
       templateId,
-      htmlContent,
-      htmlTemplateJson,
       setHtmlContent,
+      setHtmlTemplateJson,
       setHtmlStyle,
       setCreationMethod,
       setTemplateName,
       setTemplateDescription,
     });
-  }, [editor, templateId]);
-
-  const onReady = (editor: Editor) => {
-    setEditor(editor);
-
-    // Save HTML content when editor changes
-    const updateContent = debounce(() => {
-      const hbs = exportToHandlebars(editor);
-      const css = editor.getCss();
-      setHtmlContent(hbs);
-      setHtmlStyle(css as string);
-    }, 500); // adjust debounce timing
-
-    editor.on('update', updateContent);
-
-    // Block Manager
-    const blockManager = editor.BlockManager;
-
-    // Remove specific blocks
-    const blocksToRemove = ['video', 'form', 'input', 'textarea', 'select', 'button', 'checkbox', 'radio', 'label', 'map', 'link', 'linkBox', 'navbar'];
-    blocksToRemove.forEach((blockId) => {
-      if (blockManager.get(blockId)) {
-        blockManager.remove(blockId);
-      }
-    });
-
-    // Check if canvas is empty and add placeholder
-    if (editor.getComponents().length === 0) {
-      editor.setComponents(`
-            <div id="placeholder" style="text-align: center; padding: 50px; font-size: 18px; color: #aaa;">
-              ✨ Click on <strong>"+"</strong> to get started!
-            </div>
-          `);
-    }
-
-    // Listen for component add event to remove placeholder
-    editor.on('component:add', () => {
-      const placeholder = editor?.Components?.getWrapper()?.find('#placeholder');
-      if (placeholder?.length) {
-        placeholder[0]?.remove();
-      }
-    });
-  };
+  }, [templateId]);
 
   const handleSave = async (type: UpdateTypeEnum) => {
     setSaveStatus(SaveStatusEnum.SAVING);
@@ -105,6 +50,7 @@ export default function HTMLBuilder() {
         email: user?.emailAddresses[0]?.emailAddress,
         templateName,
         templateContent: htmlContent,
+        templateSampleData: htmlTemplateJson,
         templateStyle: htmlStyle,
         templateType: TemplateType.HTML_BUILDER,
         creationMethod,
@@ -149,54 +95,13 @@ export default function HTMLBuilder() {
         </h2>
       )}
       <div className="m-0 w-full rounded-md border p-0">
-        <div className="gjs-editor-cont w-full">
+        <div className="w-full">
           {/* GrapesJS StudioEditor container */}
-          <div ref={containerRef} className="h-[700px] w-full">
-            <StudioEditor
-              onReady={onReady}
-              options={{
-                licenseKey: process.env.NEXT_PUBLIC_GRAPE_STUDIO_KEY as string,
-                theme: 'light',
-                plugins: [dataSourceHandlebars],
-                dataSources: {
-                  blocks: true,
-                },
-                customTheme: {
-                  default: {
-                    colors: {
-                      component: {
-                        background1: primaryColor,
-                        background2: foregroundColor,
-                      },
-                      primary: {
-                        background1: primaryColor,
-                        backgroundHover: primaryColor,
-                      },
-                      selector: {
-                        background1: primaryColor,
-                      },
-                      symbol: {
-                        background1: primaryColor,
-                      },
-                      global: {
-                        placeholder: primaryColor,
-                        text: primaryColor,
-                      },
-                    },
-                  },
-                },
-                pages: false,
-                autoHeight: false,
-                devices: { selected: 'desktop' },
-                settingsMenu: false,
-                project: {
-                  type: 'web',
-                  id: uuidv4(),
-                },
-                identity: {
-                  id: user?.id,
-                },
-              }}
+          <div className="w-full">
+            <TemplateEditor
+              dataSources={JSON.parse(htmlTemplateJson)}
+              initialHbs={htmlContent}
+              onChange={hbs => setHtmlContent(hbs)}
             />
           </div>
         </div>

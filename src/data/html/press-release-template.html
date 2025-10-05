@@ -127,60 +127,60 @@ body {
 <body>
 <div class="press-release">
   <div class="letterhead">
-    {{#if SampleJSON.Records.company.logoUrl}}
-      <img src="{{SampleJSON.Records.company.logoUrl}}" alt="{{company.name}} Logo" class="company-logo" height="60"/>
+    {{#if company.logoUrl}}
+      <img src="{{company.logoUrl}}" alt="{{company.name}} Logo" class="company-logo" height="60"/>
     {{else}}
     <div class="company-logo">
-      <div class="logo-placeholder">{{SampleJSON.Records.company.name}} LOGO</div>
+      <div class="logo-placeholder">{{company.name}} LOGO</div>
     </div>
     {{/if}}
-    <div class="company-name">{{SampleJSON.Records.company.name}}</div>
-    <div class="company-tagline">{{SampleJSON.Records.company.tagline}}</div>
+    <div class="company-name">{{company.name}}</div>
+    <div class="company-tagline">{{company.tagline}}</div>
   </div>
   
   <div class="release-info">
     <div class="release-label">PRESS RELEASE</div>
-    <div class="release-date">{{SampleJSON.Records.releaseInfo.date}}</div>
-    {{#if SampleJSON.Records.releaseInfo.embargo}}
-    <div class="release-embargo">EMBARGO UNTIL: {{SampleJSON.Records.releaseInfo.embargo}}</div>
+    <div class="release-date">{{releaseInfo.date}}</div>
+    {{#if releaseInfo.embargo}}
+    <div class="release-embargo">EMBARGO UNTIL: {{releaseInfo.embargo}}</div>
     {{/if}}
   </div>
   
-  <div class="headline">{{SampleJSON.Records.headline}}</div>
-  <div class="subheadline">{{SampleJSON.Records.subheadline}}</div>
+  <div class="headline">{{headline}}</div>
+  <div class="subheadline">{{subheadline}}</div>
   
-  <div class="dateline">{{SampleJSON.Records.dateline}}</div>
+  <div class="dateline">{{dateline}}</div>
   
   <div class="content">
-    {{#each SampleJSON.Records.contentParagraphs}}
+    {{#each contentParagraphs}}
     <p>{{this}}</p>
     {{/each}}
     
     {{#if quote}}
     <div class="quote">
-      <div class="quote-text">{{SampleJSON.Records.quote.text}}</div>
-      <div class="quote-attribution">{{SampleJSON.Records.quote.attribution}}</div>
+      <div class="quote-text">{{quote.text}}</div>
+      <div class="quote-attribution">{{quote.attribution}}</div>
     </div>
     {{/if}}
     
-    {{#each SampleJSON.Records.additionalParagraphs}}
+    {{#each additionalParagraphs}}
     <p>{{this}}</p>
     {{/each}}
   </div>
   
   <div class="boilerplate">
-    <div class="boilerplate-title">About {{SampleJSON.Records.company.name}}:</div>
-    <p>{{SampleJSON.Records.companyDescription}}</p>
+    <div class="boilerplate-title">About {{company.name}}:</div>
+    <p>{{companyDescription}}</p>
   </div>
   
   <div class="contact-info">
     <div class="contact-title">Media Contact:</div>
-    <div class="contact-person">{{SampleJSON.Records.contact.name}}</div>
-    <div class="contact-details">{{SampleJSON.Records.contact.title}}, {{SampleJSON.Records.company.name}}</div>
-    <div class="contact-details">Phone: {{SampleJSON.Records.contact.phone}}</div>
-    <div class="contact-details">Email: {{SampleJSON.Records.contact.email}}</div>
-    {{#if SampleJSON.Records.contact.additionalInfo}}
-    <div class="contact-details">{{SampleJSON.Records.contact.additionalInfo}}</div>
+    <div class="contact-person">{{contact.name}}</div>
+    <div class="contact-details">{{contact.title}}, {{company.name}}</div>
+    <div class="contact-details">Phone: {{contact.phone}}</div>
+    <div class="contact-details">Email: {{contact.email}}</div>
+    {{#if contact.additionalInfo}}
+    <div class="contact-details">{{contact.additionalInfo}}</div>
     {{/if}}
   </div>
 </div>
