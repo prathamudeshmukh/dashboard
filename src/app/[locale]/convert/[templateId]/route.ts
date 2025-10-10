@@ -1,3 +1,5 @@
+import { Ratelimit } from '@upstash/ratelimit';
+import { Redis } from '@upstash/redis';
 import { type NextRequest, NextResponse } from 'next/server';
 
 import { generatePdf } from '@/libs/actions/templates';
@@ -5,12 +7,27 @@ import { generatePdf } from '@/libs/actions/templates';
 import { authenticateApi } from '../../api/authenticateApi';
 import { withApiAuth } from '../../api/withApiAuth';
 
+// Create a single Upstash Redis client
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL!,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+});
+
+// Define rate limiter: 2 requests per 60 seconds
+const ratelimit = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(2, '60 s'),
+  analytics: true,
+});
+
 export const POST = withApiAuth(async (req: NextRequest, { params }: { params: { templateId: string } }): Promise<NextResponse> => {
   try {
     const authResult = await authenticateApi(req);
     if (authResult instanceof NextResponse) {
       return authResult; // Authentication failed
     }
+
+    const clientId = req.headers.get('client_id');
 
     const { templateId } = params;
 
@@ -40,6 +57,19 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
       }
     } catch (error) {
       console.warn(`No valid JSON body provided. Continuing with empty templateData: ${error}`);
+    }
+
+    // Apply rate limiting for users
+    const key = `user:${clientId}`;
+    const { success } = await ratelimit.limit(key);
+
+    if (!success) {
+      return NextResponse.json(
+        {
+          error: 'Rate limit exceeded. Try again later.',
+        },
+        { status: 429 },
+      );
     }
 
     const response = await generatePdf({
