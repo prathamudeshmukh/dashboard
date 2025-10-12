@@ -13,10 +13,10 @@ const redis = new Redis({
   token: process.env.KV_REST_API_TOKEN!,
 });
 
-// Define rate limiter: 2 requests per 60 seconds
+// Define rate limiter: 4 requests per 60 seconds
 const ratelimit = new Ratelimit({
   redis,
-  limiter: Ratelimit.slidingWindow(2, '60 s'),
+  limiter: Ratelimit.slidingWindow(4, '60 s'),
   analytics: true,
 });
 
