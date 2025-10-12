@@ -9,8 +9,8 @@ import { withApiAuth } from '../../api/withApiAuth';
 
 // Create a single Upstash Redis client
 const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL!,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+  url: process.env.KV_REST_API_URL!,
+  token: process.env.KV_REST_API_TOKEN!,
 });
 
 // Define rate limiter: 2 requests per 60 seconds
