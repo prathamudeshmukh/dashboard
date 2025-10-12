@@ -7,6 +7,12 @@ import { useEffect } from 'react';
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY as string, {
+      autocapture: false,
+      loaded() {
+        if (location.hostname === 'https://templify-dashboard-dev.vercel.app/' || location.hostname === 'localhost') {
+          posthog.opt_out_capturing();
+        }
+      },
       api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com',
       person_profiles: 'always', // or 'always' to create profiles for anonymous users as well
       defaults: '2025-05-24',
