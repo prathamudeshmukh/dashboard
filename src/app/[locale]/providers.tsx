@@ -9,7 +9,7 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
     posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY as string, {
       autocapture: false,
       loaded() {
-        if (location.hostname === 'https://templify-dashboard-dev.vercel.app/' || location.hostname === 'localhost') {
+        if (process.env.NODE_ENV !== 'production') {
           posthog.opt_out_capturing();
         }
       },
