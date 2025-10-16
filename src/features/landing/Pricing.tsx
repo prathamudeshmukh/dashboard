@@ -4,6 +4,7 @@ import { Briefcase, Building2, Gift, Rocket } from 'lucide-react';
 import { SUPPORT_EMAIL } from 'templify.constants';
 
 import { PricingCard, type PricingPlan } from '@/components/landing/PricingCard';
+import { trackEvent } from '@/libs/analytics/trackEvent';
 
 const pricingPlans = [
   {
@@ -71,7 +72,15 @@ const pricingPlans = [
 
 export default function Pricing() {
   return (
-    <section id="pricing" className="py-20">
+    <section
+      id="pricing"
+      onMouseEnter={() =>
+        trackEvent('pricing_section_viewed', {
+          time_on_page: Math.round(performance.now() / 1000),
+          from_section: 'pricing',
+        })}
+      className="py-20"
+    >
       <div className="container mx-auto px-4">
         <div className="mb-12 text-center">
           <h2 className="text-4xl font-bold md:text-5xl">Simple, Credit-Based Pricing</h2>
