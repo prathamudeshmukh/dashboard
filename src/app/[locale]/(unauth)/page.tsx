@@ -1,6 +1,8 @@
 /* eslint-disable react-dom/no-dangerously-set-innerhtml */
 import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
 
+import { PageViewTracker } from '@/components/analytics/PageViewTracker';
+import { ScrollDepthTracker } from '@/components/analytics/ScrollDepthTracker';
 import About from '@/features/landing/About';
 import { CTA } from '@/features/landing/CTA';
 import { FAQ } from '@/features/landing/FAQ';
@@ -74,6 +76,13 @@ const IndexPage = (props: { params: { locale: string } }) => {
         />
       </section>
       <Navbar menuList={menuList} />
+
+      {/* ✅ Track page view */}
+      <PageViewTracker />
+
+      {/* ✅ Track scroll depth */}
+      <ScrollDepthTracker />
+
       <main className="flex-1">
         <Hero />
         <About />

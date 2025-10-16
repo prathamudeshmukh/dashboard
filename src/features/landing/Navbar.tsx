@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 
 import { CenteredMenu } from '@/components/landing/CenteredMenu';
 import { Button } from '@/components/ui/button';
+import { trackEvent } from '@/libs/analytics/trackEvent';
 import type { NavbarProps } from '@/types/Navbar';
 
 import { Logo } from '../../components/landing/Logo';
@@ -24,6 +25,14 @@ export const Navbar = ({ menuList, basePath = ' ' }: NavbarProps) => {
     // eslint-disable-next-line no-console
     console.log('isSignedIn', isSignedIn);
   }, [isLoaded, isSignedIn]);
+
+  // ✅ Add handler for the hero CTA
+  const handleHeroCTAClick = () => {
+    trackEvent('hero_cta_clicked', {
+      button_text: 'Start free trial',
+      page_section: 'navbar', // helps you know where it was clicked
+    });
+  };
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-primary-foreground py-4">
@@ -50,7 +59,7 @@ export const Navbar = ({ menuList, basePath = ' ' }: NavbarProps) => {
                           {t('sign_up')}
                         </Button>
                       </SignUpButton>
-                      <Link href="/sign-in">
+                      <Link href="/sign-in" onClick={handleHeroCTAClick}>
                         <Button className="rounded-full bg-primary text-lg hover:bg-primary">
                           Start free trial
                         </Button>
@@ -64,11 +73,23 @@ export const Navbar = ({ menuList, basePath = ' ' }: NavbarProps) => {
             {menuList.map((item, index) => {
               const linkHref = isLandingPage ? item.link : `${basePath}${item.link.replace('#', '/')}`;
 
+              const handleClick = () => {
+                // Track docs or blog link clicks
+                const lower = item.name.toLowerCase();
+                if (lower.includes('docs') || lower.includes('blog')) {
+                  trackEvent('docs_or_blog_clicked', {
+                    link_url: linkHref,
+                    link_text: item.name,
+                  });
+                }
+              };
+
               return (
                 <li key={index}>
                   <Link
                     className="text-lg font-normal text-black hover:text-primary"
                     href={linkHref}
+                    onClick={handleClick}
                   >
                     {item.name}
                   </Link>
