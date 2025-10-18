@@ -1,9 +1,12 @@
+'use client';
+
 import { FileText } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import { FAQItem } from '@/components/landing/FAQItem';
 import { Section } from '@/components/landing/Section';
 import { Accordion } from '@/components/ui/accordion';
+import { trackEvent } from '@/libs/analytics/trackEvent';
 
 export const FAQ = () => {
   const t = useTranslations('FAQ');
@@ -66,7 +69,17 @@ export const FAQ = () => {
           <div className="mx-auto mt-8 max-w-3xl space-y-4">
             <Accordion type="single" collapsible className="w-full">
               {faqs.map((faq, index) => (
-                <FAQItem key={index} question={faq.question} answer={faq.answer} />
+                <FAQItem
+                  key={index}
+                  question={faq.question}
+                  answer={faq.answer}
+                  onClick={
+                    () =>
+                      trackEvent('faq_interacted', {
+                        question_text: typeof faq.question === 'string' ? faq.question : `FAQ ${index + 1}`,
+                      })
+                  }
+                />
               ))}
             </Accordion>
           </div>
