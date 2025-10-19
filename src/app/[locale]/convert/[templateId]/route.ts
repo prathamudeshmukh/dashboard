@@ -3,6 +3,7 @@ import { Redis } from '@upstash/redis';
 import { type NextRequest, NextResponse } from 'next/server';
 
 import { generatePdf } from '@/libs/actions/templates';
+import { trackServerEvent } from '@/libs/analytics/posthog-server';
 
 import { authenticateApi } from '../../api/authenticateApi';
 import { withApiAuth } from '../../api/withApiAuth';
@@ -21,6 +22,7 @@ const ratelimit = new Ratelimit({
 });
 
 export const POST = withApiAuth(async (req: NextRequest, { params }: { params: { templateId: string } }): Promise<NextResponse> => {
+  const start = Date.now();
   try {
     const authResult = await authenticateApi(req);
     if (authResult instanceof NextResponse) {
@@ -79,12 +81,28 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
       isApi: true,
     });
 
+    const renderTime = Date.now() - start; // ms
+
     if (response.error) {
+      // ⚠️ Log failure
+      await trackServerEvent('api_call_failed', {
+        error_code: response.error.status?.toString() ?? 'unknown_error',
+        duration: renderTime,
+        template_id: templateId,
+      });
+
       return NextResponse.json(
         { error: response.error.message },
         { status: response.error.status },
       );
     }
+
+    // ✅ Log success
+    await trackServerEvent('api_call_generated_pdf', {
+      job_id: crypto.randomUUID(),
+      template_id: templateId,
+      render_time: renderTime,
+    });
 
     // Return the binary PDF file in the response
     return new NextResponse(response.pdf, {
@@ -94,6 +112,15 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
       },
     });
   } catch (error: any) {
+    const duration = Date.now() - start;
+
+    // ⚠️ Log exception as failed API call
+    await trackServerEvent('api_call_failed', {
+      error_code: 'exception',
+      duration,
+      template_id: params.templateId,
+    });
+
     console.error('Error generating PDF:', error);
     return NextResponse.json(
       { error: `Failed to generate PDF: ${error.message}` },
