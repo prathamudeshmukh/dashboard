@@ -414,6 +414,15 @@
     "security": "Sécurité et bonnes pratiques",
     "contact": "Contact et assistance"
   },
+  "Docs": {
+    "meta_title": "Documentation API Templify - Guide Développeur Complet",
+    "meta_description": "Documentation API Templify complète avec authentification, endpoints, exemples et bonnes pratiques. Apprenez à intégrer la génération PDF dans votre application SaaS avec notre guide développeur complet.",
+    "meta_keywords": "API Templify, génération PDF API, documentation API, guide développeur, intégration SaaS, gestion modèles, PDF dynamiques, endpoints API, authentification, exemples code",
+    "og_title": "Documentation API Templify - Guide Développeur Complet",
+    "og_description": "Maîtrisez l'API Templify avec notre documentation complète. Apprenez l'authentification, les endpoints, les exemples et les bonnes pratiques pour une intégration de génération PDF sans faille.",
+    "twitter_title": "Documentation API Templify - Guide Développeur",
+    "twitter_description": "Guide complet de l'API de génération PDF de Templify. Authentification, endpoints, exemples et bonnes pratiques pour les développeurs SaaS."
+  },
   "DocsIntroduction": {
     "title": "1. Introduction",
     "description": "Templify est un SaaS orienté API qui permet aux développeurs de créer et gérer des modèles et de générer des PDF dynamiquement. Cette documentation fournit les détails nécessaires pour intégrer l'API Templify de manière transparente dans votre application."
