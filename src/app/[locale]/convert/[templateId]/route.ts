@@ -3,7 +3,7 @@ import { Redis } from '@upstash/redis';
 import { type NextRequest, NextResponse } from 'next/server';
 
 import { generatePdf } from '@/libs/actions/templates';
-import { trackEvent } from '@/libs/analytics/trackEvent';
+import { trackServerEvent } from '@/libs/analytics/posthog-server';
 
 import { authenticateApi } from '../../api/authenticateApi';
 import { withApiAuth } from '../../api/withApiAuth';
@@ -85,7 +85,7 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
 
     if (response.error) {
       // ⚠️ Log failure
-      trackEvent('api_call_failed', {
+      await trackServerEvent('api_call_failed', {
         error_code: response.error.status?.toString() ?? 'unknown_error',
         duration: renderTime,
         template_id: templateId,
@@ -98,7 +98,7 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
     }
 
     // ✅ Log success
-    trackEvent('api_call_generated_pdf', {
+    await trackServerEvent('api_call_generated_pdf', {
       job_id: crypto.randomUUID(),
       template_id: templateId,
       render_time: renderTime,
@@ -115,7 +115,7 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
     const duration = Date.now() - start;
 
     // ⚠️ Log exception as failed API call
-    trackEvent('api_call_failed', {
+    await trackServerEvent('api_call_failed', {
       error_code: 'exception',
       duration,
       template_id: params.templateId,
