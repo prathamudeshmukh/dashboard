@@ -7,9 +7,9 @@ export async function trackServerEvent(event: string, properties: Record<string,
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${POSTHOG_API_KEY}`,
       },
       body: JSON.stringify({
+        api_key: POSTHOG_API_KEY,
         event,
         properties,
         distinct_id: properties.user_id || 'anonymous',
