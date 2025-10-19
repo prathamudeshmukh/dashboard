@@ -1,9 +1,9 @@
 import posthog from 'posthog-js';
 
-import type { EventPayloads, LandingPageEvents } from '@/types/Posthog/Events';
+import type { AppEvents, EventPayloads } from '@/types/Posthog/Events';
 
 // Track Function
-export const trackEvent = <E extends LandingPageEvents>(
+export const trackEvent = <E extends AppEvents >(
   event: E,
   properties: EventPayloads[E],
 ) => {

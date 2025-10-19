@@ -24,6 +24,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { deleteTemplate, fetchTemplates } from '@/libs/actions/templates';
+import { trackEvent } from '@/libs/analytics/trackEvent';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 import { TemplateTableState } from '@/types/Enum';
 import { type Template, TemplateType } from '@/types/Template';
@@ -71,11 +72,22 @@ const TemplateTable = () => {
     if (!user) {
       return;
     }
+
+    trackEvent('dashboard_viewed', {
+      user_id: user.id,
+      first_time: page === 1 && templateData.length === 0,
+    });
+
     const email = user?.emailAddresses[0]?.emailAddress as string;
     fetchTemplateData(email, page, searchQuery);
   }, [user, page]);
 
   const handleEdit = (templateId: string, templateType: string) => {
+    // Track engagement - (who edits which template and in which editor mode)
+    trackEvent('template_edited', {
+      templateId,
+      templateType,
+    });
     if (templateType === TemplateType.HTML_BUILDER) {
       router.push(`/dashboard/html-builder?templateId=${templateId}`);
     } else {
