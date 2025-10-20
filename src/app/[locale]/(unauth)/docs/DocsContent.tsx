@@ -1,4 +1,66 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
+'use client';
+
+import { trackEvent } from '@/libs/analytics/trackEvent';
+
+// Wrapper component for clickable code viewers
+const ClickableCodeViewer = ({
+  value,
+  language,
+  height = 'h-32',
+  codeType,
+  section,
+}: {
+  value: string;
+  language: string;
+  height?: string;
+  codeType: string;
+  section: string;
+}) => {
+  const handleCodeViewerClick = (codeType: string, language: string, section: string) => {
+    trackEvent('docs_code_example_copied', {
+      example_type: codeType,
+      language,
+      section,
+    });
+  };
+  return (
+    <pre
+      className={`${height} cursor-pointer overflow-auto rounded-lg border border-gray-700 bg-gray-900 p-4 transition-all duration-200 hover:border-blue-400 hover:bg-gray-800 dark:border-gray-600 dark:bg-gray-900 dark:hover:border-blue-400 dark:hover:bg-gray-800`}
+      onClick={() => handleCodeViewerClick(codeType, language, section)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleCodeViewerClick(codeType, language, section);
+        }
+      }}
+      role="button"
+      tabIndex={0}
+    >
+      <code className="block whitespace-pre-wrap font-mono text-sm leading-relaxed text-gray-100 dark:text-gray-100">
+        {value.trim()}
+      </code>
+    </pre>
+  );
+};
+
 export default function DocsContent() {
+  const handleApiEndpointClick = (endpoint: string, method: string, section: string) => {
+    trackEvent('docs_api_endpoint_clicked', {
+      endpoint,
+      method,
+      section,
+    });
+  };
+
+  const handleExternalLinkClick = (linkUrl: string, linkText: string, section: string) => {
+    trackEvent('docs_external_link_clicked', {
+      link_url: linkUrl,
+      link_text: linkText,
+      section,
+    });
+  };
+
   return (
     <div className="prose prose-lg max-w-none dark:prose-invert">
       <h1>Templify API Documentation</h1>
@@ -25,9 +87,6 @@ export default function DocsContent() {
           These credentials must be included in the request headers.
         </p>
 
-        <p><strong>Authentication Headers:</strong></p>
-        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800"><code>Content-Type: application/json</code></pre>
-
         <p>
           To obtain your API key, sign in to your Templify account and navigate to the
           {' '}
@@ -41,25 +100,40 @@ export default function DocsContent() {
         <h2>🔗 API Endpoints</h2>
 
         <h3>
-          📄
+          📄&nbsp;
           <strong>Generate PDF</strong>
         </h3>
 
         <p><strong>Endpoint:</strong></p>
-        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800"><code>POST /convert/TEMPLATE_ID_HERE</code></pre>
-
-        <p><strong>Headers:</strong></p>
-        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800">
-          <code>
-            client_id: CLIENT_ID_HERE
-            client_secret: CLIENT_SECRET_HERE
-          </code>
+        <pre
+          className="flex h-16 cursor-pointer items-center overflow-auto rounded-lg  bg-gray-900 p-4 transition-all duration-200 hover:bg-gray-800 dark:bg-gray-900 dark:hover:bg-gray-800"
+          onClick={() => handleApiEndpointClick('/convert/TEMPLATE_ID_HERE', 'POST', 'api-endpoints')}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              handleApiEndpointClick('/convert/TEMPLATE_ID_HERE', 'POST', 'api-endpoints');
+            }
+          }}
+          role="button"
+          tabIndex={0}
+        >
+          <code className="font-mono text-sm text-gray-100 dark:text-gray-100">POST /convert/TEMPLATE_ID_HERE</code>
         </pre>
 
+        <p><strong>Headers:</strong></p>
+        <ClickableCodeViewer
+          value={`{
+  "client_id": "CLIENT_ID_HERE",
+  "client_secret": "CLIENT_SECRET_HERE"
+}`}
+          language="json"
+          codeType="headers"
+          section="api-endpoints"
+        />
+
         <p><strong>Request Body:</strong></p>
-        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800">
-          <code>
-            {`{
+        <ClickableCodeViewer
+          value={`{
   "templateData": {
     "name": "John Doe",
     "invoice_number": "INV-1001",
@@ -69,26 +143,30 @@ export default function DocsContent() {
     ]
   }
 }`}
-          </code>
-        </pre>
+          language="json"
+          height="h-48"
+          codeType="request-body"
+          section="api-endpoints"
+        />
 
         <p><strong>Response:</strong></p>
-        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800">
-          <code>
-            {`{
+        <ClickableCodeViewer
+          value={`{
   data:PDF_DOC_IN_BYTE_ARRAY
 }`}
-          </code>
-        </pre>
+          language="json"
+          height="h-24"
+          codeType="response"
+          section="api-endpoints"
+        />
       </div>
 
       <div id="request-response-examples">
         <h2>📬 Request & Response Examples</h2>
 
         <p><strong>cURL Example:</strong></p>
-        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800">
-          <code>
-            {`curl --location https://api.templify.cloud/convert/YOUR_TEMPLATE_ID_HERE' \\
+        <ClickableCodeViewer
+          value={`curl --location https://api.templify.cloud/convert/YOUR_TEMPLATE_ID_HERE' \\
 --header 'client_id: USER_ID_HERE' \\
 --header 'client_secret: CLIENT_SECRET_HERE' \\
 --header 'Content-Type: application/json' \\
@@ -103,8 +181,11 @@ export default function DocsContent() {
          ]
        }
      }'`}
-          </code>
-        </pre>
+          language="bash"
+          height="h-64"
+          codeType="curl"
+          section="request-response-examples"
+        />
       </div>
 
       <div id="template-versioning">
@@ -120,14 +201,14 @@ export default function DocsContent() {
         <h3>🚀 Default Behavior</h3>
         <ul>
           <li>
-            When you
+            When you&nbsp;
             <strong>create a new template</strong>
-            , it is
+            , it is&nbsp;
             <strong>automatically published to production</strong>
             .
           </li>
           <li>
-            The template becomes immediately available to your
+            The template becomes immediately available to your&nbsp;
             <strong>generate PDF</strong>
             {' '}
             API calls (unless in dev mode).
@@ -143,18 +224,18 @@ export default function DocsContent() {
             <strong>Update (Save Only)</strong>
             <ul>
               <li>
-                Saves the changes in the
+                Saves the changes in the&nbsp;
                 <strong>unpublished (dev) version</strong>
                 .
               </li>
               <li>
-                Ideal for testing changes in
+                Ideal for testing changes in&nbsp;
                 <strong>lower environments</strong>
                 {' '}
                 (e.g., staging).
               </li>
               <li>
-                These changes
+                These changes&nbsp;
                 <strong>do not affect</strong>
                 {' '}
                 the live template used in production.
@@ -165,15 +246,15 @@ export default function DocsContent() {
             <strong>Update and Publish</strong>
             <ul>
               <li>
-                Saves and
+                Saves and&nbsp;
                 <strong>publishes the new version</strong>
                 {' '}
-                to
+                to&nbsp;
                 <strong>production</strong>
                 .
               </li>
               <li>
-                All future PDF generations (including from
+                All future PDF generations (including from&nbsp;
                 <strong>generate</strong>
                 {' '}
                 API) will use this updated version.
@@ -187,7 +268,7 @@ export default function DocsContent() {
         <p>To preview changes made in dev (unpublished) mode:</p>
         <ul>
           <li>
-            Add
+            Add&nbsp;
             <strong>?devMode=true</strong>
             {' '}
             to your preview or generation API calls.
@@ -196,15 +277,14 @@ export default function DocsContent() {
         </ul>
 
         <h3>
-          Example
+          Example&nbsp;
           <strong>curl</strong>
           {' '}
           to preview dev version:
         </h3>
 
-        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800">
-          <code>
-            {`curl --location https://api.templify.cloud/convert/YOUR_TEMPLATE_ID_HERE?devMode=true' \\
+        <ClickableCodeViewer
+          value={`curl --location https://api.templify.cloud/convert/YOUR_TEMPLATE_ID_HERE?devMode=true' \\
 --header 'client_id: USER_ID_HERE' \\
 --header 'client_secret: CLIENT_SECRET_HERE' \\
 --header 'Content-Type: application/json' \\
@@ -219,8 +299,11 @@ export default function DocsContent() {
          ]
        }
      }'`}
-          </code>
-        </pre>
+          language="bash"
+          height="h-64"
+          codeType="curl-dev"
+          section="template-versioning"
+        />
 
         <h3>✅ Production PDF Generation (Default Behavior)</h3>
 
@@ -288,32 +371,34 @@ export default function DocsContent() {
         </table>
 
         <p>Example error response:</p>
-        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800">
-          <code>
-            {`{
+        <ClickableCodeViewer
+          value={`{
   "error": "Template ID not found"
 }`}
-          </code>
-        </pre>
+          language="json"
+          height="h-20"
+          codeType="error-response"
+          section="error-handling"
+        />
       </div>
 
       <div id="security-best-practices">
         <h2>🔒 Security & Best Practices</h2>
         <ul>
           <li>
-            Always
+            Always&nbsp;
             <strong>store API keys securely</strong>
             {' '}
             and do not expose them in front-end code.
           </li>
           <li>
-            Use
+            Use&nbsp;
             <strong>HTTPS</strong>
             {' '}
             for all API requests to ensure encryption.
           </li>
           <li>
-            Implement
+            Implement&nbsp;
             <strong>rate limiting</strong>
             {' '}
             to prevent abuse.
@@ -328,12 +413,26 @@ export default function DocsContent() {
           <li>
             <strong>Email:</strong>
             {' '}
-            support@templify.cloud
+            <a
+              href="mailto:support@templify.cloud"
+              className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+              onClick={() => handleExternalLinkClick('mailto:support@templify.cloud', 'support@templify.cloud', 'contact-support')}
+            >
+              support@templify.cloud
+            </a>
           </li>
           <li>
             <strong>API Status:</strong>
             {' '}
-            https://status.templify.cloud
+            <a
+              href="https://status.templify.cloud"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+              onClick={() => handleExternalLinkClick('https://status.templify.cloud', 'API Status', 'contact-support')}
+            >
+              https://status.templify.cloud
+            </a>
           </li>
         </ul>
       </div>

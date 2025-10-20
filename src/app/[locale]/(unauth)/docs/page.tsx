@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
 
+import { DocsPageTracker } from '@/components/analytics/DocsPageTracker';
 import { getBaseUrl } from '@/utils/Helpers';
 
 import DocsContent from './DocsContent';
@@ -130,6 +131,7 @@ export default function DocsPage(props: { params: { locale: string } }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <DocsPageTracker />
       <DocsContent />
     </>
   );
