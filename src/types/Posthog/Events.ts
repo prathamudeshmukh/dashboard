@@ -9,6 +9,13 @@ export type LandingPageEvents =
   | 'signup_started'
   | 'user_account_created';
 
+export type DocsPageEvents =
+  | 'docs_page_viewed'
+  | 'docs_section_viewed'
+  | 'docs_code_example_copied'
+  | 'docs_api_endpoint_clicked'
+  | 'docs_external_link_clicked';
+
 export type InAppCoreEvents =
   | 'dashboard_viewed'
   | 'template_created'
@@ -19,7 +26,7 @@ export type InAppCoreEvents =
   | 'api_call_generated_pdf'
   | 'api_call_failed';
 
-export type AppEvents = LandingPageEvents | InAppCoreEvents;
+export type AppEvents = LandingPageEvents | DocsPageEvents | InAppCoreEvents;
 
 export type EventPayloads = {
   // --- Landing Page Events ---
@@ -61,6 +68,35 @@ export type EventPayloads = {
     user_id: string;
     email?: string;
     source?: string;
+  };
+
+  // --- Docs Page Events ---
+  docs_page_viewed: {
+    referrer?: string;
+    utm_source?: string;
+    device_type?: string;
+    country?: string;
+    time_on_page?: number;
+  };
+  docs_section_viewed: {
+    section_name: string;
+    section_id: string;
+    time_in_section?: number;
+  };
+  docs_code_example_copied: {
+    example_type: string;
+    language: string;
+    section: string;
+  };
+  docs_api_endpoint_clicked: {
+    endpoint: string;
+    method: string;
+    section: string;
+  };
+  docs_external_link_clicked: {
+    link_url: string;
+    link_text: string;
+    section: string;
   };
 
   // --- In-App Core Events ---
