@@ -18,22 +18,22 @@ export default function About() {
 
         <div className="mx-auto grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
           <AboutCard
-            icon={<Icon icon="material-symbols-light:lock-outline" width="50" height="50" className="bg-templify-lightgray" />}
+            icon={<Icon icon="mingcute:ai-line" width="50" height="50" className="text-purple-600" />}
             title={t('feature1')}
             description={t('feature1_description')}
           />
           <AboutCard
-            icon={<Icon icon="hugeicons:security-check" width="50" height="50" className="bg-templify-lightgray" />}
+            icon={<Icon icon="material-symbols-light:lock-outline" width="50" height="50" className="bg-templify-lightgray" />}
             title={t('feature2')}
             description={t('feature2_description')}
           />
           <AboutCard
-            icon={<Icon icon="material-symbols-light:support-agent-outline-rounded" width="50" height="50" className="bg-templify-lightgray" />}
+            icon={<Icon icon="hugeicons:security-check" width="50" height="50" className="bg-templify-lightgray" />}
             title={t('feature3')}
             description={t('feature3_description')}
           />
           <AboutCard
-            icon={<Icon icon="solar:scale-linear" width="50" height="50" className="bg-templify-lightgray" />}
+            icon={<Icon icon="material-symbols-light:support-agent-outline-rounded" width="50" height="50" className="bg-templify-lightgray" />}
             title={t('feature4')}
             description={t('feature4_description')}
           />

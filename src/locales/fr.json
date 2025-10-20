@@ -16,8 +16,9 @@
   },
   "Hero": {
     "follow_twitter": "Suivez @Ixartz sur Twitter",
-    "title": "Le parfait SaaS template pour construire et mettre à l'échelle votre entreprise en toute simplicité.",
-    "subtitle": "Créer et gérer des modèles PDF ne devrait pas être un casse-tête. <important>Templify</important> vous permet de créer, de gérer et de générer des PDF sans effort, sans maintenir de bibliothèques complexes ni écrire de code personnalisé pour chaque nouveau modèle.",
+    "badge": "NOUVEAU : Extraction de modèles PDF alimentée par l’IA",
+    "title": "Génération de PDF sans effort pour les applications SaaS",
+    "subtitle": "Templify simplifie la création de modèles PDF — créez, gérez et générez des PDF sans code complexe ni bibliothèques. Désormais avec l’extraction alimentée par l’IA pour convertir instantanément n’importe quel PDF en modèle modifiable.",
     "description1": "Infrastructure évolutive, axée sur l'API, qui gère la génération de PDF pour vous",
     "description2": "Aucun effort de développement important n'est nécessaire pour chaque nouveau modèle",
     "description3": "Plus besoin de maintenir des bibliothèques PDF volumineuses"
@@ -27,8 +28,13 @@
   },
   "Features": {
     "title": "Pourquoi Templify est Différent",
-    "subtitle": "Templify simplifie la génération de PDF en combinant des outils de développement puissants avec une expérience sans code — ainsi n'importe qui dans votre équipe peut créer des documents prêts pour la production en quelques minutes.",
+    "subtitle": "Créez facilement des modèles PDF professionnels. Nos outils alimentés par l’IA et notre éditeur intuitif rendent la création de modèles plus rapide que jamais.",
     "feature1": {
+      "id": "ai-powered",
+      "title": "Extraction de PDF alimentée par l’IA ✨",
+      "content": "Transformez instantanément n’importe quel PDF existant en modèle modifiable. Notre IA avancée analyse votre PDF, identifie les champs de texte, la mise en page et le style, puis génère un modèle entièrement modifiable avec variables et espaces réservés. Aucune recréation manuelle nécessaire — il suffit de télécharger et d’éditer."
+    },
+    "feature2": {
       "id": "no-code",
       "title": "🔧 Convivial pour les Développeurs & Prêt Sans Code",
       "content": "Que vous soyez un développeur ou que vous préfériez le design visuel, Templify vous couvre :",
@@ -37,12 +43,12 @@
         "Sans code : Utilisez l'éditeur visuel glisser-déposer pour un contrôle instantané de la mise en page."
       ]
     },
-    "feature2": {
+    "feature3": {
       "id": "live-preview",
       "title": "👁️ Aperçu en Temps Réel",
       "content": "Voyez exactement à quoi ressemblera votre PDF pendant que vous le construisez. Un retour instantané garde vos designs précis et soignés."
     },
-    "feature3": {
+    "feature4": {
       "id": "dynamic-content",
       "title": "⚙️ Contenu Dynamique, Flexibilité Inégalée",
       "content": "Donnez vie à vos modèles avec des données dynamiques :",
@@ -51,7 +57,7 @@
         "Parfait pour des cas d'usage comme les factures, contrats, rapports, certificats, et documents personnalisés."
       ]
     },
-    "feature4": {
+    "feature5": {
       "id": "scalable",
       "title": "🚀 Performance à l'Échelle Entreprise",
       "content": "Notre infrastructure s'adapte automatiquement pour gérer vos pics de charge. Générez des milliers de PDF simultanément sans dégradation de performance.",
@@ -60,7 +66,7 @@
         "Soutenu par une infrastructure auto-évolutive et un SLA de disponibilité de 99,9%, même pendant les pics d'utilisation."
       ]
     },
-    "feature5": {
+    "feature6": {
       "id": "secure",
       "title": "🔐 Sécurisé & Fiable",
       "content": "La sécurité de vos données est notre priorité. Toutes les communications sont chiffrées, et nous maintenons des contrôles d'accès stricts. Avec 99,9% de disponibilité, vous pouvez compter sur notre service pour être là quand vous en avez besoin.",
@@ -69,7 +75,7 @@
         "Une infrastructure sécurisée garantit que vos documents et données restent protégés."
       ]
     },
-    "feature6": {
+    "feature7": {
       "id": "api-insights",
       "title": "📊 Insights Intelligents & Métriques d'Utilisation",
       "content": "Gardez le contrôle avec les analyses :",
@@ -78,7 +84,7 @@
         "Optimisez pour l'efficacité des coûts et des ressources."
       ]
     },
-    "feature7": {
+    "feature8": {
       "id": "support",
       "title": "🛠️ Support Exceptionnel & Documentation",
       "content": "",
@@ -201,14 +207,16 @@
     "title": "Sécurisé, fiable et conçu pour l'échelle",
     "subtitle": "Sécurité",
     "description": "Vos données restent protégées et vos PDF sont générés instantanément, à chaque fois.",
-    "feature1": "Sécurité",
-    "feature2": "Fiabilité",
-    "feature3": "Support",
-    "feature4": "Évolutivité",
-    "feature1_description": "L'authentification sécurisée par clé API garantit que seuls les utilisateurs autorisés génèrent des PDF.",
-    "feature2_description": "Garantie de disponibilité de 99,9% pour un service ininterrompu.",
-    "feature3_description": "Documentation API complète + support par email pour les développeurs.",
-    "feature4_description": "L'infrastructure à mise à l'échelle automatique assure une génération de PDF à haute vitesse, même en période de pointe."
+    "feature1": "Alimenté par l’IA",
+    "feature2": "Sécurité",
+    "feature3": "Fiabilité",
+    "feature4": "Support",
+    "feature5": "Évolutivité",
+    "feature1_description": "Convertissez instantanément vos PDF existants en modèles modifiables grâce à notre technologie d’extraction intelligente alimentée par l’IA.",
+    "feature2_description": "L'authentification sécurisée par clé API garantit que seuls les utilisateurs autorisés génèrent des PDF.",
+    "feature3_description": "Garantie de disponibilité de 99,9% pour un service ininterrompu.",
+    "feature4_description": "Documentation API complète + support par email pour les développeurs.",
+    "feature5_description": "L'infrastructure à mise à l'échelle automatique assure une génération de PDF à haute vitesse, même en période de pointe."
   },
   "Pricing": {
     "title": "Tarification simple et transparente pour la version MVP",
