@@ -31,7 +31,7 @@ const NextConfig = withSentryConfig(
   withMDX(
     bundleAnalyzer(
       withNextIntlConfig({
-        compress: false,
+        compress: true,
         eslint: {
           dirs: ['.'],
         },
@@ -39,6 +39,11 @@ const NextConfig = withSentryConfig(
         reactStrictMode: true,
         experimental: {
           serverComponentsExternalPackages: ['@electric-sql/pglite'],
+        },
+        images: {
+          formats: ['image/webp', 'image/avif'],
+          deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+          imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
         },
         pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
       }),

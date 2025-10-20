@@ -1,7 +1,7 @@
 {
   "Index": {
-    "meta_title": "Templify - API-First & No-Code PDF Generation",
-    "meta_description": "Templify lets SaaS companies generate dynamic PDFs effortlessly using API and no-code templates. Fast, secure, and scalable document automation."
+    "meta_title": "Templify - API-First PDF Generation Platform | No-Code Templates for SaaS",
+    "meta_description": "Generate dynamic PDFs instantly with Templify's API-first platform. No-code templates, Handlebars support, and enterprise-scale performance. Start with 150 free credits today!"
   },
   "Navbar": {
     "sign_in": "Sign In",
@@ -16,8 +16,8 @@
   },
   "Hero": {
     "follow_twitter": "Follow @Ixartz on Twitter",
-    "title": "Effortless PDF Generation for SaaS Applications",
-    "subtitle": "Templify makes PDF templates easy—create, manage, and generate PDFs without complex code or libraries.",
+    "title": "Effortless PDF Generation API for SaaS Applications",
+    "subtitle": "Templify makes dynamic PDF generation easy—create, manage, and generate PDFs with our API-first platform. No complex libraries or coding required.",
     "description1": "Scalable, API-first infrastructure that handles PDF generation for you",
     "description2": "No huge dev effort needed for every new template",
     "description3": "No more maintaining bulky PDF libraries"

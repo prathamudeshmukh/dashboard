@@ -1,7 +1,7 @@
 {
   "Index": {
-    "meta_title": "SaaS Template - Le template SaaS parfait pour construire et mettre à l'échelle votre entreprise en toute simplicité.",
-    "meta_description": "Un template gratuit et open-source de landing page pour votre entreprise SaaS, construit avec React, TypeScript, Shadcn UI et Tailwind CSS."
+    "meta_title": "Templify - Plateforme de Génération PDF API-First | Modèles No-Code pour SaaS",
+    "meta_description": "Générez des PDF dynamiques instantanément avec la plateforme API-first de Templify. Modèles no-code, support Handlebars, et performance à l'échelle entreprise. Commencez avec 150 crédits gratuits aujourd'hui !"
   },
   "Navbar": {
     "sign_in": "Se connecter",
