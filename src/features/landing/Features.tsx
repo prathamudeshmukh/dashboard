@@ -40,7 +40,7 @@ export default function Features() {
             </Accordion>
 
           </div>
-          <div className="relative size-full overflow-hidden rounded-xl">
+          <div className="relative size-full overflow-hidden rounded-xl bg-templify-lightgray">
             <Image
               key={activeImage}
               src={activeImage}
