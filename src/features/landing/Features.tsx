@@ -61,6 +61,7 @@ export default function Features() {
               className="object-contain object-center opacity-0 transition-opacity duration-300 data-[loaded=true]:opacity-100"
               onLoadingComplete={img => img.setAttribute('data-loaded', 'true')}
               priority
+              fetchPriority="high"
             />
           </div>
         </div>
