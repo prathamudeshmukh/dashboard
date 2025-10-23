@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { FeatureAccordionItem } from '@/components/landing/FeatureAccordionItem';
 import { Accordion } from '@/components/ui/accordion';
@@ -18,6 +18,18 @@ export default function Features() {
   // Get the current feature's image (fallback to default)
   const activeImage
     = features.find(f => f.id === activeFeature) ? `/images/features/${activeFeature}.png` : '/images/dashboard.png';
+
+  // ✅ Preload all feature images for smoother transitions
+  useEffect(() => {
+    features.forEach((feature) => {
+      const img = new window.Image();
+      img.src = `/images/features/${feature.id}.png`;
+    });
+
+    // Optionally preload fallback image too
+    const fallback = new window.Image();
+    fallback.src = '/images/dashboard.png';
+  }, [features]);
 
   return (
     <section id="features" className="bg-white py-20">
@@ -46,7 +58,9 @@ export default function Features() {
               src={activeImage}
               alt="Features"
               fill
-              className="object-contain object-center transition-all duration-300"
+              className="object-contain object-center opacity-0 transition-opacity duration-300 data-[loaded=true]:opacity-100"
+              onLoadingComplete={img => img.setAttribute('data-loaded', 'true')}
+              priority
             />
           </div>
         </div>
