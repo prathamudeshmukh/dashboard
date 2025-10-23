@@ -77,15 +77,6 @@
         "Track template usage and performance.",
         "Optimize for cost and resource efficiency."
       ]
-    },
-    "feature7": {
-      "id": "support",
-      "title": "Exceptional Support & Documentation",
-      "content": "",
-      "points": [
-        "Rich, interactive developer docs and code samples.",
-        "Responsive email support to help you integrate smoothly."
-      ]
     }
   },
   "Steps": {

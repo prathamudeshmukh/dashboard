@@ -77,15 +77,6 @@
         "Suivez l'utilisation et les performances des modèles.",
         "Optimisez pour l'efficacité des coûts et des ressources."
       ]
-    },
-    "feature7": {
-      "id": "support",
-      "title": "🛠️ Support Exceptionnel & Documentation",
-      "content": "",
-      "points": [
-        "Documentation développeur riche et interactive avec des exemples de code.",
-        "Support par email réactif pour vous aider à intégrer en douceur."
-      ]
     }
   },
   "Steps": {
