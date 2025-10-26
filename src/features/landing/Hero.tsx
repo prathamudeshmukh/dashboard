@@ -1,5 +1,6 @@
 'use client';
 
+import { Sparkles } from 'lucide-react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 
@@ -10,6 +11,11 @@ export const Hero = () => {
     <section className="relative py-16">
       <div className="container mx-auto px-4">
         <div className="mb-12 flex flex-col items-center text-center">
+          {/* ✨ Badge */}
+          <div className="mb-4 flex items-center space-x-2 rounded-full bg-gradient-to-r from-purple-100 to-pink-100 px-4 py-2 text-sm font-medium text-purple-700 shadow-sm">
+            <Sparkles className="size-4 text-purple-600" />
+            <span>{t('badge')}</span>
+          </div>
           <h1 className="max-w-4xl text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl lg:font-semibold lg:tracking-normal">
             {t('title')}
           </h1>
