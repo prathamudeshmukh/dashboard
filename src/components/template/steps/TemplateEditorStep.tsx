@@ -1,5 +1,6 @@
 'use client';
 
+import { useUser } from '@clerk/nextjs';
 import { Lightbulb } from 'lucide-react';
 import { useLocale } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
@@ -7,6 +8,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import ConfirmationDialog from '@/components/ui/confirmation-dialog';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
+import { trackEvent } from '@/libs/analytics/trackEvent';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 import { EditorTypeEnum } from '@/types/Enum';
 import type { PostMessagePayload, TemplateData } from '@/types/PostMessage';
@@ -36,6 +38,7 @@ export default function TemplateEditorStep() {
   const [pendingTab, setPendingTab] = useState<EditorTypeEnum | null>(null);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const locale = useLocale();
+  const { user } = useUser();
 
   // Send data to iframe
   const sendDataToIframe = (templateData: TemplateData) => {
@@ -113,6 +116,17 @@ export default function TemplateEditorStep() {
 
   const handleConfirmSwitch = () => {
     if (pendingTab) {
+      if (pendingTab === EditorTypeEnum.VISUAL && activeTab === EditorTypeEnum.HANDLEBARS) {
+        trackEvent('visual_editor_opened', {
+          from_mode: 'code',
+          user_id: user?.id,
+        });
+      } else if (pendingTab === EditorTypeEnum.HANDLEBARS && activeTab === EditorTypeEnum.VISUAL) {
+        trackEvent('code_editor_opened', {
+          from_mode: 'visual',
+          user_id: user?.id,
+        });
+      }
       setActiveTab(pendingTab);
     }
     setShowConfirmation(false);

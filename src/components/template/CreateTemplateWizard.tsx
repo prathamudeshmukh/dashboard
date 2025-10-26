@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 
 import { PublishTemplateToProd, UpsertTemplate } from '@/libs/actions/templates';
+import { trackEvent } from '@/libs/analytics/trackEvent';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 import { CreationMethodEnum, EditorTypeEnum, SaveStatusEnum } from '@/types/Enum';
 import { TemplateType } from '@/types/Template';
@@ -99,6 +100,14 @@ export default function CreateTemplateWizard() {
         templateGeneratedFrom: creationMethod === CreationMethodEnum.TEMPLATE_GALLERY ? selectedTemplate : null,
       });
       await PublishTemplateToProd(response.templateId as string);
+
+      // ✅ Analytics event for template creation
+      trackEvent('template_created', {
+        template_id: response.templateId as string,
+        method:
+          creationMethod === CreationMethodEnum.EXTRACT_FROM_PDF ? 'pdf' : 'gallery',
+      });
+
       toast.success('Template Saved Successfully');
       setSaveStatus(SaveStatusEnum.SUCCESS);
       setSuccessData({
