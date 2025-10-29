@@ -2,6 +2,7 @@
 
 import { Lightbulb } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 import { fetchTemplateById } from '@/libs/actions/templates';
 import { HandlebarsService } from '@/libs/services/HandlebarService';
@@ -36,11 +37,13 @@ export default function HandlebarsEditor() {
     setHandlebarsCode,
     setHandlebarTemplateJson,
     setCreationMethod,
+    jsonError,
+    templateError,
+    setJsonError,
+    setTemplateError,
   } = useTemplateStore();
 
   const [handlebarsPreview, setHandlebarsPreview] = useState('');
-  const [jsonError, setJsonError] = useState('');
-  const [templateError, setTemplateError] = useState('');
   const [isHandlebarsLoading, setIsHandlebarsLoading] = useState(true);
   const [isEditorReady, setIsEditorReady] = useState(false);
   const [activeTab, setActiveTab] = useState('editor');
@@ -177,13 +180,13 @@ export default function HandlebarsEditor() {
         setTemplateError('');
         setRenderCount(prev => prev + 1);
       } catch (error: any) {
-        console.error('Template rendering error:', error);
+        console.error('Template rendering error:', error.message);
         if (error.message.includes('JSON')) {
           setJsonError(error.message);
-        } else {
-          setTemplateError(error.message);
-          setHandlebarsPreview(`<div class="text-red-500 p-4">Error: ${error.message}</div>`);
+          toast.error(`JSON Error: ${error.message}`, { position: 'bottom-right' });
         }
+        setTemplateError(error.message);
+        setHandlebarsPreview(`<div class="text-red-500 p-4">Error: ${error.message}</div>`);
       } finally {
         setIsHandlebarsLoading(false);
       }

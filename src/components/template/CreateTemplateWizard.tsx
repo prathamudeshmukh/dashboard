@@ -25,7 +25,7 @@ export default function CreateTemplateWizard() {
   const router = useRouter();
   const [saveStatus, setSaveStatus] = useState<SaveStatusEnum>(SaveStatusEnum.IDLE);
   const [currentStep, setCurrentStep] = useState(0);
-  const { creationMethod, selectedTemplate, templateName, templateDescription, htmlContent, htmlTemplateJson, htmlStyle, handlebarsCode, activeTab, handlebarTemplateJson, setSuccessData } = useTemplateStore();
+  const { creationMethod, selectedTemplate, templateName, templateDescription, htmlContent, htmlTemplateJson, htmlStyle, handlebarsCode, activeTab, handlebarTemplateJson, templateError, jsonError, setSuccessData } = useTemplateStore();
   const handleNext = () => setCurrentStep(prev => prev + 1);
   const handlePrevious = () => setCurrentStep(prev => prev - 1);
 
@@ -76,8 +76,11 @@ export default function CreateTemplateWizard() {
         return !htmlContent;
       case 2:
         return (!templateName || !templateDescription);
-      case 3:
-        return (!htmlContent);
+      case 3: {
+        const hasTemplateError = templateError?.trim().length > 0;
+        const hasJsonError = jsonError?.trim().length > 0;
+        return !htmlContent || hasTemplateError || hasJsonError;
+      }
       case 4:
         return (saveStatus === SaveStatusEnum.SAVING);
       default:
