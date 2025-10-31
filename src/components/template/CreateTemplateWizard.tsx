@@ -77,9 +77,12 @@ export default function CreateTemplateWizard() {
       case 2:
         return (!templateName || !templateDescription);
       case 3: {
-        const hasTemplateError = templateError?.trim().length > 0;
-        const hasJsonError = jsonError?.trim().length > 0;
-        return !htmlContent || hasTemplateError || hasJsonError;
+        if (activeTab === EditorTypeEnum.VISUAL) {
+          return !htmlContent;
+        }
+
+        // Handlebars tab
+        return !handlebarsCode || !!templateError || !!jsonError;
       }
       case 4:
         return (saveStatus === SaveStatusEnum.SAVING);
