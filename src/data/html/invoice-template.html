@@ -104,10 +104,10 @@
 <body>
   <div class="invoice-container">
     <div class="invoice-header">
-      <div class="invoice-title">INVOICE</div>
+      <div class="invoice-title">{{title}}</div>
       <div class="invoice-details">
-        <div class="invoice-id">#INV-001</div>
-        <div class="invoice-date">March 29, 2025</div>
+        <div class="invoice-id">{{invoiceNumber}}</div>
+        <div class="invoice-date">{{invoiceDate}}</div>
       </div>
     </div>
     
@@ -116,17 +116,17 @@
     <div class="invoice-parties">
       <div class="invoice-from">
         <div class="party-title">From:</div>
-        <div>Acme Corporation</div>
-        <div>123 Business Street</div>
-        <div>San Francisco, CA 94107</div>
-        <div>billing@acmecorp.com</div>
+        <div>{{from.company}}</div>
+        <div>{{from.address1}}</div>
+        <div>{{from.address2}}</div>
+        <div>{{from.email}}</div>
       </div>
       <div class="invoice-to">
         <div class="party-title">Bill To:</div>
-        <div>Client Company Inc.</div>
-        <div>456 Client Avenue</div>
-        <div>New York, NY 10001</div>
-        <div>accounting@clientcompany.com</div>
+        <div>{{to.company}}</div>
+        <div>{{to.address1}}</div>
+        <div>{{to.address2}}</div>
+        <div>{{to.email}}</div>
       </div>
     </div>
     
@@ -140,45 +140,41 @@
         </tr>
       </thead>
       <tbody>
+        {{#each items}}
         <tr>
-          <td>Web Development</td>
-          <td>40</td>
-          <td>$75.00</td>
-          <td>$3,000.00</td>
+          <td>{{description}}</td>
+          <td>{{quantity}}</td>
+          <td>{{price}}</td>
+          <td>{{total}}</td>
         </tr>
-        <tr>
-          <td>Design Services</td>
-          <td>20</td>
-          <td>$85.00</td>
-          <td>$1,700.00</td>
-        </tr>
-        <tr>
-          <td>Consulting</td>
-          <td>10</td>
-          <td>$125.00</td>
-          <td>$1,250.00</td>
-        </tr>
+        {{/each}}
       </tbody>
     </table>
     
     <div class="invoice-totals">
       <div class="total-row">
         <span>Subtotal:</span>
-        <span>$5,950.00</span>
+        <span>{{totals.subtotal}}</span>
       </div>
       <div class="total-row">
-        <span>Tax (8%):</span>
-        <span>$476.00</span>
+        <span>{{totals.taxLabel}}:</span>
+        <span>{{totals.tax}}</span>
       </div>
+      {{#if totals.discount}}
+      <div class="total-row">
+        <span>Discount:</span>
+        <span>{{totals.discount}}</span>
+      </div>
+      {{/if}}
       <div class="total-row grand-total">
         <span>Total:</span>
-        <span>$6,426.00</span>
+        <span>{{totals.grandTotal}}</span>
       </div>
     </div>
     
     <div class="invoice-footer">
-      <p>Thank you for your business!</p>
-      <p>Payment due within 30 days. Please make checks payable to Acme Corporation.</p>
+      <p>{{footer.thankYouMessage}}</p>
+      <p>{{footer.paymentTerms}}</p>
     </div>
   </div>
 </body>

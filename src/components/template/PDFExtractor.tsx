@@ -3,6 +3,7 @@ import { Check, FileUp, Loader2, Upload } from 'lucide-react';
 import React, { useRef, useState } from 'react';
 
 import { getStatus } from '@/libs/actions/pdf';
+import { trackEvent } from '@/libs/analytics/trackEvent';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
@@ -34,12 +35,12 @@ const PDFExtractor = () => {
 
   async function pollJobStatus(runID: string) {
     try {
-    // Initial fetch before starting the loop
+      // Initial fetch before starting the loop
       let response = await getStatus(runID);
 
       // Poll until the job is in a terminal state
       while (response.status !== 'Completed' && response.status !== 'Failed' && response.status !== 'Cancelled') {
-      // Wait for a second before the next poll
+        // Wait for a second before the next poll
         await new Promise(resolve => setTimeout(resolve, 1000));
         response = await getStatus(runID);
       }
@@ -79,7 +80,20 @@ const PDFExtractor = () => {
       });
       setPdfUploadStatus(PdfUploadStatusEnum.COMPLETETD);
       setpdfExtractionStatus(PdfExtractionStatusEnum.IN_PROGRESS);
-      pollJobStatus(response.data.runID);
+
+      // Poll job status
+      const extractionStart = Date.now();
+      await pollJobStatus(response.data.runID);
+      const extractionEnd = Date.now();
+
+      const extractionTime = extractionEnd - extractionStart;
+
+      // ✅ Fire success tracking event
+      trackEvent('template_imported_from_pdf', {
+        file_size: file.size,
+        extraction_time: extractionTime,
+        success: true,
+      });
     } catch (error: any) {
       setPdfUploadStatus(PdfUploadStatusEnum.FAILED);
       setUploadError(`Upload failed. Please try again - ${error}`);

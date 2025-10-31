@@ -1,5 +1,4 @@
-import { inngest } from '@/inngest/client';
-
+import { inngest } from '../../client';
 import { convertToHTML } from './convertToHtml';
 import { fetchBlobMetadata } from './fetchBlobMetadata';
 
@@ -16,7 +15,7 @@ export const extractPdfContent = inngest.createFunction(
         fetchBlobMetadata(pdfId));
 
       const htmlContent = await step.run('convert-to-html', () =>
-        convertToHTML(downloadUrl, pdfId, logger));
+        convertToHTML(downloadUrl, logger));
 
       logger.info('PDF Extraction Completed Succesfully');
 

@@ -18,22 +18,6 @@ export type Template = {
   updatedAt?: Date;
 };
 
-export type FetchTemplateResponse = {
-  templateName: string;
-  templateId: string | null;
-  description?: string;
-  templateType: string;
-};
-
-export type FetchTemplatesRequest = {
-  email: string;
-  page: number;
-  pageSize: number;
-  startDate?: Date;
-  endDate?: Date;
-  searchQuery?: string;
-};
-
 export type UsageMetric = {
   generatedDate: Date;
   templateName: string;

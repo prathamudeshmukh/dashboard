@@ -1,6 +1,6 @@
 import { put } from '@vercel/blob';
 
-import { generatePdf } from '@/libs/actions/templates';
+import { generatePdf } from '../../../libs/actions/templates';
 
 export async function GenerateAnduploadPDF(templateId: string, logger: any) {
   logger.info('Generating and Uploading PDF for template', { templateId });

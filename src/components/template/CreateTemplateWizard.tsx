@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 
 import { PublishTemplateToProd, UpsertTemplate } from '@/libs/actions/templates';
+import { trackEvent } from '@/libs/analytics/trackEvent';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 import { CreationMethodEnum, EditorTypeEnum, SaveStatusEnum } from '@/types/Enum';
 import { TemplateType } from '@/types/Template';
@@ -24,7 +25,7 @@ export default function CreateTemplateWizard() {
   const router = useRouter();
   const [saveStatus, setSaveStatus] = useState<SaveStatusEnum>(SaveStatusEnum.IDLE);
   const [currentStep, setCurrentStep] = useState(0);
-  const { creationMethod, selectedTemplate, templateName, templateDescription, htmlContent, htmlStyle, handlebarsCode, activeTab, handlebarsJson, setSuccessData } = useTemplateStore();
+  const { creationMethod, selectedTemplate, templateName, templateDescription, htmlContent, htmlTemplateJson, htmlStyle, handlebarsCode, activeTab, handlebarTemplateJson, setSuccessData } = useTemplateStore();
   const handleNext = () => setCurrentStep(prev => prev + 1);
   const handlePrevious = () => setCurrentStep(prev => prev - 1);
 
@@ -92,13 +93,21 @@ export default function CreateTemplateWizard() {
         email: user?.emailAddresses[0]?.emailAddress,
         templateName,
         templateContent: activeTab === EditorTypeEnum.VISUAL ? htmlContent : handlebarsCode,
-        templateSampleData: activeTab === EditorTypeEnum.HANDLEBARS ? handlebarsJson : '{}',
+        templateSampleData: activeTab === EditorTypeEnum.HANDLEBARS ? handlebarTemplateJson : htmlTemplateJson,
         templateStyle: activeTab === EditorTypeEnum.VISUAL ? htmlStyle : '',
         templateType: activeTab === EditorTypeEnum.VISUAL ? TemplateType.HTML_BUILDER : TemplateType.HANDLBARS_TEMPLATE,
         creationMethod,
         templateGeneratedFrom: creationMethod === CreationMethodEnum.TEMPLATE_GALLERY ? selectedTemplate : null,
       });
       await PublishTemplateToProd(response.templateId as string);
+
+      // ✅ Analytics event for template creation
+      trackEvent('template_created', {
+        template_id: response.templateId as string,
+        method:
+          creationMethod === CreationMethodEnum.EXTRACT_FROM_PDF ? 'pdf' : 'gallery',
+      });
+
       toast.success('Template Saved Successfully');
       setSaveStatus(SaveStatusEnum.SUCCESS);
       setSuccessData({

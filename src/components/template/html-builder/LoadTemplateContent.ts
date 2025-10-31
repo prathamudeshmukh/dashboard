@@ -1,57 +1,46 @@
-import type { Editor } from 'grapesjs';
-
 import { fetchTemplateById } from '@/libs/actions/templates';
 import type { CreationMethodEnum } from '@/types/Enum';
 
 export async function loadTemplateContent({
-  editor,
   templateId,
-  htmlContent,
   setHtmlContent,
+  setHtmlTemplateJson,
   setHtmlStyle,
   setCreationMethod,
   setTemplateName,
   setTemplateDescription,
 }: {
-  editor: Editor;
   templateId: string | null;
-  htmlContent: string;
   setHtmlContent: (val: string) => void;
   setHtmlStyle: (val: string) => void;
   setCreationMethod: (val: CreationMethodEnum) => void;
   setTemplateName: (val: string) => void;
+  setHtmlTemplateJson: (val: string) => void;
   setTemplateDescription: (val: string) => void;
 }) {
-  if (!editor) {
+  if (!templateId) {
     return;
   }
-
-  if (templateId) {
-    try {
-      const response = await fetchTemplateById(templateId);
-      if (!response?.data) {
-        return;
-      }
-
-      const content = response.data.templateContent as string;
-      const style = response.data.templateStyle as string;
-
-      setHtmlContent(content);
-      setHtmlStyle(style);
-      setCreationMethod(response.data.creationMethod as CreationMethodEnum);
-      setTemplateName(response.data.templateName as string);
-      setTemplateDescription(response.data.description as string);
-
-      if (content) {
-        editor.setComponents(content);
-      }
-      if (style) {
-        editor.setStyle(style);
-      }
-    } catch (error) {
-      console.error('Failed to load template for editing:', error);
+  try {
+    const response = await fetchTemplateById(templateId);
+    if (!response?.data) {
+      return;
     }
-  } else if (htmlContent) {
-    editor.setComponents(htmlContent);
+
+    const content = response.data.templateContent as string;
+    const style = response.data.templateStyle as string;
+    const dataSource = JSON.stringify(response.data.templateSampleData);
+    const creationMethod = response.data.creationMethod as CreationMethodEnum;
+    const templateName = response.data.templateName as string;
+    const templateDescription = response.data.description as string;
+
+    setHtmlContent(content);
+    setHtmlStyle(style);
+    setHtmlTemplateJson(dataSource);
+    setCreationMethod(creationMethod);
+    setTemplateName(templateName);
+    setTemplateDescription(templateDescription);
+  } catch (error) {
+    console.error('Failed to load template for editing:', error);
   }
 }

@@ -23,8 +23,9 @@ export default function TemplateGallery() {
     setTemplateName,
     setTemplateDescription,
     setHtmlContent,
+    setHtmlTemplateJson,
     setHandlebarsCode,
-    setHandlebarsJson,
+    setHandlebarTemplateJson,
     setTemplateGallery,
   } = useTemplateStore();
   const [isLoading, setIsLoading] = useState(true);
@@ -73,7 +74,8 @@ export default function TemplateGallery() {
     setTemplateDescription(template?.description as string);
     setHtmlContent(template.htmlContent);
     setHandlebarsCode(template.handlebarContent as string);
-    setHandlebarsJson(JSON.stringify(template.sampleData as string, null, 2));
+    setHtmlTemplateJson(JSON.stringify(template.sampleData as string, null, 2));
+    setHandlebarTemplateJson(JSON.stringify(template.sampleData as string, null, 2));
   }
 
   return (
@@ -119,6 +121,7 @@ export default function TemplateGallery() {
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {filteredTemplates.map(template => (
                   <Card
+                    data-testid="template-card"
                     key={template.id}
                     className={`cursor-pointer transition-all hover:shadow-md ${
                       selectedTemplate === template.id ? 'ring-2 ring-primary' : ''
@@ -130,7 +133,7 @@ export default function TemplateGallery() {
                         <div className="flex size-8 items-center justify-center rounded-full">
                           <DynamicLucideIcon name={template.icon as keyof typeof Icons} color={`${template.color}`} />
                         </div>
-                        <CardTitle className="text-xl font-medium">{template.title}</CardTitle>
+                        <CardTitle data-testid="template-name" className="text-xl font-medium">{template.title}</CardTitle>
                       </div>
                     </CardHeader>
 
@@ -139,7 +142,7 @@ export default function TemplateGallery() {
                     </CardContent>
 
                     <CardFooter className="pt-0">
-                      <Button variant={selectedTemplate === template.id ? 'default' : 'outline'} size="sm" className="w-full rounded-full text-base font-normal">
+                      <Button data-testid="use-template-button" variant={selectedTemplate === template.id ? 'default' : 'outline'} size="sm" className="w-full rounded-full text-base font-normal">
                         {selectedTemplate === template.id
                           ? (
                               <>

@@ -29,12 +29,12 @@ export default function HandlebarsEditor() {
     templateName,
     templateDescription,
     handlebarsCode,
-    handlebarsJson,
+    handlebarTemplateJson,
     creationMethod,
     setTemplateName,
     setTemplateDescription,
     setHandlebarsCode,
-    setHandlebarsJson,
+    setHandlebarTemplateJson,
     setCreationMethod,
   } = useTemplateStore();
 
@@ -72,7 +72,7 @@ export default function HandlebarsEditor() {
       if (type === 'TEMPLATE_DATA_RESPONSE') {
         if (data) {
           setHandlebarsCode(data.handlebarsCode);
-          setHandlebarsJson(data.handlebarsJson);
+          setHandlebarTemplateJson(data.handlebarTemplateJson);
           setIsEditorReady(true);
         }
       }
@@ -101,7 +101,7 @@ export default function HandlebarsEditor() {
           templateName,
           templateDescription,
           handlebarsCode,
-          handlebarsJson,
+          handlebarTemplateJson,
           creationMethod,
         },
         source: 'iframe',
@@ -110,7 +110,7 @@ export default function HandlebarsEditor() {
     }, 500); // Debounce updates
 
     return () => clearTimeout(timeoutId);
-  }, [isInFrame, templateName, templateDescription, handlebarsCode, handlebarsJson, creationMethod]);
+  }, [isInFrame, templateName, templateDescription, handlebarsCode, handlebarTemplateJson, creationMethod]);
 
   // fetch data if template id is available
   useEffect(() => {
@@ -126,7 +126,7 @@ export default function HandlebarsEditor() {
         }
         setTemplateName(response.data.templateName as string);
         setHandlebarsCode(response.data.templateContent as string);
-        setHandlebarsJson(JSON.stringify(response.data.templateSampleData));
+        setHandlebarTemplateJson(JSON.stringify(response.data.templateSampleData));
         setTemplateDescription(response.data.description as string);
         setCreationMethod(response.data.creationMethod as CreationMethodEnum);
         setIsTemplateLoaded(true);
@@ -143,7 +143,7 @@ export default function HandlebarsEditor() {
     setTemplateName,
     setTemplateDescription,
     setHandlebarsCode,
-    setHandlebarsJson,
+    setHandlebarTemplateJson,
     setCreationMethod,
     setIsTemplateLoaded,
     setIsEditorReady,
@@ -159,7 +159,7 @@ export default function HandlebarsEditor() {
       setIsHandlebarsLoading(true);
       try {
         // Validate JSON
-        JSON.parse(handlebarsJson);
+        JSON.parse(handlebarTemplateJson);
         setJsonError('');
 
         // Validate CSS
@@ -172,7 +172,7 @@ export default function HandlebarsEditor() {
         }
 
         // Render Handlebars template with current data
-        const result = await handlebarsService.renderTemplate(handlebarsCode, handlebarsJson);
+        const result = await handlebarsService.renderTemplate(handlebarsCode, handlebarTemplateJson);
         setHandlebarsPreview(result);
         setTemplateError('');
         setRenderCount(prev => prev + 1);
@@ -190,12 +190,12 @@ export default function HandlebarsEditor() {
     };
 
     renderTemplate();
-  }, [handlebarsCode, handlebarsJson, isEditorReady]);
+  }, [handlebarsCode, handlebarTemplateJson, isEditorReady]);
 
   const refreshPreview = async () => {
     setIsHandlebarsLoading(true);
     try {
-      const result = await handlebarsService.renderTemplate(handlebarsCode, handlebarsJson);
+      const result = await handlebarsService.renderTemplate(handlebarsCode, handlebarTemplateJson);
       setHandlebarsPreview(result);
       setRenderCount(prev => prev + 1);
     } catch (error) {
@@ -214,7 +214,7 @@ export default function HandlebarsEditor() {
             {/* Left section (Editors) */}
             <div className="flex w-3/5 flex-col border-r border-gray-300">
               {/* Template Editor (top half) */}
-              <div className="h-1/2">
+              <div className="h-1/2" data-testid="code-editor">
                 <TemplateEditor
                   code={handlebarsCode}
                   onChange={setHandlebarsCode}
@@ -224,10 +224,10 @@ export default function HandlebarsEditor() {
               </div>
 
               {/* JSON Editor (bottom half) */}
-              <div className="h-1/2">
+              <div className="h-1/2" data-testid="json-editor">
                 <JsonEditor
-                  json={handlebarsJson}
-                  onChange={setHandlebarsJson}
+                  json={handlebarTemplateJson}
+                  onChange={setHandlebarTemplateJson}
                   error={jsonError}
                   isReady={isEditorReady}
                 />
@@ -235,7 +235,7 @@ export default function HandlebarsEditor() {
             </div>
 
             {/* Right section (Preview) */}
-            <div className="h-[770px] w-2/4">
+            <div className="h-[770px] w-2/4" data-testid="preview-panel">
               <PreviewPanel
                 preview={handlebarsPreview}
                 isLoading={isHandlebarsLoading}

@@ -1,16 +1,35 @@
+import { Ratelimit } from '@upstash/ratelimit';
+import { Redis } from '@upstash/redis';
 import { type NextRequest, NextResponse } from 'next/server';
 
 import { generatePdf } from '@/libs/actions/templates';
+import { trackServerEvent } from '@/libs/analytics/posthog-server';
 
 import { authenticateApi } from '../../api/authenticateApi';
 import { withApiAuth } from '../../api/withApiAuth';
 
+// Create a single Upstash Redis client
+const redis = new Redis({
+  url: process.env.KV_REST_API_URL!,
+  token: process.env.KV_REST_API_TOKEN!,
+});
+
+// Define rate limiter: 4 requests per 60 seconds
+const ratelimit = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(4, '60 s'),
+  analytics: true,
+});
+
 export const POST = withApiAuth(async (req: NextRequest, { params }: { params: { templateId: string } }): Promise<NextResponse> => {
+  const start = Date.now();
   try {
     const authResult = await authenticateApi(req);
     if (authResult instanceof NextResponse) {
       return authResult; // Authentication failed
     }
+
+    const clientId = req.headers.get('client_id');
 
     const { templateId } = params;
 
@@ -42,6 +61,19 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
       console.warn(`No valid JSON body provided. Continuing with empty templateData: ${error}`);
     }
 
+    // Apply rate limiting for users
+    const key = `user:${clientId}`;
+    const { success } = await ratelimit.limit(key);
+
+    if (!success) {
+      return NextResponse.json(
+        {
+          error: 'Rate limit exceeded. Try again later.',
+        },
+        { status: 429 },
+      );
+    }
+
     const response = await generatePdf({
       devMode,
       templateId,
@@ -49,12 +81,28 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
       isApi: true,
     });
 
+    const renderTime = Date.now() - start; // ms
+
     if (response.error) {
+      // ⚠️ Log failure
+      await trackServerEvent('api_call_failed', {
+        error_code: response.error.status?.toString() ?? 'unknown_error',
+        duration: renderTime,
+        template_id: templateId,
+      });
+
       return NextResponse.json(
         { error: response.error.message },
         { status: response.error.status },
       );
     }
+
+    // ✅ Log success
+    await trackServerEvent('api_call_generated_pdf', {
+      job_id: crypto.randomUUID(),
+      template_id: templateId,
+      render_time: renderTime,
+    });
 
     // Return the binary PDF file in the response
     return new NextResponse(response.pdf, {
@@ -64,6 +112,15 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
       },
     });
   } catch (error: any) {
+    const duration = Date.now() - start;
+
+    // ⚠️ Log exception as failed API call
+    await trackServerEvent('api_call_failed', {
+      error_code: 'exception',
+      duration,
+      template_id: params.templateId,
+    });
+
     console.error('Error generating PDF:', error);
     return NextResponse.json(
       { error: `Failed to generate PDF: ${error.message}` },

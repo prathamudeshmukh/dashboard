@@ -1,0 +1,25 @@
+# Simple worker deployment for pre-built files
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Set default port, will be overridden by environment
+ARG WORKER_PORT=3001
+ENV PORT=$WORKER_PORT
+
+# Create non-root user
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+# Copy worker build zip and extract it
+COPY worker-build.zip ./
+RUN unzip -o worker-build.zip && rm worker-build.zip
+
+# Switch to non-root user
+USER nextjs
+
+# Expose the port dynamically
+EXPOSE $PORT
+
+# Start the worker
+CMD ["npm", "run", "worker:start"]

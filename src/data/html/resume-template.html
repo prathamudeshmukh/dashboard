@@ -1,246 +1,205 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: #333;
-      line-height: 1.6;
-      margin: 0;
-      padding: 0;
-      background-color: #f9f9f9;
-    }
-    .resume-container {
-      max-width: 800px;
-      margin: 20px auto;
-      background-color: #fff;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-    .resume-header {
-      background-color: #2a4365;
-      color: #fff;
-      padding: 30px;
-      text-align: center;
-    }
-    .name {
-      font-size: 32px;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-    .title {
-      font-size: 18px;
-      font-weight: normal;
-      margin-bottom: 15px;
-    }
-    .contact-info {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 15px;
-      font-size: 14px;
-    }
-    .contact-item {
-      display: flex;
-      align-items: center;
-    }
-    .contact-icon {
-      width: 20px;
-      height: 20px;
-      margin-right: 5px;
-      background-color: #fff;
-      border-radius: 50%;
-      display: inline-block;
-    }
-    .resume-body {
-      padding: 30px;
-    }
-    .section {
-      margin-bottom: 25px;
-    }
-    .section-title {
-      font-size: 20px;
-      font-weight: bold;
-      color: #2a4365;
-      border-bottom: 2px solid #2a4365;
-      padding-bottom: 5px;
-      margin-bottom: 15px;
-    }
-    .summary {
-      margin-bottom: 25px;
-    }
-    .experience-item, .education-item {
-      margin-bottom: 20px;
-    }
-    .job-title, .degree {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-    .company, .school {
-      font-size: 16px;
-      font-weight: normal;
-      color: #2a4365;
-    }
-    .date {
-      font-size: 14px;
-      color: #666;
-      margin-bottom: 10px;
-    }
-    .job-description, .education-description {
-      font-size: 14px;
-    }
-    .skills-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      list-style-type: none;
-      padding: 0;
-    }
-    .skill-item {
-      background-color: #e2e8f0;
-      padding: 5px 15px;
-      border-radius: 15px;
-      font-size: 14px;
-    }
-    .references {
-      font-style: italic;
-      color: #666;
-    }
-  </style>
+<style>
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #333;
+    line-height: 1.5;
+    margin: 0;
+    padding: 20px;
+    background-color: #f9f9f9;
+  }
+  .resume-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  .name {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #2c5282;
+  }
+  .title {
+    font-size: 18px;
+    color: #4a5568;
+    margin-bottom: 15px;
+  }
+  .contact-info {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    font-size: 14px;
+  }
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .section {
+    margin-bottom: 25px;
+  }
+  .section-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #2c5282;
+    color: #2c5282;
+  }
+  .summary {
+    margin-bottom: 25px;
+  }
+  .experience-item, .education-item, .project-item {
+    margin-bottom: 20px;
+  }
+  .item-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+  }
+  .item-title {
+    font-weight: bold;
+    font-size: 16px;
+  }
+  .item-subtitle {
+    font-style: italic;
+    color: #4a5568;
+  }
+  .item-date {
+    color: #718096;
+    font-size: 14px;
+  }
+  .item-description {
+    margin-top: 10px;
+  }
+  .skills-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .skill-item {
+    background-color: #ebf4ff;
+    color: #2c5282;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 14px;
+  }
+  .bullet-list {
+    margin-top: 10px;
+    margin-left: 20px;
+    padding-left: 0;
+  }
+  .bullet-item {
+    margin-bottom: 5px;
+    list-style-type: disc;
+  }
+  .references {
+    font-style: italic;
+    text-align: center;
+    margin-top: 30px;
+    color: #718096;
+  }
+</style>
 </head>
 <body>
-  <div class="resume-container">
-    <div class="resume-header">
-      <div class="name">John Doe</div>
-      <div class="title">Senior Software Engineer</div>
-      <div class="contact-info">
-        <div class="contact-item">
-          <span class="contact-icon"></span>
-          john.doe@example.com
-        </div>
-        <div class="contact-item">
-          <span class="contact-icon"></span>
-          (555) 123-4567
-        </div>
-        <div class="contact-item">
-          <span class="contact-icon"></span>
-          San Francisco, CA
-        </div>
-        <div class="contact-item">
-          <span class="contact-icon"></span>
-          linkedin.com/in/johndoe
-        </div>
-      </div>
-    </div>
-    
-    <div class="resume-body">
-      <div class="section summary">
-        <div class="section-title">Professional Summary</div>
-        <p>Experienced software engineer with over 8 years of expertise in full-stack development, specializing in JavaScript frameworks and cloud technologies. Proven track record of delivering high-quality, scalable applications for enterprise clients. Strong problem-solving abilities and team leadership skills.</p>
-      </div>
-      
-      <div class="section">
-        <div class="section-title">Work Experience</div>
-        
-        <div class="experience-item">
-          <div class="job-title">Senior Software Engineer</div>
-          <div class="company">Tech Innovations Inc.</div>
-          <div class="date">January 2021 - Present</div>
-          <div class="job-description">
-            <ul>
-              <li>Lead a team of 5 developers in building and maintaining cloud-based enterprise applications</li>
-              <li>Architected and implemented microservices using Node.js and React, resulting in 40% improved performance</li>
-              <li>Established CI/CD pipelines that reduced deployment time by 60%</li>
-              <li>Mentored junior developers and conducted code reviews to ensure quality standards</li>
-            </ul>
-          </div>
-        </div>
-        
-        <div class="experience-item">
-          <div class="job-title">Software Developer</div>
-          <div class="company">Digital Solutions LLC</div>
-          <div class="date">March 2018 - December 2020</div>
-          <div class="job-description">
-            <ul>
-              <li>Developed and maintained web applications using React, Angular, and Vue.js</li>
-              <li>Collaborated with UX designers to implement responsive, accessible interfaces</li>
-              <li>Optimized database queries that improved application response time by 35%</li>
-              <li>Participated in agile development processes, including daily stand-ups and sprint planning</li>
-            </ul>
-          </div>
-        </div>
-        
-        <div class="experience-item">
-          <div class="job-title">Junior Developer</div>
-          <div class="company">WebTech Solutions</div>
-          <div class="date">June 2016 - February 2018</div>
-          <div class="job-description">
-            <ul>
-              <li>Assisted in developing front-end components using HTML, CSS, and JavaScript</li>
-              <li>Fixed bugs and implemented minor features for existing web applications</li>
-              <li>Participated in code reviews and improved coding skills through mentorship</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      
-      <div class="section">
-        <div class="section-title">Education</div>
-        
-        <div class="education-item">
-          <div class="degree">Master of Science in Computer Science</div>
-          <div class="school">Stanford University</div>
-          <div class="date">2014 - 2016</div>
-          <div class="education-description">
-            <p>Specialized in Software Engineering and Artificial Intelligence. GPA: 3.8/4.0</p>
-          </div>
-        </div>
-        
-        <div class="education-item">
-          <div class="degree">Bachelor of Science in Computer Engineering</div>
-          <div class="school">University of California, Berkeley</div>
-          <div class="date">2010 - 2014</div>
-          <div class="education-description">
-            <p>Dean's List for 6 semesters. Participated in ACM programming competitions.</p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="section">
-        <div class="section-title">Skills</div>
-        <ul class="skills-list">
-          <li class="skill-item">JavaScript</li>
-          <li class="skill-item">TypeScript</li>
-          <li class="skill-item">React</li>
-          <li class="skill-item">Node.js</li>
-          <li class="skill-item">Express</li>
-          <li class="skill-item">MongoDB</li>
-          <li class="skill-item">PostgreSQL</li>
-          <li class="skill-item">AWS</li>
-          <li class="skill-item">Docker</li>
-          <li class="skill-item">Kubernetes</li>
-          <li class="skill-item">CI/CD</li>
-          <li class="skill-item">Git</li>
-          <li class="skill-item">Agile/Scrum</li>
-          <li class="skill-item">RESTful APIs</li>
-          <li class="skill-item">GraphQL</li>
-        </ul>
-      </div>
-      
-      <div class="section">
-        <div class="section-title">Certifications</div>
-        <ul>
-          <li>AWS Certified Solutions Architect - Associate</li>
-          <li>Microsoft Certified: Azure Developer Associate</li>
-          <li>Certified Scrum Master (CSM)</li>
-        </ul>
-      </div>
-      
-      <div class="section">
-        <div class="section-title">References</div>
-        <div class="references">Available upon request</div>
-      </div>
+<div class="resume-container">
+  <div class="header">
+    <div class="name">{{person.name}}</div>
+    <div class="title">{{person.title}}</div>
+    <div class="contact-info">
+      <div class="contact-item">{{person.email}}</div>
+      <div class="contact-item">{{person.phone}}</div>
+      <div class="contact-item">{{person.location}}</div>
+      <div class="contact-item">{{person.linkedin}}</div>
+      <div class="contact-item">{{person.website}}</div>
     </div>
   </div>
+
+  <div class="section summary">
+    <div class="section-title">Professional Summary</div>
+    <p>{{summary}}</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Experience</div>
+    {{#each experience}}
+    <div class="experience-item">
+      <div class="item-header">
+        <div>
+          <div class="item-title">{{title}}</div>
+          <div class="item-subtitle">{{company}}</div>
+        </div>
+        <div class="item-date">{{dateRange}}</div>
+      </div>
+      <div class="item-description">
+        <p>{{description}}</p>
+        <ul class="bullet-list">{{#each achievements}}<li>{{this}}</li>{{/each}}</ul>
+      </div>
+    </div>
+    {{/each}}
+  </div>
+
+  <div class="section">
+    <div class="section-title">Education</div>
+    {{#each education}}
+    <div class="education-item">
+      <div class="item-header">
+        <div>
+          <div class="item-title">{{degree}}</div>
+          <div class="item-subtitle">{{institution}}</div>
+        </div>
+        <div class="item-date">{{dateRange}}</div>
+      </div>
+      <div class="item-description"><p>{{details}}</p></div>
+    </div>
+    {{/each}}
+  </div>
+
+  <div class="section">
+    <div class="section-title">Skills</div>
+    <div class="skills-list">{{#each skills}}<div class="skill-item">{{this}}</div>{{/each}}</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Projects</div>
+    {{#each projects}}
+    <div class="project-item">
+      <div class="item-header">
+        <div class="item-title">{{title}}</div>
+        <div class="item-date">{{date}}</div>
+      </div>
+      <div class="item-description"><p>{{description}}</p></div>
+      <div class="skills-list">{{#each technologies}}<div class="skill-item">{{this}}</div>{{/each}}</div>
+    </div>
+    {{/each}}
+  </div>
+
+  <div class="section">
+    <div class="section-title">Certifications</div>
+    <ul class="bullet-list">
+      {{#each certifications}}
+      <li>{{name}} ({{issuer}}) • {{date}}</li>
+      {{/each}}
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Languages</div>
+    <ul class="bullet-list">{{#each languages}}<li>{{language}}: {{proficiency}}</li>{{/each}}</ul>
+  </div>
+
+  <div class="references">{{references}}</div>
+</div>
 </body>
+
 </html>

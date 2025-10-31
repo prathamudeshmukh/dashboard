@@ -1,6 +1,5 @@
-import { inngest } from '@/inngest/client';
-import type { TemplatePreviewJobData } from '@/types/Template';
-
+import type { TemplatePreviewJobData } from '../../../types/Template';
+import { inngest } from '../../client';
 import { GenerateAnduploadPDF } from './generateAndUploadPDF';
 import { updatePreviewURL } from './updatePreviewURL';
 

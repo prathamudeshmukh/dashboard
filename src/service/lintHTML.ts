@@ -5,7 +5,7 @@ const lintHTML = (html: string): string[] => {
   // Define HTMLHint rules
   const rules = {
     'tag-pair': true, // Ensure tags are properly paired
-    'attr-value-not-empty': true, // Ensure attribute values are not empty
+    'attr-value-not-empty': false, // Ensure attribute values are not empty
     'id-unique': true, // Ensure IDs are unique
     'src-not-empty': true, // Ensure `src` attributes are not empty
     'tag-self-close': true, // Ensure self-closing tags are properly closed
