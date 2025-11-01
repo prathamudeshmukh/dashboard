@@ -32,7 +32,7 @@ test('Login and verify dashboard loads with templates table and actions', async 
   expect(totalRows).toBeGreaterThan(0);
 
   // Logout
-  await page.getByLabel('Open user button').click();
+  await page.getByLabel('Open user menu').click();
   await page.getByRole('menuitem', { name: 'Sign out' }).click();
   await page.close();
 });
