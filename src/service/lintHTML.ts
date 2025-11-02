@@ -8,8 +8,6 @@ const lintHTML = (html: string): string[] => {
     'attr-value-not-empty': false, // Ensure attribute values are not empty
     'id-unique': true, // Ensure IDs are unique
     'src-not-empty': true, // Ensure `src` attributes are not empty
-
-    // this need to be true in prod.
     'tag-self-close': false, // Ensure self-closing tags are properly closed
   };
     // Use HTMLHint.verify() to validate the HTML content
