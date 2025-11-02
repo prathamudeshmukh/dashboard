@@ -1,7 +1,6 @@
 'use client';
 
 import { Sparkles } from 'lucide-react';
-import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 
 export const Hero = () => {
@@ -24,16 +23,17 @@ export const Hero = () => {
           </p>
         </div>
 
-        {/* Dashboard UI Mockup */}
+        {/* Dashboard Video Mockup */}
         <div className="relative mx-auto mt-24 max-w-5xl">
           <div className="hero-radial-bg absolute -inset-5 -z-10 rounded-[30px] opacity-85 blur-2xl md:-inset-20"></div>
-          <div className="relative z-10 overflow-hidden rounded-lg border bg-white p-2 shadow-xl">
-            <Image
-              src="/images/dashboard.png"
-              alt="Templify Dashboard"
-              width={1200}
-              height={600}
-              className="h-auto w-full"
+          <div className="relative z-10 overflow-hidden rounded-lg border bg-white p-1 shadow-xl">
+            <video
+              src="/videos/dashboard.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="h-auto w-full rounded-md"
             />
           </div>
         </div>
