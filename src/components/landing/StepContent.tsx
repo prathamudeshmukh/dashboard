@@ -1,10 +1,12 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import type React from 'react';
 
 import type { StepContent as StepContentType } from '@/types/Steps';
 
+import { Button } from '../ui/button';
 import StepDescription from './StepDescription';
 
 type StepContentProps = {
@@ -16,6 +18,7 @@ export default function StepContent({
   content,
   innerRef,
 }: StepContentProps) {
+  const isPublishStep = content.id === 'publish-and-integrate';
   return (
     <div className="rounded-xl bg-gradient-to-r from-primary via-templify-navy to-templify-blue p-px">
       <div className="rounded-xl bg-gradient-to-l from-primary via-templify-navy to-templify-blue p-px">
@@ -34,14 +37,26 @@ export default function StepContent({
             <div className="flex w-full flex-col justify-start space-y-8 md:w-2/3">
               <StepDescription content={content} />
               <div>
-                <Image
-                  src={`/images/${content.id}.png`}
-                  alt={content.imageAlt}
-                  width={476}
-                  height={295}
-                  className="w-full rounded-md"
-                  priority={content.id === 'choose-how-to-start'}
-                />
+                {isPublishStep
+                  ? (
+                      <div className="flex flex-col items-start space-y-4">
+                        <Link href="/docs">
+                          <Button variant="outline" className="w-full rounded-full text-sm text-black">
+                            Go to Documentation
+                          </Button>
+                        </Link>
+                      </div>
+                    )
+                  : (
+                      <Image
+                        src={`/images/${content.id}.png`}
+                        alt={content.imageAlt}
+                        width={476}
+                        height={295}
+                        className="w-full rounded-md"
+                        priority={content.id === 'choose-how-to-start'}
+                      />
+                    )}
               </div>
             </div>
           </div>
