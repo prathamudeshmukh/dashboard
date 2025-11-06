@@ -47,7 +47,7 @@ export async function generateMetadata(props: { params: { locale: string } }) {
       locale: props.params.locale,
       images: [
         {
-          url: `${getBaseUrl()}/opengraph-image.png`,
+          url: `${getBaseUrl()}/images/og_image.png`,
           width: 1200,
           height: 630,
           alt: 'Templify - API-First PDF Generation Platform',
@@ -58,7 +58,7 @@ export async function generateMetadata(props: { params: { locale: string } }) {
       card: 'summary_large_image',
       title: t('meta_title'),
       description: t('meta_description'),
-      images: [`${getBaseUrl()}/twitter-image.png`],
+      images: [`${getBaseUrl()}/images/og_image.png`],
       creator: '@templify_cloud',
       site: '@templify_cloud',
     },
