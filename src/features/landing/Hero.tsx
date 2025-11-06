@@ -1,6 +1,7 @@
 'use client';
 
 import { Sparkles } from 'lucide-react';
+import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 
 export const Hero = () => {
@@ -21,6 +22,22 @@ export const Hero = () => {
           <p className="mt-6 max-w-2xl text-base text-gray-600">
             {t('subtitle')}
           </p>
+          {/* Product Hunt Badge */}
+          <div className="mt-8">
+            <a
+              href="https://www.producthunt.com/products/templify-3?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-templify&#0045;3"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Image
+                src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1031813&theme=neutral&t=1762436399237"
+                alt="Templify - Turn any HTML into stunning PDFs at scale — instantly. | Product Hunt"
+                width={250}
+                height={54}
+                unoptimized
+              />
+            </a>
+          </div>
         </div>
 
         {/* Dashboard Video Mockup */}
