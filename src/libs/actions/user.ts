@@ -2,8 +2,10 @@
 
 import { eq, sql } from 'drizzle-orm';
 
-import { apikeys, creditTransactions, users } from '../../models/Schema';
-import { decrypt } from '../../service/crypto';
+import { generateWebhookSecret } from '@/service/generateWebhook';
+
+import { apikeys, creditTransactions, users, webhook_endpoints } from '../../models/Schema';
+import { decrypt, encrypt } from '../../service/crypto';
 import { generateApiKeys } from '../../service/generateApiKeys';
 import type { ClientConfigs, User } from '../../types/User';
 import { db } from '../DB';
@@ -128,4 +130,72 @@ export async function getClientSecret(clientId: string): Promise<ClientConfigs> 
   } catch (error: any) {
     throw new Error(`Error fetching client secret: ${error.message}`);
   }
+}
+
+export async function saveWebhookEndpoint({
+  clientId,
+  url,
+  encryptedSecret,
+}: {
+  clientId: string;
+  url: string;
+  encryptedSecret: string;
+}) {
+  try {
+    const existing = await db.query.webhook_endpoints.findFirst({
+      where: eq(webhook_endpoints.clientId, clientId),
+    });
+
+    if (existing) {
+      await db
+        .update(webhook_endpoints)
+        .set({
+          url,
+          encryptedSecret,
+          active: true,
+        })
+        .where(eq(webhook_endpoints.clientId, clientId));
+    } else {
+      await db.insert(webhook_endpoints).values({
+        clientId,
+        url,
+        encryptedSecret,
+      });
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error('[Webhook Save Error]', error);
+    throw new Error ('Failed to save webhook configuration');
+  }
+}
+
+export async function getOrCreateWebhookEndpoint(clientId: string) {
+  if (!clientId) {
+    throw new Error('Missing clientId');
+  }
+
+  // Check for existing webhook endpoint
+  const existing = await db.query.webhook_endpoints.findFirst({
+    where: eq(webhook_endpoints.clientId, clientId),
+  });
+
+  // ✅ If webhook exists, decrypt and return it
+  if (existing?.encryptedSecret) {
+    const decryptedSecret = decrypt(existing.encryptedSecret);
+    return { success: true, secret: decryptedSecret, url: existing.url, exists: true, created: false };
+  }
+
+  // ✅ Otherwise, generate a new secret (do not save)
+  const newSecret = generateWebhookSecret();
+  const encryptedSecret = encrypt(newSecret);
+
+  return {
+    success: true,
+    secret: newSecret,
+    url: '',
+    encryptedSecret, // so client can later call `saveWebhookEndpoint`
+    exists: false,
+    created: true,
+  };
 }
