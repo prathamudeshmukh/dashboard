@@ -1,6 +1,7 @@
 import { relations } from 'drizzle-orm';
 import {
   bigint,
+  boolean,
   index,
   integer,
   jsonb,
@@ -147,10 +148,22 @@ export const apikeys = pgTable('apikeys', {
   createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
 });
 
+export const webhook_endpoints = pgTable('webhook_endpoints', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  clientId: varchar('client_id')
+    .notNull()
+    .references(() => users.clientId, { onDelete: 'cascade' }),
+  url: text('url').notNull(),
+  encryptedSecret: varchar('client_secret', { length: 255 }).notNull(),
+  active: boolean('active').notNull().default(true),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+});
+
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
   templates: many(templates), // One-to-many relation with templates
   apikeys: many(apikeys), // One-to-many relation with apikeys
+  webhook_endpoints: many(webhook_endpoints),
   creditTransactions: many(creditTransactions),
 }));
 
@@ -187,6 +200,13 @@ export const templateGalleryRelations = relations(templateGallery, ({ many }) =>
 export const apikeysRelations = relations(apikeys, ({ one }) => ({
   user: one(users, {
     fields: [apikeys.clientId],
+    references: [users.clientId],
+  }),
+}));
+
+export const webhookEndpointsRelations = relations(webhook_endpoints, ({ one }) => ({
+  user: one(users, {
+    fields: [webhook_endpoints.clientId],
     references: [users.clientId],
   }),
 }));

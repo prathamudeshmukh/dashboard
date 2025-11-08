@@ -25,6 +25,7 @@ export default function WebhooksPage() {
   const { webhookUrl, isSaved, isValid, updateUrl, clearUrl, saveConfiguration, markAsUnsaved } = useWebhookForm();
   const {
     secret,
+    encryptedSecret,
     showSecret,
     secretCopied,
     toggleVisibility,
@@ -32,15 +33,15 @@ export default function WebhooksPage() {
     regenerateSecret,
   } = useWebhookSecret();
 
-  const handleRegenerateSecret = () => {
-    const wasRegenerated = regenerateSecret();
+  const handleRegenerateSecret = async () => {
+    const wasRegenerated = await regenerateSecret();
     if (wasRegenerated) {
       markAsUnsaved();
     }
   };
 
   const handleSave = () => {
-    saveConfiguration(secret);
+    saveConfiguration(encryptedSecret);
   };
 
   return (
