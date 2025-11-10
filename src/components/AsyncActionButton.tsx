@@ -8,12 +8,14 @@ type AsyncActionButtonProps = {
   onClick: () => Promise<void>;
   children: React.ReactNode;
   className?: string;
+  isDisabled?: boolean;
 };
 
 export default function AsyncActionButton({
   onClick,
   children,
   className,
+  isDisabled,
 }: AsyncActionButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -38,7 +40,7 @@ export default function AsyncActionButton({
   return (
     <Button
       onClick={handleClick}
-      disabled={isLoading}
+      disabled={isLoading || isDisabled}
       className={cn(className, 'flex items-center gap-2')}
     >
       {isLoading
