@@ -2,6 +2,7 @@
 
 import { Webhook } from 'lucide-react';
 
+import AsyncActionButton from '@/components/AsyncActionButton';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -40,10 +41,6 @@ export default function WebhooksPage() {
     }
   };
 
-  const handleSave = () => {
-    saveConfiguration(encryptedSecret);
-  };
-
   return (
     <div className="min-h-screen p-4 sm:p-8">
       <div className="mx-auto max-w-4xl space-y-8">
@@ -79,9 +76,14 @@ export default function WebhooksPage() {
               <WebhookSuccessAlert show={isSaved} />
 
               <div className="flex gap-3 pt-2">
-                <Button onClick={handleSave} disabled={!isValid}>
+                <AsyncActionButton
+                  isDisabled={!isValid}
+                  onClick={() => saveConfiguration(encryptedSecret)}
+                  className="bg-primary text-white"
+
+                >
                   Save Configuration
-                </Button>
+                </AsyncActionButton>
                 <Button variant="outline" onClick={clearUrl}>
                   Clear
                 </Button>
