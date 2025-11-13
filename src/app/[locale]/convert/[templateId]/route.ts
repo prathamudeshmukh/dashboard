@@ -2,6 +2,7 @@ import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
 import { type NextRequest, NextResponse } from 'next/server';
 
+import { inngest } from '@/inngest/client';
 import { generatePdf } from '@/libs/actions/templates';
 import { trackServerEvent } from '@/libs/analytics/posthog-server';
 
@@ -74,6 +75,46 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
       );
     }
 
+    const preferHeader = req.headers.get('Prefer');
+    const modeParam = searchParams.get('mode');
+
+    const isAsyncMode
+      = preferHeader?.toLowerCase() === 'respond-async' || modeParam?.toLowerCase() === 'async';
+
+    if (isAsyncMode) {
+      // ------------------------------------------------
+      // ⚡ ASYNC MODE: Trigger background job via Inngest
+      // ------------------------------------------------
+      const jobId = crypto.randomUUID();
+
+      // Send to Inngest queue (example event name)
+      await inngest.send({
+        name: 'pdf/generate.async',
+        data: {
+          jobId,
+          templateId,
+          templateData,
+          devMode,
+        },
+      });
+
+      return NextResponse.json(
+        {
+          status: 'accepted',
+          job_id: jobId,
+          message: 'PDF generation request accepted for async processing',
+        },
+        {
+          status: 202, // HTTP 202 Accepted
+          headers: { 'Preference-Applied': 'respond-async' },
+        },
+      );
+    }
+
+    // ------------------------------------------------
+    // 🧩 SYNC MODE: Generate PDF immediately
+    // ------------------------------------------------
+
     const response = await generatePdf({
       devMode,
       templateId,
@@ -121,7 +162,7 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
       template_id: params.templateId,
     });
 
-    console.error('Error generating PDF:', error);
+    console.error('Error generating PDF [API Route]:', error);
     return NextResponse.json(
       { error: `Failed to generate PDF: ${error.message}` },
       { status: 500 },
