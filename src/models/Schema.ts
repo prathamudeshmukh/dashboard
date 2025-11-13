@@ -57,6 +57,8 @@ export const environmentEnum = pgEnum('environment', ['prod', 'dev']);
 
 const creationMethodEnum = pgEnum('creation_method', ['EXTRACT_FROM_PDF', 'TEMPLATE_GALLERY', 'NEW_TEMPLATE']);
 
+export const pdfGenerationTypeEnum = pgEnum('pdf_generation_type', ['ASYNC', 'SYNC']);
+
 // Users Table
 export const users = pgTable('users', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -133,6 +135,11 @@ export const generated_templates = pgTable('generated_templates', {
   generated_date: timestamp('generated_date', { mode: 'date' }).defaultNow().notNull(),
   template_id: uuid('template_id').notNull().references(() => templates.id, { onDelete: 'cascade' }),
   data_value: jsonb('data_value'),
+  jobId: varchar('job_id').notNull().default(''),
+  inngestJobId: varchar('inngest_job_id').notNull().default(''),
+  mode: pdfGenerationTypeEnum('pdf_generation_type').default('SYNC'), // SYNC | ASYNC
+  startedAt: timestamp('started_at', { mode: 'date' }).defaultNow().notNull(),
+  completedAt: timestamp('completed_at', { mode: 'date' }),
 }, table => ({
   dateIndex: index('generated_templates_generated_date_idx').on(table.generated_date),
   templateIdIndex: index('generated_templates_template_id_idx').on(table.template_id),
