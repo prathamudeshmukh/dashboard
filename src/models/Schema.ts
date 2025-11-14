@@ -135,7 +135,7 @@ export const generated_templates = pgTable('generated_templates', {
   generated_date: timestamp('generated_date', { mode: 'date' }).defaultNow().notNull(),
   template_id: uuid('template_id').notNull().references(() => templates.id, { onDelete: 'cascade' }),
   data_value: jsonb('data_value'),
-  jobId: varchar('job_id').notNull().default(''),
+  generated_pdf_url: text('generated_pdf_url').default(''),
   inngestJobId: varchar('inngest_job_id').notNull().default(''),
   mode: pdfGenerationTypeEnum('pdf_generation_type').default('SYNC'), // SYNC | ASYNC
   startedAt: timestamp('started_at', { mode: 'date' }).defaultNow().notNull(),

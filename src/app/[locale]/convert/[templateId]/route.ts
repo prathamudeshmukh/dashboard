@@ -3,7 +3,7 @@ import { Redis } from '@upstash/redis';
 import { type NextRequest, NextResponse } from 'next/server';
 
 import { inngest } from '@/inngest/client';
-import { generatePdf } from '@/libs/actions/templates';
+import { addGeneratedTemplateHistory, generatePdf } from '@/libs/actions/templates';
 import { trackServerEvent } from '@/libs/analytics/posthog-server';
 
 import { authenticateApi } from '../../api/authenticateApi';
@@ -85,13 +85,12 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
       // ------------------------------------------------
       // ⚡ ASYNC MODE: Trigger background job via Inngest
       // ------------------------------------------------
-      const jobId = crypto.randomUUID();
 
       // Send to Inngest queue (example event name)
-      await inngest.send({
+      const { ids } = await inngest.send({
         name: 'pdf/generate.async',
         data: {
-          jobId,
+          clientId,
           templateId,
           templateData,
           devMode,
@@ -101,7 +100,7 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
       return NextResponse.json(
         {
           status: 'accepted',
-          job_id: jobId,
+          job_id: ids[0],
           message: 'PDF generation request accepted for async processing',
         },
         {
@@ -137,6 +136,11 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
         { status: response.error.status },
       );
     }
+
+    await addGeneratedTemplateHistory({
+      templateId,
+      dataValue: templateData,
+    });
 
     // ✅ Log success
     await trackServerEvent('api_call_generated_pdf', {
