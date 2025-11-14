@@ -15,22 +15,18 @@ export const generatePdfAsync = inngest.createFunction(
     const { clientId, templateId, templateData, jobId, devMode } = event.data;
 
     try {
-      // 🧩 Generate PDF
-      const result = await step.run('generate-pdf', async () => {
+      // 🧩 Generate and Upload PDF
+      const blob = await step.run('generate-and-upload-pdf', async () => {
         const pdfResult = await generatePdf({ devMode, templateId, templateData, isApi: true });
         if (pdfResult.error) {
           throw new Error(pdfResult.error.message);
         }
-        return pdfResult;
-      });
 
-      // 🧩 Upload PDF to Blob
-      const blob = await step.run('upload-pdf', async () => {
         const date = new Date();
         const datePath = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
         const storagePath = `generated-pdf/${clientId}/${datePath}/${jobId}.pdf`;
 
-        return await put(storagePath, result.pdf as ArrayBuffer, {
+        return await put(storagePath, pdfResult.pdf as ArrayBuffer, {
           access: 'public',
           contentType: 'application/pdf',
           addRandomSuffix: false,
