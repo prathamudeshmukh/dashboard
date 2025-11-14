@@ -1,4 +1,5 @@
 import { put } from '@vercel/blob';
+import { sql } from 'drizzle-orm';
 
 import { inngest } from '@/inngest/client';
 import { generatePdf } from '@/libs/actions/templates';
@@ -12,7 +13,7 @@ export const generatePdfAsync = inngest.createFunction(
   },
   { event: 'pdf/generate.async' },
   async ({ event, step, runId }) => {
-    const { clientId, templateId, templateData, jobId, devMode } = event.data;
+    const { clientId, templateId, templateData, devMode } = event.data;
 
     try {
       // 🧩 Generate and Upload PDF
@@ -24,7 +25,7 @@ export const generatePdfAsync = inngest.createFunction(
 
         const date = new Date();
         const datePath = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
-        const storagePath = `generated-pdf/${clientId}/${datePath}/${jobId}.pdf`;
+        const storagePath = `generated-pdf/${clientId}/${datePath}/${runId}.pdf`;
 
         return await put(storagePath, pdfResult.pdf as ArrayBuffer, {
           access: 'public',
@@ -39,7 +40,8 @@ export const generatePdfAsync = inngest.createFunction(
           template_id: templateId,
           data_value: templateData,
           inngestJobId: runId,
-          jobId,
+          generated_pdf_url: blob.url,
+          completedAt: sql`now()`,
           mode: 'ASYNC',
         });
       });
@@ -48,7 +50,6 @@ export const generatePdfAsync = inngest.createFunction(
       return await step.run('return-success', async () => ({
         success: true,
         pdfUrl: blob.url,
-        jobId,
       }));
     } catch (err: any) {
       console.error('[Async PDF Error]', err);
