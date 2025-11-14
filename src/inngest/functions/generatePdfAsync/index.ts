@@ -1,7 +1,7 @@
 import { put } from '@vercel/blob';
 
 import { inngest } from '@/inngest/client';
-import { generatePdf } from '@/libs/actions/templates';
+import { fetchTemplateById, generatePdf } from '@/libs/actions/templates';
 import { db } from '@/libs/DB';
 import { generated_templates } from '@/models/Schema';
 
@@ -35,8 +35,11 @@ export const generatePdfAsync = inngest.createFunction(
 
       // 🧩 Save record to DB
       await step.run('save-db-record', async () => {
+        // fetch template to get the template id (PK) from for the template
+        const fetchedTemplate = await fetchTemplateById(templateId);
+
         await db.insert(generated_templates).values({
-          template_id: templateId,
+          template_id: fetchedTemplate.data?.id as string,
           data_value: templateData,
           inngestJobId: runId,
           generated_pdf_url: blob.url,

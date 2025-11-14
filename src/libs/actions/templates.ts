@@ -369,8 +369,9 @@ export async function addGeneratedTemplateHistory({
   }
 
   try {
+    const fetchedTemplate = await fetchTemplateById(templateId);
     await db.insert(generated_templates).values({
-      template_id: templateId,
+      template_id: fetchedTemplate.data?.id as string,
       data_value: dataValue || null,
       completedAt: new Date(),
     });
