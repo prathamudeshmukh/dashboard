@@ -86,7 +86,7 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
       // ⚡ ASYNC MODE: Trigger background job via Inngest
       // ------------------------------------------------
 
-      // Send to Inngest queue (example event name)
+      // Send to Inngest
       const { ids } = await inngest.send({
         name: 'pdf/generate.async',
         data: {
@@ -99,9 +99,9 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
 
       return NextResponse.json(
         {
-          status: 'accepted',
+          template_id: templateId,
+          status: 'STARTED',
           job_id: ids[0],
-          message: 'PDF generation request accepted for async processing',
         },
         {
           status: 202, // HTTP 202 Accepted
