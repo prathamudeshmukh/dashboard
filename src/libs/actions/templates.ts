@@ -371,7 +371,7 @@ export async function addGeneratedTemplateHistory({
     await db.insert(generated_templates).values({
       template_id: templateId,
       data_value: dataValue || null,
-      completedAt: sql`now`,
+      completedAt: new Date(),
     });
 
     return { message: 'History Added for Generated Template' };

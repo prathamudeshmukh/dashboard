@@ -1,5 +1,4 @@
 import { put } from '@vercel/blob';
-import { sql } from 'drizzle-orm';
 
 import { inngest } from '@/inngest/client';
 import { generatePdf } from '@/libs/actions/templates';
@@ -41,7 +40,7 @@ export const generatePdfAsync = inngest.createFunction(
           data_value: templateData,
           inngestJobId: runId,
           generated_pdf_url: blob.url,
-          completedAt: sql`now()`,
+          completedAt: new Date(),
           mode: 'ASYNC',
         });
       });
