@@ -300,10 +300,6 @@ export async function generatePdf({
 
     if (template?.data?.id && isApi) {
       await deductCredit(template.data.user?.cliendId as string);
-      await addGeneratedTemplateHistory({
-        templateId: template.data.id,
-        dataValue: templateData,
-      });
     }
 
     return { pdf: pdfBuffer };
@@ -373,9 +369,11 @@ export async function addGeneratedTemplateHistory({
   }
 
   try {
+    const fetchedTemplate = await fetchTemplateById(templateId);
     await db.insert(generated_templates).values({
-      template_id: templateId,
+      template_id: fetchedTemplate.data?.id as string,
       data_value: dataValue || null,
+      completedAt: new Date(),
     });
 
     return { message: 'History Added for Generated Template' };
