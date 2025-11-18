@@ -3,7 +3,7 @@ import { Redis } from '@upstash/redis';
 import { type NextRequest, NextResponse } from 'next/server';
 
 import { inngest } from '@/inngest/client';
-import { addGeneratedTemplateHistory, generatePdf } from '@/libs/actions/templates';
+import { addGeneratedTemplateHistory, fetchTemplateById, generatePdf } from '@/libs/actions/templates';
 import { trackServerEvent } from '@/libs/analytics/posthog-server';
 
 import { authenticateApi } from '../../api/authenticateApi';
@@ -72,6 +72,15 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
           error: 'Rate limit exceeded. Try again later.',
         },
         { status: 429 },
+      );
+    }
+
+    // check if template is present or not.
+    const fetchedTemplate = await fetchTemplateById(templateId);
+    if (fetchedTemplate.error) {
+      return NextResponse.json(
+        { error: fetchedTemplate.error.message },
+        { status: fetchedTemplate.error.status },
       );
     }
 
