@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function DocsContent() {
   return (
     <div className="prose prose-lg max-w-none dark:prose-invert">
@@ -121,13 +123,16 @@ export default function DocsContent() {
         <ul>
           <li>
             When you
+            {' '}
             <strong>create a new template</strong>
             , it is
+            {' '}
             <strong>automatically published to production</strong>
             .
           </li>
           <li>
             The template becomes immediately available to your
+            {' '}
             <strong>generate PDF</strong>
             {' '}
             API calls (unless in dev mode).
@@ -144,17 +149,20 @@ export default function DocsContent() {
             <ul>
               <li>
                 Saves the changes in the
+                {' '}
                 <strong>unpublished (dev) version</strong>
                 .
               </li>
               <li>
                 Ideal for testing changes in
+                {' '}
                 <strong>lower environments</strong>
                 {' '}
                 (e.g., staging).
               </li>
               <li>
                 These changes
+                {' '}
                 <strong>do not affect</strong>
                 {' '}
                 the live template used in production.
@@ -166,14 +174,16 @@ export default function DocsContent() {
             <ul>
               <li>
                 Saves and
+                {' '}
                 <strong>publishes the new version</strong>
                 {' '}
                 to
-                <strong>production</strong>
+                <strong> production</strong>
                 .
               </li>
               <li>
                 All future PDF generations (including from
+                {' '}
                 <strong>generate</strong>
                 {' '}
                 API) will use this updated version.
@@ -188,6 +198,7 @@ export default function DocsContent() {
         <ul>
           <li>
             Add
+            {' '}
             <strong>?devMode=true</strong>
             {' '}
             to your preview or generation API calls.
@@ -302,18 +313,21 @@ export default function DocsContent() {
         <ul>
           <li>
             Always
+            {' '}
             <strong>store API keys securely</strong>
             {' '}
             and do not expose them in front-end code.
           </li>
           <li>
             Use
+            {' '}
             <strong>HTTPS</strong>
             {' '}
             for all API requests to ensure encryption.
           </li>
           <li>
             Implement
+            {' '}
             <strong>rate limiting</strong>
             {' '}
             to prevent abuse.
@@ -328,12 +342,14 @@ export default function DocsContent() {
           <li>
             <strong>Email:</strong>
             {' '}
-            support@templify.cloud
+            <Link href="mailto:support@templify.cloud" className="font-normal">
+              support@templify.cloud
+            </Link>
           </li>
           <li>
             <strong>API Status:</strong>
             {' '}
-            https://status.templify.cloud
+            <Link href="https://status.templify.cloud" className="font-normal">https://status.templify.cloud</Link>
           </li>
         </ul>
       </div>

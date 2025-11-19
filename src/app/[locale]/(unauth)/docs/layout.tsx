@@ -4,7 +4,7 @@ import { DocsSidebar } from './DocsSidebar';
 
 export default function DocsLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-screen flex-col bg-background">
+    <div className="flex max-h-screen flex-col bg-background">
       <div className="flex flex-1">
         <DocsSidebar />
 
@@ -14,7 +14,10 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
           </div>
         </main>
       </div>
-      <Footer />
+
+      <div className="sticky bottom-0 w-full">
+        <Footer />
+      </div>
     </div>
   );
 }
