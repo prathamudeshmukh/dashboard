@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { upload } from '@vercel/blob/client';
 import { Check, FileUp, Loader2, Upload } from 'lucide-react';
 import React, { useRef, useState } from 'react';
 
@@ -67,23 +67,21 @@ const PDFExtractor = () => {
       setUploadError(null);
       setProgress(0);
 
-      const response = await axios.post('/api/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        onUploadProgress: (e: any) => {
-          if (e.total) {
-            const percent = Math.round((e.loaded * 100) / e.total);
-            setProgress(percent);
-          }
+      const response: any = await upload(file.name, file, {
+        access: 'public',
+        handleUploadUrl: '/api/upload',
+
+        onUploadProgress: ({ percentage }) => {
+          setProgress(Math.round(percentage));
         },
       });
+
       setPdfUploadStatus(PdfUploadStatusEnum.COMPLETETD);
       setpdfExtractionStatus(PdfExtractionStatusEnum.IN_PROGRESS);
 
       // Poll job status
       const extractionStart = Date.now();
-      await pollJobStatus(response.data.runID);
+      await pollJobStatus(response.runID);
       const extractionEnd = Date.now();
 
       const extractionTime = extractionEnd - extractionStart;
