@@ -1,9 +1,7 @@
 import { put } from '@vercel/blob';
 
 import { inngest } from '@/inngest/client';
-import { fetchTemplateById, generatePdf } from '@/libs/actions/templates';
-import { db } from '@/libs/DB';
-import { generated_templates } from '@/models/Schema';
+import { addGeneratedTemplateHistory, generatePdf } from '@/libs/actions/templates';
 
 export const generatePdfAsync = inngest.createFunction(
   {
@@ -34,25 +32,15 @@ export const generatePdfAsync = inngest.createFunction(
       });
 
       // 🧩 Save record to DB
-      await step.run('save-db-record', async () => {
-        // fetch template to get the template id (PK) from for the template
-        const fetchedTemplate = await fetchTemplateById(templateId);
-
-        await db.insert(generated_templates).values({
-          template_id: fetchedTemplate.data?.id as string,
-          data_value: templateData,
+      return await step.run('save-db-record', async () => {
+        await addGeneratedTemplateHistory({
+          templateId,
+          dataValue: templateData,
           inngestJobId: runId,
-          generated_pdf_url: blob.url,
-          completedAt: new Date(),
+          generatedPdfUrl: blob.url,
           mode: 'ASYNC',
         });
       });
-
-      // 🧩 Return success result
-      return await step.run('return-success', async () => ({
-        success: true,
-        pdfUrl: blob.url,
-      }));
     } catch (err: any) {
       console.error('[Async PDF Error]', err);
       return { success: false, error: err.message };

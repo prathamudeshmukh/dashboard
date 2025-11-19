@@ -362,7 +362,10 @@ export async function updateTemplatePreviewURL({
 
 export async function addGeneratedTemplateHistory({
   templateId,
-  dataValue,
+  dataValue = null,
+  generatedPdfUrl = '',
+  inngestJobId = '',
+  mode = 'SYNC',
 }: GeneratedTemplates) {
   if (!templateId) {
     throw new Error('Missing templateId');
@@ -372,7 +375,10 @@ export async function addGeneratedTemplateHistory({
     const fetchedTemplate = await fetchTemplateById(templateId);
     await db.insert(generated_templates).values({
       template_id: fetchedTemplate.data?.id as string,
-      data_value: dataValue || null,
+      data_value: dataValue,
+      generated_pdf_url: generatedPdfUrl,
+      inngestJobId: inngestJobId as string,
+      mode,
       completedAt: new Date(),
     });
 

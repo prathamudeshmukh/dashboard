@@ -1,0 +1,1 @@
+ALTER TABLE "generated_templates" ALTER COLUMN "inngest_job_id" DROP NOT NULL;
