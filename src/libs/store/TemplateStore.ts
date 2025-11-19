@@ -20,6 +20,8 @@ type TemplateStore = {
   activeTab: string;
 
   successData: TemplateSuccessData | null;
+  templateError: string;
+  jsonError: string;
 
   setTemplateName: (name: string) => void;
   setTemplateDescription: (desc: string) => void;
@@ -35,6 +37,9 @@ type TemplateStore = {
 
   setSuccessData: (data: TemplateSuccessData) => void;
   clearSuccessData: () => void;
+  setTemplateError: (error: string) => void;
+  setJsonError: (error: string) => void;
+  clearErrors: () => void;
 
   saveTemplate: () => void;
   resetTemplate: () => void;
@@ -58,6 +63,9 @@ export const useTemplateStore = create<TemplateStore>((set, get) => ({
   creationMethod: CreationMethodEnum.EXTRACT_FROM_PDF,
 
   successData: null,
+  templateError: '',
+  jsonError: '',
+
   // Setters
   setTemplateName: name => set({ templateName: name }),
   setTemplateDescription: desc => set({ templateDescription: desc }),
@@ -74,6 +82,10 @@ export const useTemplateStore = create<TemplateStore>((set, get) => ({
   setCreationMethod: method => set({ creationMethod: method }),
 
   setSuccessData: (data: TemplateSuccessData) => set({ successData: data }),
+
+  setTemplateError: error => set({ templateError: error }),
+  setJsonError: error => set({ jsonError: error }),
+  clearErrors: () => set({ templateError: '', jsonError: '' }),
 
   // Actions
   saveTemplate: () => {

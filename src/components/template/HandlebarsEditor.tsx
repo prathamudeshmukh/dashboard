@@ -2,6 +2,7 @@
 
 import { Lightbulb } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 import { fetchTemplateById } from '@/libs/actions/templates';
 import { HandlebarsService } from '@/libs/services/HandlebarService';
@@ -36,11 +37,13 @@ export default function HandlebarsEditor() {
     setHandlebarsCode,
     setHandlebarTemplateJson,
     setCreationMethod,
+    jsonError,
+    templateError,
+    setJsonError,
+    setTemplateError,
   } = useTemplateStore();
 
   const [handlebarsPreview, setHandlebarsPreview] = useState('');
-  const [jsonError, setJsonError] = useState('');
-  const [templateError, setTemplateError] = useState('');
   const [isHandlebarsLoading, setIsHandlebarsLoading] = useState(true);
   const [isEditorReady, setIsEditorReady] = useState(false);
   const [activeTab, setActiveTab] = useState('editor');
@@ -174,16 +177,35 @@ export default function HandlebarsEditor() {
         // Render Handlebars template with current data
         const result = await handlebarsService.renderTemplate(handlebarsCode, handlebarTemplateJson);
         setHandlebarsPreview(result);
-        setTemplateError('');
+        // Detect error HTML returned by service (no thrown error)
+        const isError
+          = /class="text-red-500/.test(result)
+          || /^(?:Error|JSON Error|Template Error):/.test(
+            result.replace(/<[^>]+>/g, '').trim(),
+          );
+        if (isError) {
+          const plain = result.replace(/<[^>]+>/g, '').trim();
+          // Only mark templateError if this isn't a JSON error
+          if (!/^JSON Error:/i.test(plain)) {
+            setTemplateError(plain);
+          } else {
+            setTemplateError('');
+          }
+        } else {
+          setTemplateError('');
+        }
+
         setRenderCount(prev => prev + 1);
       } catch (error: any) {
-        console.error('Template rendering error:', error);
+        console.error('Template rendering error:', error.message);
         if (error.message.includes('JSON')) {
           setJsonError(error.message);
+          setTemplateError('');
+          toast.error(`JSON Error: ${error.message}`, { position: 'bottom-right' });
         } else {
           setTemplateError(error.message);
-          setHandlebarsPreview(`<div class="text-red-500 p-4">Error: ${error.message}</div>`);
         }
+        setHandlebarsPreview(`<div class="text-red-500 p-4">Error: ${error.message}</div>`);
       } finally {
         setIsHandlebarsLoading(false);
       }
@@ -197,6 +219,21 @@ export default function HandlebarsEditor() {
     try {
       const result = await handlebarsService.renderTemplate(handlebarsCode, handlebarTemplateJson);
       setHandlebarsPreview(result);
+      const isError
+        = /class="text-red-500/.test(result)
+        || /^(?:Error|JSON Error|Template Error):/.test(
+          result.replace(/<[^>]+>/g, '').trim(),
+        );
+      if (isError) {
+        const plain = result.replace(/<[^>]+>/g, '').trim();
+        if (!/^JSON Error:/i.test(plain)) {
+          setTemplateError(plain);
+        } else {
+          setTemplateError('');
+        }
+      } else {
+        setTemplateError('');
+      }
       setRenderCount(prev => prev + 1);
     } catch (error) {
       console.error('Error rendering:', error);
