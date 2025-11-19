@@ -2,7 +2,7 @@ import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
 import { type NextRequest, NextResponse } from 'next/server';
 
-import { inngest } from '@/inngest/client';
+import { handleAsyncMode } from '@/inngest/helpers/handleAsyncMode';
 import { addGeneratedTemplateHistory, fetchTemplateById, generatePdf } from '@/libs/actions/templates';
 import { trackServerEvent } from '@/libs/analytics/posthog-server';
 
@@ -96,26 +96,11 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
       // ------------------------------------------------
 
       // Send to Inngest
-      const { ids } = await inngest.send({
-        name: 'pdf/generate.async',
-        data: {
-          clientId,
-          templateId,
-          templateData,
-          devMode,
-        },
-      });
-
-      return NextResponse.json(
-        {
-          template_id: templateId,
-          status: 'STARTED',
-          job_id: ids[0],
-        },
-        {
-          status: 202, // HTTP 202 Accepted
-          headers: { 'Preference-Applied': 'respond-async' },
-        },
+      return handleAsyncMode(
+        clientId as string,
+        templateId,
+        templateData,
+        devMode,
       );
     }
 
