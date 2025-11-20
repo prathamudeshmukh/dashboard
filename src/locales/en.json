@@ -1,7 +1,7 @@
 {
   "Index": {
-    "meta_title": "Templify - API-First & No-Code PDF Generation",
-    "meta_description": "Templify lets SaaS companies generate dynamic PDFs effortlessly using API and no-code templates. Fast, secure, and scalable document automation."
+    "meta_title": "Templify - API-First PDF Generation Platform | No-Code Templates for SaaS",
+    "meta_description": "Generate dynamic PDFs instantly with Templify's API-first platform. No-code templates, Handlebars support, and enterprise-scale performance. Start with 150 free credits today!"
   },
   "Navbar": {
     "sign_in": "Sign In",
@@ -16,8 +16,9 @@
   },
   "Hero": {
     "follow_twitter": "Follow @Ixartz on Twitter",
+    "badge": "NEW: AI-Powered PDF Template Extraction",
     "title": "Effortless PDF Generation for SaaS Applications",
-    "subtitle": "Templify makes PDF templates easy—create, manage, and generate PDFs without complex code or libraries.",
+    "subtitle": "Templify makes PDF templates easy—create, manage, and generate PDFs without complex code or libraries. Now with AI-powered extraction to convert any PDF into an editable template instantly",
     "description1": "Scalable, API-first infrastructure that handles PDF generation for you",
     "description2": "No huge dev effort needed for every new template",
     "description3": "No more maintaining bulky PDF libraries"
@@ -27,8 +28,13 @@
   },
   "Features": {
     "title": "Why Templify is Different",
-    "subtitle": "Templify streamlines PDF generation by combining powerful developer tools with a no-code experience — so anyone on your team can deliver production-ready documents in minutes.",
+    "subtitle": "Create professional PDF templates with ease. Our AI-powered tools and intuitive editor make template creation faster than ever.",
     "feature1": {
+      "id": "ai-powered",
+      "title": "AI-Powered PDF Extraction ✨",
+      "content": "Transform any existing PDF into an editable template instantly. Our advanced AI analyzes your PDF, identifies text fields, layouts, and styling, then generates a fully editable template complete with variables and placeholders. No manual recreation needed—just upload and edit."
+    },
+    "feature2": {
       "id": "no-code",
       "title": "Developer-Friendly & No-Code Ready",
       "content": "Whether you’re a coder or prefer visual design, Templify has you covered:",
@@ -37,12 +43,12 @@
         "No-code: Use the drag‑and‑drop visual editor for instant layout control."
       ]
     },
-    "feature2": {
+    "feature3": {
       "id": "live-preview",
       "title": "Real-Time Preview",
       "content": "See exactly how your PDF will look while you build. Instant feedback keeps your designs accurate and polished."
     },
-    "feature3": {
+    "feature4": {
       "id": "dynamic-content",
       "title": "Dynamic Content, Unmatched Flexibility",
       "content": "Bring templates to life with dynamic data:",
@@ -51,7 +57,7 @@
         "Perfect for use cases like invoices, contracts, reports, certificates, and personalized documents."
       ]
     },
-    "feature4": {
+    "feature5": {
       "id": "scalable",
       "title": "Enterprise-Scale Performance",
       "content": "Our infrastructure automatically scales to handle your peak loads. Generate thousands of PDFs simultaneously without performance degradation.",
@@ -60,7 +66,7 @@
         "Backed by auto‑scaling infrastructure and 99.9% uptime SLA, even during peak usage."
       ]
     },
-    "feature5": {
+    "feature6": {
       "id": "secure",
       "title": "Secure & Reliable",
       "content": "Your data security is our priority. All communications are encrypted, and we maintain strict access controls. With 99.9% uptime, you can rely on our service to be there when you need it.",
@@ -69,7 +75,7 @@
         "Secure infrastructure ensures your documents and data stay protected."
       ]
     },
-    "feature6": {
+    "feature7": {
       "id": "api-insights",
       "title": "Smart Insights & Usage Metrics",
       "content": "Stay in control with analytics:",
@@ -78,7 +84,7 @@
         "Optimize for cost and resource efficiency."
       ]
     },
-    "feature7": {
+    "feature8": {
       "id": "support",
       "title": "Exceptional Support & Documentation",
       "content": "",
@@ -201,14 +207,14 @@
     "title": "Trustworthy and reliable",
     "subtitle": "Trust & Reliability",
     "description": "Your data stays protected, and your PDFs generate instantly – every time.",
-    "feature1": "Security",
-    "feature2": "Reliability",
-    "feature3": "Support",
-    "feature4": "Scalability",
-    "feature1_description": "Secure API key authentication ensures only authorized users generate PDFs.",
-    "feature2_description": "99.9% uptime guarantee for uninterrupted service.",
-    "feature3_description": "Comprehensive API documentation + email support for developers.",
-    "feature4_description": "Auto-scaling infrastructure ensures high-speed PDF generation, even at peak loads."
+    "feature1": "AI-Powered",
+    "feature2": "Security",
+    "feature3": "Reliability",
+    "feature4": "Support",
+    "feature1_description": "Instantly convert existing PDFs into editable templates with our intelligent AI extraction technology.",
+    "feature2_description": "Secure API key authentication ensures only authorized users generate PDFs.",
+    "feature3_description": "99.9% uptime guarantee for uninterrupted service.",
+    "feature4_description": "Comprehensive API documentation + email support for developers."
   },
   "Pricing": {
     "title": "Simple & Transparent pricing for the MVP version",
