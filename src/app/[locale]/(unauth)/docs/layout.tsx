@@ -9,13 +9,13 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
         <DocsSidebar />
 
         <main className="flex-1 overflow-y-auto">
-          <div className="container p-12">
+          <div className="container p-12 lg:pb-56">
             {children}
           </div>
         </main>
       </div>
 
-      <div className="sticky bottom-0 w-full">
+      <div className="w-full lg:fixed lg:bottom-0">
         <Footer />
       </div>
     </div>
