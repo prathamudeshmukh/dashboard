@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function DocsContent() {
   return (
     <div className="prose prose-lg max-w-none dark:prose-invert">
@@ -25,9 +27,6 @@ export default function DocsContent() {
           These credentials must be included in the request headers.
         </p>
 
-        <p><strong>Authentication Headers:</strong></p>
-        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800"><code>Content-Type: application/json</code></pre>
-
         <p>
           To obtain your API key, sign in to your Templify account and navigate to the
           {' '}
@@ -41,7 +40,7 @@ export default function DocsContent() {
         <h2>🔗 API Endpoints</h2>
 
         <h3>
-          📄
+          📄&nbsp;
           <strong>Generate PDF</strong>
         </h3>
 
@@ -121,13 +120,16 @@ export default function DocsContent() {
         <ul>
           <li>
             When you
+            {' '}
             <strong>create a new template</strong>
             , it is
+            {' '}
             <strong>automatically published to production</strong>
             .
           </li>
           <li>
             The template becomes immediately available to your
+            {' '}
             <strong>generate PDF</strong>
             {' '}
             API calls (unless in dev mode).
@@ -144,17 +146,20 @@ export default function DocsContent() {
             <ul>
               <li>
                 Saves the changes in the
+                {' '}
                 <strong>unpublished (dev) version</strong>
                 .
               </li>
               <li>
                 Ideal for testing changes in
+                {' '}
                 <strong>lower environments</strong>
                 {' '}
                 (e.g., staging).
               </li>
               <li>
                 These changes
+                {' '}
                 <strong>do not affect</strong>
                 {' '}
                 the live template used in production.
@@ -166,14 +171,16 @@ export default function DocsContent() {
             <ul>
               <li>
                 Saves and
+                {' '}
                 <strong>publishes the new version</strong>
                 {' '}
                 to
-                <strong>production</strong>
+                <strong> production</strong>
                 .
               </li>
               <li>
                 All future PDF generations (including from
+                {' '}
                 <strong>generate</strong>
                 {' '}
                 API) will use this updated version.
@@ -188,6 +195,7 @@ export default function DocsContent() {
         <ul>
           <li>
             Add
+            {' '}
             <strong>?devMode=true</strong>
             {' '}
             to your preview or generation API calls.
@@ -196,7 +204,7 @@ export default function DocsContent() {
         </ul>
 
         <h3>
-          Example
+          Example&nbsp;
           <strong>curl</strong>
           {' '}
           to preview dev version:
@@ -302,18 +310,21 @@ export default function DocsContent() {
         <ul>
           <li>
             Always
+            {' '}
             <strong>store API keys securely</strong>
             {' '}
             and do not expose them in front-end code.
           </li>
           <li>
             Use
+            {' '}
             <strong>HTTPS</strong>
             {' '}
             for all API requests to ensure encryption.
           </li>
           <li>
             Implement
+            {' '}
             <strong>rate limiting</strong>
             {' '}
             to prevent abuse.
@@ -328,12 +339,24 @@ export default function DocsContent() {
           <li>
             <strong>Email:</strong>
             {' '}
-            support@templify.cloud
+            <Link
+              href="mailto:support@templify.cloud"
+              className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+            >
+              support@templify.cloud
+            </Link>
           </li>
           <li>
             <strong>API Status:</strong>
             {' '}
-            https://status.templify.cloud
+            <Link
+              href="https://status.templify.cloud"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+            >
+              https://status.templify.cloud
+            </Link>
           </li>
         </ul>
       </div>
