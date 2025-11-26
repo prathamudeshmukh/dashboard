@@ -51,6 +51,9 @@ export type GeneratePdfRequest = {
 export type GeneratedTemplates = {
   templateId: string;
   dataValue?: JsonValue;
+  generatedPdfUrl?: string | '';
+  inngestJobId?: string | '';
+  mode?: 'ASYNC' | 'SYNC';
 };
 
 export type JsonValue<K extends string | number | symbol = string, V = any> =

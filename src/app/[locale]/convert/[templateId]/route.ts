@@ -2,7 +2,8 @@ import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
 import { type NextRequest, NextResponse } from 'next/server';
 
-import { generatePdf } from '@/libs/actions/templates';
+import { handleAsyncMode } from '@/inngest/helpers/handleAsyncMode';
+import { addGeneratedTemplateHistory, fetchTemplateById, generatePdf } from '@/libs/actions/templates';
 import { trackServerEvent } from '@/libs/analytics/posthog-server';
 
 import { authenticateApi } from '../../api/authenticateApi';
@@ -74,6 +75,39 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
       );
     }
 
+    // check if template is present or not.
+    const fetchedTemplate = await fetchTemplateById(templateId);
+    if (fetchedTemplate.error) {
+      return NextResponse.json(
+        { error: fetchedTemplate.error.message },
+        { status: fetchedTemplate.error.status },
+      );
+    }
+
+    const preferHeader = req.headers.get('Prefer');
+    const modeParam = searchParams.get('mode');
+
+    const isAsyncMode
+      = preferHeader?.toLowerCase() === 'respond-async' || modeParam?.toLowerCase() === 'async';
+
+    if (isAsyncMode) {
+      // ------------------------------------------------
+      // ⚡ ASYNC MODE: Trigger background job via Inngest
+      // ------------------------------------------------
+
+      // Send to Inngest
+      return handleAsyncMode(
+        clientId as string,
+        templateId,
+        templateData,
+        devMode,
+      );
+    }
+
+    // ------------------------------------------------
+    // 🧩 SYNC MODE: Generate PDF immediately
+    // ------------------------------------------------
+
     const response = await generatePdf({
       devMode,
       templateId,
@@ -96,6 +130,11 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
         { status: response.error.status },
       );
     }
+
+    await addGeneratedTemplateHistory({
+      templateId,
+      dataValue: templateData,
+    });
 
     // ✅ Log success
     await trackServerEvent('api_call_generated_pdf', {
@@ -121,7 +160,7 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
       template_id: params.templateId,
     });
 
-    console.error('Error generating PDF:', error);
+    console.error('Error generating PDF [API Route]:', error);
     return NextResponse.json(
       { error: `Failed to generate PDF: ${error.message}` },
       { status: 500 },

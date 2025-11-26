@@ -300,10 +300,6 @@ export async function generatePdf({
 
     if (template?.data?.id && isApi) {
       await deductCredit(template.data.user?.cliendId as string);
-      await addGeneratedTemplateHistory({
-        templateId: template.data.id,
-        dataValue: templateData,
-      });
     }
 
     return { pdf: pdfBuffer };
@@ -366,16 +362,24 @@ export async function updateTemplatePreviewURL({
 
 export async function addGeneratedTemplateHistory({
   templateId,
-  dataValue,
+  dataValue = null,
+  generatedPdfUrl = '',
+  inngestJobId = '',
+  mode = 'SYNC',
 }: GeneratedTemplates) {
   if (!templateId) {
     throw new Error('Missing templateId');
   }
 
   try {
+    const fetchedTemplate = await fetchTemplateById(templateId);
     await db.insert(generated_templates).values({
-      template_id: templateId,
-      data_value: dataValue || null,
+      template_id: fetchedTemplate.data?.id as string,
+      data_value: dataValue,
+      generated_pdf_url: generatedPdfUrl,
+      inngestJobId: inngestJobId as string,
+      mode,
+      completedAt: new Date(),
     });
 
     return { message: 'History Added for Generated Template' };
