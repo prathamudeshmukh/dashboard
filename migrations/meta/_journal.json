@@ -120,6 +120,13 @@
       "when": 1763561698910,
       "tag": "0016_nervous_red_hulk",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1763734547248,
+      "tag": "0017_chunky_loa",
+      "breakpoints": true
     }
   ]
 }
