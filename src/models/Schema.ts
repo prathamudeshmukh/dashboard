@@ -166,11 +166,38 @@ export const webhook_endpoints = pgTable('webhook_endpoints', {
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 });
 
+// --- Webhook Events ---
+export const webhook_events = pgTable('webhook_events', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  clientId: varchar('client_id').notNull().references(() => users.clientId, { onDelete: 'cascade' }),
+  type: text('type').notNull(),
+  payload: jsonb('payload').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+});
+
+// --- Webhook Deliveries ---
+export const webhook_deliveries = pgTable('webhook_deliveries', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  eventId: uuid('event_id').notNull().references(() => webhook_events.id, { onDelete: 'cascade' }),
+  endpointId: uuid('endpoint_id').notNull().references(() => webhook_endpoints.id, { onDelete: 'cascade' }),
+  status: text('status').notNull(), // pending | succeeded | failed | failed_permanent
+  attempt: integer('attempt').notNull().default(0),
+  last_code: integer('last_code'),
+  last_error: text('last_error'),
+  last_latency_ms: integer('last_latency_ms'),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+}, table => ({
+  eventIndex: index('webhook_deliveries_event_idx').on(table.eventId),
+  endpointIndex: index('webhook_deliveries_endpoint_idx').on(table.endpointId),
+}));
+
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
   templates: many(templates), // One-to-many relation with templates
   apikeys: many(apikeys), // One-to-many relation with apikeys
   webhook_endpoints: many(webhook_endpoints),
+  webhook_events: many(webhook_events),
   creditTransactions: many(creditTransactions),
 }));
 
@@ -215,5 +242,24 @@ export const webhookEndpointsRelations = relations(webhook_endpoints, ({ one }) 
   user: one(users, {
     fields: [webhook_endpoints.clientId],
     references: [users.clientId],
+  }),
+}));
+
+export const webhookEventsRelations = relations(webhook_events, ({ one, many }) => ({
+  user: one(users, {
+    fields: [webhook_events.clientId],
+    references: [users.clientId],
+  }),
+  deliveries: many(webhook_deliveries),
+}));
+
+export const webhookDeliveriesRelations = relations(webhook_deliveries, ({ one }) => ({
+  event: one(webhook_events, {
+    fields: [webhook_deliveries.eventId],
+    references: [webhook_events.id],
+  }),
+  endpoint: one(webhook_endpoints, {
+    fields: [webhook_deliveries.endpointId],
+    references: [webhook_endpoints.id],
   }),
 }));
