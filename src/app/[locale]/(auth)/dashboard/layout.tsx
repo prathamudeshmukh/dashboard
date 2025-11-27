@@ -1,6 +1,5 @@
 import { getTranslations } from 'next-intl/server';
 
-import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { DashboardSidebar } from '@/features/dashboard/DashboardSidebar';
 
 export async function generateMetadata(props: { params: { locale: string } }) {
@@ -19,13 +18,12 @@ export default function DashboardLayout(props: { children: React.ReactNode }) {
   // const t = useTranslations('DashboardLayout');
 
   return (
-    <SidebarProvider>
+    <main className="min-h-screen bg-muted pt-4">
       <DashboardSidebar />
-      <SidebarInset>
-        <SidebarTrigger />
+      <div className="mx-auto max-w-screen-xl px-3 pb-16">
         {props.children}
-      </SidebarInset>
-    </SidebarProvider>
+      </div>
+    </main>
   );
 }
 

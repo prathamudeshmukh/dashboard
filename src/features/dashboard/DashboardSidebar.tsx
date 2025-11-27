@@ -1,111 +1,43 @@
 import { UserButton } from '@clerk/nextjs';
-import { ChartColumn, Home, Key, Settings, Webhook } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import Link from 'next/link';
+import React from 'react';
 
 import { Logo } from '@/components/landing/Logo';
-import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem, SidebarRail } from '@/components/ui/sidebar';
+import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTrigger } from '@/components/ui/sheet';
 
-const sidebarMenu = [
-  {
-    href: '/dashboard',
-    label: 'Home',
-    icon: Home,
-  },
-  {
-    label: 'Settings',
-    icon: Settings,
-    submenu: [
-      {
-        href: '/dashboard/settings/api-keys',
-        label: 'API Keys',
-        icon: Key,
-      },
-      {
-        href: '/dashboard/settings/webhooks',
-        label: 'Webhooks',
-        icon: Webhook,
-      },
-    ],
-  },
-  {
-    href: '/dashboard/usage-metrics',
-    label: 'Usage',
-    icon: ChartColumn,
-  },
-];
+import { DashboardSidebarMenu } from './DashboardSidebarMenu';
 
 export const DashboardSidebar = () => {
   return (
-    <Sidebar>
-      <SidebarHeader className="p-4">
-        <Link href="/dashboard" className="max-sm:hidden">
-          <Logo />
-        </Link>
-      </SidebarHeader>
+    <Sheet>
+      <SheetTrigger asChild>
+        <Menu className="ml-8 size-8 cursor-pointer" />
+      </SheetTrigger>
 
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {sidebarMenu.map((menu) => {
-                const Icon = menu.icon;
+      <SheetContent>
+        <SheetHeader className="border-b">
+          <SheetClose asChild>
+            <Link href="/dashboard" className="pl-2 max-sm:hidden">
+              <Logo />
+            </Link>
+          </SheetClose>
+        </SheetHeader>
 
-                return (
-                  <SidebarMenuItem key={menu.label}>
-                    {menu.submenu
-                      ? (
-                          <>
-                            <SidebarMenuButton>
-                              <Icon className="mr-2 size-4" />
-                              <span>{menu.label}</span>
-                            </SidebarMenuButton>
+        <DashboardSidebarMenu />
 
-                            <SidebarMenuSub>
-                              {menu.submenu.map((sub) => {
-                                const SubIcon = sub.icon;
-
-                                return (
-                                  <SidebarMenuSubItem key={sub.label}>
-                                    <SidebarMenuSubButton asChild>
-                                      <Link href={sub.href}>
-                                        <SubIcon className="mr-2 size-4" />
-                                        <span>{sub.label}</span>
-                                      </Link>
-                                    </SidebarMenuSubButton>
-                                  </SidebarMenuSubItem>
-                                );
-                              })}
-                            </SidebarMenuSub>
-                          </>
-                        )
-                      : (
-                          <SidebarMenuButton asChild>
-                            <Link href={menu.href}>
-                              <Icon className="mr-2 size-4" />
-                              <span>{menu.label}</span>
-                            </Link>
-                          </SidebarMenuButton>
-                        )}
-                  </SidebarMenuItem>
-                );
-              })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-
-      <SidebarFooter>
-        <UserButton
-          userProfileMode="navigation"
-          userProfileUrl="/dashboard/user-profile"
-          appearance={{
-            elements: {
-              rootBox: 'px-2 py-1.5',
-            },
-          }}
-        />
-      </SidebarFooter>
-      <SidebarRail />
-    </Sidebar>
+        <SheetFooter className="border-t">
+          <UserButton
+            userProfileMode="navigation"
+            userProfileUrl="/dashboard/user-profile"
+            appearance={{
+              elements: {
+                rootBox: 'px-2 py-1.5',
+              },
+            }}
+          />
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
   );
 };
