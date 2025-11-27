@@ -12,7 +12,7 @@ const sidebarMenu = [
   {
     id: 'dashboard',
     href: '/dashboard',
-    label: 'Home',
+    label: 'Dashboard',
     icon: Home,
   },
   {
@@ -53,11 +53,11 @@ export const DashboardSidebarMenu = () => {
           <React.Fragment key={menu.id}>
             {menu.submenu
               ? (
-                  <Collapsible className="space-y-1">
-                    <CollapsibleTrigger className="flex w-full items-center justify-between rounded-md px-3 py-2 text-sm hover:bg-muted">
+                  <Collapsible className="space-y-1" defaultOpen={menu.submenu.some(sub => sub.id === active)}>
+                    <CollapsibleTrigger className="flex w-full items-center justify-between rounded-md px-3 py-2 text-base outline-none hover:bg-muted">
                       <div className="flex items-center gap-2">
                         <menu.icon
-                          className={`size-4 ${active === menu.id
+                          className={`size-5 ${active === menu.id
                             ? 'text-white'
                             : 'text-muted-foreground'
                           }`}
@@ -73,7 +73,7 @@ export const DashboardSidebarMenu = () => {
                             <SheetClose key={sub.id} asChild>
                               <Link
                                 href={sub.href}
-                                className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors 
+                                className={`flex items-center gap-2 rounded-md px-3 py-2 text-base transition-colors 
                                   ${active === sub.id
                               ? 'bg-primary text-white'
                               : 'hover:bg-muted'
@@ -81,7 +81,7 @@ export const DashboardSidebarMenu = () => {
                                 onClick={() => setActive(sub.id)}
                               >
                                 <sub.icon
-                                  className={`size-4 ${active === sub.id
+                                  className={`size-5 ${active === sub.id
                                     ? 'text-white'
                                     : 'text-muted-foreground'
                                   }`}
@@ -100,7 +100,7 @@ export const DashboardSidebarMenu = () => {
                     <Link
                       key={menu.label}
                       href={menu.href}
-                      className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors 
+                      className={`flex items-center gap-2 rounded-md px-3 py-2 text-base transition-colors 
                         ${active === menu.id
                     ? 'bg-primary text-white'
                     : 'hover:bg-muted'
@@ -108,7 +108,7 @@ export const DashboardSidebarMenu = () => {
                       onClick={() => setActive(menu.id)}
                     >
                       <menu.icon
-                        className={`size-4 ${active === menu.id
+                        className={`size-5 ${active === menu.id
                           ? 'text-white'
                           : 'text-muted-foreground'
                         }`}
