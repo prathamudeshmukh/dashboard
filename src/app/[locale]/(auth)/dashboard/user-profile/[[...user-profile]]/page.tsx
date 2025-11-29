@@ -8,7 +8,7 @@ const UserProfilePage = (props: { params: { locale: string } }) => {
   const t = useTranslations('UserProfile');
 
   return (
-    <>
+    <div className="p-4 sm:p-6 lg:p-8">
       <TitleBar
         title={t('title_bar')}
         description={t('title_bar_description')}
@@ -24,7 +24,7 @@ const UserProfilePage = (props: { params: { locale: string } }) => {
           },
         }}
       />
-    </>
+    </div>
   );
 };
 

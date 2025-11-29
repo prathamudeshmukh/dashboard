@@ -1,6 +1,6 @@
 'use client';
 
-import { UserButton, useUser } from '@clerk/nextjs';
+import { UserButton } from '@clerk/nextjs';
 import { Menu, X } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
@@ -11,8 +11,6 @@ import { Sheet, SheetClose, SheetContent, SheetFooter, SheetHeader, SheetTitle, 
 import { DashboardSidebarMenu } from './DashboardSidebarMenu';
 
 export const DashboardSidebar = () => {
-  const { user } = useUser();
-
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -21,7 +19,7 @@ export const DashboardSidebar = () => {
 
       <SheetContent>
         <SheetTitle className="sr-only">Sidebar Menu</SheetTitle>
-        <SheetHeader className="relative items-center justify-center border-b">
+        <SheetHeader className="relative items-center border-b px-7">
           <SheetClose asChild>
             <Link href="/dashboard">
               <Logo />
@@ -35,17 +33,20 @@ export const DashboardSidebar = () => {
 
         <DashboardSidebarMenu />
 
-        <SheetFooter className="border-t">
+        <SheetFooter className="border-t px-5">
           <UserButton
             userProfileMode="navigation"
             userProfileUrl="/dashboard/user-profile"
             appearance={{
               elements: {
                 rootBox: 'px-2 py-1.5',
+                userButtonTrigger: 'focus:shadow-none focus:outline-none',
+                userButtonBox: 'flex-row-reverse',
+                userButtonOuterIdentifier: 'text-base font-medium pl-0',
               },
             }}
+            showName
           />
-          <span className="text-base font-medium">{user?.fullName}</span>
         </SheetFooter>
       </SheetContent>
     </Sheet>
