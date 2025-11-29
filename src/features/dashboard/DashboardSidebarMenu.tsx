@@ -47,7 +47,7 @@ export const DashboardSidebarMenu = () => {
   const activeLink: string | undefined = pathname.split('/').pop();
   const [active, setActive] = useState<string>(activeLink || 'dashboard');
   return (
-    <div className="space-y-1 p-4">
+    <div className="space-y-1 p-4 pt-0">
       {sidebarMenu.map(menu =>
         (
           <React.Fragment key={menu.id}>

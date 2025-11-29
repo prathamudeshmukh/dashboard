@@ -50,7 +50,7 @@ export default function APIKeys({ clientId }: { clientId: string }) {
 
   return (
     <div className="min-h-screen p-4 sm:p-8">
-      <div className="mx-auto max-w-4xl space-y-8">
+      <div className="mx-auto space-y-8">
         <h1 className="break-words text-4xl font-bold text-foreground">API Keys</h1>
 
         <Card className="space-y-4 bg-black p-4 text-white sm:p-6">

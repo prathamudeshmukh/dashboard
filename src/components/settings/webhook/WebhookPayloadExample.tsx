@@ -9,18 +9,18 @@ export const WebhookPayloadExample = () => {
         <CardTitle>Webhook Payload Example</CardTitle>
         <CardDescription>Example of the JSON payload sent to your webhook endpoint</CardDescription>
       </CardHeader>
-      <CardContent>
-        <div className="overflow-x-auto rounded-md bg-muted p-4">
-          <pre className="text-sm">
-            <code>{WEBHOOK_PAYLOAD_EXAMPLE}</code>
-          </pre>
-        </div>
-        <div className="mt-4 rounded-md border bg-muted/50 p-3">
+      <CardContent className="prose prose-lg max-w-none dark:prose-invert">
+        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800">
+          <code>{WEBHOOK_PAYLOAD_EXAMPLE}</code>
+        </pre>
+        <div className="mt-4 rounded-lg">
           <p className="mb-2 text-sm font-medium">Headers:</p>
-          <code className="text-xs">
-            {WEBHOOK_SIGNATURE_HEADER}
-            : sha256=abc123...
-          </code>
+          <pre className="my-0 overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800">
+            <code>
+              {WEBHOOK_SIGNATURE_HEADER}
+              : sha256=abc123...
+            </code>
+          </pre>
         </div>
       </CardContent>
     </Card>
