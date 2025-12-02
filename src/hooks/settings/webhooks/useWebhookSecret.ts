@@ -27,9 +27,6 @@ export const useWebhookSecret = () => {
         if (result?.success) {
           setSecret(result.secret);
           setEncryptedSecret(result.encryptedSecret as string);
-          if (result.created) {
-            toast.success('Webhook secret generated');
-          }
         }
       } catch (err) {
         toast.error('Failed to load webhook secret');

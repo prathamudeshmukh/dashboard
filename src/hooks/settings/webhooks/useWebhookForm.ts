@@ -27,8 +27,6 @@ export const useWebhookForm = () => {
           setWebhookUrl(result.url || '');
           if (result.exists) {
             toast.info('Loaded existing webhook configuration');
-          } else {
-            toast.success('Generated new webhook secret');
           }
         }
       } catch (err) {

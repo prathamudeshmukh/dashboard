@@ -1,7 +1,6 @@
-import { useTranslations } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 
-import { DashboardHeader } from '@/features/dashboard/DashboardHeader';
+import { DashboardSidebar } from '@/features/dashboard/DashboardSidebar';
 
 export async function generateMetadata(props: { params: { locale: string } }) {
   const t = await getTranslations({
@@ -16,37 +15,13 @@ export async function generateMetadata(props: { params: { locale: string } }) {
 }
 
 export default function DashboardLayout(props: { children: React.ReactNode }) {
-  const t = useTranslations('DashboardLayout');
-
   return (
-    <>
-      <div className="shadow-md">
-        <div className="mx-auto flex max-w-screen-xl items-center justify-between px-3 py-6">
-          <DashboardHeader
-            menu={[
-              {
-                href: '/dashboard',
-                label: t('home'),
-              },
-              {
-                href: '/dashboard/settings',
-                label: 'Settings',
-              },
-              {
-                href: '/dashboard/usage-metrics',
-                label: 'Usage',
-              },
-            ]}
-          />
-        </div>
+    <main className="min-h-screen bg-muted pt-4">
+      <DashboardSidebar />
+      <div className="mx-auto max-w-screen-xl px-3 pb-16">
+        {props.children}
       </div>
-
-      <div className="min-h-[calc(100vh-72px)] bg-muted">
-        <div className="mx-auto max-w-screen-xl px-3 pb-16 pt-6">
-          {props.children}
-        </div>
-      </div>
-    </>
+    </main>
   );
 }
 

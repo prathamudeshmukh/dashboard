@@ -2,6 +2,7 @@ import { AlertTriangle, Shield } from 'lucide-react';
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const CODE_EXAMPLES = {
   nodejs: `const crypto = require('crypto');
@@ -101,13 +102,11 @@ export async function POST(req: NextRequest) {
 
 const CodeExample = ({ title, code }: { title: string; code: string }) => {
   return (
-    <div>
+    <div className="prose prose-lg max-w-none dark:prose-invert">
       <h4 className="mb-2 text-sm font-semibold">{title}</h4>
-      <div className="overflow-x-auto rounded-md bg-muted p-4">
-        <pre className="text-xs">
-          <code>{code}</code>
-        </pre>
-      </div>
+      <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800">
+        <code>{code}</code>
+      </pre>
     </div>
   );
 };
@@ -127,6 +126,7 @@ export const WebhookSignatureExamples = () => {
           <p className="mb-4 text-sm text-muted-foreground">
             Each webhook request includes an
             {' '}
+            {/* <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800"></pre> */}
             <code className="rounded bg-muted px-1 py-0.5 text-xs">X-Templify-Signature</code>
             {' '}
             header containing an
@@ -134,11 +134,22 @@ export const WebhookSignatureExamples = () => {
           </p>
         </div>
 
-        <div className="space-y-4">
-          <CodeExample title="Node.js / Express Example" code={CODE_EXAMPLES.nodejs} />
-          <CodeExample title="Python / Flask Example" code={CODE_EXAMPLES.python} />
-          <CodeExample title="Next.js API Route Example" code={CODE_EXAMPLES.nextjs} />
-        </div>
+        <Tabs defaultValue="nodejs">
+          <TabsList>
+            <TabsTrigger value="nodejs">Node.js</TabsTrigger>
+            <TabsTrigger value="python">Python</TabsTrigger>
+            <TabsTrigger value="nextjs">Next.js</TabsTrigger>
+          </TabsList>
+          <TabsContent value="nodejs">
+            <CodeExample title="Node.js / Express Example" code={CODE_EXAMPLES.nodejs} />
+          </TabsContent>
+          <TabsContent value="python">
+            <CodeExample title="Python / Flask Example" code={CODE_EXAMPLES.python} />
+          </TabsContent>
+          <TabsContent value="nextjs">
+            <CodeExample title="Next.js API Route Example" code={CODE_EXAMPLES.nextjs} />
+          </TabsContent>
+        </Tabs>
 
         <Alert className="border-amber-200 bg-amber-50">
           <AlertTriangle className="size-4 text-amber-600" />
