@@ -15,8 +15,6 @@ export async function generateMetadata(props: { params: { locale: string } }) {
 }
 
 export default function DashboardLayout(props: { children: React.ReactNode }) {
-  // const t = useTranslations('DashboardLayout');
-
   return (
     <main className="min-h-screen bg-muted pt-4">
       <DashboardSidebar />
