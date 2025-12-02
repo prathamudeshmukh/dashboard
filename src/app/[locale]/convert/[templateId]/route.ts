@@ -2,6 +2,7 @@ import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
 import { type NextRequest, NextResponse } from 'next/server';
 
+import { FEATURE_PDF_ASYNC } from '@/config/features';
 import { handleAsyncMode } from '@/inngest/helpers/handleAsyncMode';
 import { addGeneratedTemplateHistory, fetchTemplateById, generatePdf } from '@/libs/actions/templates';
 import { trackServerEvent } from '@/libs/analytics/posthog-server';
@@ -85,7 +86,7 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
     }
 
     const preferHeader = req.headers.get('Prefer');
-    const modeParam = searchParams.get('mode');
+    const modeParam = searchParams.get('runMode');
 
     const isAsyncMode
       = preferHeader?.toLowerCase() === 'respond-async' || modeParam?.toLowerCase() === 'async';
@@ -94,6 +95,13 @@ export const POST = withApiAuth(async (req: NextRequest, { params }: { params: {
       // ------------------------------------------------
       // ⚡ ASYNC MODE: Trigger background job via Inngest
       // ------------------------------------------------
+
+      if (!FEATURE_PDF_ASYNC) {
+        return NextResponse.json(
+          { error: 'Async PDF generation is disabled.' },
+          { status: 403 },
+        );
+      }
 
       // Send to Inngest
       return handleAsyncMode(

@@ -20,7 +20,11 @@ export const generatePdfAsync = inngest.createFunction(
       data: {
         clientId,
         type: 'pdf.started',
-        meta: { input_data: templateData },
+        meta: {
+          input_data: templateData,
+          template_id: templateId,
+          job_id: runId,
+        },
         endpointId,
         endpointUrl,
       },
@@ -112,6 +116,8 @@ export const generatePdfAsync = inngest.createFunction(
         clientId,
         type: 'pdf.generated',
         data: {
+          template_id: templateId,
+          job_id: runId,
           download_url: blob.url,
           render_ms: renderMs,
           expires_at: new Date(Date.now() + 24 * 60 * 60_000).toISOString(),
