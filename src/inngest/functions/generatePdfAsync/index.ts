@@ -10,7 +10,7 @@ export const generatePdfAsync = inngest.createFunction(
   },
   { event: 'pdf/generate.async' },
   async ({ event, step, runId }) => {
-    const { clientId, templateId, templateData, devMode, endpointId, endpointUrl } = event.data;
+    const { clientId, templateId, templateData, devMode, endpointId, endpointUrl, encryptedSecret } = event.data;
 
     // 1️⃣ -------------------------------------------------
     // Send "pdf.started"
@@ -118,6 +118,7 @@ export const generatePdfAsync = inngest.createFunction(
         },
         endpointId,
         endpointUrl,
+        encryptedSecret,
       },
     });
 
