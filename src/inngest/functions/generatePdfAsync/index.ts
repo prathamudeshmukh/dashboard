@@ -23,6 +23,7 @@ export const generatePdfAsync = inngest.createFunction(
         meta: { input_data: templateData },
         endpointId,
         endpointUrl,
+        encryptedSecret,
       },
     });
 
@@ -71,6 +72,7 @@ export const generatePdfAsync = inngest.createFunction(
           },
           endpointId,
           endpointUrl,
+          encryptedSecret,
         },
       });
 
