@@ -14,7 +14,7 @@ export const DashboardSidebar = () => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Menu className="ml-8 size-8 cursor-pointer" />
+        <Menu data-testid="sidebar-trigger" className="ml-8 size-8 cursor-pointer" />
       </SheetTrigger>
 
       <SheetContent>
