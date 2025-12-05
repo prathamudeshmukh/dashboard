@@ -50,6 +50,9 @@ export const sendWebhook = inngest.createFunction(
     // -----------------------------------------------
     // Prepare signature generation
     // -----------------------------------------------
+
+    const body = JSON.stringify(payloadObject);
+
     const encoder = new TextEncoder();
     const key = await crypto.subtle.importKey(
       'raw',
@@ -62,7 +65,7 @@ export const sendWebhook = inngest.createFunction(
     const signatureBytes = await crypto.subtle.sign(
       'HMAC',
       key,
-      encoder.encode(JSON.stringify(payloadObject)),
+      encoder.encode(body),
     );
 
     const signatureHex = Array.from(new Uint8Array(signatureBytes))
@@ -79,9 +82,6 @@ export const sendWebhook = inngest.createFunction(
 
     try {
       const start = performance.now();
-      const payload = await db.query.webhook_events.findFirst({
-        where: eq(webhook_events.id, eventId),
-      });
 
       const res = await fetch(endpointUrl, {
         method: 'POST',
@@ -90,7 +90,7 @@ export const sendWebhook = inngest.createFunction(
           'x-templify-signature': signatureHeader,
           'x-templify-event': type,
         },
-        body: JSON.stringify(payload?.payload),
+        body,
       });
 
       lastLatency = Math.round(performance.now() - start);
