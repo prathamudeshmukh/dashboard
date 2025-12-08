@@ -14,7 +14,13 @@ export const DashboardSidebar = () => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Menu className="ml-8 size-8 cursor-pointer" />
+        <button
+          type="button"
+          aria-label="Open sidebar menu"
+          className="ml-8 block cursor-pointer"
+        >
+          <Menu className="size-8" />
+        </button>
       </SheetTrigger>
 
       <SheetContent>
