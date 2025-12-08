@@ -4,6 +4,7 @@ import { Check, Copy, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 
+import { CodeSnippet } from '@/components/CodeSnippet';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -95,30 +96,8 @@ export default function TemplateInformation({ previewTemplate, codeSnippets }: P
             </TabsList>
 
             {Object.entries(codeSnippets).map(([language, code]) => (
-              <TabsContent key={language} value={language} className="relative">
-                <pre className="max-h-[400px] overflow-x-auto rounded-md bg-muted p-4 text-sm">
-                  <code>{code}</code>
-                </pre>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="absolute right-2 top-2"
-                  onClick={() => handleCopy(code, language)}
-                >
-                  {copied === language
-                    ? (
-                        <>
-                          <Check className="mr-1 size-4" />
-                          Copied
-                        </>
-                      )
-                    : (
-                        <>
-                          <Copy className="mr-1 size-4" />
-                          Copy
-                        </>
-                      )}
-                </Button>
+              <TabsContent key={language} value={language}>
+                <CodeSnippet code={code} className="max-h-[400px]" />
               </TabsContent>
             ))}
           </Tabs>

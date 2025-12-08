@@ -4,7 +4,7 @@ import { useUser } from '@clerk/nextjs';
 import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-import { getOrCreateWebhookEndpoint } from '@/libs/actions/user';
+import { getOrCreateWebhookEndpoint, regenerateWebhookSecret } from '@/libs/actions/user';
 
 const COPY_SUCCESS_DURATION = 2000;
 
@@ -27,9 +27,6 @@ export const useWebhookSecret = () => {
         if (result?.success) {
           setSecret(result.secret);
           setEncryptedSecret(result.encryptedSecret as string);
-          if (result.created) {
-            toast.success('Webhook secret generated');
-          }
         }
       } catch (err) {
         toast.error('Failed to load webhook secret');
@@ -57,15 +54,16 @@ export const useWebhookSecret = () => {
         'Are you sure you want to regenerate the webhook secret? This will invalidate the current secret and you\'ll need to update your webhook endpoint.',
       )
     ) {
-      const res = await getOrCreateWebhookEndpoint(user?.id as string); // reuse same for demo
-      if (res.success) {
+      const res = await regenerateWebhookSecret();
+      if (res.created) {
         setSecret(res.secret);
+        setEncryptedSecret(res.encryptedSecret);
+        toast.success('Webhook secret regenerated');
+      } else {
+        toast.error('Failed to regenerate webhook secret. Try again.');
       }
-      setEncryptedSecret(res.encryptedSecret as string);
-      return true;
     }
-    return false;
-  }, [user?.id]);
+  }, []);
 
   return {
     secret,

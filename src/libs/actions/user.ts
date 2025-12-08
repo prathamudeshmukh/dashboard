@@ -199,3 +199,9 @@ export async function getOrCreateWebhookEndpoint(clientId: string) {
     created: true,
   };
 }
+
+export async function regenerateWebhookSecret() {
+  const newSecret = generateWebhookSecret();
+  const encryptedSecret = encrypt(newSecret);
+  return { created: true, secret: newSecret, encryptedSecret };
+}
