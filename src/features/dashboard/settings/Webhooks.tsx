@@ -43,7 +43,8 @@ export default function WebhooksPage() {
 
   return (
     <div className="min-h-screen p-4 sm:p-8">
-      <div className="mx-auto max-w-4xl space-y-8">
+      <div className="mx-auto space-y-8">
+        <h1 className="break-words text-4xl font-bold text-foreground">Webhooks</h1>
         <div className="space-y-6">
           <Card>
             <CardHeader>
