@@ -5,60 +5,68 @@ export default function DocsContent() {
     <div className="prose prose-lg max-w-none dark:prose-invert">
       <h1>Templify API Documentation</h1>
 
+      {/* INTRODUCTION */}
       <div id="introduction">
         <h2>🚀 Introduction</h2>
         <p>
-          Templify is an API-first SaaS that allows developers to create and manage templates and generate PDFs dynamically.
-          This documentation provides the necessary details to integrate the Templify API seamlessly into your application.
+          Templify is an API-first SaaS that allows developers to create and manage templates, generate PDFs dynamically,
+          and integrate powerful asynchronous workflows using webhooks.
+          This documentation provides everything you need to start using the Templify API.
         </p>
       </div>
 
+      {/* AUTHENTICATION */}
       <div id="authentication">
         <h2>🔐 Authentication</h2>
         <p>
-          Templify API requires authentication using a
+          Templify API requires authentication using both a
           {' '}
           <strong>Client ID</strong>
           {' '}
-          and
           {' '}
-          <strong>Secret ID</strong>
+          and a
+          {' '}
+          <strong>Client Secret</strong>
           .
-          These credentials must be included in the request headers.
+          These must be included in every API request via headers.
         </p>
 
+        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800">
+          {`client_id: CLIENT_ID_HERE
+client_secret: CLIENT_SECRET_HERE`}
+        </pre>
+
         <p>
-          To obtain your API key, sign in to your Templify account and navigate to the
+          You can generate & manage your API keys from the
           {' '}
           <strong>API Keys</strong>
           {' '}
-          section.
+          section of your dashboard.
         </p>
       </div>
 
+      {/* GENERATE PDF */}
       <div id="api-endpoints">
         <h2>🔗 API Endpoints</h2>
 
         <h3>
-          📄&nbsp;
+          📄
           <strong>Generate PDF</strong>
         </h3>
 
         <p><strong>Endpoint:</strong></p>
-        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800"><code>POST /convert/TEMPLATE_ID_HERE</code></pre>
+        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4"><code>POST /convert/TEMPLATE_ID_HERE</code></pre>
 
         <p><strong>Headers:</strong></p>
-        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800">
-          <code>
-            client_id: CLIENT_ID_HERE
-            client_secret: CLIENT_SECRET_HERE
-          </code>
+        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4">
+          {`client_id: CLIENT_ID_HERE
+client_secret: CLIENT_SECRET_HERE
+Content-Type: application/json`}
         </pre>
 
         <p><strong>Request Body:</strong></p>
-        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800">
-          <code>
-            {`{
+        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4">
+          {`{
   "templateData": {
     "name": "John Doe",
     "invoice_number": "INV-1001",
@@ -68,44 +76,204 @@ export default function DocsContent() {
     ]
   }
 }`}
-          </code>
         </pre>
 
         <p><strong>Response:</strong></p>
-        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800">
-          <code>
-            {`{
-  data:PDF_DOC_IN_BYTE_ARRAY
+        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4">
+          {`{
+  data: PDF_DOC_IN_BYTE_ARRAY
 }`}
-          </code>
         </pre>
       </div>
 
+      {/* REQUEST EXAMPLES */}
       <div id="request-response-examples">
         <h2>📬 Request & Response Examples</h2>
 
-        <p><strong>cURL Example:</strong></p>
-        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800">
-          <code>
-            {`curl --location https://api.templify.cloud/convert/YOUR_TEMPLATE_ID_HERE' \\
+        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4">
+          {`curl --location 'https://api.templify.cloud/convert/YOUR_TEMPLATE_ID' \\
 --header 'client_id: USER_ID_HERE' \\
 --header 'client_secret: CLIENT_SECRET_HERE' \\
 --header 'Content-Type: application/json' \\
---header 'Cookie: NEXT_LOCALE=en' \\
 --data '{
   "templateData": {
-         "name": "John Doe",
-         "invoice_number": "INV-1001",
-         "items": [
-           { "description": "Item 1", "price": 20 },
-           { "description": "Item 2", "price": 30 }
-         ]
-       }
-     }'`}
-          </code>
+     "name": "John Doe",
+     "invoice_number": "INV-1001",
+     "items": [
+       { "description": "Item 1", "price": 20 },
+       { "description": "Item 2", "price": 30 }
+     ]
+  }
+}'`}
         </pre>
       </div>
 
+      {/* ASYNC PDF GENERATION */}
+      <div id="async-pdf-generation">
+        <h2>⚡ Asynchronous PDF Generation</h2>
+
+        <p>
+          Templify supports asynchronous PDF generation, allowing long-running documents to be processed in the background.
+        </p>
+
+        <h3>How to trigger async mode</h3>
+        <p>You can request async processing using either:</p>
+
+        <ul>
+          <li>
+            <strong>Header:</strong>
+            {' '}
+            <code>Prefer: respond-async</code>
+          </li>
+          <li>
+            <strong>Query param:</strong>
+            {' '}
+            <code>?mode=async</code>
+          </li>
+        </ul>
+
+        <h3>Example (async mode)</h3>
+        <pre className="overflow-x-auto rounded bg-gray-800 p-4">
+          {`curl --location 'https://api.templify.cloud/convert/TEMPLATE_ID?mode=async' \\
+--header 'Prefer: respond-async' \\
+--header 'client_id: USER_ID' \\
+--header 'client_secret: SECRET' \\
+--header 'Content-Type: application/json' \\
+--data '{ "templateData": { "name": "John" } }'`}
+        </pre>
+
+        <h3>Async Response</h3>
+        <pre className="overflow-x-auto rounded bg-gray-800 p-4">
+          {`{
+  "template_id": "tmpl_123",
+  "status": "STARTED",
+  "job_id": "01HF4S8JAC9P7Z92K2N7Q3Y3G7"
+}`}
+        </pre>
+      </div>
+
+      {/* WEBHOOK CONFIG */}
+      <div id="webhooks">
+        <h2>📡 Webhooks for Async PDFs</h2>
+
+        <p>
+          When async mode is used, Templify sends webhook notifications at different stages of PDF generation.
+        </p>
+
+        <h3>Supported Events</h3>
+        <ul>
+          <li><strong>pdf.started</strong></li>
+          <li><strong>pdf.generated</strong></li>
+          <li><strong>pdf.failed</strong></li>
+        </ul>
+
+        <h3>Webhook Example Payloads</h3>
+
+        <h4>📤 pdf.started</h4>
+        <pre className="overflow-x-auto rounded bg-gray-800 p-4">
+          {`{
+  "id": "evt_84h1N3P2",
+  "type": "pdf.started",
+  "created_at": "2025-11-02T10:12:00Z",
+  "attempt": 1,
+  "meta": {
+    "input_data": { "company_name": "ABC Corp" }
+  }
+}`}
+        </pre>
+
+        <h4>📤 pdf.generated</h4>
+        <pre className="overflow-x-auto rounded bg-gray-800 p-4">
+          {`{
+  "id": "evt_84h1N3P2",
+  "type": "pdf.generated",
+  "created_at": "2025-11-02T10:12:00Z",
+  "data": {
+    "download_url": "https://cdn.templify.cloud/renders/xyz.pdf",
+    "render_ms": 12450,
+    "expires_at": "2025-11-03T10:12:00Z"
+  }
+}`}
+        </pre>
+
+        <h4>📤 pdf.failed</h4>
+        <pre className="overflow-x-auto rounded bg-gray-800 p-4">
+          {`{
+  "id": "evt_84h1N3P3",
+  "type": "pdf.failed",
+  "data": {
+    "error": {
+      "code": "TEMPLATE_NOT_FOUND",
+      "message": "Template ID tmpl_999 does not exist.",
+      "details": null
+    },
+    "render_ms": 350
+  },
+  "meta": {
+    "template_id": "tmpl_999",
+    "job_id": "job_8r9sm1a3",
+    "input_data": { "company_name": "ABC Corp" }
+  }
+}`}
+        </pre>
+      </div>
+
+      {/* SIGNATURE VALIDATION */}
+      <div id="signature">
+        <h2>🔏 Webhook Signature Verification</h2>
+
+        <p>Every webhook request includes the header:</p>
+        <pre className="overflow-x-auto rounded bg-gray-800 p-4">{`x-templify-signature: sha256=<signature>`}</pre>
+
+        <p>You should validate the signature on your server:</p>
+
+        <pre className="overflow-x-auto rounded bg-gray-800 p-4">
+          {`const crypto = require("crypto");
+
+app.post("/webhooks/templify", (req, res) => {
+  const signature = req.headers["x-templify-signature"];
+  const payload = JSON.stringify(req.body);
+  const secret = process.env.TEMPLIFY_WEBHOOK_SECRET;
+
+  const expectedSignature =
+    "sha256=" +
+    crypto.createHmac("sha256", secret).update(payload).digest("hex");
+
+  if (
+    crypto.timingSafeEqual(
+      Buffer.from(signature),
+      Buffer.from(expectedSignature)
+    )
+  ) {
+    return res.status(200).send("OK");
+  }
+
+  res.status(401).send("Invalid signature");
+});`}
+        </pre>
+      </div>
+
+      {/* TESTING WITH NGROK */}
+      <div id="ngrok">
+        <h2>🧪 Testing Webhooks Locally (ngrok)</h2>
+
+        <p>You can test webhooks locally using ngrok:</p>
+
+        <pre className="overflow-x-auto rounded bg-gray-800 p-4">
+          {`ngrok http 3000
+
+# Example forwarding URL:
+https://d7a3-10-1-2-55.ngrok-free.app`}
+        </pre>
+
+        <p>Use this URL as your Webhook URL in Templify dashboard:</p>
+
+        <pre className="overflow-x-auto rounded bg-gray-800 p-4">
+          https://YOUR_NGROK_URL/webhooks/templify
+        </pre>
+      </div>
+
+      {/* TEMPLATE VERSIONING (FROM ORIGINAL DOC) */}
       <div id="template-versioning">
         <h2>📦 Template Versioning</h2>
 
@@ -113,145 +281,48 @@ export default function DocsContent() {
           Templify supports
           {' '}
           <strong>template versioning</strong>
-          , enabling you to safely develop, test, and deploy updates to your templates without affecting the live (production) version.
+          {' '}
+          so you can safely test, stage, and publish updates without
+          affecting live production templates.
         </p>
 
         <h3>🚀 Default Behavior</h3>
         <ul>
-          <li>
-            When you
-            {' '}
-            <strong>create a new template</strong>
-            , it is
-            {' '}
-            <strong>automatically published to production</strong>
-            .
-          </li>
-          <li>
-            The template becomes immediately available to your
-            {' '}
-            <strong>generate PDF</strong>
-            {' '}
-            API calls (unless in dev mode).
-          </li>
+          <li>New templates are automatically published.</li>
+          <li>Used immediately by all generate PDF requests.</li>
         </ul>
 
         <h3>🛠 Updating Templates</h3>
-
-        <p>When editing a template, you have two options:</p>
-
         <ol>
           <li>
             <strong>Update (Save Only)</strong>
-            <ul>
-              <li>
-                Saves the changes in the
-                {' '}
-                <strong>unpublished (dev) version</strong>
-                .
-              </li>
-              <li>
-                Ideal for testing changes in
-                {' '}
-                <strong>lower environments</strong>
-                {' '}
-                (e.g., staging).
-              </li>
-              <li>
-                These changes
-                {' '}
-                <strong>do not affect</strong>
-                {' '}
-                the live template used in production.
-              </li>
-            </ul>
+            {' '}
+            — stores changes in dev mode.
           </li>
           <li>
-            <strong>Update and Publish</strong>
-            <ul>
-              <li>
-                Saves and
-                {' '}
-                <strong>publishes the new version</strong>
-                {' '}
-                to
-                <strong> production</strong>
-                .
-              </li>
-              <li>
-                All future PDF generations (including from
-                {' '}
-                <strong>generate</strong>
-                {' '}
-                API) will use this updated version.
-              </li>
-            </ul>
+            <strong>Update & Publish</strong>
+            {' '}
+            — pushes changes to production.
           </li>
         </ol>
 
-        <h3>🧪 Previewing Unpublished Versions (Dev Mode)</h3>
-
-        <p>To preview changes made in dev (unpublished) mode:</p>
-        <ul>
-          <li>
-            Add
-            {' '}
-            <strong>?devMode=true</strong>
-            {' '}
-            to your preview or generation API calls.
-          </li>
-          <li>This will render the latest saved (unpublished) version of the template.</li>
-        </ul>
-
-        <h3>
-          Example&nbsp;
-          <strong>curl</strong>
-          {' '}
-          to preview dev version:
-        </h3>
-
-        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800">
-          <code>
-            {`curl --location https://api.templify.cloud/convert/YOUR_TEMPLATE_ID_HERE?devMode=true' \\
---header 'client_id: USER_ID_HERE' \\
---header 'client_secret: CLIENT_SECRET_HERE' \\
---header 'Content-Type: application/json' \\
---header 'Cookie: NEXT_LOCALE=en' \\
---data '{
-  "templateData": {
-         "name": "John Doe",
-         "invoice_number": "INV-1001",
-         "items": [
-           { "description": "Item 1", "price": 20 },
-           { "description": "Item 2", "price": 30 }
-         ]
-       }
-     }'`}
-          </code>
-        </pre>
-
-        <h3>✅ Production PDF Generation (Default Behavior)</h3>
+        <h3>🧪 Previewing Dev Mode Templates</h3>
 
         <p>
-          When you call the
+          Use
+          <code>?devMode=true</code>
           {' '}
-          <strong>/convert</strong>
-          {' '}
-          API without
-          {' '}
-          <strong>devMode=true</strong>
-          , Templify will
-          {' '}
-          <strong>always use the latest published version</strong>
-          {' '}
-          of the template.
+          to preview unpublished templates.
         </p>
+
+        <pre className="overflow-x-auto rounded bg-gray-800 p-4">
+          {`curl --location 'https://api.templify.cloud/convert/TEMPLATE_ID?devMode=true'`}
+        </pre>
       </div>
 
+      {/* ERROR HANDLING */}
       <div id="error-handling">
         <h2>❌ Error Handling</h2>
-
-        <p>Templify API returns standard HTTP status codes.</p>
 
         <table>
           <thead>
@@ -265,96 +336,62 @@ export default function DocsContent() {
             <tr>
               <td>200</td>
               <td>OK</td>
-              <td>Request successful.</td>
+              <td>Success</td>
             </tr>
             <tr>
               <td>400</td>
               <td>Bad Request</td>
-              <td>Missing required parameters.</td>
+              <td>Missing parameters</td>
             </tr>
             <tr>
               <td>401</td>
               <td>Unauthorized</td>
-              <td>Invalid API key.</td>
+              <td>Invalid credentials</td>
             </tr>
             <tr>
               <td>402</td>
-              <td>Unauthorized</td>
-              <td>Insufficient credits.</td>
+              <td>Insufficient credits</td>
+              <td>Credit balance too low</td>
             </tr>
             <tr>
               <td>404</td>
               <td>Not Found</td>
-              <td>Template ID does not exist.</td>
+              <td>Template not found</td>
             </tr>
             <tr>
               <td>500</td>
               <td>Server Error</td>
-              <td>An internal server error occurred.</td>
+              <td>Unexpected error</td>
             </tr>
           </tbody>
         </table>
-
-        <p>Example error response:</p>
-        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800">
-          <code>
-            {`{
-  "error": "Template ID not found"
-}`}
-          </code>
-        </pre>
       </div>
 
+      {/* SECURITY */}
       <div id="security-best-practices">
         <h2>🔒 Security & Best Practices</h2>
         <ul>
-          <li>
-            Always
-            {' '}
-            <strong>store API keys securely</strong>
-            {' '}
-            and do not expose them in front-end code.
-          </li>
-          <li>
-            Use
-            {' '}
-            <strong>HTTPS</strong>
-            {' '}
-            for all API requests to ensure encryption.
-          </li>
-          <li>
-            Implement
-            {' '}
-            <strong>rate limiting</strong>
-            {' '}
-            to prevent abuse.
-          </li>
+          <li>Store API keys securely.</li>
+          <li>Never expose secrets to frontend code.</li>
+          <li>Use HTTPS for all requests.</li>
+          <li>Use signature verification for all webhook requests.</li>
         </ul>
       </div>
 
+      {/* CONTACT */}
       <div id="contact-support">
         <h2>📞 Contact & Support</h2>
-        <p>For any queries or issues, contact our support team:</p>
+        <p>Need help? We're here for you.</p>
         <ul>
           <li>
             <strong>Email:</strong>
             {' '}
-            <Link
-              href="mailto:support@templify.cloud"
-              className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
-            >
-              support@templify.cloud
-            </Link>
+            <Link href="mailto:support@templify.cloud">support@templify.cloud</Link>
           </li>
           <li>
             <strong>API Status:</strong>
             {' '}
-            <Link
-              href="https://status.templify.cloud"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
-            >
+            <Link href="https://status.templify.cloud" target="_blank">
               https://status.templify.cloud
             </Link>
           </li>
