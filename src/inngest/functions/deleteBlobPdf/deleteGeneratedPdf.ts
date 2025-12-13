@@ -11,19 +11,23 @@ export async function deleteGeneratedPdf(logger: any) {
 
     const { blobs } = await list({ prefix: 'generated-pdf/' });
 
-    for (const file of blobs) {
-      const { uploadedAt, url } = file;
+    for (const blob of blobs) {
+      const { uploadedAt, url } = blob;
 
-      if (isFileExpired(uploadedAt, GENERATED_PDF_EXPIRY_HOURS)) {
-        await del(url);
-        removedFiles.push(url);
-        removedCount++;
+      try {
+        if (isFileExpired(uploadedAt, GENERATED_PDF_EXPIRY_HOURS)) {
+          await del(url);
+          removedFiles.push(url);
+          removedCount++;
+        }
+      } catch (error) {
+        logger.error(`Failed to delete blob: ${url}`, error);
       }
     }
 
     return { removedCount, removedFiles };
   } catch (error) {
-    logger.error(`Failed to delete pdf: ${error}`);
+    logger.error(`Failed to delete generated PDFs: ${error}`);
     throw error;
   }
 }

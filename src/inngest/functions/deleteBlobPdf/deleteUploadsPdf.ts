@@ -15,13 +15,17 @@ export async function deleteUploadsPdf(logger: any) {
       const blobsList = await list({ prefix: 'uploads/', cursor });
       const pdfBlobs = blobsList.blobs.filter(blob => blob.pathname.endsWith('.pdf'));
 
-      for (const file of pdfBlobs) {
-        const { uploadedAt, url } = file;
+      for (const blob of pdfBlobs) {
+        const { uploadedAt, url } = blob;
 
-        if (isFileExpired(uploadedAt, EXTRACTED_PDF_EXPIRY_HOURS)) {
-          await del(url);
-          removedFiles.push(url);
-          removedCount++;
+        try {
+          if (isFileExpired(uploadedAt, EXTRACTED_PDF_EXPIRY_HOURS)) {
+            await del(url);
+            removedFiles.push(url);
+            removedCount++;
+          }
+        } catch (error) {
+          logger.error(`Failed to delete blob: ${url}`, error);
         }
       }
       hasMore = blobsList.hasMore;
@@ -29,7 +33,7 @@ export async function deleteUploadsPdf(logger: any) {
     }
     return { removedCount, removedFiles };
   } catch (error) {
-    logger.error(`Failed to delete pdf: ${error}`);
+    logger.error(`Failed to delete uploads PDFs: ${error}`);
     throw error;
   }
 }
