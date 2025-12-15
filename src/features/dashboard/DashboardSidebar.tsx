@@ -27,7 +27,7 @@ export const DashboardSidebar = () => {
         <SheetTitle className="sr-only">Sidebar Menu</SheetTitle>
         <SheetHeader className="relative items-center border-b px-7">
           <SheetClose asChild>
-            <Link href="/dashboard">
+            <Link href="/">
               <Logo />
             </Link>
           </SheetClose>
