@@ -3,7 +3,9 @@
 import Editor, { type OnChange, type OnMount } from '@monaco-editor/react';
 import { Loader2 } from 'lucide-react';
 import type React from 'react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
+import type { LineNumbersProps } from '../template/handlebars-editor/types';
 
 export type MonacoEditorProps = {
   value: string;
@@ -15,6 +17,7 @@ export type MonacoEditorProps = {
   className?: string;
   loading?: React.ReactNode;
   readonly?: boolean;
+  lineNumbers?: LineNumbersProps;
 };
 
 export default function MonacoEditor({
@@ -22,18 +25,21 @@ export default function MonacoEditor({
   onChange,
   language,
   theme = 'vs-dark',
-  height = '100%',
   width = '100%',
   className = '',
   loading,
   readonly,
+  lineNumbers = 'on',
 }: MonacoEditorProps) {
   const editorRef = useRef<any>(null);
+  const [editorHeight, setEditorHeight] = useState<number>(150);
 
   const handleEditorDidMount: OnMount = (editor) => {
     editorRef.current = editor;
 
     editor.setValue(value);
+
+    setEditorHeight(Math.min(editor.getContentHeight(), 350));
 
     setTimeout(() => {
       editor.getAction('editor.action.formatDocument')?.run();
@@ -59,7 +65,7 @@ export default function MonacoEditor({
   return (
     <div className={`monaco-editor-container size-full ${className}`}>
       <Editor
-        height={height}
+        height={editorHeight}
         width={width}
         language={language}
         value={value}
@@ -72,7 +78,7 @@ export default function MonacoEditor({
             vertical: 'auto',
             horizontal: 'auto',
           },
-          lineNumbers: 'on',
+          lineNumbers,
           folding: true,
           wordWrap: 'on',
           formatOnPaste: true,

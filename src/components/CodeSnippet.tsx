@@ -2,48 +2,49 @@
 
 import { Check, Copy } from 'lucide-react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
+import { IntegrationCodeViewer } from './template/handlebars-editor/IntegrationCodeViewer';
+import type { LineNumbersProps } from './template/handlebars-editor/types';
 import { Button } from './ui/button';
 
 type CodeBlockProps = {
-  code: string;
+  value: string;
+  onChange?: (json: string) => void;
+  language?: string;
+  isReady?: boolean;
+  readOnly?: boolean;
   className?: string;
+  lineNumbers?: LineNumbersProps;
 };
 
-export const CodeSnippet = ({ code, className }: CodeBlockProps) => {
+export const CodeSnippet = ({ value, onChange, language = 'json', lineNumbers, isReady = true, readOnly = true, className }: CodeBlockProps) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(code);
+    navigator.clipboard.writeText(value);
     setCopied(true);
+    toast.success('Code copied to clipboard!');
 
     setTimeout(() => setCopied(false), 2000);
   };
 
   return (
-    <div className="relative">
-      <pre className={`overflow-x-auto rounded-md bg-muted p-4 text-sm ${className || ''}`}>
-        <code>{code}</code>
-      </pre>
+    <div className={`relative ${className || ''}`}>
+      <IntegrationCodeViewer readOnly={readOnly} value={value} isReady={isReady} lineNumbers={lineNumbers} language={language} onChange={onChange ?? (() => {})} />
 
       <Button
-        variant="ghost"
         size="sm"
-        className="absolute right-4 top-2"
+        variant="outline"
+        className="absolute right-4 top-2 z-10"
         onClick={handleCopy}
       >
         {copied
           ? (
-              <>
-                <Check className="mr-1 size-4" />
-                Copied
-              </>
+              <Check className="size-4" />
             )
           : (
-              <>
-                <Copy className="mr-1 size-4" />
-                Copy
-              </>
+              <Copy className="size-4" />
             )}
       </Button>
     </div>

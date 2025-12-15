@@ -97,7 +97,7 @@ export default function TemplateInformation({ previewTemplate, codeSnippets }: P
 
             {Object.entries(codeSnippets).map(([language, code]) => (
               <TabsContent key={language} value={language}>
-                <CodeSnippet code={code} className="max-h-[400px]" />
+                <CodeSnippet value={code} onChange={() => code} language={language} />
               </TabsContent>
             ))}
           </Tabs>

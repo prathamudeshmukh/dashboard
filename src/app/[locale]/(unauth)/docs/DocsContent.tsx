@@ -2,17 +2,60 @@
 
 import Link from 'next/link';
 
-import { trackEvent } from '@/libs/analytics/trackEvent';
+import { CodeSnippet } from '@/components/CodeSnippet';
+
+const CODE = {
+  endpoint: `POST /convert/TEMPLATE_ID_HERE`,
+  headers: `client_id: CLIENT_ID_HERE, client_secret: CLIENT_SECRET_HERE`,
+  requestBody: `{
+  "templateData": {
+    "name": "John Doe",
+    "invoice_number": "INV-1001",
+    "items": [
+      { "description": "Item 1", "price": 20 },
+      { "description": "Item 2", "price": 30 }
+    ]
+  }
+}`,
+  response: `{
+  data: PDF_DOC_IN_BYTE_ARRAY
+}`,
+  cUrlExample: `curl --location 'https://api.templify.cloud/convert/YOUR_TEMPLATE_ID_HERE' \\
+  --header 'client_id: USER_ID_HERE' \\
+  --header 'client_secret: CLIENT_SECRET_HERE' \\
+  --header 'Content-Type: application/json' \\
+  --header 'Cookie: NEXT_LOCALE=en' \\
+  --data '{
+    "templateData": {
+      "name": "John Doe",
+      "invoice_number": "INV-1001",
+      "items": [
+        { "description": "Item 1", "price": 20 }, 
+        { "description": "Item 2", "price": 30 }
+      ]
+    }
+  }'`,
+  previewDevModeExample: `curl --location 'https://api.templify.cloud/convert/YOUR_TEMPLATE_ID_HERE?devMode=true' \\
+  --header 'client_id: USER_ID_HERE' \\
+  --header 'client_secret: CLIENT_SECRET_HERE' \\
+  --header 'Content-Type: application/json' \\
+  --header 'Cookie: NEXT_LOCALE=en' \\
+  --data '{
+    "templateData": {
+      "name": "John Doe",
+      "invoice_number": "INV-1001",
+      "items": [
+        { "description": "Item 1", "price": 20 }, 
+        { "description": "Item 2", "price": 30 }
+      ]
+    }
+  }'`,
+  errorResponse: `{
+  "error": "Template ID not found"
+}`,
+};
 
 export default function DocsContent() {
-  const handleExternalLinkClick = (linkUrl: string, linkText: string, section: string) => {
-    trackEvent('docs_external_link_clicked', {
-      link_url: linkUrl,
-      link_text: linkText,
-      section,
-    });
-  };
-
   return (
     <div className="prose prose-lg max-w-none dark:prose-invert">
       <h1>Templify API Documentation</h1>
@@ -57,65 +100,25 @@ export default function DocsContent() {
         </h3>
 
         <p><strong>Endpoint:</strong></p>
-        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800"><code>POST /convert/TEMPLATE_ID_HERE</code></pre>
+        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800"><code>{CODE.endpoint}</code></pre>
 
         <p><strong>Headers:</strong></p>
         <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800">
-          <code>
-            client_id: CLIENT_ID_HERE
-            client_secret: CLIENT_SECRET_HERE
-          </code>
+          <code>{CODE.headers}</code>
         </pre>
 
         <p><strong>Request Body:</strong></p>
-        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800">
-          <code>
-            {`{
-  "templateData": {
-    "name": "John Doe",
-    "invoice_number": "INV-1001",
-    "items": [
-      { "description": "Item 1", "price": 20 },
-      { "description": "Item 2", "price": 30 }
-    ]
-  }
-}`}
-          </code>
-        </pre>
+        <CodeSnippet value={CODE.requestBody} lineNumbers="off" />
 
         <p><strong>Response:</strong></p>
-        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800">
-          <code>
-            {`{
-  data:PDF_DOC_IN_BYTE_ARRAY
-}`}
-          </code>
-        </pre>
+        <CodeSnippet value={CODE.response} lineNumbers="off" />
       </div>
 
       <div id="request-response-examples">
         <h2>📬 Request & Response Examples</h2>
 
         <p><strong>cURL Example:</strong></p>
-        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800">
-          <code>
-            {`curl --location https://api.templify.cloud/convert/YOUR_TEMPLATE_ID_HERE' \\
---header 'client_id: USER_ID_HERE' \\
---header 'client_secret: CLIENT_SECRET_HERE' \\
---header 'Content-Type: application/json' \\
---header 'Cookie: NEXT_LOCALE=en' \\
---data '{
-  "templateData": {
-         "name": "John Doe",
-         "invoice_number": "INV-1001",
-         "items": [
-           { "description": "Item 1", "price": 20 },
-           { "description": "Item 2", "price": 30 }
-         ]
-       }
-     }'`}
-          </code>
-        </pre>
+        <CodeSnippet value={CODE.cUrlExample} language="shell" />
       </div>
 
       <div id="template-versioning">
@@ -222,25 +225,7 @@ export default function DocsContent() {
           to preview dev version:
         </h3>
 
-        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800">
-          <code>
-            {`curl --location https://api.templify.cloud/convert/YOUR_TEMPLATE_ID_HERE?devMode=true' \\
---header 'client_id: USER_ID_HERE' \\
---header 'client_secret: CLIENT_SECRET_HERE' \\
---header 'Content-Type: application/json' \\
---header 'Cookie: NEXT_LOCALE=en' \\
---data '{
-  "templateData": {
-         "name": "John Doe",
-         "invoice_number": "INV-1001",
-         "items": [
-           { "description": "Item 1", "price": 20 },
-           { "description": "Item 2", "price": 30 }
-         ]
-       }
-     }'`}
-          </code>
-        </pre>
+        <CodeSnippet value={CODE.previewDevModeExample} language="shell" />
 
         <h3>✅ Production PDF Generation (Default Behavior)</h3>
 
@@ -308,13 +293,7 @@ export default function DocsContent() {
         </table>
 
         <p>Example error response:</p>
-        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800">
-          <code>
-            {`{
-  "error": "Template ID not found"
-}`}
-          </code>
-        </pre>
+        <CodeSnippet value={CODE.errorResponse} lineNumbers="off" />
       </div>
 
       <div id="security-best-practices">
@@ -354,7 +333,6 @@ export default function DocsContent() {
             <Link
               href="mailto:support@templify.cloud"
               className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
-              onClick={() => handleExternalLinkClick('mailto:support@templify.cloud', 'support@templify.cloud', 'contact-support')}
             >
               support@templify.cloud
             </Link>
@@ -367,7 +345,6 @@ export default function DocsContent() {
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
-              onClick={() => handleExternalLinkClick('https://status.templify.cloud', 'API Status', 'contact-support')}
             >
               https://status.templify.cloud
             </Link>

@@ -14,7 +14,7 @@ import { getClientSecret } from '@/libs/actions/user';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 import { generateCodeSnippets } from '@/service/generateCodeSnippets';
 
-import { IntegrationCodeViewer } from './handlebars-editor/IntegrationCodeViewer';
+import { CodeSnippet } from '../CodeSnippet';
 
 export default function SuccessView() {
   const [activeTab, setActiveTab] = useState('javascript');
@@ -60,12 +60,6 @@ export default function SuccessView() {
 
   const handleCreateAnother = () => {
     router.push('/dashboard/create-template');
-  };
-
-  const handleCopy = (code: string, language: string) => {
-    navigator.clipboard.writeText(code);
-    setCopied(language);
-    setTimeout(() => setCopied(null), 2000);
   };
 
   // Generate a formatted version of the sample data for code snippets
@@ -166,29 +160,7 @@ export default function SuccessView() {
 
             {Object.entries(codeSnippets).map(([language, code]) => (
               <TabsContent key={language} value={language}>
-                <div className="relative">
-                  <IntegrationCodeViewer readOnly={true} value={code} isReady={true} language={language} onChange={() => code} />
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="absolute right-2 top-2 z-10"
-                    onClick={() => handleCopy(code, language)}
-                  >
-                    {copied === language
-                      ? (
-                          <>
-                            <Check className="mr-1 size-4" />
-                            Copied
-                          </>
-                        )
-                      : (
-                          <>
-                            <Copy className="mr-1 size-4" />
-                            Copy
-                          </>
-                        )}
-                  </Button>
-                </div>
+                <CodeSnippet value={code} onChange={() => code} language={language} />
               </TabsContent>
             ))}
           </Tabs>

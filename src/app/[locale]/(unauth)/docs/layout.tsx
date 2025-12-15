@@ -14,7 +14,7 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
           </div>
         </main>
       </div>
-      <div className="w-full lg:fixed lg:bottom-0">
+      <div className="z-30 w-full lg:fixed lg:bottom-0">
         <Footer />
       </div>
     </div>

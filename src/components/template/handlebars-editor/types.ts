@@ -8,7 +8,10 @@ export type EditorProps = {
   placeholder?: string;
   isReady: boolean;
   readOnly?: boolean;
+  lineNumbers?: LineNumbersProps;
 };
+
+export type LineNumbersProps = 'on' | 'off' | 'relative' | 'interval' | ((lineNumber: number) => string);
 
 export type PanelHeaderProps = {
   title: string;
