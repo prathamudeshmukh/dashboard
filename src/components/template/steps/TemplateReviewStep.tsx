@@ -73,7 +73,7 @@ export default function TemplateReviewStep() {
               <CardTitle className="text-2xl font-medium">JSON</CardTitle>
             </CardHeader>
             <CardContent>
-              <CodeSnippet value={handlebarTemplateJson} lineNumbers="off" />
+              <CodeSnippet value={handlebarTemplateJson} lineNumbers={false} className="max-w-[480px]" />
             </CardContent>
           </Card>
         )}
