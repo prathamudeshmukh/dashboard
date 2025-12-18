@@ -160,7 +160,7 @@ export default function SuccessView() {
 
             {Object.entries(codeSnippets).map(([language, code]) => (
               <TabsContent key={language} value={language}>
-                <CodeSnippet value={code} onChange={() => code} language={language} />
+                <CodeSnippet value={code} language={language} className="max-h-[450px]" />
               </TabsContent>
             ))}
           </Tabs>
