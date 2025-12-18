@@ -11,7 +11,7 @@ export const WebhookPayloadExample = () => {
         <CardDescription>Example of the JSON payload sent to your webhook endpoint</CardDescription>
       </CardHeader>
       <CardContent className="prose prose-lg max-w-none dark:prose-invert">
-        <CodeSnippet value={WEBHOOK_PAYLOAD_EXAMPLE} lineNumbers="off" />
+        <CodeSnippet value={WEBHOOK_PAYLOAD_EXAMPLE} lineNumbers={false} />
         <div className="mt-4 rounded-lg">
           <p className="mb-2 text-sm font-medium">Headers:</p>
           <pre className="my-0 overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800">

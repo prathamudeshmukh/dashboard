@@ -106,10 +106,10 @@ export default function DocsContent() {
         </pre>
 
         <p><strong>Request Body:</strong></p>
-        <CodeSnippet value={CODE.requestBody} lineNumbers="off" />
+        <CodeSnippet value={CODE.requestBody} lineNumbers={false} />
 
         <p><strong>Response:</strong></p>
-        <CodeSnippet value={CODE.response} lineNumbers="off" />
+        <CodeSnippet value={CODE.response} lineNumbers={false} />
       </div>
 
       <div id="request-response-examples">
@@ -291,7 +291,7 @@ export default function DocsContent() {
         </table>
 
         <p>Example error response:</p>
-        <CodeSnippet value={CODE.errorResponse} lineNumbers="off" />
+        <CodeSnippet value={CODE.errorResponse} lineNumbers={false} />
       </div>
 
       <div id="security-best-practices">

@@ -2,10 +2,10 @@
 
 import { Check, Copy } from 'lucide-react';
 import { useState } from 'react';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { toast } from 'sonner';
 
-import { IntegrationCodeViewer } from './template/handlebars-editor/IntegrationCodeViewer';
-import type { LineNumbersProps } from './template/handlebars-editor/types';
 import { Button } from './ui/button';
 
 type CodeBlockProps = {
@@ -15,10 +15,10 @@ type CodeBlockProps = {
   isReady?: boolean;
   readOnly?: boolean;
   className?: string;
-  lineNumbers?: LineNumbersProps;
+  lineNumbers?: boolean;
 };
 
-export const CodeSnippet = ({ value, onChange, language = 'json', lineNumbers, isReady = true, readOnly = true, className }: CodeBlockProps) => {
+export const CodeSnippet = ({ value, language = 'json', lineNumbers = true, className }: CodeBlockProps) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -30,8 +30,12 @@ export const CodeSnippet = ({ value, onChange, language = 'json', lineNumbers, i
   };
 
   return (
-    <div className={`relative ${className || ''}`}>
-      <IntegrationCodeViewer readOnly={readOnly} value={value} isReady={isReady} lineNumbers={lineNumbers} language={language} onChange={onChange ?? (() => {})} />
+    <div className="relative">
+      <div className={`overflow-x-auto rounded-md ${className || ''}`}>
+        <SyntaxHighlighter language={language} style={oneDark} showLineNumbers={lineNumbers} wrapLines className="!m-0 !rounded-md">
+          {value}
+        </SyntaxHighlighter>
+      </div>
 
       <Button
         size="sm"

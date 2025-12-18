@@ -132,15 +132,15 @@ export const WebhookSignatureExamples = () => {
 
           <TabsContent value="nodejs">
             <h4 className="mb-2 text-sm font-semibold">Node.js / Express Example</h4>
-            <CodeSnippet value={CODE_EXAMPLES.nodejs} onChange={() => CODE_EXAMPLES.nodejs} language="javascript" />
+            <CodeSnippet value={CODE_EXAMPLES.nodejs} language="javascript" className="max-h-[340px]" />
           </TabsContent>
           <TabsContent value="python">
             <h4 className="mb-2 text-sm font-semibold">Python / Flask Example</h4>
-            <CodeSnippet value={CODE_EXAMPLES.python} onChange={() => CODE_EXAMPLES.python} language="python" />
+            <CodeSnippet value={CODE_EXAMPLES.python} language="python" className="max-h-[340px]" />
           </TabsContent>
           <TabsContent value="nextjs">
             <h4 className="mb-2 text-sm font-semibold">Next.js API Route Example</h4>
-            <CodeSnippet value={CODE_EXAMPLES.nextjs} onChange={() => CODE_EXAMPLES.nextjs} language="javascript" />
+            <CodeSnippet value={CODE_EXAMPLES.nextjs} language="javascript" className="max-h-[340px]" />
           </TabsContent>
         </Tabs>
 
