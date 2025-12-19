@@ -203,8 +203,8 @@ Content-Type: application/json`}
   "type": "pdf.failed",
   "data": {
     "error": {
-      "code": "TEMPLATE_NOT_FOUND",
-      "message": "Template ID tmpl_999 does not exist.",
+      "code": "PDF_GENERATION_FAILED",
+      "message": "Error generating PDF: HTML validation failed",
       "details": null
     },
     "render_ms": 350
@@ -221,6 +221,67 @@ Content-Type: application/json`}
       {/* SIGNATURE VALIDATION */}
       <div id="signature">
         <h2>🔏 Webhook Signature Verification</h2>
+
+        <h3>🔑 Getting Your Webhook Secret</h3>
+
+        <p>
+          Each webhook endpoint in Templify is secured using a unique
+          <strong> webhook secret</strong>
+          .
+        </p>
+
+        <p>
+          This secret is
+          {' '}
+          <strong>automatically generated</strong>
+          {' '}
+          by Templify when you add
+          a webhook URL from the dashboard.
+        </p>
+
+        <ul>
+          <li>
+            Go to
+            {' '}
+            <strong>Settings → Webhooks</strong>
+          </li>
+          <li>
+            Add a new webhook endpoint URL
+          </li>
+          <li>
+            Copy the generated
+            {' '}
+            <strong>Webhook Secret</strong>
+          </li>
+        </ul>
+
+        <p>
+          You must store this secret securely on your server and use it to validate
+          incoming webhook requests.
+        </p>
+
+        <p>
+          Example:
+        </p>
+
+        <pre className="overflow-x-auto rounded bg-gray-800 p-4">
+          <code>
+            TEMPLIFY_WEBHOOK_SECRET=whsec_4f8d2c9e9a0e6d
+          </code>
+        </pre>
+
+        <p>
+          👉 You can manage your webhook endpoints and secrets from here:
+        </p>
+
+        <p>
+          <Link
+            href="dashboard/settings/webhooks"
+            className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+          >
+            Open Webhook Settings
+          </Link>
+        </p>
 
         <p>Every webhook request includes the header:</p>
         <pre className="overflow-x-auto rounded bg-gray-800 p-4">{`x-templify-signature: sha256=<signature>`}</pre>
