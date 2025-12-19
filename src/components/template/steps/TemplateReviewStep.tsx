@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
+import { CodeSnippet } from '@/components/CodeSnippet';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 import contentGenerator from '@/service/contentGenerator';
@@ -67,12 +68,12 @@ export default function TemplateReviewStep() {
         </Card>
 
         {(handlebarTemplateJson && handlebarsCode && activeTab === EditorTypeEnum.HANDLEBARS) && (
-          <Card className="max-h-[40vh] overflow-auto">
+          <Card className="max-h-[50vh] overflow-auto">
             <CardHeader>
               <CardTitle className="text-2xl font-medium">JSON</CardTitle>
             </CardHeader>
             <CardContent>
-              <pre className="whitespace-pre-wrap text-base font-normal">{handlebarTemplateJson}</pre>
+              <CodeSnippet value={handlebarTemplateJson} lineNumbers={false} className="max-w-[480px]" />
             </CardContent>
           </Card>
         )}

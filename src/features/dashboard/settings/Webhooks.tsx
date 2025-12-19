@@ -23,7 +23,7 @@ import { useWebhookSecret } from '../../../hooks/settings/webhooks/useWebhookSec
 import { WEBHOOK_EVENTS } from './constants';
 
 export default function WebhooksPage() {
-  const { webhookUrl, isSaved, isValid, updateUrl, clearUrl, saveConfiguration, markAsUnsaved } = useWebhookForm();
+  const { webhookUrl, isSaved, isValid, updateUrl, clearUrl, saveConfiguration } = useWebhookForm();
   const {
     secret,
     encryptedSecret,
@@ -33,13 +33,6 @@ export default function WebhooksPage() {
     copyToClipboard,
     regenerateSecret,
   } = useWebhookSecret();
-
-  const handleRegenerateSecret = async () => {
-    const wasRegenerated = await regenerateSecret();
-    if (wasRegenerated) {
-      markAsUnsaved();
-    }
-  };
 
   return (
     <div className="min-h-screen p-4 sm:p-8">
@@ -68,7 +61,7 @@ export default function WebhooksPage() {
                 secretCopied={secretCopied}
                 onToggleVisibility={toggleVisibility}
                 onCopy={copyToClipboard}
-                onRegenerate={handleRegenerateSecret}
+                onRegenerate={regenerateSecret}
               />
 
               <WebhookEventsList events={WEBHOOK_EVENTS} />

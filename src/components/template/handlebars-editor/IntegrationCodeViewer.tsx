@@ -1,6 +1,7 @@
 'use client';
 
 import { CodeEditorWrapper } from './CodeEditorWrapper';
+import type { LineNumbersProps } from './types';
 
 type IntegrationCodeViewerProps = {
   value: string;
@@ -8,9 +9,10 @@ type IntegrationCodeViewerProps = {
   language: string;
   isReady: boolean;
   readOnly: boolean;
+  lineNumbers?: LineNumbersProps;
 };
 
-export function IntegrationCodeViewer({ value, onChange, language, readOnly, isReady }: IntegrationCodeViewerProps) {
+export function IntegrationCodeViewer({ value, onChange, language, lineNumbers, readOnly, isReady }: IntegrationCodeViewerProps) {
   return (
     <div className="flex h-full flex-col">
       <div className="relative flex-1 overflow-auto rounded-md">
@@ -20,6 +22,7 @@ export function IntegrationCodeViewer({ value, onChange, language, readOnly, isR
           language={language}
           readOnly={readOnly}
           isReady={isReady}
+          lineNumbers={lineNumbers}
         />
       </div>
     </div>
