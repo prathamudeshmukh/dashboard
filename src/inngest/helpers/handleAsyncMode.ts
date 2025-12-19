@@ -31,6 +31,7 @@ export async function handleAsyncMode(
       devMode,
       endpointId: endpoint.id,
       endpointUrl: endpoint.url,
+      encryptedSecret: endpoint.encryptedSecret,
     },
   });
 

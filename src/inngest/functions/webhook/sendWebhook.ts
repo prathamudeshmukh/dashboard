@@ -6,6 +6,7 @@ import {
   webhook_deliveries,
   webhook_events,
 } from '@/models/Schema';
+import { decrypt } from '@/service/crypto';
 
 export const sendWebhook = inngest.createFunction(
   {
@@ -13,24 +14,27 @@ export const sendWebhook = inngest.createFunction(
     name: 'Send Webhook Event',
   },
   { event: 'webhook/send' },
-  async ({ event }) => {
-    const { clientId, type, data, meta, endpointId, endpointUrl } = event.data;
+  async ({ event, attempt }) => {
+    const { clientId, type, data, meta, endpointId, endpointUrl, encryptedSecret } = event.data;
+
+    const decryptedSecret = decrypt(encryptedSecret);
 
     // 2️⃣ Create persistent webhook event
     const eventId = crypto.randomUUID();
+    const payloadObject = {
+      id: `evt_${crypto.randomUUID().slice(0, 8)}`,
+      type,
+      created_at: new Date().toISOString(),
+      attempt,
+      data: data ?? null,
+      meta: meta ?? null,
+    };
 
     await db.insert(webhook_events).values({
       id: eventId,
       clientId,
       type,
-      payload: {
-        id: `evt_${crypto.randomUUID().slice(0, 8)}`,
-        type,
-        created_at: new Date().toISOString(),
-        attempt: 1,
-        data: data ?? null,
-        meta: meta ?? null,
-      },
+      payload: payloadObject,
     });
 
     // 3️⃣ Create delivery tracking entry
@@ -40,8 +44,35 @@ export const sendWebhook = inngest.createFunction(
       eventId,
       endpointId,
       status: 'pending',
-      attempt: 1,
+      attempt,
     });
+
+    // -----------------------------------------------
+    // Prepare signature generation
+    // -----------------------------------------------
+
+    const body = JSON.stringify(payloadObject);
+
+    const encoder = new TextEncoder();
+    const key = await crypto.subtle.importKey(
+      'raw',
+      encoder.encode(decryptedSecret),
+      { name: 'HMAC', hash: 'SHA-256' },
+      false,
+      ['sign'],
+    );
+
+    const signatureBytes = await crypto.subtle.sign(
+      'HMAC',
+      key,
+      encoder.encode(body),
+    );
+
+    const signatureHex = Array.from(new Uint8Array(signatureBytes))
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
+
+    const signatureHeader = `sha256=${signatureHex}`;
 
     // 4️⃣ Attempt actual webhook POST
     let status = 'succeeded';
@@ -51,16 +82,15 @@ export const sendWebhook = inngest.createFunction(
 
     try {
       const start = performance.now();
-      const payload = await db.query.webhook_events.findFirst({
-        where: eq(webhook_events.id, eventId),
-      });
 
       const res = await fetch(endpointUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'x-templify-signature': signatureHeader,
+          'x-templify-event': type,
         },
-        body: JSON.stringify(payload?.payload),
+        body,
       });
 
       lastLatency = Math.round(performance.now() - start);
