@@ -2,56 +2,7 @@ import Link from 'next/link';
 
 import { CodeSnippet } from '@/components/CodeSnippet';
 
-const CODE = {
-  endpoint: `POST /convert/TEMPLATE_ID_HERE`,
-  headers: `client_id: CLIENT_ID_HERE, client_secret: CLIENT_SECRET_HERE`,
-  requestBody: `{
-  "templateData": {
-    "name": "John Doe",
-    "invoice_number": "INV-1001",
-    "items": [
-      { "description": "Item 1", "price": 20 },
-      { "description": "Item 2", "price": 30 }
-    ]
-  }
-}`,
-  response: `{
-  data: PDF_DOC_IN_BYTE_ARRAY
-}`,
-  cUrlExample: `curl --location 'https://api.templify.cloud/convert/YOUR_TEMPLATE_ID_HERE' \\
-  --header 'client_id: USER_ID_HERE' \\
-  --header 'client_secret: CLIENT_SECRET_HERE' \\
-  --header 'Content-Type: application/json' \\
-  --header 'Cookie: NEXT_LOCALE=en' \\
-  --data '{
-    "templateData": {
-      "name": "John Doe",
-      "invoice_number": "INV-1001",
-      "items": [
-        { "description": "Item 1", "price": 20 }, 
-        { "description": "Item 2", "price": 30 }
-      ]
-    }
-  }'`,
-  previewDevModeExample: `curl --location 'https://api.templify.cloud/convert/YOUR_TEMPLATE_ID_HERE?devMode=true' \\
-  --header 'client_id: USER_ID_HERE' \\
-  --header 'client_secret: CLIENT_SECRET_HERE' \\
-  --header 'Content-Type: application/json' \\
-  --header 'Cookie: NEXT_LOCALE=en' \\
-  --data '{
-    "templateData": {
-      "name": "John Doe",
-      "invoice_number": "INV-1001",
-      "items": [
-        { "description": "Item 1", "price": 20 }, 
-        { "description": "Item 2", "price": 30 }
-      ]
-    }
-  }'`,
-  errorResponse: `{
-  "error": "Template ID not found"
-}`,
-};
+import { TEMPLIFY_API_SNIPPETS as CODE } from './snippets/templifyApiSnippets';
 
 export default function DocsContent() {
   return (
@@ -85,8 +36,7 @@ export default function DocsContent() {
         </p>
 
         <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800">
-          {`client_id: CLIENT_ID_HERE
-client_secret: CLIENT_SECRET_HERE`}
+          <code>{CODE.headers}</code>
         </pre>
 
         <p>
@@ -126,22 +76,8 @@ client_secret: CLIENT_SECRET_HERE`}
       <div id="request-response-examples">
         <h2>📬 Request & Response Examples</h2>
 
-        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4">
-          {`curl --location 'https://api.templify.cloud/convert/YOUR_TEMPLATE_ID' \\
---header 'client_id: USER_ID_HERE' \\
---header 'client_secret: CLIENT_SECRET_HERE' \\
---header 'Content-Type: application/json' \\
---data '{
-  "templateData": {
-     "name": "John Doe",
-     "invoice_number": "INV-1001",
-     "items": [
-       { "description": "Item 1", "price": 20 },
-       { "description": "Item 2", "price": 30 }
-     ]
-  }
-}'`}
-        </pre>
+        <p><strong>cURL Example:</strong></p>
+        <CodeSnippet value={CODE.cUrlExample} language="shell" />
       </div>
 
       {/* ASYNC PDF GENERATION */}
@@ -169,22 +105,11 @@ client_secret: CLIENT_SECRET_HERE`}
         </ul>
 
         <h3>Example (async mode)</h3>
-        <pre className="overflow-x-auto rounded bg-gray-800 p-4">
-          {`curl --location 'https://api.templify.cloud/convert/TEMPLATE_ID?mode=async' \\
---header 'Prefer: respond-async' \\
---header 'client_id: USER_ID' \\
---header 'client_secret: SECRET' \\
---header 'Content-Type: application/json' \\
---data '{ "templateData": { "name": "John" } }'`}
-        </pre>
+        <CodeSnippet value={CODE.cUrlAsync} language="shell" />
 
         <h3>Async Response</h3>
         <pre className="overflow-x-auto rounded bg-gray-800 p-4">
-          {`{
-  "template_id": "tmpl_123",
-  "status": "STARTED",
-  "job_id": "01HF4S8JAC9P7Z92K2N7Q3Y3G7"
-}`}
+          <code>{CODE.asyncResponse}</code>
         </pre>
       </div>
 
@@ -207,50 +132,17 @@ client_secret: CLIENT_SECRET_HERE`}
 
         <h4>📤 pdf.started</h4>
         <pre className="overflow-x-auto rounded bg-gray-800 p-4">
-          {`{
-  "id": "evt_84h1N3P2",
-  "type": "pdf.started",
-  "created_at": "2025-11-02T10:12:00Z",
-  "attempt": 1,
-  "meta": {
-    "input_data": { "company_name": "ABC Corp" }
-  }
-}`}
+          <code>{CODE.pdfStarted}</code>
         </pre>
 
         <h4>📤 pdf.generated</h4>
         <pre className="overflow-x-auto rounded bg-gray-800 p-4">
-          {`{
-  "id": "evt_84h1N3P2",
-  "type": "pdf.generated",
-  "created_at": "2025-11-02T10:12:00Z",
-  "data": {
-    "download_url": "https://cdn.templify.cloud/renders/xyz.pdf",
-    "render_ms": 12450,
-    "expires_at": "2025-11-03T10:12:00Z"
-  }
-}`}
+          <code>{CODE.pdfGenerated}</code>
         </pre>
 
         <h4>📤 pdf.failed</h4>
         <pre className="overflow-x-auto rounded bg-gray-800 p-4">
-          {`{
-  "id": "evt_84h1N3P3",
-  "type": "pdf.failed",
-  "data": {
-    "error": {
-      "code": "PDF_GENERATION_FAILED",
-      "message": "Error generating PDF: HTML validation failed",
-      "details": null
-    },
-    "render_ms": 350
-  },
-  "meta": {
-    "template_id": "tmpl_999",
-    "job_id": "job_8r9sm1a3",
-    "input_data": { "company_name": "ABC Corp" }
-  }
-}`}
+          <code>{CODE.pdfFailed}</code>
         </pre>
       </div>
 
@@ -302,7 +194,7 @@ client_secret: CLIENT_SECRET_HERE`}
 
         <pre className="overflow-x-auto rounded bg-gray-800 p-4">
           <code>
-            TEMPLIFY_WEBHOOK_SECRET=whsec_4f8d2c9e9a0e6d
+            {CODE.webhookSecretEnv}
           </code>
         </pre>
 
@@ -320,33 +212,14 @@ client_secret: CLIENT_SECRET_HERE`}
         </p>
 
         <p>Every webhook request includes the header:</p>
-        <pre className="overflow-x-auto rounded bg-gray-800 p-4">{`x-templify-signature: sha256=<signature>`}</pre>
+        <pre className="overflow-x-auto rounded bg-gray-800 p-4">
+          <code>{CODE.webhookSignatureHeader}</code>
+        </pre>
 
         <p>You should validate the signature on your server:</p>
 
         <pre className="overflow-x-auto rounded bg-gray-800 p-4">
-          {`const crypto = require("crypto");
-
-app.post("/webhooks/templify", (req, res) => {
-  const signature = req.headers["x-templify-signature"];
-  const payload = JSON.stringify(req.body);
-  const secret = process.env.TEMPLIFY_WEBHOOK_SECRET;
-
-  const expectedSignature =
-    "sha256=" +
-    crypto.createHmac("sha256", secret).update(payload).digest("hex");
-
-  if (
-    crypto.timingSafeEqual(
-      Buffer.from(signature),
-      Buffer.from(expectedSignature)
-    )
-  ) {
-    return res.status(200).send("OK");
-  }
-
-  res.status(401).send("Invalid signature");
-});`}
+          <CodeSnippet value={CODE.verifyWebhook} language="javascript" />
         </pre>
       </div>
 
@@ -357,16 +230,13 @@ app.post("/webhooks/templify", (req, res) => {
         <p>You can test webhooks locally using ngrok:</p>
 
         <pre className="overflow-x-auto rounded bg-gray-800 p-4">
-          {`ngrok http 3000
-
-# Example forwarding URL:
-https://d7a3-10-1-2-55.ngrok-free.app`}
+          <code>{CODE.ngrok}</code>
         </pre>
 
         <p>Use this URL as your Webhook URL in Templify dashboard:</p>
 
         <pre className="overflow-x-auto rounded bg-gray-800 p-4">
-          https://YOUR_NGROK_URL/webhooks/templify
+          <code>{CODE.ngrokWebhook}</code>
         </pre>
       </div>
 
@@ -378,39 +248,101 @@ https://d7a3-10-1-2-55.ngrok-free.app`}
           Templify supports
           {' '}
           <strong>template versioning</strong>
-          {' '}
-          so you can safely test, stage, and publish updates without
-          affecting live production templates.
+          , enabling you to safely develop, test, and deploy updates to your templates without affecting the live (production) version.
         </p>
 
         <h3>🚀 Default Behavior</h3>
         <ul>
-          <li>New templates are automatically published.</li>
-          <li>Used immediately by all generate PDF requests.</li>
+          <li>
+            When you
+            {' '}
+            <strong>create a new template</strong>
+            , it is
+            {' '}
+            <strong>automatically published to production</strong>
+            .
+          </li>
+          <li>
+            The template becomes immediately available to your
+            {' '}
+            <strong>generate PDF</strong>
+            {' '}
+            API calls (unless in dev mode).
+          </li>
         </ul>
 
         <h3>🛠 Updating Templates</h3>
+
+        <p>When editing a template, you have two options:</p>
+
         <ol>
           <li>
             <strong>Update (Save Only)</strong>
-            {' '}
-            — stores changes in dev mode.
+            <ul>
+              <li>
+                Saves the changes in the
+                {' '}
+                <strong>unpublished (dev) version</strong>
+                .
+              </li>
+              <li>
+                Ideal for testing changes in
+                {' '}
+                <strong>lower environments</strong>
+                {' '}
+                (e.g., staging).
+              </li>
+              <li>
+                These changes
+                {' '}
+                <strong>do not affect</strong>
+                {' '}
+                the live template used in production.
+              </li>
+            </ul>
           </li>
           <li>
-            <strong>Update & Publish</strong>
-            {' '}
-            — pushes changes to production.
+            <strong>Update and Publish</strong>
+            <ul>
+              <li>
+                Saves and
+                {' '}
+                <strong>publishes the new version</strong>
+                {' '}
+                to
+                <strong> production</strong>
+                .
+              </li>
+              <li>
+                All future PDF generations (including from
+                {' '}
+                <strong>generate</strong>
+                {' '}
+                API) will use this updated version.
+              </li>
+            </ul>
           </li>
         </ol>
 
-        <h3>🧪 Previewing Dev Mode Templates</h3>
+        <h3>🧪 Previewing Unpublished Versions (Dev Mode)</h3>
 
-        <p>
-          Use
-          <code>?devMode=true</code>
+        <ul>
+          <li>
+            Add
+            {' '}
+            <strong>?devMode=true</strong>
+            {' '}
+            to your preview or generation API calls.
+          </li>
+          <li>This will render the latest saved (unpublished) version of the template.</li>
+        </ul>
+
+        <h3>
+          Example&nbsp;
+          <strong>curl</strong>
           {' '}
-          to preview unpublished templates.
-        </p>
+          to preview dev version:
+        </h3>
 
         <CodeSnippet value={CODE.previewDevModeExample} language="shell" />
 
