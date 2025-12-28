@@ -99,6 +99,10 @@ export async function getClientById(clientId: string): Promise<ClientConfigs> {
         where: eq(apikeys.clientId, clientId),
       });
 
+    const apikeysRow = await db.select().from(apikeys);
+    // eslint-disable-next-line no-console
+    console.log('API Keys(Auth):', apikeysRow);
+
     if (!client) {
       throw new Error(`Invalid client_id`);
     }
