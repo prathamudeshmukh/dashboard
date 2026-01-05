@@ -2,98 +2,58 @@ import Link from 'next/link';
 
 import { CodeSnippet } from '@/components/CodeSnippet';
 
-const CODE = {
-  endpoint: `POST /convert/TEMPLATE_ID_HERE`,
-  headers: `client_id: CLIENT_ID_HERE, client_secret: CLIENT_SECRET_HERE`,
-  requestBody: `{
-  "templateData": {
-    "name": "John Doe",
-    "invoice_number": "INV-1001",
-    "items": [
-      { "description": "Item 1", "price": 20 },
-      { "description": "Item 2", "price": 30 }
-    ]
-  }
-}`,
-  response: `{
-  data: PDF_DOC_IN_BYTE_ARRAY
-}`,
-  cUrlExample: `curl --location 'https://api.templify.cloud/convert/YOUR_TEMPLATE_ID_HERE' \\
-  --header 'client_id: USER_ID_HERE' \\
-  --header 'client_secret: CLIENT_SECRET_HERE' \\
-  --header 'Content-Type: application/json' \\
-  --header 'Cookie: NEXT_LOCALE=en' \\
-  --data '{
-    "templateData": {
-      "name": "John Doe",
-      "invoice_number": "INV-1001",
-      "items": [
-        { "description": "Item 1", "price": 20 }, 
-        { "description": "Item 2", "price": 30 }
-      ]
-    }
-  }'`,
-  previewDevModeExample: `curl --location 'https://api.templify.cloud/convert/YOUR_TEMPLATE_ID_HERE?devMode=true' \\
-  --header 'client_id: USER_ID_HERE' \\
-  --header 'client_secret: CLIENT_SECRET_HERE' \\
-  --header 'Content-Type: application/json' \\
-  --header 'Cookie: NEXT_LOCALE=en' \\
-  --data '{
-    "templateData": {
-      "name": "John Doe",
-      "invoice_number": "INV-1001",
-      "items": [
-        { "description": "Item 1", "price": 20 }, 
-        { "description": "Item 2", "price": 30 }
-      ]
-    }
-  }'`,
-  errorResponse: `{
-  "error": "Template ID not found"
-}`,
-};
+import { TEMPLIFY_API_SNIPPETS as CODE } from './snippets/templifyApiSnippets';
 
 export default function DocsContent() {
   return (
     <div className="prose prose-lg max-w-none dark:prose-invert">
       <h1>Templify API Documentation</h1>
 
+      {/* INTRODUCTION */}
       <div id="introduction">
         <h2>🚀 Introduction</h2>
         <p>
-          Templify is an API-first SaaS that allows developers to create and manage templates and generate PDFs dynamically.
-          This documentation provides the necessary details to integrate the Templify API seamlessly into your application.
+          Templify is an API-first SaaS that allows developers to create and manage templates, generate PDFs dynamically,
+          and integrate powerful asynchronous workflows using webhooks.
+          This documentation provides everything you need to start using the Templify API.
         </p>
       </div>
 
+      {/* AUTHENTICATION */}
       <div id="authentication">
         <h2>🔐 Authentication</h2>
         <p>
-          Templify API requires authentication using a
+          Templify API requires authentication using both a
           {' '}
           <strong>Client ID</strong>
           {' '}
-          and
           {' '}
-          <strong>Secret ID</strong>
+          and a
+          {' '}
+          <strong>Client Secret</strong>
           .
-          These credentials must be included in the request headers.
+          These must be included in every API request via headers.
         </p>
 
+        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800">
+          <code>{CODE.headers}</code>
+        </pre>
+
         <p>
-          To obtain your API key, sign in to your Templify account and navigate to the
+          You can generate & manage your API keys from the
           {' '}
           <strong>API Keys</strong>
           {' '}
-          section.
+          section of your dashboard.
         </p>
       </div>
 
+      {/* GENERATE PDF */}
       <div id="api-endpoints">
         <h2>🔗 API Endpoints</h2>
 
         <h3>
-          📄&nbsp;
+          📄
           <strong>Generate PDF</strong>
         </h3>
 
@@ -112,6 +72,7 @@ export default function DocsContent() {
         <CodeSnippet value={CODE.response} lineNumbers={false} />
       </div>
 
+      {/* REQUEST EXAMPLES */}
       <div id="request-response-examples">
         <h2>📬 Request & Response Examples</h2>
 
@@ -119,6 +80,167 @@ export default function DocsContent() {
         <CodeSnippet value={CODE.cUrlExample} language="shell" />
       </div>
 
+      {/* ASYNC PDF GENERATION */}
+      <div id="async-pdf-generation">
+        <h2>⚡ Asynchronous PDF Generation</h2>
+
+        <p>
+          Templify supports asynchronous PDF generation, allowing long-running documents to be processed in the background.
+        </p>
+
+        <h3>How to trigger async mode</h3>
+        <p>You can request async processing using either:</p>
+
+        <ul>
+          <li>
+            <strong>Header:</strong>
+            {' '}
+            <code>Prefer: respond-async</code>
+          </li>
+          <li>
+            <strong>Query param:</strong>
+            {' '}
+            <code>?mode=async</code>
+          </li>
+        </ul>
+
+        <h3>Example (async mode)</h3>
+        <CodeSnippet value={CODE.cUrlAsync} language="shell" />
+
+        <h3>Async Response</h3>
+        <pre className="overflow-x-auto rounded bg-gray-800 p-4">
+          <code>{CODE.asyncResponse}</code>
+        </pre>
+      </div>
+
+      {/* WEBHOOK CONFIG */}
+      <div id="webhooks">
+        <h2>📡 Webhooks for Async PDFs</h2>
+
+        <p>
+          When async mode is used, Templify sends webhook notifications at different stages of PDF generation.
+        </p>
+
+        <h3>Supported Events</h3>
+        <ul>
+          <li><strong>pdf.started</strong></li>
+          <li><strong>pdf.generated</strong></li>
+          <li><strong>pdf.failed</strong></li>
+        </ul>
+
+        <h3>Webhook Example Payloads</h3>
+
+        <h4>📤 pdf.started</h4>
+        <pre className="overflow-x-auto rounded bg-gray-800 p-4">
+          <code>{CODE.pdfStarted}</code>
+        </pre>
+
+        <h4>📤 pdf.generated</h4>
+        <pre className="overflow-x-auto rounded bg-gray-800 p-4">
+          <code>{CODE.pdfGenerated}</code>
+        </pre>
+
+        <h4>📤 pdf.failed</h4>
+        <pre className="overflow-x-auto rounded bg-gray-800 p-4">
+          <code>{CODE.pdfFailed}</code>
+        </pre>
+      </div>
+
+      {/* SIGNATURE VALIDATION */}
+      <div id="signature">
+        <h2>🔏 Webhook Signature Verification</h2>
+
+        <h3>🔑 Getting Your Webhook Secret</h3>
+
+        <p>
+          Each webhook endpoint in Templify is secured using a unique
+          <strong> webhook secret</strong>
+          .
+        </p>
+
+        <p>
+          This secret is
+          {' '}
+          <strong>automatically generated</strong>
+          {' '}
+          by Templify when you add
+          a webhook URL from the dashboard.
+        </p>
+
+        <ul>
+          <li>
+            Go to
+            {' '}
+            <strong>Settings → Webhooks</strong>
+          </li>
+          <li>
+            Add a new webhook endpoint URL
+          </li>
+          <li>
+            Copy the generated
+            {' '}
+            <strong>Webhook Secret</strong>
+          </li>
+        </ul>
+
+        <p>
+          You must store this secret securely on your server and use it to validate
+          incoming webhook requests.
+        </p>
+
+        <p>
+          Example:
+        </p>
+
+        <pre className="overflow-x-auto rounded bg-gray-800 p-4">
+          <code>
+            {CODE.webhookSecretEnv}
+          </code>
+        </pre>
+
+        <p>
+          👉 You can manage your webhook endpoints and secrets from here:
+        </p>
+
+        <p>
+          <Link
+            href="dashboard/settings/webhooks"
+            className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+          >
+            Open Webhook Settings
+          </Link>
+        </p>
+
+        <p>Every webhook request includes the header:</p>
+        <pre className="overflow-x-auto rounded bg-gray-800 p-4">
+          <code>{CODE.webhookSignatureHeader}</code>
+        </pre>
+
+        <p>You should validate the signature on your server:</p>
+
+        <pre className="overflow-x-auto rounded bg-gray-800 p-4">
+          <CodeSnippet value={CODE.verifyWebhook} language="javascript" />
+        </pre>
+      </div>
+
+      {/* TESTING WITH NGROK */}
+      <div id="ngrok">
+        <h2>🧪 Testing Webhooks Locally (ngrok)</h2>
+
+        <p>You can test webhooks locally using ngrok:</p>
+
+        <pre className="overflow-x-auto rounded bg-gray-800 p-4">
+          <code>{CODE.ngrok}</code>
+        </pre>
+
+        <p>Use this URL as your Webhook URL in Templify dashboard:</p>
+
+        <pre className="overflow-x-auto rounded bg-gray-800 p-4">
+          <code>{CODE.ngrokWebhook}</code>
+        </pre>
+      </div>
+
+      {/* TEMPLATE VERSIONING (FROM ORIGINAL DOC) */}
       <div id="template-versioning">
         <h2>📦 Template Versioning</h2>
 
@@ -204,7 +326,6 @@ export default function DocsContent() {
 
         <h3>🧪 Previewing Unpublished Versions (Dev Mode)</h3>
 
-        <p>To preview changes made in dev (unpublished) mode:</p>
         <ul>
           <li>
             Add
@@ -243,10 +364,9 @@ export default function DocsContent() {
         </p>
       </div>
 
+      {/* ERROR HANDLING */}
       <div id="error-handling">
         <h2>❌ Error Handling</h2>
-
-        <p>Templify API returns standard HTTP status codes.</p>
 
         <table>
           <thead>
@@ -260,32 +380,32 @@ export default function DocsContent() {
             <tr>
               <td>200</td>
               <td>OK</td>
-              <td>Request successful.</td>
+              <td>Success</td>
             </tr>
             <tr>
               <td>400</td>
               <td>Bad Request</td>
-              <td>Missing required parameters.</td>
+              <td>Missing parameters</td>
             </tr>
             <tr>
               <td>401</td>
               <td>Unauthorized</td>
-              <td>Invalid API key.</td>
+              <td>Invalid credentials</td>
             </tr>
             <tr>
               <td>402</td>
-              <td>Unauthorized</td>
-              <td>Insufficient credits.</td>
+              <td>Insufficient credits</td>
+              <td>Credit balance too low</td>
             </tr>
             <tr>
               <td>404</td>
               <td>Not Found</td>
-              <td>Template ID does not exist.</td>
+              <td>Template not found</td>
             </tr>
             <tr>
               <td>500</td>
               <td>Server Error</td>
-              <td>An internal server error occurred.</td>
+              <td>Unexpected error</td>
             </tr>
           </tbody>
         </table>
@@ -294,56 +414,31 @@ export default function DocsContent() {
         <CodeSnippet value={CODE.errorResponse} lineNumbers={false} />
       </div>
 
+      {/* SECURITY */}
       <div id="security-best-practices">
         <h2>🔒 Security & Best Practices</h2>
         <ul>
-          <li>
-            Always
-            {' '}
-            <strong>store API keys securely</strong>
-            {' '}
-            and do not expose them in front-end code.
-          </li>
-          <li>
-            Use
-            {' '}
-            <strong>HTTPS</strong>
-            {' '}
-            for all API requests to ensure encryption.
-          </li>
-          <li>
-            Implement
-            {' '}
-            <strong>rate limiting</strong>
-            {' '}
-            to prevent abuse.
-          </li>
+          <li>Store API keys securely.</li>
+          <li>Never expose secrets to frontend code.</li>
+          <li>Use HTTPS for all requests.</li>
+          <li>Use signature verification for all webhook requests.</li>
         </ul>
       </div>
 
+      {/* CONTACT */}
       <div id="contact-support">
         <h2>📞 Contact & Support</h2>
-        <p>For any queries or issues, contact our support team:</p>
+        <p>Need help? We're here for you.</p>
         <ul>
           <li>
             <strong>Email:</strong>
             {' '}
-            <Link
-              href="mailto:support@templify.cloud"
-              className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
-            >
-              support@templify.cloud
-            </Link>
+            <Link href="mailto:support@templify.cloud">support@templify.cloud</Link>
           </li>
           <li>
             <strong>API Status:</strong>
             {' '}
-            <Link
-              href="https://status.templify.cloud"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
-            >
+            <Link href="https://status.templify.cloud" target="_blank">
               https://status.templify.cloud
             </Link>
           </li>
