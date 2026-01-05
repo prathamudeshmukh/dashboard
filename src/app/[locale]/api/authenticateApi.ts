@@ -2,6 +2,8 @@ import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
 import { getClientById } from '@/libs/actions/user';
+import { db } from '@/libs/DB';
+import { apikeys } from '@/models/Schema';
 import { decrypt } from '@/service/crypto';
 
 export async function authenticateApi(req: NextRequest): Promise<true | NextResponse> {
@@ -18,6 +20,9 @@ export async function authenticateApi(req: NextRequest): Promise<true | NextResp
   }
 
   try {
+    const apikeysRow = await db.select().from(apikeys);
+    // eslint-disable-next-line no-console
+    console.log('API Keys(client):', apikeysRow);
     // Retrieve client details from the database by clientId
     const client = await getClientById(clientId);
 
