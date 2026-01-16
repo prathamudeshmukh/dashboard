@@ -100,7 +100,7 @@ export default function DocsContent() {
           <li>
             <strong>Query param:</strong>
             {' '}
-            <code>?mode=async</code>
+            <code>?runMode=async</code>
           </li>
         </ul>
 
