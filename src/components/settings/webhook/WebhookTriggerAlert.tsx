@@ -26,7 +26,7 @@ export const WebhookTriggerAlert = () => {
           <li>
             Using the
             {' '}
-            <code className="rounded bg-amber-100 px-1 py-0.5 text-xs">?mode=async</code>
+            <code className="rounded bg-amber-100 px-1 py-0.5 text-xs">?runMode=async</code>
             {' '}
             query parameter
           </li>
