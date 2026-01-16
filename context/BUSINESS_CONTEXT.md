@@ -59,7 +59,7 @@ Without this system, teams either delay shipping document-heavy features or acce
 ## 7. Business Rules & Constraints
 - **Trial credits**
   - **150 credits** are granted as a **one-time trial**.
-  - Scope: per user, per organization, and per environment (current policy as stated).
+  - Scope: per user (**Clerk user id**) for now. (Org-level accounting is a future consideration; credits are not scoped per environment.)
 
 - **Metering**
   - **1 credit = 1 PDF generation**.
