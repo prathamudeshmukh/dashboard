@@ -1,6 +1,7 @@
 import { serve } from 'inngest/next';
 
 import { inngest } from '@/inngest/client';
+import { deleteBlobPdf } from '@/inngest/functions/deleteBlobPdf';
 import { extractPdfContent } from '@/inngest/functions/extractPdf';
 import { generatePdfAsync } from '@/inngest/functions/generatePdfAsync';
 import { generateTemplatePreviewJob } from '@/inngest/functions/generatePreview';
@@ -14,5 +15,6 @@ export const { GET, POST, PUT } = serve({
     generateTemplatePreviewJob,
     generatePdfAsync,
     sendWebhook,
+    deleteBlobPdf,
   ],
 });
