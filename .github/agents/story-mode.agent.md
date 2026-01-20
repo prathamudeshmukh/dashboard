@@ -1,4 +1,3 @@
-
 ---
 description: 'This is the mode to use when writing user stories.'
 tools: ['codebase', 'usages', 'vscodeAPI', 'fetch', 'editFiles']
