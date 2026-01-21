@@ -48,7 +48,9 @@ const PDFExtractor = () => {
       if (response.status === 'Completed') {
         setpdfExtractionStatus(PdfExtractionStatusEnum.COMPLETED);
         // eslint-disable-next-line no-console
-        console.log(`PDFExtractor -  ${response}`);
+        console.log(`PDFExtractor 1 -  ${response.output.htmlContent}`);
+        // eslint-disable-next-line no-console
+        console.log(`PDFExtractor 2 -  ${response.output}`);
         setHtmlContent(response.output.htmlContent.html);
         setHandlebarsCode(response.output.htmlContent.html);
         setHandlebarTemplateJson(response.output.htmlContent.sample_json);
