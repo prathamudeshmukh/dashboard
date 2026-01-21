@@ -14,7 +14,7 @@ export const extractPdfContent = inngest.createFunction(
         fetchBlobMetadata(pdfId));
 
       const htmlContent = await step.run('convert-to-html', () =>
-        convertToHTML(downloadUrl, logger));
+        convertToHTML(downloadUrl, logger, true));
 
       logger.info('PDF Extraction Completed Succesfully');
 

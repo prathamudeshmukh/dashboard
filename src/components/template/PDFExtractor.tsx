@@ -31,7 +31,7 @@ const PDFExtractor = () => {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [pdfExtractionStatus, setpdfExtractionStatus] = useState<PdfExtractionStatusEnum>(PdfExtractionStatusEnum.NOT_STARTED);
   const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB
-  const { setHtmlContent, setHandlebarsCode } = useTemplateStore();
+  const { setHtmlContent, setHandlebarsCode, setHandlebarTemplateJson } = useTemplateStore();
 
   async function pollJobStatus(runID: string) {
     try {
@@ -47,8 +47,9 @@ const PDFExtractor = () => {
 
       if (response.status === 'Completed') {
         setpdfExtractionStatus(PdfExtractionStatusEnum.COMPLETED);
-        setHtmlContent(response.output.htmlContent);
-        setHandlebarsCode(response.output.htmlContent);
+        setHtmlContent(response.output.htmlContent.html);
+        setHandlebarsCode(response.output.htmlContent.html);
+        setHandlebarTemplateJson(response.output.htmlContent.sample_json);
       } else if (response.status === 'Failed' || response.status === 'Cancelled') {
         setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED);
       }

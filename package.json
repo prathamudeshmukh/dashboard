@@ -24,13 +24,7 @@
     "storybook:serve": "http-server storybook-static --port 6006 --silent",
     "serve-storybook": "run-s storybook:*",
     "test-storybook:ci": "start-server-and-test serve-storybook http://127.0.0.1:6006 test-storybook",
-    "prepare": "husky",
-    "worker:dev": "NODE_ENV=development tsx src/worker.ts",
-    "worker:staging": "NODE_ENV=staging INNGEST_ENV=staging tsx src/worker.ts",
-    "worker:prod": "NODE_ENV=production INNGEST_ENV=production tsx src/worker.ts",
-    "worker:start": "NODE_ENV=production node dist/worker.js",
-    "worker:build": "tsc --project tsconfig.worker.json",
-    "worker:test:local": "npm run worker:build && NODE_ENV=development INNGEST_ENV=development node dist/worker.js"
+    "prepare": "husky"
   },
   "dependencies": {
     "@clerk/localizations": "^3.2.1",

@@ -35,7 +35,7 @@ client_secret: CLIENT_SECRET_HERE`,
   }
 }'`,
 
-  cUrlAsync: `curl --location 'https://api.templify.cloud/convert/TEMPLATE_ID?mode=async' \\
+  cUrlAsync: `curl --location 'https://api.templify.cloud/convert/TEMPLATE_ID?runMode=async' \\
 --header 'Prefer: respond-async' \\
 --header 'client_id: USER_ID' \\
 --header 'client_secret: SECRET' \\
