@@ -8,7 +8,7 @@ env:
 jobs:
   test:
     # Only run when the deployment was successful
-    if: false # Temporarily disabled
+    if: github.event.deployment_status.state == 'success'
 
     name: Test E2E on playwright
     runs-on: ubuntu-latest
