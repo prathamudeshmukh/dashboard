@@ -2,11 +2,10 @@
 name: Playwright Tests
 
 on:
-  workflow_dispatch: # disabled: temporarily turned off
+  workflow_dispatch:
 
 jobs:
   test:
-
     name: Test E2E on playwright
     runs-on: ubuntu-latest
 
