@@ -1,14 +1,11 @@
 # .github/workflows/playwright.yml
 name: Playwright Tests
 
-on: [deployment_status]
+on:
+  workflow_dispatch: # disabled: temporarily turned off
 
-env:
-  PLAYWRIGHT_TEST_ENVIRONMENT: ${{ github.event.deployment_status.environment }}
 jobs:
   test:
-    # Only run when the deployment was successful
-    if: github.event.deployment_status.state == 'success'
 
     name: Test E2E on playwright
     runs-on: ubuntu-latest
