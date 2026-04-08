@@ -12,7 +12,7 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
           posthog.opt_out_capturing();
         }
       },
-      api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com/i/v0/e/',
+      api_host: new URL(process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com/i/v0/e/').origin,
       person_profiles: 'always', // or 'always' to create profiles for anonymous users as well
       defaults: '2025-05-24',
       autocapture: false,
