@@ -33,7 +33,7 @@ const PDFExtractor = () => {
   const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB
   const { setHtmlContent, setHandlebarsCode } = useTemplateStore();
 
-  async function pollJobStatus(runID: string, file: File, extractionStart: number) {
+  async function pollJobStatus(runID: string, file: File, pdfId: string, extractionStart: number) {
     try {
       let response = await getStatus(runID);
 
@@ -49,6 +49,7 @@ const PDFExtractor = () => {
         setHandlebarsCode(htmlContent);
 
         trackEvent('template_imported_from_pdf', {
+          pdf_id: pdfId,
           file_name: file.name,
           file_size: file.size,
           extraction_time: Date.now() - extractionStart,
@@ -57,6 +58,7 @@ const PDFExtractor = () => {
       } else {
         setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED);
         trackEvent('template_import_failed', {
+          pdf_id: pdfId,
           file_name: file.name,
           file_size: file.size,
           failure_stage: 'extraction',
@@ -67,6 +69,7 @@ const PDFExtractor = () => {
       console.error('An error occurred while polling job status:', error);
       setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED);
       trackEvent('template_import_failed', {
+        pdf_id: pdfId,
         file_name: file.name,
         file_size: file.size,
         failure_stage: 'extraction',
@@ -98,12 +101,14 @@ const PDFExtractor = () => {
       setPdfUploadStatus(PdfUploadStatusEnum.COMPLETETD);
       setpdfExtractionStatus(PdfExtractionStatusEnum.IN_PROGRESS);
 
+      const pdfId: string = response.data.result.pdfId;
       const extractionStart = Date.now();
-      await pollJobStatus(response.data.runID, file, extractionStart);
+      await pollJobStatus(response.data.runID, file, pdfId, extractionStart);
     } catch (error: any) {
       setPdfUploadStatus(PdfUploadStatusEnum.FAILED);
       setUploadError(`Upload failed. Please try again - ${error}`);
       trackEvent('template_import_failed', {
+        pdf_id: '',
         file_name: file.name,
         file_size: file.size,
         failure_stage: 'upload',

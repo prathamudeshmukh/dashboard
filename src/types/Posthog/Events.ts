@@ -98,12 +98,14 @@ export type EventPayloads = {
     templateType: string;
   };
   template_imported_from_pdf: {
+    pdf_id: string;
     file_name: string;
     file_size: number; // in bytes
     extraction_time: number; // in milliseconds
     html_length: number; // chars in extracted HTML
   };
   template_import_failed: {
+    pdf_id: string;
     file_name: string;
     file_size: number; // in bytes
     failure_stage: 'upload' | 'extraction';
