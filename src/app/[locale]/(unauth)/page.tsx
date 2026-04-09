@@ -11,6 +11,7 @@ import { Footer } from '@/features/landing/Footer';
 import { Hero } from '@/features/landing/Hero';
 import { Navbar } from '@/features/landing/Navbar';
 import Pricing from '@/features/landing/Pricing';
+import Showcase from '@/features/landing/Showcase';
 import Steps from '@/features/landing/Steps';
 import { getBaseUrl } from '@/utils/Helpers';
 
@@ -128,6 +129,7 @@ const IndexPage = (props: { params: { locale: string } }) => {
   const menuList = [
     { link: '#about', name: 'About' },
     { link: '#how-it-works', name: 'How it Works' },
+    { link: '#examples', name: 'Examples' },
     { link: '#features', name: 'Feature' },
     { link: '#pricing', name: 'Pricing' },
     { link: '/docs', name: 'Docs' },
@@ -154,6 +156,7 @@ const IndexPage = (props: { params: { locale: string } }) => {
         <About />
         <Features />
         <Steps />
+        <Showcase />
         <Pricing />
         <FAQ />
         <CTA />

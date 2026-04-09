@@ -23,7 +23,7 @@ export const Hero = () => {
             {t('subtitle')}
           </p>
           {/* Product Hunt Badge */}
-          <div className="mt-8">
+          <div className="mt-8 flex flex-col items-center gap-3">
             <a
               href="https://www.producthunt.com/products/templify-3?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-templify&#0045;3"
               target="_blank"
@@ -36,6 +36,16 @@ export const Hero = () => {
                 height={54}
                 unoptimized
               />
+            </a>
+            <a
+              href="https://examples.templify.cloud/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-gray-500 underline underline-offset-4 hover:text-primary"
+            >
+              {t('see_example')}
+              {' '}
+              →
             </a>
           </div>
         </div>
