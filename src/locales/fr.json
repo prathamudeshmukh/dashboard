@@ -422,6 +422,10 @@
     "security": "Sécurité et bonnes pratiques",
     "contact": "Contact et assistance"
   },
+  "DocsApiReference": {
+    "meta_title": "Référence API Templify - Explorateur OpenAPI Interactif",
+    "meta_description": "Explorez l'API Templify de façon interactive. Consultez les schémas de requête/réponse, testez des requêtes en direct et téléchargez la spec OpenAPI."
+  },
   "Docs": {
     "meta_title": "Documentation API Templify - Guide Développeur Complet",
     "meta_description": "Documentation API Templify complète avec authentification, endpoints, exemples et bonnes pratiques. Apprenez à intégrer la génération PDF dans votre application SaaS avec notre guide développeur complet.",

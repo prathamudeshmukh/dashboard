@@ -420,6 +420,10 @@
     "security": "Security & Best Practices",
     "contact": "Contact & Support"
   },
+  "DocsApiReference": {
+    "meta_title": "Templify API Reference - Interactive OpenAPI Explorer",
+    "meta_description": "Explore the Templify API interactively. View request/response schemas, try live requests, and download the OpenAPI spec."
+  },
   "Docs": {
     "meta_title": "Templify API Documentation - Complete Developer Guide",
     "meta_description": "Complete Templify API documentation with authentication, endpoints, examples, and best practices. Learn to integrate PDF generation into your SaaS application with our comprehensive developer guide.",

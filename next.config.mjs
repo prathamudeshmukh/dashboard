@@ -37,6 +37,7 @@ const NextConfig = withSentryConfig(
         },
         poweredByHeader: false,
         reactStrictMode: true,
+        transpilePackages: ['@scalar/api-reference-react'],
         experimental: {
           serverComponentsExternalPackages: ['@electric-sql/pglite'],
         },

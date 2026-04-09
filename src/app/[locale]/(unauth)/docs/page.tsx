@@ -125,12 +125,12 @@ export default function DocsPage(props: { params: { locale: string } }) {
   };
 
   return (
-    <>
+    <div className="container p-8 lg:p-12 lg:pb-56">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <DocsContent />
-    </>
+    </div>
   );
 }
