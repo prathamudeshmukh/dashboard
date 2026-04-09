@@ -7,15 +7,21 @@ export type LandingPageEvents =
   | 'faq_interacted'
   | 'docs_or_blog_clicked'
   | 'signup_started'
-  | 'user_account_created';
+  | 'user_account_created'
+  | 'live_example_section_viewed'
+  | 'live_example_cta_clicked';
 
 export type InAppCoreEvents =
   | 'dashboard_viewed'
+  | 'dashboard_ftux_shown'
+  | 'create_template_cta_clicked'
   | 'template_created'
   | 'template_edited'
   | 'template_imported_from_pdf'
   | 'visual_editor_opened'
   | 'code_editor_opened'
+  | 'wizard_step_viewed'
+  | 'wizard_abandoned'
   | 'api_call_generated_pdf'
   | 'api_call_failed';
 
@@ -57,6 +63,13 @@ export type EventPayloads = {
     utm_source?: string;
     device_type?: string;
   };
+  live_example_section_viewed: {
+    device_type?: string;
+  };
+  live_example_cta_clicked: {
+    cta_label: 'try_it_out' | 'view_source';
+    destination_url: string;
+  };
   user_account_created: {
     user_id: string;
     email?: string;
@@ -67,6 +80,13 @@ export type EventPayloads = {
   dashboard_viewed: {
     user_id: string;
     first_time: boolean;
+  };
+  dashboard_ftux_shown: {
+    user_id: string;
+  };
+  create_template_cta_clicked: {
+    cta_location: 'ftux' | 'table_header';
+    user_has_templates: boolean;
   };
   template_created: {
     template_id: string;
@@ -88,6 +108,14 @@ export type EventPayloads = {
   code_editor_opened: {
     from_mode: 'visual';
     user_id?: string;
+  };
+  wizard_step_viewed: {
+    step: number;
+    step_name: string;
+  };
+  wizard_abandoned: {
+    last_step: number;
+    last_step_name: string;
   };
   api_call_generated_pdf: {
     job_id: string;

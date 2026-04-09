@@ -3,7 +3,7 @@
 import { useUser } from '@clerk/nextjs';
 import type { JsonValue } from 'inngest/helpers/jsonify';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 import { PublishTemplateToProd, UpsertTemplate } from '@/libs/actions/templates';
@@ -25,6 +25,10 @@ export default function CreateTemplateWizard() {
   const router = useRouter();
   const [saveStatus, setSaveStatus] = useState<SaveStatusEnum>(SaveStatusEnum.IDLE);
   const [currentStep, setCurrentStep] = useState(0);
+  const saveStatusRef = useRef(saveStatus);
+  const currentStepRef = useRef(currentStep);
+  saveStatusRef.current = saveStatus;
+  currentStepRef.current = currentStep;
   const { creationMethod, selectedTemplate, templateName, templateDescription, htmlContent, htmlTemplateJson, htmlStyle, handlebarsCode, activeTab, handlebarTemplateJson, setSuccessData } = useTemplateStore();
   const handleNext = () => setCurrentStep(prev => prev + 1);
   const handlePrevious = () => setCurrentStep(prev => prev - 1);
@@ -39,6 +43,24 @@ export default function CreateTemplateWizard() {
     { id: 'editor', title: 'Edit Template' },
     { id: 'review', title: 'Review & Save' },
   ];
+
+  useEffect(() => {
+    trackEvent('wizard_step_viewed', {
+      step: currentStep,
+      step_name: steps[currentStep]?.id ?? 'unknown',
+    });
+  }, [currentStep]);
+
+  useEffect(() => {
+    return () => {
+      if (saveStatusRef.current !== SaveStatusEnum.SUCCESS && currentStepRef.current > 0) {
+        trackEvent('wizard_abandoned', {
+          last_step: currentStepRef.current,
+          last_step_name: steps[currentStepRef.current]?.id ?? 'unknown',
+        });
+      }
+    };
+  }, []);
 
   const renderStep = () => {
     switch (currentStep) {

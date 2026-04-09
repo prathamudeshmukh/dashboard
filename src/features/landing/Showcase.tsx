@@ -1,9 +1,12 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { useEffect, useRef } from 'react';
+
+import { trackEvent } from '@/libs/analytics/trackEvent';
 
 const FREELANCE_KIT_URL = 'https://examples.templify.cloud/';
-const GITHUB_URL = 'https://github.com/prathamudeshmukh/templify/tree/main/examples/freelance-kit';
+const GITHUB_URL = 'https://github.com/prathamudeshmukh/templify-example-freelancekit';
 
 const DOC_TYPES = [
   { emoji: '📄', label: 'Proposal', envVar: 'TEMPLIFY_PROPOSAL_TEMPLATE_ID' },
@@ -16,9 +19,32 @@ const DOC_TYPE_LABELS = ['Proposal', 'Contract', 'Invoice', 'Receipt'];
 
 export default function Showcase() {
   const t = useTranslations('Showcase');
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const node = sectionRef.current;
+    if (!node) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          trackEvent('live_example_section_viewed', {
+            device_type: window.innerWidth < 768 ? 'mobile' : 'desktop',
+          });
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 },
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <section id="examples" className="py-20">
+    <section ref={sectionRef} id="examples" className="py-20">
       <div className="container mx-auto px-4">
         {/* Section header */}
         <div className="mb-12 text-center">
@@ -67,6 +93,7 @@ export default function Showcase() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+                  onClick={() => trackEvent('live_example_cta_clicked', { cta_label: 'try_it_out', destination_url: FREELANCE_KIT_URL })}
                 >
                   {t('cta_try')}
                   <span aria-hidden="true">→</span>
@@ -76,6 +103,7 @@ export default function Showcase() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 rounded-full border border-gray-300 px-5 py-2.5 text-sm font-semibold text-gray-700 transition-colors hover:border-gray-400"
+                  onClick={() => trackEvent('live_example_cta_clicked', { cta_label: 'view_source', destination_url: GITHUB_URL })}
                 >
                   {t('cta_source')}
                   <span aria-hidden="true" className="text-xs">↗</span>
