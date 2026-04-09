@@ -3,7 +3,6 @@
 import { useUser } from '@clerk/nextjs';
 import type { ColumnDef } from '@tanstack/react-table';
 import { Copy, FileSearch, MoreHorizontal, Plus, Search, SquarePen, Trash2 } from 'lucide-react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import React, { useEffect, useState } from 'react';
@@ -43,21 +42,27 @@ const TemplateTable = () => {
   const { selectTemplate } = useTemplateStore();
 
   const t = useTranslations('TemplateTable');
-  const fetchTemplateData = async (email: string, page: number, search: string) => {
+  const fetchTemplateData = async (email: string, currentPage: number, search: string) => {
     if (!email) {
       return;
     }
-    const start = performance.now();
     setTableState(TemplateTableState.Loading);
     try {
-      const response = await fetchTemplates({ email, page, pageSize: 10, searchQuery: search });
-      const end = performance.now();
-      // eslint-disable-next-line no-console
-      console.log(`Fetching templates took ${end - start} ms`);
-      if (response.data.length === 0) {
+      const response = await fetchTemplates({ email, page: currentPage, pageSize: 10, searchQuery: search });
+      const isFirstLoad = currentPage === 1 && !search;
+      const hasNoTemplates = response.data.length === 0;
+
+      if (hasNoTemplates) {
         setTableState(search ? TemplateTableState.SearchNoResults : TemplateTableState.FTUX);
       } else {
         setTableState(TemplateTableState.Success);
+      }
+
+      if (isFirstLoad) {
+        trackEvent('dashboard_viewed', {
+          user_id: email,
+          first_time: hasNoTemplates,
+        });
       }
 
       setTotalPages(response.totalPages);
@@ -72,15 +77,16 @@ const TemplateTable = () => {
     if (!user) {
       return;
     }
-
-    trackEvent('dashboard_viewed', {
-      user_id: user.id,
-      first_time: page === 1 && templateData.length === 0,
-    });
-
     const email = user?.emailAddresses[0]?.emailAddress as string;
     fetchTemplateData(email, page, searchQuery);
   }, [user, page]);
+
+  useEffect(() => {
+    if (tableState === TemplateTableState.FTUX && user) {
+      const email = user?.emailAddresses[0]?.emailAddress as string;
+      trackEvent('dashboard_ftux_shown', { user_id: email });
+    }
+  }, [tableState, user]);
 
   const handleEdit = (templateId: string, templateType: string) => {
     // Track engagement - (who edits which template and in which editor mode)
@@ -254,7 +260,11 @@ const TemplateTable = () => {
 
   ];
 
-  const handleCreateTemplate = () => {
+  const handleCreateTemplate = (location: 'ftux' | 'table_header') => {
+    trackEvent('create_template_cta_clicked', {
+      cta_location: location,
+      user_has_templates: tableState !== TemplateTableState.FTUX,
+    });
     router.push('/dashboard/create-template');
   };
 
@@ -279,7 +289,7 @@ const TemplateTable = () => {
           <p className="mb-4 text-base font-normal text-gray-600">
             Your one-stop solution to your dynamic PDF generation needs.
           </p>
-          <Button onClick={handleCreateTemplate} className="rounded-full bg-primary text-lg">
+          <Button onClick={() => handleCreateTemplate('ftux')} className="rounded-full bg-primary text-lg">
             Create your first template
           </Button>
         </div>
@@ -288,12 +298,10 @@ const TemplateTable = () => {
       {tableState !== TemplateTableState.Loading && tableState !== TemplateTableState.FTUX && (
         <>
           <div className="mt-5 flex items-end justify-end">
-            <Link href="/dashboard/create-template">
-              <Button className="rounded-full bg-primary text-lg">
-                <Plus />
-                Create Template
-              </Button>
-            </Link>
+            <Button className="rounded-full bg-primary text-lg" onClick={() => handleCreateTemplate('table_header')}>
+              <Plus />
+              Create Template
+            </Button>
           </div>
           <div className="mb-4 flex items-center gap-4">
             <Input
