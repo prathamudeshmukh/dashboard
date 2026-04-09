@@ -33,28 +33,45 @@ const PDFExtractor = () => {
   const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB
   const { setHtmlContent, setHandlebarsCode } = useTemplateStore();
 
-  async function pollJobStatus(runID: string) {
+  async function pollJobStatus(runID: string, file: File, extractionStart: number) {
     try {
-      // Initial fetch before starting the loop
       let response = await getStatus(runID);
 
-      // Poll until the job is in a terminal state
       while (response.status !== 'Completed' && response.status !== 'Failed' && response.status !== 'Cancelled') {
-        // Wait for a second before the next poll
         await new Promise(resolve => setTimeout(resolve, 1000));
         response = await getStatus(runID);
       }
 
       if (response.status === 'Completed') {
+        const htmlContent: string = response.output.htmlContent;
         setpdfExtractionStatus(PdfExtractionStatusEnum.COMPLETED);
-        setHtmlContent(response.output.htmlContent);
-        setHandlebarsCode(response.output.htmlContent);
-      } else if (response.status === 'Failed' || response.status === 'Cancelled') {
+        setHtmlContent(htmlContent);
+        setHandlebarsCode(htmlContent);
+
+        trackEvent('template_imported_from_pdf', {
+          file_name: file.name,
+          file_size: file.size,
+          extraction_time: Date.now() - extractionStart,
+          html_length: htmlContent.length,
+        });
+      } else {
         setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED);
+        trackEvent('template_import_failed', {
+          file_name: file.name,
+          file_size: file.size,
+          failure_stage: 'extraction',
+          error_message: `Job ended with status: ${response.status}`,
+        });
       }
     } catch (error) {
       console.error('An error occurred while polling job status:', error);
       setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED);
+      trackEvent('template_import_failed', {
+        file_name: file.name,
+        file_size: file.size,
+        failure_stage: 'extraction',
+        error_message: error instanceof Error ? error.message : String(error),
+      });
     }
   }
 
@@ -81,24 +98,17 @@ const PDFExtractor = () => {
       setPdfUploadStatus(PdfUploadStatusEnum.COMPLETETD);
       setpdfExtractionStatus(PdfExtractionStatusEnum.IN_PROGRESS);
 
-      // Poll job status
       const extractionStart = Date.now();
-      await pollJobStatus(response.data.runID);
-      const extractionEnd = Date.now();
-
-      const extractionTime = extractionEnd - extractionStart;
-
-      // ✅ Fire success tracking event
-      trackEvent('template_imported_from_pdf', {
-        file_size: file.size,
-        extraction_time: extractionTime,
-        success: true,
-      });
+      await pollJobStatus(response.data.runID, file, extractionStart);
     } catch (error: any) {
       setPdfUploadStatus(PdfUploadStatusEnum.FAILED);
       setUploadError(`Upload failed. Please try again - ${error}`);
-    } finally {
-      setPdfUploadStatus(PdfUploadStatusEnum.FAILED);
+      trackEvent('template_import_failed', {
+        file_name: file.name,
+        file_size: file.size,
+        failure_stage: 'upload',
+        error_message: error instanceof Error ? error.message : String(error),
+      });
     }
   };
 

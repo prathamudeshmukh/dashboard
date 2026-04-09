@@ -18,6 +18,7 @@ export type InAppCoreEvents =
   | 'template_created'
   | 'template_edited'
   | 'template_imported_from_pdf'
+  | 'template_import_failed'
   | 'visual_editor_opened'
   | 'code_editor_opened'
   | 'wizard_step_viewed'
@@ -97,9 +98,16 @@ export type EventPayloads = {
     templateType: string;
   };
   template_imported_from_pdf: {
+    file_name: string;
     file_size: number; // in bytes
     extraction_time: number; // in milliseconds
-    success: boolean;
+    html_length: number; // chars in extracted HTML
+  };
+  template_import_failed: {
+    file_name: string;
+    file_size: number; // in bytes
+    failure_stage: 'upload' | 'extraction';
+    error_message?: string;
   };
   visual_editor_opened: {
     from_mode: 'code';
