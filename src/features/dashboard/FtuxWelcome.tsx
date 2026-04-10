@@ -1,6 +1,7 @@
 'use client';
 
 import { ArrowRight, FileUp, Key, Pencil } from 'lucide-react';
+import { EXAMPLES_URL } from 'templify.constants';
 
 import { Button } from '@/components/ui/button';
 
@@ -14,14 +15,11 @@ const STEPS = [
   { label: 'Get your API key', icon: Key },
 ] as const;
 
-// TODO: Replace with real docs URL when available
-const EXAMPLES_URL = 'https://docs.templify.dev/examples';
-
 export function FtuxWelcome({ onStart }: FtuxWelcomeProps) {
   return (
     <div className="flex flex-col items-center justify-center gap-8 py-8 text-center">
       <div>
-        <h2 className="text-4xl font-bold">Turn a PDF into a live API endpoint.</h2>
+        <h1 className="text-4xl font-bold">Turn a PDF into a live API endpoint.</h1>
         <p className="mt-2 text-sm text-muted-foreground">takes ~2 min</p>
       </div>
 
