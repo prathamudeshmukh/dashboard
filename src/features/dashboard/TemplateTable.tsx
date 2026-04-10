@@ -29,8 +29,13 @@ import { TemplateTableState } from '@/types/Enum';
 import { type Template, TemplateType } from '@/types/Template';
 
 import AsyncActionButton from '../../components/AsyncActionButton';
+import { FtuxWelcome } from './FtuxWelcome';
 
-const TemplateTable = () => {
+type TemplateTableProps = {
+  onFtuxChange?: (isFtux: boolean) => void;
+};
+
+const TemplateTable = ({ onFtuxChange }: TemplateTableProps) => {
   const [templateData, setTemplateData] = useState<any>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -86,6 +91,7 @@ const TemplateTable = () => {
       const email = user?.emailAddresses[0]?.emailAddress as string;
       trackEvent('dashboard_ftux_shown', { user_id: email });
     }
+    onFtuxChange?.(tableState === TemplateTableState.FTUX);
   }, [tableState, user]);
 
   const handleEdit = (templateId: string, templateType: string) => {
@@ -269,7 +275,7 @@ const TemplateTable = () => {
   };
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="container mx-auto py-4">
       {tableState === TemplateTableState.Loading && (
         <div className="space-y-4">
           {[...Array(5)].map((_, i) => (
@@ -284,15 +290,7 @@ const TemplateTable = () => {
       )}
 
       {tableState === TemplateTableState.FTUX && (
-        <div className="flex h-96 flex-col items-center justify-center text-center">
-          <h2 className="mb-2 text-6xl font-semibold">Welcome to Templify</h2>
-          <p className="mb-4 text-base font-normal text-gray-600">
-            Your one-stop solution to your dynamic PDF generation needs.
-          </p>
-          <Button onClick={() => handleCreateTemplate('ftux')} className="rounded-full bg-primary text-lg">
-            Create your first template
-          </Button>
-        </div>
+        <FtuxWelcome onStart={() => handleCreateTemplate('ftux')} />
       )}
 
       {tableState !== TemplateTableState.Loading && tableState !== TemplateTableState.FTUX && (
