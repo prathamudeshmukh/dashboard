@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 
+import { PostHogIdentify } from '@/components/analytics/PostHogIdentify';
 import { DashboardSidebar } from '@/features/dashboard/DashboardSidebar';
 
 export async function generateMetadata(props: { params: { locale: string } }) {
@@ -17,6 +18,7 @@ export async function generateMetadata(props: { params: { locale: string } }) {
 export default function DashboardLayout(props: { children: React.ReactNode }) {
   return (
     <main className="min-h-screen bg-muted pt-4">
+      <PostHogIdentify />
       <DashboardSidebar />
       <div className="mx-auto max-w-screen-xl px-3 pb-16">
         {props.children}
