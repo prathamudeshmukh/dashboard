@@ -49,7 +49,7 @@ const TemplateTable = ({ onFtuxChange }: TemplateTableProps) => {
   const ftuxEventFiredRef = useRef(false);
 
   const t = useTranslations('TemplateTable');
-  const fetchTemplateData = async (email: string, currentPage: number, search: string) => {
+  const fetchTemplateData = async (email: string, userId: string, currentPage: number, search: string) => {
     if (!email) {
       return;
     }
@@ -73,7 +73,7 @@ const TemplateTable = ({ onFtuxChange }: TemplateTableProps) => {
 
       if (isFirstLoad) {
         trackEvent('dashboard_viewed', {
-          user_id: email,
+          user_id: userId,
           first_time: hasNoTemplates,
         });
       }
@@ -91,17 +91,18 @@ const TemplateTable = ({ onFtuxChange }: TemplateTableProps) => {
     if (!user) {
       return;
     }
-    const email = user?.emailAddresses[0]?.emailAddress as string;
-    fetchTemplateData(email, page, searchQuery);
+    const email = user.emailAddresses[0]?.emailAddress;
+    if (!email) {
+      return;
+    }
+    fetchTemplateData(email, user.id, page, searchQuery);
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- searchQuery is intentionally excluded; search is triggered by button click, not reactively
   }, [user, page]);
 
   useEffect(() => {
     if (tableState === TemplateTableState.FTUX && user && !ftuxEventFiredRef.current) {
       ftuxEventFiredRef.current = true;
-      const email = user.emailAddresses[0]?.emailAddress;
-      if (email) {
-        trackEvent('dashboard_ftux_shown', { user_id: email });
-      }
+      trackEvent('dashboard_ftux_shown', { user_id: user.id });
     }
     onFtuxChange?.(tableState === TemplateTableState.FTUX);
   }, [tableState, user, onFtuxChange]);
@@ -126,8 +127,10 @@ const TemplateTable = ({ onFtuxChange }: TemplateTableProps) => {
     const response = await deleteTemplate(templateId);
     if (response.success) {
       toast.success('Template Deleted Successfully');
-      const email = user?.emailAddresses[0]?.emailAddress as string;
-      fetchTemplateData(email, page, searchQuery);
+      const email = user?.emailAddresses[0]?.emailAddress;
+      if (user && email) {
+        fetchTemplateData(email, user.id, page, searchQuery);
+      }
     } else {
       toast.error(`Failed to delete template: ${response.error}`);
     }
@@ -335,8 +338,8 @@ const TemplateTable = ({ onFtuxChange }: TemplateTableProps) => {
               variant="secondary"
               onClick={() => {
                 const email = user?.emailAddresses[0]?.emailAddress;
-                if (email) {
-                  fetchTemplateData(email, page, searchQuery);
+                if (user && email) {
+                  fetchTemplateData(email, user.id, page, searchQuery);
                 }
               }}
             >
