@@ -314,7 +314,7 @@ const TemplateTable = ({ onFtuxChange }: TemplateTableProps) => {
       )}
 
       {tableState === TemplateTableState.FTUX && (
-        <FtuxWelcome onStart={() => handleCreateTemplate('ftux')} />
+        <FtuxWelcome userId={user?.id ?? ''} onStart={() => handleCreateTemplate('ftux')} />
       )}
 
       {tableState !== TemplateTableState.Loading && tableState !== TemplateTableState.FTUX && (

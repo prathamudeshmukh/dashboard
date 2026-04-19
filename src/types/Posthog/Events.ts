@@ -15,6 +15,7 @@ export type InAppCoreEvents =
   | 'dashboard_viewed'
   | 'dashboard_ftux_shown'
   | 'create_template_cta_clicked'
+  | 'ftux_examples_cta_clicked'
   | 'template_created'
   | 'template_edited'
   | 'template_imported_from_pdf'
@@ -88,6 +89,9 @@ export type EventPayloads = {
   create_template_cta_clicked: {
     cta_location: 'ftux' | 'table_header';
     user_has_templates: boolean;
+  };
+  ftux_examples_cta_clicked: {
+    user_id: string;
   };
   template_created: {
     template_id: string;
