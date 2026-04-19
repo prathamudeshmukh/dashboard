@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowRight, FileUp, Key, Pencil, Plus } from 'lucide-react';
+import { ArrowRight, FileUp, Key, Pencil, Plus, Zap } from 'lucide-react';
 import { EXAMPLES_URL } from 'templify.constants';
 
 import { Button } from '@/components/ui/button';
@@ -23,42 +23,51 @@ export function FtuxWelcome({ onStart, userId }: FtuxWelcomeProps) {
   };
 
   return (
-    <div className="flex min-h-[420px] flex-col items-center justify-center gap-8 py-8 text-center">
-      <div className="max-w-lg">
-        <h1 className="text-4xl font-bold">Turn a PDF into a live API endpoint.</h1>
-        <p className="mt-2 text-sm text-muted-foreground">takes ~2 min</p>
-        <p className="mt-4 text-muted-foreground">
-          A template is your document blueprint — define the layout once, then generate
-          PDFs on demand by calling your API with any data. Invoices, contracts, reports:
-          one API call, one PDF, every time.
+    <div className="relative flex min-h-[420px] flex-col items-center justify-center gap-7 overflow-hidden rounded-xl py-8 text-center" style={{ background: '#f8f5ff' }}>
+      {/* decorative blobs */}
+      <div className="pointer-events-none absolute right-0 top-0 size-56 -translate-y-1/3 translate-x-1/3 rounded-full opacity-30" style={{ background: 'radial-gradient(circle, #c7d2fe, transparent)' }} />
+      <div className="pointer-events-none absolute bottom-0 left-0 size-64 -translate-x-1/3 translate-y-1/3 rounded-full opacity-20" style={{ background: 'radial-gradient(circle, #ddd6fe, transparent)' }} />
+
+      <div className="relative z-10 max-w-sm">
+        <div className="mb-4 inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-white/60 px-3 py-1 text-xs font-semibold text-primary backdrop-blur-sm">
+          <Zap className="size-3" />
+          Takes ~2 min
+        </div>
+        <h1 className="text-2xl font-bold leading-snug">Create a template. Get an API that generates PDFs.</h1>
+        <p className="mt-3 text-sm text-muted-foreground">
+          Design your document layout once — invoices, contracts, reports — and Templify
+          gives you an API endpoint. Send it data, get back a perfect PDF every time.
         </p>
       </div>
 
-      <div className="flex flex-wrap items-center justify-center gap-3">
+      <div className="relative z-10 flex flex-wrap items-center justify-center gap-2">
         {STEPS.map((step, index) => {
           const Icon = step.icon;
           return (
-            <div key={step.label} className="flex items-center gap-3">
-              <span className="flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium">
-                <Icon className="size-4 text-primary" />
+            <div key={step.label} className="flex items-center gap-2">
+              <span className="flex items-center gap-2 rounded-full border border-primary/20 bg-white/70 px-3.5 py-2 text-xs font-semibold text-foreground shadow-sm backdrop-blur-sm">
+                <Icon className="size-3.5 text-primary" />
                 {step.label}
               </span>
               {index < STEPS.length - 1 && (
-                <ArrowRight className="size-4 shrink-0 text-muted-foreground" />
+                <ArrowRight className="size-3.5 shrink-0 text-primary/40" />
               )}
             </div>
           );
         })}
       </div>
 
-      <div className="flex gap-3">
-        <Button onClick={onStart} className="h-auto rounded-full bg-primary px-6 py-3 text-lg">
-          <Plus className="size-5" />
+      <div className="relative z-10 flex gap-3">
+        <Button
+          onClick={onStart}
+          className="h-auto rounded-full px-5 py-2.5 text-sm shadow-lg shadow-primary/20"
+        >
+          <Plus className="size-4" />
           Create your first template
         </Button>
         <Button
           variant="outline"
-          className="h-auto rounded-full px-6 py-3 text-lg"
+          className="h-auto rounded-full border-primary/20 bg-white/70 px-5 py-2.5 text-sm backdrop-blur-sm"
           onClick={handleExamplesClick}
           asChild
         >
