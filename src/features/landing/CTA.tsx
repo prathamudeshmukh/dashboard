@@ -1,6 +1,6 @@
 'use client';
 
-import { useUser } from '@clerk/nextjs';
+import { SignUpButton, useUser } from '@clerk/nextjs';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { SUPPORT_EMAIL } from 'templify.constants';
@@ -24,9 +24,9 @@ export const CTA = () => {
           </Link>
           {!isSignedIn
           && (
-            <Link href="/sign-in">
+            <SignUpButton mode="modal" forceRedirectUrl="/dashboard">
               <Button className="rounded-full bg-primary px-4 py-3 text-xl font-normal">Start free trial</Button>
-            </Link>
+            </SignUpButton>
           )}
         </div>
       </div>

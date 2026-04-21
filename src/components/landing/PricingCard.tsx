@@ -30,9 +30,10 @@ export type PricingPlan = {
 
 type PricingCardProps = {
   plan: PricingPlan;
+  onCtaClick?: () => void;
 };
 
-export const PricingCard: React.FC<PricingCardProps> = ({ plan }) => {
+export const PricingCard: React.FC<PricingCardProps> = ({ plan, onCtaClick }) => {
   const { name, price, icon, href, isPopular, features, cta, description } = plan;
 
   return (
@@ -71,13 +72,23 @@ export const PricingCard: React.FC<PricingCardProps> = ({ plan }) => {
       </CardContent>
 
       <CardFooter>
-
-        <Button variant={isPopular ? 'default' : 'outline'} className={`${isPopular ? 'w-full rounded-full text-sm' : 'w-full rounded-full text-sm text-black'}`}>
-          <Link href={href}>
-            {cta}
-          </Link>
-        </Button>
-
+        {onCtaClick
+          ? (
+              <Button
+                variant={isPopular ? 'default' : 'outline'}
+                className={`${isPopular ? 'w-full rounded-full text-sm' : 'w-full rounded-full text-sm text-black'}`}
+                onClick={onCtaClick}
+              >
+                {cta}
+              </Button>
+            )
+          : (
+              <Button variant={isPopular ? 'default' : 'outline'} className={`${isPopular ? 'w-full rounded-full text-sm' : 'w-full rounded-full text-sm text-black'}`}>
+                <Link href={href}>
+                  {cta}
+                </Link>
+              </Button>
+            )}
       </CardFooter>
     </Card>
   );

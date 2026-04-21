@@ -9,7 +9,8 @@ export type LandingPageEvents =
   | 'signup_started'
   | 'user_account_created'
   | 'live_example_section_viewed'
-  | 'live_example_cta_clicked';
+  | 'live_example_cta_clicked'
+  | 'pricing_cta_clicked';
 
 export type InAppCoreEvents =
   | 'dashboard_viewed'
@@ -71,6 +72,10 @@ export type EventPayloads = {
   live_example_cta_clicked: {
     cta_label: 'try_it_out' | 'view_source';
     destination_url: string;
+  };
+  pricing_cta_clicked: {
+    plan: string;
+    button_text: string;
   };
   user_account_created: {
     user_id: string;
@@ -140,5 +145,6 @@ export type EventPayloads = {
     error_code: string;
     duration: number;
     template_id: string;
+    error_message?: string;
   };
 };
