@@ -4,8 +4,8 @@
     "meta_description": "Generate dynamic PDFs instantly with Templify's API-first platform. No-code templates, Handlebars support, and enterprise-scale performance. Start with 150 free credits today!"
   },
   "Navbar": {
-    "sign_in": "Sign In",
-    "sign_up": "Sign Up",
+    "sign_in": "Log in",
+    "sign_up": "Start free trial",
     "sign_out": "Sign Out",
     "dashboard": "Dashboard",
     "product": "Product",

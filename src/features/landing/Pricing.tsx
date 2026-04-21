@@ -1,8 +1,11 @@
 'use client';
 
+import { useClerk } from '@clerk/nextjs';
 import { Briefcase, Building2, Gift, Rocket } from 'lucide-react';
+import { useState } from 'react';
 import { SUPPORT_EMAIL } from 'templify.constants';
 
+import { PlanContactDialog } from '@/components/landing/PlanContactDialog';
 import { PricingCard, type PricingPlan } from '@/components/landing/PricingCard';
 import { trackEvent } from '@/libs/analytics/trackEvent';
 
@@ -50,7 +53,6 @@ const pricingPlans = [
       { text: '$3 per additional 250 credits.' },
       { text: 'Priority support.' },
       { text: 'All starter plan features.' },
-
     ],
   },
   {
@@ -59,7 +61,7 @@ const pricingPlans = [
     description: 'Tailored solutions for large-scale deployments.',
     price: 'Custom',
     icon: <Building2 className="size-8 text-primary" />,
-    cta: 'Conact Sales',
+    cta: 'Contact Sales',
     href: `mailto:${SUPPORT_EMAIL}`,
     features: [
       { text: 'Custom credit allocation.' },
@@ -71,6 +73,19 @@ const pricingPlans = [
 ];
 
 export default function Pricing() {
+  const { openSignUp } = useClerk();
+  const [selectedPlan, setSelectedPlan] = useState<PricingPlan | null>(null);
+
+  const handleFreeCtaClick = () => {
+    trackEvent('pricing_cta_clicked', { plan: 'free', button_text: 'Get started for free' });
+    openSignUp({ forceRedirectUrl: '/dashboard' });
+  };
+
+  const handlePaidCtaClick = (plan: PricingPlan) => {
+    trackEvent('pricing_cta_clicked', { plan: plan.id, button_text: plan.cta });
+    setSelectedPlan(plan);
+  };
+
   return (
     <section
       id="pricing"
@@ -91,10 +106,24 @@ export default function Pricing() {
 
         <div className="mx-auto grid max-w-7xl gap-8 md:grid-cols-2 lg:grid-cols-4">
           {pricingPlans.map(plan => (
-            <PricingCard key={plan.id} plan={plan as PricingPlan} />
+            <PricingCard
+              key={plan.id}
+              plan={plan as PricingPlan}
+              onCtaClick={
+                plan.id === 'free'
+                  ? handleFreeCtaClick
+                  : () => handlePaidCtaClick(plan as PricingPlan)
+              }
+            />
           ))}
         </div>
       </div>
+
+      <PlanContactDialog
+        plan={selectedPlan}
+        open={selectedPlan !== null}
+        onClose={() => setSelectedPlan(null)}
+      />
     </section>
   );
 }
