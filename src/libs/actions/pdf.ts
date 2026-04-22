@@ -47,12 +47,15 @@ export async function getStatus(runId: string) {
     throw new Error(`Error fetching status: ${response.statusText}`);
   }
 
-  const json = await response?.json();
-  logger.info({ json }, '[getStatus] raw json');
+  const json = await response.json();
+  // eslint-disable-next-line no-console
+  console.log('[getStatus] raw json:', JSON.stringify(json));
 
-  if (!json?.data[0]?.status) {
+  const run = json?.data?.[0];
+
+  if (!run?.status) {
     return { status: 'pending', output: null };
   }
 
-  return { status: json?.data[0]?.status, output: json?.data[0]?.output };
+  return { status: run.status as string, output: run.output ?? null };
 }

@@ -34,12 +34,22 @@ const PDFExtractor = () => {
   const { setHtmlContent, setHandlebarsCode } = useTemplateStore();
 
   async function pollJobStatus(runID: string, file: File, pdfId: string, extractionStart: number) {
+    if (!runID) {
+      setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED);
+      return;
+    }
+
     try {
       let response = await getStatus(runID);
 
-      while (response.status !== 'Completed' && response.status !== 'Failed' && response.status !== 'Cancelled') {
+      while (response?.status !== 'Completed' && response?.status !== 'Failed' && response?.status !== 'Cancelled') {
         await new Promise(resolve => setTimeout(resolve, 1000));
         response = await getStatus(runID);
+      }
+
+      if (!response) {
+        setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED);
+        return;
       }
 
       if (response.status === 'Completed') {
