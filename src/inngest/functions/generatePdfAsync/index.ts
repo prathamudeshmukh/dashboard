@@ -1,3 +1,5 @@
+import { Buffer } from 'node:buffer';
+
 import { put } from '@vercel/blob';
 
 import { inngest } from '@/inngest/client';
@@ -90,7 +92,7 @@ export const generatePdfAsync = inngest.createFunction(
     const datePath = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
     const storagePath = `generated-pdf/${clientId}/${datePath}/${runId}.pdf`;
 
-    const blob = await put(storagePath, pdfBuffer, {
+    const blob = await put(storagePath, Buffer.from(pdfBuffer), {
       access: 'public',
       contentType: 'application/pdf',
       addRandomSuffix: false,

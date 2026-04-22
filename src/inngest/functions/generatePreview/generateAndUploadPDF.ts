@@ -1,3 +1,5 @@
+import { Buffer } from 'node:buffer';
+
 import { put } from '@vercel/blob';
 
 import { fetchTemplateById } from '@/libs/actions/templates';
@@ -26,7 +28,7 @@ export async function GenerateAnduploadPDF(templateId: string, logger: any) {
 
     const filename = `${templateId}.pdf`;
 
-    const blob = await put(filename, result.pdf, {
+    const blob = await put(filename, Buffer.from(result.pdf), {
       access: 'public',
       contentType: 'application/pdf',
       addRandomSuffix: false,
