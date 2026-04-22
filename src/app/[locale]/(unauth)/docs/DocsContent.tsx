@@ -21,6 +21,15 @@ export default function DocsContent() {
         </p>
       </div>
 
+      {/* BASE URL */}
+      <div id="base-url">
+        <h2>🌐 Base URL</h2>
+        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-4 dark:bg-gray-800">
+          <code>{CODE.baseUrl}</code>
+        </pre>
+        <p>All API endpoints are relative to this base URL.</p>
+      </div>
+
       {/* AUTHENTICATION */}
       <div id="authentication">
         <h2>🔐 Authentication</h2>
@@ -67,10 +76,30 @@ export default function DocsContent() {
           <code>{CODE.headers}</code>
         </pre>
 
-        <p><strong>Request Body:</strong></p>
+        <p>
+          <strong>Request Body</strong>
+          {' '}
+          <em>(optional)</em>
+          <strong>:</strong>
+        </p>
+        <p>
+          <code>templateData</code>
+          {' '}
+          is optional. If omitted, the template renders with no variable substitution.
+        </p>
         <CodeSnippet value={CODE.requestBody} lineNumbers={false} />
 
         <p><strong>Response:</strong></p>
+        <p>
+          The response is a
+          {' '}
+          <strong>raw binary PDF file</strong>
+          , not JSON. Save the response body directly as a
+          {' '}
+          <code>.pdf</code>
+          {' '}
+          file.
+        </p>
         <CodeSnippet value={CODE.response} lineNumbers={false} />
       </div>
 
@@ -337,6 +366,21 @@ export default function DocsContent() {
             to your preview or generation API calls.
           </li>
           <li>This will render the latest saved (unpublished) version of the template.</li>
+          <li>
+            <strong>Default:</strong>
+            {' '}
+            <code>devMode</code>
+            {' '}
+            is
+            {' '}
+            <code>false</code>
+            {' '}
+            when omitted — all API calls use the latest
+            {' '}
+            <strong>published (production)</strong>
+            {' '}
+            version.
+          </li>
         </ul>
 
         <h3>
@@ -403,6 +447,11 @@ export default function DocsContent() {
               <td>404</td>
               <td>Not Found</td>
               <td>Template not found</td>
+            </tr>
+            <tr>
+              <td>429</td>
+              <td>Too Many Requests</td>
+              <td>Rate limit exceeded (4 requests / 60s per user)</td>
             </tr>
             <tr>
               <td>500</td>

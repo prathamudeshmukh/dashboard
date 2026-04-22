@@ -1,10 +1,9 @@
 'use client';
 
-import { SignOutButton, SignUpButton, useUser } from '@clerk/nextjs';
+import { SignInButton, SignOutButton, SignUpButton, useUser } from '@clerk/nextjs';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { useEffect } from 'react';
 
 import { CenteredMenu } from '@/components/landing/CenteredMenu';
 import { Button } from '@/components/ui/button';
@@ -14,23 +13,15 @@ import type { NavbarProps } from '@/types/Navbar';
 import { Logo } from '../../components/landing/Logo';
 
 export const Navbar = ({ menuList, basePath = ' ' }: NavbarProps) => {
-  const { isSignedIn, isLoaded } = useUser();
+  const { isSignedIn } = useUser();
   const t = useTranslations('Navbar');
   const pathname = usePathname();
   const isLandingPage = pathname === '/';
 
-  useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.log('isLoaded', isLoaded);
-    // eslint-disable-next-line no-console
-    console.log('isSignedIn', isSignedIn);
-  }, [isLoaded, isSignedIn]);
-
-  // ✅ Add handler for the hero CTA
   const handleHeroCTAClick = () => {
     trackEvent('hero_cta_clicked', {
-      button_text: 'Start free trial',
-      page_section: 'navbar', // helps you know where it was clicked
+      button_text: 'Log in',
+      page_section: 'navbar',
     });
   };
 
@@ -59,11 +50,14 @@ export const Navbar = ({ menuList, basePath = ' ' }: NavbarProps) => {
                           {t('sign_up')}
                         </Button>
                       </SignUpButton>
-                      <Link href="/sign-in" onClick={handleHeroCTAClick}>
-                        <Button className="rounded-full bg-primary text-lg hover:bg-primary">
-                          Start free trial
+                      <SignInButton mode="modal" forceRedirectUrl="/dashboard">
+                        <Button
+                          className="rounded-full bg-primary text-lg hover:bg-primary"
+                          onClick={handleHeroCTAClick}
+                        >
+                          {t('sign_in')}
                         </Button>
-                      </Link>
+                      </SignInButton>
                     </div>
                   )}
             </li>
@@ -74,7 +68,6 @@ export const Navbar = ({ menuList, basePath = ' ' }: NavbarProps) => {
               const linkHref = isLandingPage ? item.link : `${basePath}${item.link.replace('#', '/')}`;
 
               const handleClick = () => {
-                // Track docs or blog link clicks
                 const lower = item.name.toLowerCase();
                 if (lower.includes('docs') || lower.includes('blog')) {
                   trackEvent('docs_or_blog_clicked', {

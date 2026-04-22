@@ -4,8 +4,8 @@
     "meta_description": "Generate dynamic PDFs instantly with Templify's API-first platform. No-code templates, Handlebars support, and enterprise-scale performance. Start with 150 free credits today!"
   },
   "Navbar": {
-    "sign_in": "Sign In",
-    "sign_up": "Sign Up",
+    "sign_in": "Log in",
+    "sign_up": "Start free trial",
     "sign_out": "Sign Out",
     "dashboard": "Dashboard",
     "product": "Product",
@@ -21,7 +21,8 @@
     "subtitle": "Templify makes PDF templates easy—create, manage, and generate PDFs without complex code or libraries. Now with AI-powered extraction to convert any PDF into an editable template instantly",
     "description1": "Scalable, API-first infrastructure that handles PDF generation for you",
     "description2": "No huge dev effort needed for every new template",
-    "description3": "No more maintaining bulky PDF libraries"
+    "description3": "No more maintaining bulky PDF libraries",
+    "see_example": "See a live example"
   },
   "Sponsors": {
     "title": "Sponsored by"
@@ -232,6 +233,14 @@
     "plan_interval_year": "year",
     "next_renew_date": "Your subscription renews on {date}"
   },
+  "Showcase": {
+    "title": "See Templify in Action",
+    "subtitle": "A real app built with Templify. Try it — no signup required.",
+    "app_name": "FreelanceKit",
+    "app_description": "A freelance business tool that generates proposals, contracts, invoices, and receipts — 4 document types, 4 Templify templates, zero PDF infrastructure.",
+    "cta_try": "Try FreelanceKit",
+    "cta_source": "View source"
+  },
   "FAQ": {
     "title": "Got Questions? <important>We’ve Got Answers</important>",
     "subtitle": "Support",
@@ -410,6 +419,10 @@
     "error_handling": "Error Handling",
     "security": "Security & Best Practices",
     "contact": "Contact & Support"
+  },
+  "DocsApiReference": {
+    "meta_title": "Templify API Reference - Interactive OpenAPI Explorer",
+    "meta_description": "Explore the Templify API interactively. View request/response schemas, try live requests, and download the OpenAPI spec."
   },
   "Docs": {
     "meta_title": "Templify API Documentation - Complete Developer Guide",

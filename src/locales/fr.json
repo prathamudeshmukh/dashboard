@@ -5,7 +5,7 @@
   },
   "Navbar": {
     "sign_in": "Se connecter",
-    "sign_up": "S'inscrire",
+    "sign_up": "Démarrer l'essai gratuit",
     "sign_out": "Sign Out",
     "dashboard": "Dashboard",
     "product": "Produit",
@@ -412,6 +412,10 @@
     "error_handling": "Gestion des erreurs",
     "security": "Sécurité et bonnes pratiques",
     "contact": "Contact et assistance"
+  },
+  "DocsApiReference": {
+    "meta_title": "Référence API Templify - Explorateur OpenAPI Interactif",
+    "meta_description": "Explorez l'API Templify de façon interactive. Consultez les schémas de requête/réponse, testez des requêtes en direct et téléchargez la spec OpenAPI."
   },
   "Docs": {
     "meta_title": "Documentation API Templify - Guide Développeur Complet",

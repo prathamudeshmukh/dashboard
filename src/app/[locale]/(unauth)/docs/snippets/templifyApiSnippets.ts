@@ -1,4 +1,6 @@
 export const TEMPLIFY_API_SNIPPETS = {
+  baseUrl: `https://api.templify.cloud`,
+
   endpoint: `POST /convert/TEMPLATE_ID_HERE`,
 
   headers: `client_id: CLIENT_ID_HERE
@@ -15,15 +17,16 @@ client_secret: CLIENT_SECRET_HERE`,
   }
 }`,
 
-  response: `{
-  data: PDF_DOC_IN_BYTE_ARRAY
-}`,
+  response: `HTTP/1.1 200 OK
+Content-Type: application/pdf
+Content-Disposition: attachment; filename="document.pdf"
+
+<binary PDF bytes>`,
 
   cUrlExample: `curl --location 'https://api.templify.cloud/convert/YOUR_TEMPLATE_ID_HERE' \\
 --header 'client_id: USER_ID_HERE' \\
 --header 'client_secret: CLIENT_SECRET_HERE' \\
 --header 'Content-Type: application/json' \\
---header 'Cookie: NEXT_LOCALE=en' \\
 --data '{
   "templateData": {
     "name": "John Doe",
@@ -33,7 +36,8 @@ client_secret: CLIENT_SECRET_HERE`,
       { "description": "Item 2", "price": 30 }
     ]
   }
-}'`,
+}' \\
+--output document.pdf`,
 
   cUrlAsync: `curl --location 'https://api.templify.cloud/convert/TEMPLATE_ID?runMode=async' \\
 --header 'Prefer: respond-async' \\
@@ -42,7 +46,10 @@ client_secret: CLIENT_SECRET_HERE`,
 --header 'Content-Type: application/json' \\
 --data '{ "templateData": { "name": "John" } }'`,
 
-  asyncResponse: `{
+  asyncResponse: `HTTP/1.1 202 Accepted
+Content-Type: application/json
+
+{
   "template_id": "tmpl_123",
   "status": "STARTED",
   "job_id": "01HF4S8JAC9P7Z92K2N7Q3Y3G7"
@@ -134,7 +141,8 @@ https://d7a3-10-1-2-55.ngrok-free.app`,
       { "description": "Item 2", "price": 30 }
     ]
   }
-}'`,
+}' \\
+--output document.pdf`,
 
   errorResponse: `{
   "error": "Template ID not found"

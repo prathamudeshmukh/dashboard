@@ -3,10 +3,9 @@
 import { useUser } from '@clerk/nextjs';
 import type { ColumnDef } from '@tanstack/react-table';
 import { Copy, FileSearch, MoreHorizontal, Plus, Search, SquarePen, Trash2 } from 'lucide-react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 import {
@@ -27,37 +26,56 @@ import { deleteTemplate, fetchTemplates } from '@/libs/actions/templates';
 import { trackEvent } from '@/libs/analytics/trackEvent';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 import { TemplateTableState } from '@/types/Enum';
-import { type Template, TemplateType } from '@/types/Template';
+import { TemplateType } from '@/types/Template';
+import type { FetchTemplateResponse } from '@/types/Template/TemplateResponse';
 
 import AsyncActionButton from '../../components/AsyncActionButton';
+import { FtuxWelcome } from './FtuxWelcome';
 
-const TemplateTable = () => {
-  const [templateData, setTemplateData] = useState<any>([]);
+type TemplateTableProps = {
+  onFtuxChange?: (isFtux: boolean) => void;
+};
+
+const TemplateTable = ({ onFtuxChange }: TemplateTableProps) => {
+  const [templateData, setTemplateData] = useState<FetchTemplateResponse[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const { user } = useUser();
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [templateToDelete, setTemplateToDelete] = useState<Template | null>(null);
+  const [templateToDelete, setTemplateToDelete] = useState<FetchTemplateResponse | null>(null);
   const [tableState, setTableState] = useState<TemplateTableState>(TemplateTableState.Loading);
   const { selectTemplate } = useTemplateStore();
+  const ftuxEventFiredRef = useRef(false);
 
   const t = useTranslations('TemplateTable');
-  const fetchTemplateData = async (email: string, page: number, search: string) => {
+  const fetchTemplateData = async (email: string, userId: string, currentPage: number, search: string) => {
     if (!email) {
       return;
     }
-    const start = performance.now();
     setTableState(TemplateTableState.Loading);
     try {
-      const response = await fetchTemplates({ email, page, pageSize: 10, searchQuery: search });
-      const end = performance.now();
-      // eslint-disable-next-line no-console
-      console.log(`Fetching templates took ${end - start} ms`);
-      if (response.data.length === 0) {
-        setTableState(search ? TemplateTableState.SearchNoResults : TemplateTableState.FTUX);
+      const response = await fetchTemplates({ email, page: currentPage, pageSize: 10, searchQuery: search });
+      const isFirstLoad = currentPage === 1 && !search;
+      const hasNoTemplates = response.data.length === 0;
+
+      if (hasNoTemplates) {
+        if (search) {
+          setTableState(TemplateTableState.SearchNoResults);
+        } else if (currentPage === 1) {
+          setTableState(TemplateTableState.FTUX);
+        } else {
+          setTableState(TemplateTableState.Empty);
+        }
       } else {
         setTableState(TemplateTableState.Success);
+      }
+
+      if (isFirstLoad) {
+        trackEvent('dashboard_viewed', {
+          user_id: userId,
+          first_time: hasNoTemplates,
+        });
       }
 
       setTotalPages(response.totalPages);
@@ -65,6 +83,7 @@ const TemplateTable = () => {
     } catch (err) {
       setTableState(TemplateTableState.Error);
       console.error(err);
+      toast.error('Failed to load templates. Please try again.');
     }
   };
 
@@ -72,15 +91,21 @@ const TemplateTable = () => {
     if (!user) {
       return;
     }
-
-    trackEvent('dashboard_viewed', {
-      user_id: user.id,
-      first_time: page === 1 && templateData.length === 0,
-    });
-
-    const email = user?.emailAddresses[0]?.emailAddress as string;
-    fetchTemplateData(email, page, searchQuery);
+    const email = user.emailAddresses[0]?.emailAddress;
+    if (!email) {
+      return;
+    }
+    fetchTemplateData(email, user.id, page, searchQuery);
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- searchQuery is intentionally excluded; search is triggered by button click, not reactively
   }, [user, page]);
+
+  useEffect(() => {
+    if (tableState === TemplateTableState.FTUX && user && !ftuxEventFiredRef.current) {
+      ftuxEventFiredRef.current = true;
+      trackEvent('dashboard_ftux_shown', { user_id: user.id });
+    }
+    onFtuxChange?.(tableState === TemplateTableState.FTUX);
+  }, [tableState, user, onFtuxChange]);
 
   const handleEdit = (templateId: string, templateType: string) => {
     // Track engagement - (who edits which template and in which editor mode)
@@ -102,8 +127,10 @@ const TemplateTable = () => {
     const response = await deleteTemplate(templateId);
     if (response.success) {
       toast.success('Template Deleted Successfully');
-      const email = user?.emailAddresses[0]?.emailAddress as string;
-      fetchTemplateData(email, page, searchQuery);
+      const email = user?.emailAddresses[0]?.emailAddress;
+      if (user && email) {
+        fetchTemplateData(email, user.id, page, searchQuery);
+      }
     } else {
       toast.error(`Failed to delete template: ${response.error}`);
     }
@@ -113,7 +140,7 @@ const TemplateTable = () => {
     router.push(`/dashboard/template/preview`);
   };
 
-  const columns: ColumnDef<Template>[] = [
+  const columns: ColumnDef<FetchTemplateResponse>[] = [
     {
       accessorKey: 'templateName',
       header: () => t('template_name'),
@@ -188,8 +215,11 @@ const TemplateTable = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem
-                  onClick={() =>
-                    handlePreview(template.templateId as string)}
+                  onClick={() => {
+                    if (template.templateId) {
+                      handlePreview(template.templateId);
+                    }
+                  }}
                 >
                   <Button size="sm" variant="ghost">
                     <FileSearch />
@@ -197,8 +227,12 @@ const TemplateTable = () => {
                   </Button>
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  onClick={() =>
-                    handleEdit(template.templateId!, template.templateType!)}
+                  onClick={() => {
+                    const { templateId, templateType } = template;
+                    if (templateId && templateType) {
+                      handleEdit(templateId, templateType);
+                    }
+                  }}
                 >
                   <Button size="sm" variant="ghost">
                     <SquarePen />
@@ -237,7 +271,9 @@ const TemplateTable = () => {
                     </AlertDialogCancel>
                     <AsyncActionButton
                       onClick={async () => {
-                        await handleDelete(templateToDelete.templateId as string);
+                        if (templateToDelete.templateId) {
+                          await handleDelete(templateToDelete.templateId);
+                        }
                         setTemplateToDelete(null);
                       }}
                     >
@@ -254,12 +290,16 @@ const TemplateTable = () => {
 
   ];
 
-  const handleCreateTemplate = () => {
+  const handleCreateTemplate = (location: 'ftux' | 'table_header') => {
+    trackEvent('create_template_cta_clicked', {
+      cta_location: location,
+      user_has_templates: tableState !== TemplateTableState.FTUX,
+    });
     router.push('/dashboard/create-template');
   };
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="container mx-auto py-4">
       {tableState === TemplateTableState.Loading && (
         <div className="space-y-4">
           {[...Array(5)].map((_, i) => (
@@ -274,26 +314,16 @@ const TemplateTable = () => {
       )}
 
       {tableState === TemplateTableState.FTUX && (
-        <div className="flex h-96 flex-col items-center justify-center text-center">
-          <h2 className="mb-2 text-6xl font-semibold">Welcome to Templify</h2>
-          <p className="mb-4 text-base font-normal text-gray-600">
-            Your one-stop solution to your dynamic PDF generation needs.
-          </p>
-          <Button onClick={handleCreateTemplate} className="rounded-full bg-primary text-lg">
-            Create your first template
-          </Button>
-        </div>
+        <FtuxWelcome userId={user?.id ?? ''} onStart={() => handleCreateTemplate('ftux')} />
       )}
 
       {tableState !== TemplateTableState.Loading && tableState !== TemplateTableState.FTUX && (
         <>
           <div className="mt-5 flex items-end justify-end">
-            <Link href="/dashboard/create-template">
-              <Button className="rounded-full bg-primary text-lg">
-                <Plus />
-                Create Template
-              </Button>
-            </Link>
+            <Button className="rounded-full bg-primary text-lg" onClick={() => handleCreateTemplate('table_header')}>
+              <Plus />
+              Create Template
+            </Button>
           </div>
           <div className="mb-4 flex items-center gap-4">
             <Input
@@ -308,8 +338,8 @@ const TemplateTable = () => {
               variant="secondary"
               onClick={() => {
                 const email = user?.emailAddresses[0]?.emailAddress;
-                if (email) {
-                  fetchTemplateData(email, page, searchQuery);
+                if (user && email) {
+                  fetchTemplateData(email, user.id, page, searchQuery);
                 }
               }}
             >
@@ -322,6 +352,18 @@ const TemplateTable = () => {
       {tableState === TemplateTableState.SearchNoResults && (
         <p className="mt-10 text-center text-muted-foreground">
           No results found for this search.
+        </p>
+      )}
+
+      {tableState === TemplateTableState.Empty && (
+        <p className="mt-10 text-center text-muted-foreground">
+          No templates found on this page.
+        </p>
+      )}
+
+      {tableState === TemplateTableState.Error && (
+        <p className="mt-10 text-center text-destructive">
+          Failed to load templates. Please refresh the page.
         </p>
       )}
 

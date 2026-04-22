@@ -1,6 +1,7 @@
 import { inngest } from '../../client';
 import { convertToHTML } from './convertToHtml';
 import { fetchBlobMetadata } from './fetchBlobMetadata';
+import { storeExtractedHtml } from './storeExtractedHtml';
 
 export const extractPdfContent = inngest.createFunction(
   { id: 'extract-html' },
@@ -16,7 +17,15 @@ export const extractPdfContent = inngest.createFunction(
       const htmlContent = await step.run('convert-to-html', () =>
         convertToHTML(downloadUrl, logger, true));
 
-      logger.info('PDF Extraction Completed Succesfully');
+      const htmlContentUrl = await step.run('store-extracted-html', () =>
+        storeExtractedHtml(pdfId, htmlContent));
+
+      logger.info('PDF extraction completed', {
+        pdfId,
+        html_length: htmlContent.length,
+        html_preview: htmlContent.slice(0, 500),
+        html_url: htmlContentUrl,
+      });
 
       return { htmlContent };
     } catch (error: any) {

@@ -27,6 +27,9 @@ storybook-static
 /.next
 /out
 
+# generated build artifacts (re-created by prebuild/predev scripts)
+/public/openapi.json
+
 # cache
 .swc/
 

@@ -7,7 +7,10 @@ export type LandingPageEvents =
   | 'faq_interacted'
   | 'docs_or_blog_clicked'
   | 'signup_started'
-  | 'user_account_created';
+  | 'user_account_created'
+  | 'live_example_section_viewed'
+  | 'live_example_cta_clicked'
+  | 'pricing_cta_clicked';
 
 export type DocsPageEvents =
   | 'docs_page_viewed'
@@ -18,11 +21,17 @@ export type DocsPageEvents =
 
 export type InAppCoreEvents =
   | 'dashboard_viewed'
+  | 'dashboard_ftux_shown'
+  | 'create_template_cta_clicked'
+  | 'ftux_examples_cta_clicked'
   | 'template_created'
   | 'template_edited'
   | 'template_imported_from_pdf'
+  | 'template_import_failed'
   | 'visual_editor_opened'
   | 'code_editor_opened'
+  | 'wizard_step_viewed'
+  | 'wizard_abandoned'
   | 'api_call_generated_pdf'
   | 'api_call_failed';
 
@@ -64,6 +73,17 @@ export type EventPayloads = {
     utm_source?: string;
     device_type?: string;
   };
+  live_example_section_viewed: {
+    device_type?: string;
+  };
+  live_example_cta_clicked: {
+    cta_label: 'try_it_out' | 'view_source';
+    destination_url: string;
+  };
+  pricing_cta_clicked: {
+    plan: string;
+    button_text: string;
+  };
   user_account_created: {
     user_id: string;
     email?: string;
@@ -104,6 +124,16 @@ export type EventPayloads = {
     user_id: string;
     first_time: boolean;
   };
+  dashboard_ftux_shown: {
+    user_id: string;
+  };
+  create_template_cta_clicked: {
+    cta_location: 'ftux' | 'table_header';
+    user_has_templates: boolean;
+  };
+  ftux_examples_cta_clicked: {
+    user_id: string;
+  };
   template_created: {
     template_id: string;
     method: 'pdf' | 'gallery';
@@ -113,9 +143,18 @@ export type EventPayloads = {
     templateType: string;
   };
   template_imported_from_pdf: {
+    pdf_id: string;
+    file_name: string;
     file_size: number; // in bytes
     extraction_time: number; // in milliseconds
-    success: boolean;
+    html_length: number; // chars in extracted HTML
+  };
+  template_import_failed: {
+    pdf_id: string;
+    file_name: string;
+    file_size: number; // in bytes
+    failure_stage: 'upload' | 'extraction';
+    error_message?: string;
   };
   visual_editor_opened: {
     from_mode: 'code';
@@ -124,6 +163,14 @@ export type EventPayloads = {
   code_editor_opened: {
     from_mode: 'visual';
     user_id?: string;
+  };
+  wizard_step_viewed: {
+    step: number;
+    step_name: string;
+  };
+  wizard_abandoned: {
+    last_step: number;
+    last_step_name: string;
   };
   api_call_generated_pdf: {
     job_id: string;
@@ -134,5 +181,6 @@ export type EventPayloads = {
     error_code: string;
     duration: number;
     template_id: string;
+    error_message?: string;
   };
 };
