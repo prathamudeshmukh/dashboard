@@ -3,8 +3,6 @@
 import { put } from '@vercel/blob';
 import { v4 as uuidv4 } from 'uuid';
 
-import { logger } from '@/libs/Logger';
-
 const inngestBaseUrl = process.env.INNGEST_GET_RUNS_BASE_URL;
 
 export async function uploadPdf(formData: FormData) {
@@ -33,7 +31,8 @@ export async function uploadPdf(formData: FormData) {
 
 export async function getStatus(runId: string) {
   const url = `${inngestBaseUrl}v1/events/${runId}/runs`;
-  logger.info({ url }, '[getStatus] fetching');
+  // eslint-disable-next-line no-console
+  console.log('[getStatus] fetching:', url);
 
   const response = await fetch(url, {
     headers: {
@@ -41,14 +40,16 @@ export async function getStatus(runId: string) {
     },
   });
 
-  logger.info({ status: response.status, statusText: response.statusText }, '[getStatus] response');
+  // eslint-disable-next-line no-console
+  console.log('[getStatus] response status:', response.status, response.statusText);
 
   if (!response.ok) {
     throw new Error(`Error fetching status: ${response.statusText}`);
   }
 
   const json = await response?.json();
-  logger.info({ json }, '[getStatus] raw json');
+  // eslint-disable-next-line no-console
+  console.log('[getStatus] raw json:', JSON.stringify(json));
 
   if (!json?.data[0]?.status) {
     return { status: 'pending', output: null };
