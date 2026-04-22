@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 
 import { inngest } from '@/inngest/client';
 import { uploadPdf } from '@/libs/actions/pdf';
+import { logger } from '@/libs/Logger';
 
 export async function POST(req: NextRequest) {
   try {
@@ -16,6 +17,7 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    logger.info({ ids }, '[upload] inngest.send ids');
     const runID = ids[0];
     return NextResponse.json({ result, runID });
   } catch (err: any) {
