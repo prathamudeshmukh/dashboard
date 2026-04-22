@@ -39,6 +39,7 @@ export async function getStatus(runId: string) {
     headers: {
       Authorization: `Bearer ${process.env.INNGEST_SIGNING_KEY}`,
     },
+    cache: 'no-store',
   });
 
   logger.info({ status: response.status, statusText: response.statusText }, '[getStatus] response');
