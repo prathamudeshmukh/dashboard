@@ -17,7 +17,7 @@ export async function convertToHTML(downloadUrl: string, logger: Logger) {
       },
     );
     logger.info('Conversion completed');
-    return response.data.html;
+    return response.data.html as string;
   } catch (error) {
     logger.error('Conversion error', error);
     console.error('Error Fetching Extracted PDF content:', error);
