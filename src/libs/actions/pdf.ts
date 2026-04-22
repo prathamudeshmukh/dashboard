@@ -30,19 +30,33 @@ export async function uploadPdf(formData: FormData) {
 }
 
 export async function checkExtractionResult(pdfId: string): Promise<
-  { status: 'completed'; htmlContent: string } | { status: 'pending' }
+  | { status: 'completed'; htmlContent: string; sampleJson: Record<string, string> | null }
+  | { status: 'pending' }
 > {
   try {
-    const blobPath = `uploads/${pdfId}/output/extracted.html`;
-    const blob = await head(blobPath);
-    const response = await fetch(blob.url, { cache: 'no-store' });
-    if (!response.ok) {
+    const htmlBlob = await head(`uploads/${pdfId}/output/extracted.html`);
+    const htmlResponse = await fetch(htmlBlob.url, { cache: 'no-store' });
+    if (!htmlResponse.ok) {
       return { status: 'pending' };
     }
-    const htmlContent = await response.text();
-    return { status: 'completed', htmlContent };
+    const htmlContent = await htmlResponse.text();
+    const sampleJson = await fetchSampleJson(pdfId);
+    return { status: 'completed', htmlContent, sampleJson };
   } catch {
     return { status: 'pending' };
+  }
+}
+
+async function fetchSampleJson(pdfId: string): Promise<Record<string, string> | null> {
+  try {
+    const jsonBlob = await head(`uploads/${pdfId}/output/sample.json`);
+    const response = await fetch(jsonBlob.url, { cache: 'no-store' });
+    if (!response.ok) {
+      return null;
+    }
+    return await response.json() as Record<string, string>;
+  } catch {
+    return null;
   }
 }
 

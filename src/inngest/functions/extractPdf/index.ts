@@ -14,20 +14,20 @@ export const extractPdfContent = inngest.createFunction(
       const { downloadUrl } = await step.run('fetch-blob-metadata', () =>
         fetchBlobMetadata(pdfId));
 
-      const htmlContent = await step.run('convert-to-html', () =>
-        convertToHTML(downloadUrl, logger, true));
+      const { html, sampleJson } = await step.run('convert-to-html', () =>
+        convertToHTML(downloadUrl, logger));
 
       const htmlContentUrl = await step.run('store-extracted-html', () =>
-        storeExtractedHtml(pdfId, htmlContent));
+        storeExtractedHtml(pdfId, html, sampleJson));
 
       logger.info('PDF extraction completed', {
         pdfId,
-        html_length: htmlContent.length,
-        html_preview: htmlContent.slice(0, 500),
+        html_length: html.length,
+        html_preview: html.slice(0, 500),
         html_url: htmlContentUrl,
       });
 
-      return { htmlContent };
+      return { htmlContent: html };
     } catch (error: any) {
       throw new Error(`Error during PDF processing: ${error.message}`);
     }
