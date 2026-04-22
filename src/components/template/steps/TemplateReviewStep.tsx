@@ -4,13 +4,35 @@ import { useEffect, useState } from 'react';
 
 import { CodeSnippet } from '@/components/CodeSnippet';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { TextArea } from '@/components/ui/text-area';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 import contentGenerator from '@/service/contentGenerator';
 import { EditorTypeEnum } from '@/types/Enum';
 
+type FieldErrors = {
+  name: boolean;
+  description: boolean;
+};
+
 export default function TemplateReviewStep() {
   const [compiledHtml, setCompiledHtml] = useState<string>('');
-  const { creationMethod, templateName, templateDescription, htmlContent, htmlStyle, htmlTemplateJson, handlebarsCode, handlebarTemplateJson, activeTab } = useTemplateStore();
+  const [errors, setErrors] = useState<FieldErrors>({ name: false, description: false });
+
+  const {
+    creationMethod,
+    templateName,
+    templateDescription,
+    htmlContent,
+    htmlStyle,
+    htmlTemplateJson,
+    handlebarsCode,
+    handlebarTemplateJson,
+    activeTab,
+    setTemplateName,
+    setTemplateDescription,
+  } = useTemplateStore();
 
   useEffect(() => {
     const generate = async () => {
@@ -32,13 +54,26 @@ export default function TemplateReviewStep() {
           setCompiledHtml(result);
         }
       } catch (err) {
-        console.error('Error generating content:', err);
         setCompiledHtml(`<pre style="color: red;">Error: ${(err as Error).message}</pre>`);
       }
     };
 
     generate();
   }, [handlebarsCode, handlebarTemplateJson, htmlContent, htmlStyle, htmlTemplateJson]);
+
+  const handleNameChange = (value: string) => {
+    setTemplateName(value);
+    if (value.trim()) {
+      setErrors(prev => ({ ...prev, name: false }));
+    }
+  };
+
+  const handleDescriptionChange = (value: string) => {
+    setTemplateDescription(value);
+    if (value.trim()) {
+      setErrors(prev => ({ ...prev, description: false }));
+    }
+  };
 
   return (
     <div className="flex h-[80vh] flex-col gap-6 lg:flex-row">
@@ -48,22 +83,48 @@ export default function TemplateReviewStep() {
           <CardHeader>
             <CardTitle className="text-2xl font-medium">Details</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-2">
-            <p>
-              <span className="font-semibold">Name:</span>
-              {' '}
-              {templateName}
-            </p>
+          <CardContent className="space-y-4">
             <p>
               <span className="font-semibold">Type:</span>
               {' '}
               {creationMethod}
             </p>
-            <p>
-              <span className="font-semibold">Description:</span>
-              {' '}
-              {templateDescription}
-            </p>
+
+            <div className="grid gap-1">
+              <Label className="text-base font-normal">Name</Label>
+              <Input
+                data-testid="review-template-name"
+                className="text-base font-normal"
+                value={templateName}
+                onChange={e => handleNameChange(e.target.value)}
+                onBlur={() => {
+                  if (!templateName.trim()) {
+                    setErrors(prev => ({ ...prev, name: true }));
+                  }
+                }}
+              />
+              {errors.name && (
+                <p className="text-sm text-destructive">Name is required</p>
+              )}
+            </div>
+
+            <div className="grid gap-1">
+              <Label className="text-base font-normal">Description</Label>
+              <TextArea
+                data-testid="review-template-description"
+                className="text-base font-normal"
+                value={templateDescription}
+                onChange={e => handleDescriptionChange(e.target.value)}
+                onBlur={() => {
+                  if (!templateDescription.trim()) {
+                    setErrors(prev => ({ ...prev, description: true }));
+                  }
+                }}
+              />
+              {errors.description && (
+                <p className="text-sm text-destructive">Description is required</p>
+              )}
+            </div>
           </CardContent>
         </Card>
 

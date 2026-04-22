@@ -1,5 +1,5 @@
 import type * as Icons from 'lucide-react';
-import { Check, Copy, Search } from 'lucide-react';
+import { Check, Edit2, Search, Zap } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 
 import { fetchTemplatesFromGallery } from '@/libs/actions/templates';
@@ -12,13 +12,17 @@ import { Button } from '../ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../ui/card';
 import { Input } from '../ui/input';
 
-export default function TemplateGallery() {
+type TemplateGalleryCallbacks = {
+  onUseAsIs: () => void;
+  onCustomize: () => void;
+};
+
+export default function TemplateGallery({ onUseAsIs, onCustomize }: TemplateGalleryCallbacks) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [templates, setTemplates] = useState<TemplateGalleryProps[]>([]);
   const {
     selectTemplate,
-    selectedTemplate,
     templateGallery,
     setTemplateName,
     setTemplateDescription,
@@ -123,10 +127,7 @@ export default function TemplateGallery() {
                   <Card
                     data-testid="template-card"
                     key={template.id}
-                    className={`cursor-pointer transition-all hover:shadow-md ${
-                      selectedTemplate === template.id ? 'ring-2 ring-primary' : ''
-                    }`}
-                    onClick={() => handleTemplateSelect(template)}
+                    className="transition-all hover:shadow-md"
                   >
                     <CardHeader className="pb-2">
                       <div className="flex items-center gap-2">
@@ -141,21 +142,30 @@ export default function TemplateGallery() {
                       <p className="mb-2 text-base font-normal text-muted-foreground">{template.description}</p>
                     </CardContent>
 
-                    <CardFooter className="pt-0">
-                      <Button data-testid="use-template-button" variant={selectedTemplate === template.id ? 'default' : 'outline'} size="sm" className="w-full rounded-full text-base font-normal">
-                        {selectedTemplate === template.id
-                          ? (
-                              <>
-                                <Check className="mr-2 size-4" />
-                                Selected
-                              </>
-                            )
-                          : (
-                              <>
-                                <Copy className="mr-2 size-4" />
-                                Use Template
-                              </>
-                            )}
+                    <CardFooter className="flex gap-2 pt-0">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex-1 rounded-full text-base font-normal"
+                        onClick={() => {
+                          handleTemplateSelect(template);
+                          onUseAsIs();
+                        }}
+                      >
+                        <Zap className="mr-2 size-4" />
+                        Use as-is
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="flex-1 rounded-full text-base font-normal"
+                        onClick={() => {
+                          handleTemplateSelect(template);
+                          onCustomize();
+                        }}
+                      >
+                        <Edit2 className="mr-2 size-4" />
+                        Customize
                       </Button>
                     </CardFooter>
                   </Card>
