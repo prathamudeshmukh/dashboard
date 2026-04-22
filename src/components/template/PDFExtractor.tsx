@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Check, FileUp, Loader2, Upload } from 'lucide-react';
 import React, { useRef, useState } from 'react';
 
-import { getStatus } from '@/libs/actions/pdf';
+import { checkExtractionResult } from '@/libs/actions/pdf';
 import { trackEvent } from '@/libs/analytics/trackEvent';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 
@@ -33,48 +33,37 @@ const PDFExtractor = () => {
   const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB
   const { setHtmlContent, setHandlebarsCode } = useTemplateStore();
 
-  async function pollJobStatus(runID: string, file: File, pdfId: string, extractionStart: number) {
-    if (!runID) {
-      setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED);
-      return;
-    }
+  async function pollJobStatus(pdfId: string, file: File, extractionStart: number) {
+    const MAX_POLL_MS = 5 * 60 * 1000;
 
     try {
-      let response = await getStatus(runID);
+      while (Date.now() - extractionStart < MAX_POLL_MS) {
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        const result = await checkExtractionResult(pdfId);
 
-      while (response?.status !== 'Completed' && response?.status !== 'Failed' && response?.status !== 'Cancelled') {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        response = await getStatus(runID);
+        if (result.status === 'completed') {
+          setpdfExtractionStatus(PdfExtractionStatusEnum.COMPLETED);
+          setHtmlContent(result.htmlContent);
+          setHandlebarsCode(result.htmlContent);
+          trackEvent('template_imported_from_pdf', {
+            pdf_id: pdfId,
+            file_name: file.name,
+            file_size: file.size,
+            extraction_time: Date.now() - extractionStart,
+            html_length: result.htmlContent.length,
+          });
+          return;
+        }
       }
 
-      if (!response) {
-        setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED);
-        return;
-      }
-
-      if (response.status === 'Completed') {
-        const htmlContent: string = response.output.htmlContent;
-        setpdfExtractionStatus(PdfExtractionStatusEnum.COMPLETED);
-        setHtmlContent(htmlContent);
-        setHandlebarsCode(htmlContent);
-
-        trackEvent('template_imported_from_pdf', {
-          pdf_id: pdfId,
-          file_name: file.name,
-          file_size: file.size,
-          extraction_time: Date.now() - extractionStart,
-          html_length: htmlContent.length,
-        });
-      } else {
-        setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED);
-        trackEvent('template_import_failed', {
-          pdf_id: pdfId,
-          file_name: file.name,
-          file_size: file.size,
-          failure_stage: 'extraction',
-          error_message: `Job ended with status: ${response.status}`,
-        });
-      }
+      setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED);
+      trackEvent('template_import_failed', {
+        pdf_id: pdfId,
+        file_name: file.name,
+        file_size: file.size,
+        failure_stage: 'extraction',
+        error_message: 'Extraction timed out',
+      });
     } catch (error) {
       console.error('An error occurred while polling job status:', error);
       setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED);
@@ -113,7 +102,7 @@ const PDFExtractor = () => {
 
       const pdfId: string = response.data.result.pdfId;
       const extractionStart = Date.now();
-      await pollJobStatus(response.data.runID, file, pdfId, extractionStart);
+      await pollJobStatus(pdfId, file, extractionStart);
     } catch (error: any) {
       setPdfUploadStatus(PdfUploadStatusEnum.FAILED);
       setUploadError(`Upload failed. Please try again - ${error}`);
