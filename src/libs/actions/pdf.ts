@@ -38,6 +38,7 @@ export async function getStatus(runId: string) {
     headers: {
       Authorization: `Bearer ${process.env.INNGEST_SIGNING_KEY}`,
     },
+    cache: 'no-store',
   });
 
   // eslint-disable-next-line no-console
