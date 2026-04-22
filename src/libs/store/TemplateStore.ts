@@ -60,7 +60,7 @@ export const useTemplateStore = create<TemplateStore>((set, get) => ({
   templateGallery: null,
 
   activeTab: EditorTypeEnum.HANDLEBARS,
-  creationMethod: CreationMethodEnum.EXTRACT_FROM_PDF,
+  creationMethod: CreationMethodEnum.TEMPLATE_GALLERY,
 
   successData: null,
   templateError: '',
@@ -107,7 +107,7 @@ export const useTemplateStore = create<TemplateStore>((set, get) => ({
       handlebarTemplateJson: '{}',
 
       activeTab: EditorTypeEnum.HANDLEBARS,
-      creationMethod: CreationMethodEnum.EXTRACT_FROM_PDF,
+      creationMethod: CreationMethodEnum.TEMPLATE_GALLERY,
     }),
 
   clearSuccessData: () => set({ successData: null }),
