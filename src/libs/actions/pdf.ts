@@ -1,6 +1,6 @@
 'use server';
 
-import { put } from '@vercel/blob';
+import { head, put } from '@vercel/blob';
 import { v4 as uuidv4 } from 'uuid';
 
 const inngestBaseUrl = process.env.INNGEST_GET_RUNS_BASE_URL;
@@ -27,6 +27,23 @@ export async function uploadPdf(formData: FormData) {
   return {
     pdfId: uuid,
   };
+}
+
+export async function checkExtractionResult(pdfId: string): Promise<
+  { status: 'completed'; htmlContent: string } | { status: 'pending' }
+> {
+  try {
+    const blobPath = `uploads/${pdfId}/output/extracted.html`;
+    const blob = await head(blobPath);
+    const response = await fetch(blob.url, { cache: 'no-store' });
+    if (!response.ok) {
+      return { status: 'pending' };
+    }
+    const htmlContent = await response.text();
+    return { status: 'completed', htmlContent };
+  } catch {
+    return { status: 'pending' };
+  }
 }
 
 export async function getStatus(runId: string) {
