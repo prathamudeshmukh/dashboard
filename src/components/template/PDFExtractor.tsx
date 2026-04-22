@@ -1,9 +1,12 @@
+'use client';
+
 import axios from 'axios';
 import { Check, FileUp, Loader2, Upload } from 'lucide-react';
 import React, { useRef, useState } from 'react';
 
 import { checkExtractionResult } from '@/libs/actions/pdf';
 import { trackEvent } from '@/libs/analytics/trackEvent';
+import { pollExtractionJob } from '@/libs/pdfExtractionPoller';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
@@ -31,51 +34,7 @@ const PDFExtractor = () => {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [pdfExtractionStatus, setpdfExtractionStatus] = useState<PdfExtractionStatusEnum>(PdfExtractionStatusEnum.NOT_STARTED);
   const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB
-  const { setHtmlContent, setHandlebarsCode } = useTemplateStore();
-
-  async function pollJobStatus(pdfId: string, file: File, extractionStart: number) {
-    const MAX_POLL_MS = 5 * 60 * 1000;
-
-    try {
-      while (Date.now() - extractionStart < MAX_POLL_MS) {
-        await new Promise(resolve => setTimeout(resolve, 3000));
-        const result = await checkExtractionResult(pdfId);
-
-        if (result.status === 'completed') {
-          setpdfExtractionStatus(PdfExtractionStatusEnum.COMPLETED);
-          setHtmlContent(result.htmlContent);
-          setHandlebarsCode(result.htmlContent);
-          trackEvent('template_imported_from_pdf', {
-            pdf_id: pdfId,
-            file_name: file.name,
-            file_size: file.size,
-            extraction_time: Date.now() - extractionStart,
-            html_length: result.htmlContent.length,
-          });
-          return;
-        }
-      }
-
-      setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED);
-      trackEvent('template_import_failed', {
-        pdf_id: pdfId,
-        file_name: file.name,
-        file_size: file.size,
-        failure_stage: 'extraction',
-        error_message: 'Extraction timed out',
-      });
-    } catch (error) {
-      console.error('An error occurred while polling job status:', error);
-      setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED);
-      trackEvent('template_import_failed', {
-        pdf_id: pdfId,
-        file_name: file.name,
-        file_size: file.size,
-        failure_stage: 'extraction',
-        error_message: error instanceof Error ? error.message : String(error),
-      });
-    }
-  }
+  const { setHtmlContent, setHandlebarsCode, setHandlebarTemplateJson } = useTemplateStore();
 
   const uploadFile = async (file: File) => {
     const formData = new FormData();
@@ -87,13 +46,10 @@ const PDFExtractor = () => {
       setProgress(0);
 
       const response = await axios.post('/api/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+        headers: { 'Content-Type': 'multipart/form-data' },
         onUploadProgress: (e: any) => {
           if (e.total) {
-            const percent = Math.round((e.loaded * 100) / e.total);
-            setProgress(percent);
+            setProgress(Math.round((e.loaded * 100) / e.total));
           }
         },
       });
@@ -101,8 +57,18 @@ const PDFExtractor = () => {
       setpdfExtractionStatus(PdfExtractionStatusEnum.IN_PROGRESS);
 
       const pdfId: string = response.data.result.pdfId;
-      const extractionStart = Date.now();
-      await pollJobStatus(pdfId, file, extractionStart);
+      await pollExtractionJob(
+        pdfId,
+        file,
+        Date.now(),
+        { setHtmlContent, setHandlebarsCode, setHandlebarTemplateJson },
+        {
+          onCompleted: () => setpdfExtractionStatus(PdfExtractionStatusEnum.COMPLETED),
+          onFailed: () => setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED),
+        },
+        checkExtractionResult,
+        trackEvent,
+      );
     } catch (error: any) {
       setPdfUploadStatus(PdfUploadStatusEnum.FAILED);
       setUploadError(`Upload failed. Please try again - ${error}`);
@@ -123,7 +89,6 @@ const PDFExtractor = () => {
         setUploadError('File size should not exceed 4MB.');
         return;
       }
-
       if (file.type === 'application/pdf') {
         await uploadFile(file);
       } else {
@@ -140,7 +105,6 @@ const PDFExtractor = () => {
         setUploadError('File size should not exceed 4MB.');
         return;
       }
-
       if (file.type === 'application/pdf') {
         await uploadFile(file);
       } else {
@@ -155,22 +119,6 @@ const PDFExtractor = () => {
 
   return (
     <div>
-      {/* <div className="mb-4 flex items-start rounded-md border border-amber-200 bg-amber-50 p-3 text-sm">
-        <TriangleAlert className="mr-3 mt-0.5 text-amber-600" />
-        <div>
-          <p className="text-base font-normal text-amber-800">Free Plan Limit</p>
-          <p className="mt-0.5 text-base text-amber-700">
-            Your free plan includes extraction from 3 PDFs.
-            {' '}
-            <a href="#demo" className="font-medium underline">
-              Upgrade to Pro
-            </a>
-            {' '}
-            for unlimited template extraction and additional features.
-          </p>
-        </div>
-      </div> */}
-
       {pdfExtractionStatus === PdfExtractionStatusEnum.NOT_STARTED && (
         <div
           className="rounded-lg border-2 border-dashed border-primary/30 p-8 text-center"
@@ -186,7 +134,6 @@ const PDFExtractor = () => {
             ref={fileInputRef}
           />
 
-          {/* Default UI */}
           <div className="flex flex-col items-center justify-center space-y-4">
             <div className="rounded-full bg-primary/10 p-4">
               <FileUp className="size-8 text-primary" />
@@ -219,7 +166,6 @@ const PDFExtractor = () => {
         </div>
       )}
 
-      {/* Dynamic status UI */}
       <div className="mt-6 space-y-4">
         {pdfExtractionStatus === PdfExtractionStatusEnum.IN_PROGRESS && (
           <div className="space-y-4">
