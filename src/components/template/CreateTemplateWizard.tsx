@@ -2,8 +2,9 @@
 
 import { useUser } from '@clerk/nextjs';
 import type { JsonValue } from 'inngest/helpers/jsonify';
+import { ChevronRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 import { PublishTemplateToProd, UpsertTemplate } from '@/libs/actions/templates';
@@ -12,7 +13,6 @@ import { useTemplateStore } from '@/libs/store/TemplateStore';
 import { EditorTypeEnum, SaveStatusEnum } from '@/types/Enum';
 import { TemplateType } from '@/types/Template';
 
-import { Wizard } from '../Wizard';
 import { WizardNavigation } from '../WizardNavigation';
 import TemplateEditorStep from './steps/TemplateEditorStep';
 import TemplateReviewStep from './steps/TemplateReviewStep';
@@ -160,19 +160,40 @@ export default function CreateTemplateWizard() {
   }
 
   return (
-    <div className="px-10 py-12">
-      <Wizard
-        steps={steps}
-        currentStep={currentStep}
-        onStepClick={(index) => {
-          if (index <= currentStep || (index === currentStep + 1 && !isNextDisabled())) {
-            setCurrentStep(index);
-          }
-        }}
-        className="mb-8"
-      />
+    <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+      {/* Breadcrumb bar */}
+      <div className="flex items-center gap-1.5 border-b border-gray-100 bg-gray-50 px-4 py-2.5 text-xs text-gray-500">
+        <span className="text-gray-300">Create Template</span>
+        {steps.map((step, index) => (
+          <Fragment key={step.id}>
+            <ChevronRight className="size-3 text-gray-300" />
+            <button
+              type="button"
+              onClick={() => {
+                if (index <= currentStep || (index === currentStep + 1 && !isNextDisabled())) {
+                  setCurrentStep(index);
+                }
+              }}
+              className={
+                index === currentStep
+                  ? 'font-semibold text-indigo-600'
+                  : 'text-gray-300 transition-colors hover:text-gray-500'
+              }
+            >
+              {step.title}
+            </button>
+          </Fragment>
+        ))}
+        <div className="ml-auto h-1 w-24 overflow-hidden rounded-full bg-gray-200">
+          <div
+            className="h-full rounded-full bg-indigo-500 transition-all duration-300"
+            style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
+          />
+        </div>
+      </div>
 
-      <div className="flex flex-col space-y-6">
+      {/* Step content + navigation */}
+      <div className="flex flex-col gap-4 px-5 py-4">
         {renderStep()}
         <WizardNavigation
           totalSteps={steps.length}
@@ -182,6 +203,7 @@ export default function CreateTemplateWizard() {
           disableNext={isNextDisabled()}
           onComplete={handleTemplateSave}
           saveStatus={saveStatus}
+          className="mt-0"
         />
       </div>
     </div>

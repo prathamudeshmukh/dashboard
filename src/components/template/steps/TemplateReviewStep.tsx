@@ -75,26 +75,30 @@ export default function TemplateReviewStep() {
     }
   };
 
+  const jsonValue = activeTab === EditorTypeEnum.HANDLEBARS
+    ? (handlebarsCode && handlebarTemplateJson ? handlebarTemplateJson : null)
+    : (htmlContent && htmlTemplateJson ? htmlTemplateJson : null);
+
   return (
-    <div className="flex h-[80vh] flex-col gap-6 lg:flex-row">
+    <div className="flex h-[80vh] flex-col gap-3 lg:flex-row">
       {/* Left Column: Details + JSON */}
-      <div className="flex-1 space-y-6 pr-2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-2xl font-medium">Details</CardTitle>
+      <div className="flex h-full flex-1 flex-col gap-3 overflow-hidden">
+        <Card className="shrink-0">
+          <CardHeader className="px-4 py-3">
+            <CardTitle className="text-base font-medium">Details</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <p>
+          <CardContent className="space-y-2 px-4 pb-4">
+            <p className="text-sm">
               <span className="font-semibold">Type:</span>
               {' '}
               {creationMethod}
             </p>
 
             <div className="grid gap-1">
-              <Label className="text-base font-normal">Name</Label>
+              <Label className="text-sm font-normal">Name</Label>
               <Input
                 data-testid="review-template-name"
-                className="text-base font-normal"
+                className="h-8 text-sm"
                 value={templateName}
                 onChange={e => handleNameChange(e.target.value)}
                 onBlur={() => {
@@ -104,15 +108,16 @@ export default function TemplateReviewStep() {
                 }}
               />
               {errors.name && (
-                <p className="text-sm text-destructive">Name is required</p>
+                <p className="text-xs text-destructive">Name is required</p>
               )}
             </div>
 
             <div className="grid gap-1">
-              <Label className="text-base font-normal">Description</Label>
+              <Label className="text-sm font-normal">Description</Label>
               <TextArea
                 data-testid="review-template-description"
-                className="text-base font-normal"
+                className="text-sm"
+                rows={3}
                 value={templateDescription}
                 onChange={e => handleDescriptionChange(e.target.value)}
                 onBlur={() => {
@@ -122,31 +127,33 @@ export default function TemplateReviewStep() {
                 }}
               />
               {errors.description && (
-                <p className="text-sm text-destructive">Description is required</p>
+                <p className="text-xs text-destructive">Description is required</p>
               )}
             </div>
           </CardContent>
         </Card>
 
-        {(handlebarTemplateJson && handlebarsCode && activeTab === EditorTypeEnum.HANDLEBARS) && (
-          <Card className="max-h-[50vh] overflow-auto">
-            <CardHeader>
-              <CardTitle className="text-2xl font-medium">JSON</CardTitle>
+        {jsonValue && (
+          <Card className="flex min-h-0 flex-1 flex-col overflow-hidden">
+            <CardHeader className="shrink-0 px-4 py-3">
+              <CardTitle className="text-base font-medium">JSON</CardTitle>
             </CardHeader>
-            <CardContent>
-              <CodeSnippet value={handlebarTemplateJson} lineNumbers={false} className="max-w-[480px]" />
+            <CardContent className="flex min-h-0 flex-1 flex-col px-4 pb-4">
+              <div className="min-h-0 flex-1 overflow-auto rounded-md">
+                <CodeSnippet value={jsonValue} lineNumbers={false} className="w-full" />
+              </div>
             </CardContent>
           </Card>
         )}
       </div>
 
       {/* Right Column: Preview */}
-      <div className="flex-1 pr-2">
+      <div className="flex-1">
         <Card className="flex h-full max-h-[80vh] flex-col">
-          <CardHeader>
-            <CardTitle className="text-2xl font-medium">Preview</CardTitle>
+          <CardHeader className="px-4 py-3">
+            <CardTitle className="text-base font-medium">Preview</CardTitle>
           </CardHeader>
-          <CardContent className="flex-1 overflow-auto px-2">
+          <CardContent className="min-h-0 flex-1 overflow-auto px-3 pb-3">
             {compiledHtml
               ? (
                   <iframe
