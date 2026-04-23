@@ -176,7 +176,7 @@ export default function CreateTemplateWizard() {
               }}
               className={
                 index === currentStep
-                  ? 'font-semibold text-indigo-600'
+                  ? 'font-semibold text-primary'
                   : 'text-gray-300 transition-colors hover:text-gray-500'
               }
             >
@@ -186,14 +186,14 @@ export default function CreateTemplateWizard() {
         ))}
         <div className="ml-auto h-1 w-24 overflow-hidden rounded-full bg-gray-200">
           <div
-            className="h-full rounded-full bg-indigo-500 transition-all duration-300"
+            className="h-full rounded-full bg-primary transition-all duration-300"
             style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
           />
         </div>
       </div>
 
       {/* Step content + navigation */}
-      <div className="flex flex-col gap-4 px-5 py-4">
+      <div className="flex flex-col gap-2 p-3">
         {renderStep()}
         <WizardNavigation
           totalSteps={steps.length}
