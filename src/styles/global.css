@@ -107,3 +107,31 @@ body {
 .hero-radial-bg {
   background: linear-gradient(90deg, #e3bcff, #d2beff, #c0c1ff, #abc3ff, #95c5ff, #7ec7ff, #67c9fe);
 }
+
+/* Subtle app-wide scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(220 13% 85%) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: hsl(220 13% 82%);
+  border-radius: 99px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(220 13% 68%);
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
