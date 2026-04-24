@@ -68,6 +68,6 @@ describe('TemplateReviewStep', () => {
       handlebarTemplateJson: '{"name":"test"}',
     });
     render(<TemplateReviewStep />);
-    await waitFor(() => expect(screen.getByText('JSON')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText('Sample data')).toBeInTheDocument());
   });
 });
