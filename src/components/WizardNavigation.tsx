@@ -23,14 +23,14 @@ export function WizardNavigation({
   const isLastStep = currentStep === totalSteps - 1;
 
   return (
-    <div className={cn('flex justify-between mt-8', className)}>
+    <div className={cn('flex justify-between mt-4', className)}>
       <Button
         variant="outline"
         type="button"
         onClick={onPrevious}
         disabled={currentStep === 0 || disablePrevious}
         className={cn(
-          'text-xl px-4 py-2 rounded-full',
+          'text-sm px-4 py-1.5 rounded-full',
           currentStep === 0 || disablePrevious
             ? 'text-muted-foreground cursor-not-allowed'
             : 'text-primary hover:bg-primary/10',
@@ -43,7 +43,7 @@ export function WizardNavigation({
         onClick={isLastStep ? onComplete : onNext}
         disabled={disableNext}
         className={cn(
-          'text-xl px-4 py-2 rounded-full flex gap-1',
+          'text-sm px-4 py-1.5 rounded-full flex gap-1',
           disableNext
             ? 'bg-primary/50 text-primary-foreground cursor-not-allowed'
             : 'bg-primary text-primary-foreground hover:bg-primary/90',
