@@ -1,16 +1,38 @@
 import type * as Icons from 'lucide-react';
-import { Check, Edit2, Search, Zap } from 'lucide-react';
+import { Edit2, Search, Zap } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 
+import { cn } from '@/lib/utils';
 import { fetchTemplatesFromGallery } from '@/libs/actions/templates';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 import type { TemplateGalleryProps } from '@/types/Template';
 
 import { DynamicLucideIcon } from '../DynamicIcon';
-import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../ui/card';
-import { Input } from '../ui/input';
+
+const TAILWIND_COLOR_MAP: Record<string, string> = {
+  'text-blue-600': '#2563eb',
+  'text-green-600': '#16a34a',
+  'text-amber-600': '#d97706',
+  'text-purple-600': '#9333ea',
+  'text-slate-600': '#475569',
+  'text-yellow-600': '#ca8a04',
+  'text-emerald-600': '#059669',
+  'text-indigo-600': '#4f46e5',
+  'text-sky-600': '#0284c7',
+  'text-rose-600': '#e11d48',
+  'text-red-600': '#dc2626',
+  'text-orange-600': '#ea580c',
+  'text-teal-600': '#0d9488',
+  'text-cyan-600': '#0891b2',
+  'text-pink-600': '#db2777',
+  'text-violet-600': '#7c3aed',
+  'text-lime-600': '#65a30d',
+  'text-fuchsia-600': '#c026d3',
+};
+
+const getCategoryColor = (color: string | null): string =>
+  color ? (TAILWIND_COLOR_MAP[color] ?? '#161676') : '#161676';
 
 type TemplateGalleryCallbacks = {
   onUseAsIs: () => void;
@@ -38,11 +60,9 @@ export default function TemplateGallery({ onUseAsIs, onCustomize }: TemplateGall
     const loadTemplates = async () => {
       setIsLoading(true);
       try {
-        // If gallery already exists in store, use it
         if (templateGallery) {
           setTemplates(templateGallery);
         } else {
-          // Otherwise fetch and update both local + store
           const data = await fetchTemplatesFromGallery();
           setTemplates(data);
           setTemplateGallery(data);
@@ -55,7 +75,6 @@ export default function TemplateGallery({ onUseAsIs, onCustomize }: TemplateGall
     loadTemplates();
   }, [templateGallery, setTemplateGallery]);
 
-  // Get unique categories
   const categories = ['All', ...new Set(templates.map(template => template.category))];
 
   const filteredTemplates = useMemo(() => {
@@ -82,135 +101,185 @@ export default function TemplateGallery({ onUseAsIs, onCustomize }: TemplateGall
     setHandlebarTemplateJson(JSON.stringify(template.sampleData as string, null, 2));
   }
 
+  const clearFilters = () => {
+    setSearchTerm('');
+    setSelectedCategory('All');
+  };
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       {/* Search and filter controls */}
-      <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative w-full sm:w-64">
-          <Search className="absolute left-2.5 top-2.5 size-4 text-muted-foreground" />
-          <Input
+          <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <input
             type="search"
             placeholder="Search templates..."
-            className="pl-8"
+            className="h-9 w-full rounded-full border border-border bg-background pl-9 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1"
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
           />
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-1.5">
           {categories.map(category => (
-            <Badge
+            <button
               key={category}
-              variant={selectedCategory === category ? 'default' : 'outline'}
-              className="cursor-pointer text-base font-normal"
+              type="button"
               onClick={() => setSelectedCategory(category as string)}
+              className={cn(
+                'rounded-full px-3.5 py-1.5 text-sm font-medium transition-all duration-200',
+                selectedCategory === category
+                  ? 'bg-primary text-primary-foreground shadow-sm'
+                  : 'bg-muted text-muted-foreground hover:bg-muted/70 hover:text-foreground',
+              )}
             >
-              {selectedCategory === category && <Check className="mr-1 size-3" />}
               {category}
-            </Badge>
+            </button>
           ))}
         </div>
       </div>
-      {/** Loading Skeleton */}
+
+      {/* Loading skeleton */}
       {isLoading
         ? (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {[...Array(6)].map((_, i) => (
-                <div key={i} className="h-[380px] animate-pulse rounded-lg bg-muted/50" />
+                <div key={i} className="animate-pulse overflow-hidden rounded-xl border bg-card">
+                  <div className="h-[200px] bg-muted/60" />
+                  <div className="space-y-3 p-4">
+                    <div className="flex items-center gap-2.5">
+                      <div className="size-8 rounded-lg bg-muted/60" />
+                      <div className="h-4 w-2/3 rounded-md bg-muted/60" />
+                    </div>
+                    <div className="h-3 w-full rounded bg-muted/40" />
+                    <div className="h-3 w-4/5 rounded bg-muted/40" />
+                  </div>
+                  <div className="flex gap-2 border-t px-4 py-3">
+                    <div className="h-8 flex-1 rounded-full bg-muted/60" />
+                    <div className="h-8 flex-1 rounded-full bg-muted/40" />
+                  </div>
+                </div>
               ))}
             </div>
           )
         : (
             <>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {filteredTemplates.map(template => (
-                  <Card
-                    data-testid="template-card"
-                    key={template.id}
-                    className="overflow-hidden transition-all hover:shadow-md"
-                  >
-                    <div className="relative h-[200px] overflow-hidden bg-muted">
-                      {template.previewHtmlContent
-                        ? (
-                            <iframe
-                              srcDoc={template.previewHtmlContent}
-                              sandbox="allow-same-origin"
-                              scrolling="no"
-                              tabIndex={-1}
-                              title={`Preview: ${template.title}`}
-                              data-testid="template-preview-iframe"
-                              style={{
-                                width: '400%',
-                                height: '400%',
-                                transform: 'scale(0.25)',
-                                transformOrigin: 'top left',
-                                pointerEvents: 'none',
-                                border: 'none',
-                              }}
-                            />
-                          )
-                        : (
-                            <div
-                              data-testid="template-preview-placeholder"
-                              className="size-full rounded-t-lg bg-muted"
-                            />
-                          )}
-                    </div>
+                {filteredTemplates.map((template, index) => {
+                  const accentColor = getCategoryColor(template.color);
+                  return (
+                    <div
+                      data-testid="template-card"
+                      key={template.id}
+                      className="animate-slide-up-fade group relative flex flex-col overflow-hidden rounded-xl border bg-card transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-black/[0.06]"
+                      style={{ animationDelay: `${index * 55}ms` }}
+                    >
+                      {/* Preview area */}
+                      <div className="relative h-[200px] shrink-0 overflow-hidden bg-muted">
+                        {template.previewHtmlContent
+                          ? (
+                              <iframe
+                                srcDoc={template.previewHtmlContent}
+                                sandbox="allow-same-origin"
+                                scrolling="no"
+                                tabIndex={-1}
+                                title={`Preview: ${template.title}`}
+                                data-testid="template-preview-iframe"
+                                style={{
+                                  width: '400%',
+                                  height: '400%',
+                                  transform: 'scale(0.25)',
+                                  transformOrigin: 'top left',
+                                  pointerEvents: 'none',
+                                  border: 'none',
+                                }}
+                              />
+                            )
+                          : (
+                              <div
+                                data-testid="template-preview-placeholder"
+                                className="size-full bg-muted"
+                              />
+                            )}
 
-                    <CardHeader className="pb-2">
-                      <div className="flex items-center gap-2">
-                        <div className="flex size-8 items-center justify-center rounded-full">
-                          <DynamicLucideIcon name={template.icon as keyof typeof Icons} color={`${template.color}`} />
-                        </div>
-                        <CardTitle data-testid="template-name" className="text-xl font-medium">{template.title}</CardTitle>
+                        {/* Hover gradient overlay */}
+                        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
+                        {/* Category badge */}
+                        {template.category && (
+                          <div className="absolute right-3 top-3">
+                            <span className="rounded-full bg-white/90 px-2.5 py-1 text-xs font-medium text-foreground/75 shadow-sm backdrop-blur-sm">
+                              {template.category}
+                            </span>
+                          </div>
+                        )}
                       </div>
-                    </CardHeader>
 
-                    <CardContent className="py-2">
-                      <p className="mb-2 text-base font-normal text-muted-foreground">{template.description}</p>
-                    </CardContent>
+                      {/* Card body */}
+                      <div className="flex flex-1 flex-col p-4">
+                        <div className="mb-2 flex items-center gap-2.5">
+                          <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted">
+                            <DynamicLucideIcon
+                              name={template.icon as keyof typeof Icons}
+                              color={accentColor}
+                            />
+                          </div>
+                          <h3
+                            data-testid="template-name"
+                            className="font-semibold leading-snug text-foreground"
+                          >
+                            {template.title}
+                          </h3>
+                        </div>
+                        <p className="line-clamp-2 flex-1 text-sm text-muted-foreground">
+                          {template.description}
+                        </p>
+                      </div>
 
-                    <CardFooter className="flex gap-2 pt-0">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="flex-1 rounded-full text-base font-normal"
-                        onClick={() => {
-                          handleTemplateSelect(template);
-                          onUseAsIs();
-                        }}
-                      >
-                        <Zap className="mr-2 size-4" />
-                        Use as-is
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="flex-1 rounded-full text-base font-normal"
-                        onClick={() => {
-                          handleTemplateSelect(template);
-                          onCustomize();
-                        }}
-                      >
-                        <Edit2 className="mr-2 size-4" />
-                        Customize
-                      </Button>
-                    </CardFooter>
-                  </Card>
-                ))}
+                      {/* Footer actions */}
+                      <div className="flex gap-2 border-t px-4 py-3">
+                        <Button
+                          variant="default"
+                          size="sm"
+                          className="flex-1 rounded-full text-sm font-medium"
+                          onClick={() => {
+                            handleTemplateSelect(template);
+                            onUseAsIs();
+                          }}
+                        >
+                          <Zap className="mr-1.5 size-3.5" />
+                          Use as-is
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex-1 rounded-full text-sm font-medium"
+                          onClick={() => {
+                            handleTemplateSelect(template);
+                            onCustomize();
+                          }}
+                        >
+                          <Edit2 className="mr-1.5 size-3.5" />
+                          Customize
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
 
-              {/* Empty state (only when search or filter applied) */}
+              {/* Empty state */}
               {filteredTemplates.length === 0 && (searchTerm || selectedCategory !== 'All') && (
-                <div className="py-8 text-center">
-                  <p className="text-muted-foreground">No templates found matching your criteria.</p>
-                  <Button
-                    variant="link"
-                    onClick={() => {
-                      setSearchTerm('');
-                      setSelectedCategory('All');
-                    }}
-                  >
+                <div className="flex flex-col items-center gap-3 py-16 text-center">
+                  <div className="flex size-16 items-center justify-center rounded-full bg-muted">
+                    <Search className="size-7 text-muted-foreground" />
+                  </div>
+                  <p className="font-medium text-foreground">No templates found</p>
+                  <p className="text-sm text-muted-foreground">
+                    Try a different search term or category.
+                  </p>
+                  <Button variant="link" onClick={clearFilters}>
                     Clear filters
                   </Button>
                 </div>
