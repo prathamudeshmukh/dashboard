@@ -1,6 +1,8 @@
 export const seedTemplates = [
   {
     fileName: 'invoice-template',
+    typeKey: 'invoice-template',
+    variantName: null,
     title: 'Invoice Template',
     description: 'Professional invoice with itemized billing and payment details',
     icon: 'FileText',
@@ -9,6 +11,8 @@ export const seedTemplates = [
   },
   {
     fileName: 'report-template',
+    typeKey: 'report-template',
+    variantName: null,
     title: 'Report Template',
     description: 'Structured report with sections for data, analysis, and conclusions',
     icon: 'FileSpreadsheet',
@@ -17,6 +21,8 @@ export const seedTemplates = [
   },
   {
     fileName: 'contract-template',
+    typeKey: 'contract-template',
+    variantName: null,
     title: 'Contract Template',
     description: 'Legal contract with terms, conditions, and signature fields',
     icon: 'FileCheck',
@@ -25,6 +31,8 @@ export const seedTemplates = [
   },
   {
     fileName: 'newsletter-template',
+    typeKey: 'newsletter-template',
+    variantName: null,
     title: 'Newsletter Template',
     description: 'Email newsletter with sections for articles, images, and call-to-actions',
     icon: 'Mail',
@@ -33,6 +41,8 @@ export const seedTemplates = [
   },
   {
     fileName: 'receipt-template',
+    typeKey: 'receipt-template',
+    variantName: null,
     title: 'Receipt Template',
     description: 'Simple receipt for transactions and purchases',
     icon: 'Receipt',
@@ -41,6 +51,8 @@ export const seedTemplates = [
   },
   {
     fileName: 'certificate-template',
+    typeKey: 'certificate-template',
+    variantName: null,
     title: 'Certificate Template',
     description: 'Professional certificate of achievement or completion',
     icon: 'Award',
@@ -49,6 +61,8 @@ export const seedTemplates = [
   },
   {
     fileName: 'financial-report-template',
+    typeKey: 'financial-report-template',
+    variantName: null,
     title: 'Financial Report',
     description: 'Detailed financial report with charts and analysis',
     icon: 'FileBarChart',
@@ -57,6 +71,8 @@ export const seedTemplates = [
   },
   {
     fileName: 'resume-template',
+    typeKey: 'resume-template',
+    variantName: null,
     title: 'Resume Template',
     description: 'Professional resume/CV for job applications',
     icon: 'Briefcase',
@@ -65,6 +81,8 @@ export const seedTemplates = [
   },
   {
     fileName: 'business-proposal-template',
+    typeKey: 'business-proposal-template',
+    variantName: null,
     title: 'Business Proposal',
     description: 'Professional business or project proposal',
     icon: 'Bookmark',
@@ -73,6 +91,8 @@ export const seedTemplates = [
   },
   {
     fileName: 'brochure-template',
+    typeKey: 'brochure-template',
+    variantName: null,
     title: 'Brochure Template',
     description: 'Marketing brochure for products or services',
     icon: 'FileImage',
@@ -81,6 +101,8 @@ export const seedTemplates = [
   },
   {
     fileName: 'press-release-template',
+    typeKey: 'press-release-template',
+    variantName: null,
     title: 'Press Release',
     description: 'Official press release for news and announcements',
     icon: 'Newspaper',

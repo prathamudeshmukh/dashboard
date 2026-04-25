@@ -24,7 +24,23 @@ vi.mock('@/libs/analytics/trackEvent', () => ({
 vi.mock('@/libs/actions/templates', () => ({
   UpsertTemplate: vi.fn(),
   PublishTemplateToProd: vi.fn(),
-  fetchTemplatesFromGallery: vi.fn().mockResolvedValue([]),
+  fetchTemplatesFromGallery: vi.fn().mockResolvedValue([
+    {
+      id: 'tpl-1',
+      title: 'Invoice',
+      description: 'A standard invoice template',
+      category: 'Finance',
+      icon: 'FileText',
+      color: '#000',
+      htmlContent: '<p>invoice</p>',
+      handlebarContent: '{{name}}',
+      sampleData: null,
+      style: null,
+      previewHtmlContent: null,
+      typeKey: 'invoice-template',
+      variantName: null,
+    },
+  ]),
 }));
 
 vi.mock('./steps/TemplateSourceStep', () => ({

@@ -75,9 +75,12 @@ export async function seedTemplateGallery() {
           handlebarContent,
           sampleData,
           previewHtmlContent,
+          typeKey: template.typeKey,
+          variantName: template.variantName,
         }).onConflictDoUpdate({
-          target: templateGallery.title,
+          target: templateGallery.typeKey,
           set: {
+            title: template.title,
             description: template.description,
             icon: template.icon,
             color: template.color,
@@ -86,6 +89,7 @@ export async function seedTemplateGallery() {
             handlebarContent,
             sampleData,
             previewHtmlContent,
+            variantName: template.variantName,
           },
         });
       } catch (err) {
