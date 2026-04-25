@@ -107,7 +107,7 @@ export default function TemplateGallery({ onUseAsIs, onCustomize }: TemplateGall
   };
 
   return (
-    <div className="space-y-5">
+    <div className="flex flex-col gap-4">
       {/* Search and filter controls */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative w-full sm:w-64">
@@ -140,152 +140,155 @@ export default function TemplateGallery({ onUseAsIs, onCustomize }: TemplateGall
         </div>
       </div>
 
-      {/* Loading skeleton */}
-      {isLoading
-        ? (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {[...Array(6)].map((_, i) => (
-                <div key={i} className="animate-pulse overflow-hidden rounded-xl border bg-card">
-                  <div className="h-[200px] bg-muted/60" />
-                  <div className="space-y-3 p-4">
-                    <div className="flex items-center gap-2.5">
-                      <div className="size-8 rounded-lg bg-muted/60" />
-                      <div className="h-4 w-2/3 rounded-md bg-muted/60" />
+      {/* Scrollable template area */}
+      <div className="h-[520px] overflow-y-auto pr-1">
+        {/* Loading skeleton */}
+        {isLoading
+          ? (
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                {[...Array(6)].map((_, i) => (
+                  <div key={i} className="animate-pulse overflow-hidden rounded-xl border bg-card">
+                    <div className="h-[200px] bg-muted/60" />
+                    <div className="space-y-3 p-4">
+                      <div className="flex items-center gap-2.5">
+                        <div className="size-8 rounded-lg bg-muted/60" />
+                        <div className="h-4 w-2/3 rounded-md bg-muted/60" />
+                      </div>
+                      <div className="h-3 w-full rounded bg-muted/40" />
+                      <div className="h-3 w-4/5 rounded bg-muted/40" />
                     </div>
-                    <div className="h-3 w-full rounded bg-muted/40" />
-                    <div className="h-3 w-4/5 rounded bg-muted/40" />
-                  </div>
-                  <div className="flex gap-2 border-t px-4 py-3">
-                    <div className="h-8 flex-1 rounded-full bg-muted/60" />
-                    <div className="h-8 flex-1 rounded-full bg-muted/40" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          )
-        : (
-            <>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {filteredTemplates.map((template, index) => {
-                  const accentColor = getCategoryColor(template.color);
-                  return (
-                    <div
-                      data-testid="template-card"
-                      key={template.id}
-                      className="animate-slide-up-fade group relative flex flex-col overflow-hidden rounded-xl border bg-card transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-black/[0.06]"
-                      style={{ animationDelay: `${index * 55}ms` }}
-                    >
-                      {/* Preview area */}
-                      <div className="relative h-[200px] shrink-0 overflow-hidden bg-muted">
-                        {template.previewHtmlContent
-                          ? (
-                              <iframe
-                                srcDoc={template.previewHtmlContent}
-                                sandbox="allow-same-origin"
-                                scrolling="no"
-                                tabIndex={-1}
-                                title={`Preview: ${template.title}`}
-                                data-testid="template-preview-iframe"
-                                style={{
-                                  width: '400%',
-                                  height: '400%',
-                                  transform: 'scale(0.25)',
-                                  transformOrigin: 'top left',
-                                  pointerEvents: 'none',
-                                  border: 'none',
-                                }}
-                              />
-                            )
-                          : (
-                              <div
-                                data-testid="template-preview-placeholder"
-                                className="size-full bg-muted"
-                              />
-                            )}
-
-                        {/* Hover gradient overlay */}
-                        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-
-                        {/* Category badge */}
-                        {template.category && (
-                          <div className="absolute right-3 top-3">
-                            <span className="rounded-full bg-white/90 px-2.5 py-1 text-xs font-medium text-foreground/75 shadow-sm backdrop-blur-sm">
-                              {template.category}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Card body */}
-                      <div className="flex flex-1 flex-col p-4">
-                        <div className="mb-2 flex items-center gap-2.5">
-                          <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted">
-                            <DynamicLucideIcon
-                              name={template.icon as keyof typeof Icons}
-                              color={accentColor}
-                            />
-                          </div>
-                          <h3
-                            data-testid="template-name"
-                            className="font-semibold leading-snug text-foreground"
-                          >
-                            {template.title}
-                          </h3>
-                        </div>
-                        <p className="line-clamp-2 flex-1 text-sm text-muted-foreground">
-                          {template.description}
-                        </p>
-                      </div>
-
-                      {/* Footer actions */}
-                      <div className="flex gap-2 border-t px-4 py-3">
-                        <Button
-                          variant="default"
-                          size="sm"
-                          className="flex-1 rounded-full text-sm font-medium"
-                          onClick={() => {
-                            handleTemplateSelect(template);
-                            onUseAsIs();
-                          }}
-                        >
-                          <Zap className="mr-1.5 size-3.5" />
-                          Use as-is
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="flex-1 rounded-full text-sm font-medium"
-                          onClick={() => {
-                            handleTemplateSelect(template);
-                            onCustomize();
-                          }}
-                        >
-                          <Edit2 className="mr-1.5 size-3.5" />
-                          Customize
-                        </Button>
-                      </div>
+                    <div className="flex gap-2 border-t px-4 py-3">
+                      <div className="h-8 flex-1 rounded-full bg-muted/60" />
+                      <div className="h-8 flex-1 rounded-full bg-muted/40" />
                     </div>
-                  );
-                })}
+                  </div>
+                ))}
               </div>
+            )
+          : (
+              <>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                  {filteredTemplates.map((template, index) => {
+                    const accentColor = getCategoryColor(template.color);
+                    return (
+                      <div
+                        data-testid="template-card"
+                        key={template.id}
+                        className="animate-slide-up-fade group relative flex flex-col overflow-hidden rounded-xl border bg-card transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-black/[0.06]"
+                        style={{ animationDelay: `${index * 55}ms` }}
+                      >
+                        {/* Preview area */}
+                        <div className="relative h-[200px] shrink-0 overflow-hidden bg-muted">
+                          {template.previewHtmlContent
+                            ? (
+                                <iframe
+                                  srcDoc={template.previewHtmlContent}
+                                  sandbox="allow-same-origin"
+                                  scrolling="no"
+                                  tabIndex={-1}
+                                  title={`Preview: ${template.title}`}
+                                  data-testid="template-preview-iframe"
+                                  style={{
+                                    width: '400%',
+                                    height: '400%',
+                                    transform: 'scale(0.25)',
+                                    transformOrigin: 'top left',
+                                    pointerEvents: 'none',
+                                    border: 'none',
+                                  }}
+                                />
+                              )
+                            : (
+                                <div
+                                  data-testid="template-preview-placeholder"
+                                  className="size-full bg-muted"
+                                />
+                              )}
 
-              {/* Empty state */}
-              {filteredTemplates.length === 0 && (searchTerm || selectedCategory !== 'All') && (
-                <div className="flex flex-col items-center gap-3 py-16 text-center">
-                  <div className="flex size-16 items-center justify-center rounded-full bg-muted">
-                    <Search className="size-7 text-muted-foreground" />
-                  </div>
-                  <p className="font-medium text-foreground">No templates found</p>
-                  <p className="text-sm text-muted-foreground">
-                    Try a different search term or category.
-                  </p>
-                  <Button variant="link" onClick={clearFilters}>
-                    Clear filters
-                  </Button>
+                          {/* Hover gradient overlay */}
+                          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
+                          {/* Category badge */}
+                          {template.category && (
+                            <div className="absolute right-3 top-3">
+                              <span className="rounded-full bg-white/90 px-2.5 py-1 text-xs font-medium text-foreground/75 shadow-sm backdrop-blur-sm">
+                                {template.category}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Card body */}
+                        <div className="flex flex-1 flex-col p-4">
+                          <div className="mb-2 flex items-center gap-2.5">
+                            <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted">
+                              <DynamicLucideIcon
+                                name={template.icon as keyof typeof Icons}
+                                color={accentColor}
+                              />
+                            </div>
+                            <h3
+                              data-testid="template-name"
+                              className="font-semibold leading-snug text-foreground"
+                            >
+                              {template.title}
+                            </h3>
+                          </div>
+                          <p className="line-clamp-2 flex-1 text-sm text-muted-foreground">
+                            {template.description}
+                          </p>
+                        </div>
+
+                        {/* Footer actions */}
+                        <div className="flex gap-2 border-t px-4 py-3">
+                          <Button
+                            variant="default"
+                            size="sm"
+                            className="flex-1 rounded-full text-sm font-medium"
+                            onClick={() => {
+                              handleTemplateSelect(template);
+                              onUseAsIs();
+                            }}
+                          >
+                            <Zap className="mr-1.5 size-3.5" />
+                            Use as-is
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="flex-1 rounded-full text-sm font-medium"
+                            onClick={() => {
+                              handleTemplateSelect(template);
+                              onCustomize();
+                            }}
+                          >
+                            <Edit2 className="mr-1.5 size-3.5" />
+                            Customize
+                          </Button>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
-              )}
-            </>
-          )}
+
+                {/* Empty state */}
+                {filteredTemplates.length === 0 && (searchTerm || selectedCategory !== 'All') && (
+                  <div className="flex flex-col items-center gap-3 py-16 text-center">
+                    <div className="flex size-16 items-center justify-center rounded-full bg-muted">
+                      <Search className="size-7 text-muted-foreground" />
+                    </div>
+                    <p className="font-medium text-foreground">No templates found</p>
+                    <p className="text-sm text-muted-foreground">
+                      Try a different search term or category.
+                    </p>
+                    <Button variant="link" onClick={clearFilters}>
+                      Clear filters
+                    </Button>
+                  </div>
+                )}
+              </>
+            )}
+      </div>
     </div>
   );
 }
