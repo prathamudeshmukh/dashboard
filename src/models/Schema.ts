@@ -91,6 +91,7 @@ export const templateGallery = pgTable('template_gallery', {
   handlebarContent: text('handlebar_content'),
   sampleData: jsonb('sample_data'),
   style: text('style'),
+  previewHtmlContent: text('preview_html_content'),
 });
 
 // Templates Table

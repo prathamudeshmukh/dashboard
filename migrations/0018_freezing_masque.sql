@@ -1,0 +1,1 @@
+ALTER TABLE "template_gallery" ADD COLUMN "preview_html_content" text;
