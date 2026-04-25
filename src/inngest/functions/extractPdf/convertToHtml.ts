@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { Logger } from 'inngest/middleware/logger';
+import type { Logger } from 'inngest';
 
 type ConvertToHTMLResult = {
   html: string;
