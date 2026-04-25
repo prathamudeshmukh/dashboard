@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
-import { seedTemplates } from '@/scripts/seed-template-gallery';
+import { seedTemplates } from '@/data/template-definitions';
 
 import { PreviewGrid } from './PreviewGrid';
 

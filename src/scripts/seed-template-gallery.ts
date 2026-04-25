@@ -6,98 +6,10 @@ import path from 'node:path';
 import { Pool } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-serverless';
 
+import { seedTemplates } from '@/data/template-definitions';
 import { templateGallery } from '@/models/Schema';
 
-export const seedTemplates = [
-  {
-    fileName: 'invoice-template',
-    title: 'Invoice Template',
-    description: 'Professional invoice with itemized billing and payment details',
-    icon: 'FileText',
-    color: 'text-blue-600',
-    category: 'Finance',
-  },
-  {
-    fileName: 'report-template',
-    title: 'Report Template',
-    description: 'Structured report with sections for data, analysis, and conclusions',
-    icon: 'FileSpreadsheet',
-    color: 'text-green-600',
-    category: 'Business',
-  },
-  {
-    fileName: 'contract-template',
-    title: 'Contract Template',
-    description: 'Legal contract with terms, conditions, and signature fields',
-    icon: 'FileCheck',
-    color: 'text-amber-600',
-    category: 'Legal',
-  },
-  {
-    fileName: 'newsletter-template',
-    title: 'Newsletter Template',
-    description: 'Email newsletter with sections for articles, images, and call-to-actions',
-    icon: 'Mail',
-    color: 'text-purple-600',
-    category: 'Marketing',
-  },
-  {
-    fileName: 'receipt-template',
-    title: 'Receipt Template',
-    description: 'Simple receipt for transactions and purchases',
-    icon: 'Receipt',
-    color: 'text-slate-600',
-    category: 'Finance',
-  },
-  {
-    fileName: 'certificate-template',
-    title: 'Certificate Template',
-    description: 'Professional certificate of achievement or completion',
-    icon: 'Award',
-    color: 'text-yellow-600',
-    category: 'Education',
-  },
-  {
-    fileName: 'financial-report-template',
-    title: 'Financial Report',
-    description: 'Detailed financial report with charts and analysis',
-    icon: 'FileBarChart',
-    color: 'text-emerald-600',
-    category: 'Finance',
-  },
-  {
-    fileName: 'resume-template',
-    title: 'Resume Template',
-    description: 'Professional resume/CV for job applications',
-    icon: 'Briefcase',
-    color: 'text-indigo-600',
-    category: 'Personal',
-  },
-  {
-    fileName: 'business-proposal-template',
-    title: 'Business Proposal',
-    description: 'Professional business or project proposal',
-    icon: 'Bookmark',
-    color: 'text-sky-600',
-    category: 'Business',
-  },
-  {
-    fileName: 'brochure-template',
-    title: 'Brochure Template',
-    description: 'Marketing brochure for products or services',
-    icon: 'FileImage',
-    color: 'text-rose-600',
-    category: 'Marketing',
-  },
-  {
-    fileName: 'press-release-template',
-    title: 'Press Release',
-    description: 'Official press release for news and announcements',
-    icon: 'Newspaper',
-    color: 'text-blue-600',
-    category: 'PR',
-  },
-];
+export { seedTemplates };
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL as string,
@@ -114,7 +26,7 @@ export async function seedTemplateGallery() {
     await db.select().from(templateGallery).limit(1);
 
     for (const template of seedTemplates) {
-      const baseFolderPath = path.join(__dirname, '../../', 'src', 'data');
+      const baseFolderPath = path.join(process.cwd(), 'src', 'data');
 
       try {
         const htmlContent = await fs.readFile(
@@ -129,8 +41,7 @@ export async function seedTemplateGallery() {
 
         let sampleData: any = null;
         const sampleDataPath = path.join(
-          __dirname,
-          '../../',
+          process.cwd(),
           'src',
           'data',
           'sampledata',
