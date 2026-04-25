@@ -1,7 +1,6 @@
 'use client';
 
 import { useUser } from '@clerk/nextjs';
-import type { JsonValue } from 'inngest/helpers/jsonify';
 import { ChevronRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Fragment, useEffect, useRef, useState } from 'react';
@@ -17,6 +16,9 @@ import { WizardNavigation } from '../WizardNavigation';
 import TemplateEditorStep from './steps/TemplateEditorStep';
 import TemplateReviewStep from './steps/TemplateReviewStep';
 import TemplateSourceStep from './steps/TemplateSourceStep';
+
+type JsonPrimitive = string | number | boolean | null;
+type JsonValue = JsonPrimitive | { [key: string]: JsonValue } | JsonValue[];
 
 export default function CreateTemplateWizard() {
   const { user } = useUser();
