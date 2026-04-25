@@ -116,7 +116,7 @@ export default function TemplateGallery({ onUseAsIs, onCustomize }: TemplateGall
         ? (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {[...Array(6)].map((_, i) => (
-                <div key={i} className="h-[180px] animate-pulse rounded-lg bg-muted/50" />
+                <div key={i} className="h-[380px] animate-pulse rounded-lg bg-muted/50" />
               ))}
             </div>
           )
@@ -127,8 +127,36 @@ export default function TemplateGallery({ onUseAsIs, onCustomize }: TemplateGall
                   <Card
                     data-testid="template-card"
                     key={template.id}
-                    className="transition-all hover:shadow-md"
+                    className="overflow-hidden transition-all hover:shadow-md"
                   >
+                    <div className="relative h-[200px] overflow-hidden bg-muted">
+                      {template.previewHtmlContent
+                        ? (
+                            <iframe
+                              srcDoc={template.previewHtmlContent}
+                              sandbox="allow-same-origin"
+                              scrolling="no"
+                              tabIndex={-1}
+                              title={`Preview: ${template.title}`}
+                              data-testid="template-preview-iframe"
+                              style={{
+                                width: '400%',
+                                height: '400%',
+                                transform: 'scale(0.25)',
+                                transformOrigin: 'top left',
+                                pointerEvents: 'none',
+                                border: 'none',
+                              }}
+                            />
+                          )
+                        : (
+                            <div
+                              data-testid="template-preview-placeholder"
+                              className="size-full rounded-t-lg bg-muted"
+                            />
+                          )}
+                    </div>
+
                     <CardHeader className="pb-2">
                       <div className="flex items-center gap-2">
                         <div className="flex size-8 items-center justify-center rounded-full">

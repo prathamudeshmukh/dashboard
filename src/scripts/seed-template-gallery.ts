@@ -144,6 +144,16 @@ export async function seedTemplateGallery() {
           console.warn(`No sample data found for: ${template.fileName}, Error: ${err}`);
         }
 
+        let previewHtmlContent: string | null = null;
+        try {
+          previewHtmlContent = await fs.readFile(
+            path.join(baseFolderPath, 'preview', `${template.fileName}-preview.html`),
+            'utf8',
+          );
+        } catch {
+          console.warn(`No preview HTML found for: ${template.fileName}`);
+        }
+
         await db.insert(templateGallery).values({
           title: template.title,
           description: template.description,
@@ -153,6 +163,7 @@ export async function seedTemplateGallery() {
           htmlContent,
           handlebarContent,
           sampleData,
+          previewHtmlContent,
         }).onConflictDoUpdate({
           target: templateGallery.title,
           set: {
@@ -163,6 +174,7 @@ export async function seedTemplateGallery() {
             htmlContent,
             handlebarContent,
             sampleData,
+            previewHtmlContent,
           },
         });
       } catch (err) {

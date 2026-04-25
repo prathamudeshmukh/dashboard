@@ -81,6 +81,7 @@ export type TemplateGalleryProps = {
   category: string | null;
   handlebarContent: string | null;
   sampleData: unknown;
+  previewHtmlContent: string | null;
 };
 
 export type TemplateSuccessData = {
