@@ -127,6 +127,13 @@
       "when": 1763734547248,
       "tag": "0017_chunky_loa",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1777099509004,
+      "tag": "0018_freezing_masque",
+      "breakpoints": true
     }
   ]
 }

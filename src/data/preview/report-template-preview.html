@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { font-family: Arial, sans-serif; color: #333; line-height: 1.6; margin: 0; padding: 20px; }
+  .report-container { max-width: 800px; margin: 0 auto; border: 1px solid #e0e0e0; padding: 30px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+  .report-header { text-align: center; margin-bottom: 30px; }
+  .report-title { font-size: 24px; font-weight: bold; margin-bottom: 5px; }
+  .report-subtitle { font-size: 16px; color: #666; }
+  .report-date { font-size: 14px; color: #888; margin-top: 5px; }
+  .divider { height: 1px; background-color: #e0e0e0; margin: 15px 0; }
+  .section { margin-bottom: 25px; }
+  .section-title { font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #444; }
+  .chart-container { display: flex; gap: 10px; margin-bottom: 20px; }
+  .chart-bar { height: 150px; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; flex: 1; }
+  .bar { width: 100%; background-color: #4a86e8; margin-bottom: 5px; }
+  .bar-label { font-size: 12px; text-align: center; }
+  .data-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+  .data-table th { background-color: #f8f8f8; text-align: left; padding: 10px; border-bottom: 1px solid #ddd; }
+  .data-table td { padding: 10px; border-bottom: 1px solid #ddd; }
+  .recommendations { background-color: #f9f9f9; padding: 15px; border-radius: 5px; }
+  .recommendation-item { margin-bottom: 10px; display: flex; align-items: flex-start; }
+  .bullet { display: inline-block; width: 6px; height: 6px; background-color: #333; border-radius: 50%; margin-right: 10px; margin-top: 8px; flex-shrink: 0; }
+  .report-footer { margin-top: 40px; text-align: center; font-size: 14px; color: #666; }
+</style>
+</head>
+<body>
+<div class="report-container">
+  <div class="report-header">
+    <div class="report-title">Quarterly Business Report</div>
+    <div class="report-subtitle">Q1 2024 — Operations &amp; Finance</div>
+    <div class="report-date">April 1, 2024</div>
+  </div>
+  <div class="divider"></div>
+  <div class="section">
+    <div class="section-title">Executive Summary</div>
+    <p>Overall performance in Q1 2024 exceeded projections by 12%, driven by strong product demand and improved operational efficiency across all business units.</p>
+  </div>
+  <div class="section">
+    <div class="section-title">Financial Overview</div>
+    <div class="chart-container">
+      <div class="chart-bar"><div class="bar" style="height:60%;"></div><div class="bar-label">Jan</div></div>
+      <div class="chart-bar"><div class="bar" style="height:80%;"></div><div class="bar-label">Feb</div></div>
+      <div class="chart-bar"><div class="bar" style="height:70%;"></div><div class="bar-label">Mar</div></div>
+      <div class="chart-bar"><div class="bar" style="height:90%;"></div><div class="bar-label">Apr</div></div>
+    </div>
+    <table class="data-table">
+      <thead><tr><th>Metric</th><th>Previous</th><th>Current</th><th>Change</th></tr></thead>
+      <tbody>
+        <tr><td>Revenue</td><td>$1.2M</td><td>$1.4M</td><td>+16.7%</td></tr>
+        <tr><td>Gross Profit</td><td>$480K</td><td>$560K</td><td>+16.7%</td></tr>
+        <tr><td>Operating Costs</td><td>$320K</td><td>$310K</td><td>-3.1%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="section">
+    <div class="section-title">Recommendations</div>
+    <div class="recommendations">
+      <div class="recommendation-item"><span class="bullet"></span><div>Increase marketing spend in high-growth regions by 20%.</div></div>
+      <div class="recommendation-item"><span class="bullet"></span><div>Streamline supply chain to reduce lead times by 15%.</div></div>
+      <div class="recommendation-item"><span class="bullet"></span><div>Expand product line into adjacent market segments.</div></div>
+    </div>
+  </div>
+  <div class="report-footer"><p>Prepared by: Analytics Team</p><p>Confidential — Internal Use Only</p></div>
+</div>
+</body>
+</html>

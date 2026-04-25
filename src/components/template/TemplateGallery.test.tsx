@@ -17,6 +17,8 @@ vi.mock('@/libs/actions/templates', () => ({
       htmlContent: '<p>invoice</p>',
       handlebarContent: '{{name}}',
       sampleData: { name: 'Acme' },
+      style: null,
+      previewHtmlContent: '<html><body><p>Invoice Preview</p></body></html>',
     },
     {
       id: 'tpl-2',
@@ -28,6 +30,8 @@ vi.mock('@/libs/actions/templates', () => ({
       htmlContent: '<p>resume</p>',
       handlebarContent: '{{position}}',
       sampleData: { position: 'Engineer' },
+      style: null,
+      previewHtmlContent: null,
     },
   ]),
 }));
@@ -71,5 +75,20 @@ describe('TemplateGallery', () => {
 
     expect(onCustomize).toHaveBeenCalledTimes(1);
     expect(useTemplateStore.getState().templateName).toBe('Invoice');
+  });
+
+  it('renders an iframe thumbnail for cards with previewHtmlContent', async () => {
+    renderGallery();
+    const iframes = await screen.findAllByTestId('template-preview-iframe');
+
+    expect(iframes).toHaveLength(1);
+    expect(iframes[0]).toHaveAttribute('sandbox', 'allow-same-origin');
+  });
+
+  it('renders a placeholder div for cards with null previewHtmlContent', async () => {
+    renderGallery();
+    const placeholders = await screen.findAllByTestId('template-preview-placeholder');
+
+    expect(placeholders).toHaveLength(1);
   });
 });
