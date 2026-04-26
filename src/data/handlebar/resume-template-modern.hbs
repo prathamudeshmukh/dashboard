@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{person.name}} — Resume</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .page {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(79, 70, 229, 0.08);
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      overflow: hidden;
+      min-height: 1100px;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: #4f46e5;
+      color: #ffffff;
+      padding: 40px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .sidebar-name {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+    }
+
+    .sidebar-title {
+      font-size: 12px;
+      opacity: 0.8;
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    .sidebar-section-title {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      opacity: 0.7;
+      border-bottom: 1px solid rgba(255,255,255,0.25);
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+    }
+
+    .contact-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .contact-list li {
+      font-size: 12px;
+      opacity: 0.9;
+      word-break: break-all;
+    }
+
+    .contact-list li span {
+      display: block;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0.6;
+      margin-bottom: 2px;
+    }
+
+    .skills-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .skill-tag {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 4px;
+      padding: 3px 8px;
+      font-size: 11px;
+    }
+
+    .lang-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .lang-list li { font-size: 12px; opacity: 0.9; }
+    .lang-list li .proficiency { font-size: 10px; opacity: 0.6; margin-left: 4px; }
+
+    .cert-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .cert-list li { font-size: 12px; opacity: 0.9; }
+    .cert-list li .cert-issuer { font-size: 10px; opacity: 0.6; }
+
+    /* Main content */
+    .main {
+      padding: 40px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .section-title {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #4f46e5;
+      border-left: 4px solid #4f46e5;
+      padding-left: 10px;
+      margin-bottom: 14px;
+    }
+
+    /* Summary */
+    .summary-text {
+      color: #334155;
+      line-height: 1.7;
+    }
+
+    /* Experience */
+    .experience-item {
+      margin-bottom: 20px;
+    }
+
+    .experience-item:last-child { margin-bottom: 0; }
+
+    .exp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 2px;
+    }
+
+    .exp-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .exp-date {
+      font-size: 11px;
+      color: #64748b;
+      white-space: nowrap;
+    }
+
+    .exp-company {
+      font-size: 12px;
+      color: #4f46e5;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .exp-description {
+      color: #475569;
+      margin-bottom: 8px;
+      font-size: 12px;
+    }
+
+    .achievements-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .achievements-list li {
+      font-size: 12px;
+      color: #475569;
+      padding-left: 14px;
+      position: relative;
+    }
+
+    .achievements-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: #4f46e5;
+    }
+
+    /* Education */
+    .edu-item { margin-bottom: 14px; }
+    .edu-item:last-child { margin-bottom: 0; }
+
+    .edu-degree {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .edu-institution {
+      font-size: 12px;
+      color: #4f46e5;
+      font-weight: 600;
+    }
+
+    .edu-date {
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    .edu-details {
+      font-size: 12px;
+      color: #475569;
+      margin-top: 2px;
+    }
+
+    /* Projects */
+    .project-item { margin-bottom: 14px; }
+    .project-item:last-child { margin-bottom: 0; }
+
+    .project-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .project-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .project-date {
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    .project-description {
+      font-size: 12px;
+      color: #475569;
+      margin-top: 4px;
+    }
+
+    .tech-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 6px;
+    }
+
+    .tech-tag {
+      background: #ede9fe;
+      color: #4f46e5;
+      border-radius: 4px;
+      padding: 2px 7px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    /* References */
+    .references-text {
+      font-size: 12px;
+      color: #64748b;
+      font-style: italic;
+    }
+
+    hr.divider {
+      border: none;
+      border-top: 1px solid #f1f5f9;
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div>
+      <div class="sidebar-name">{{person.name}}</div>
+      <div class="sidebar-title">{{person.title}}</div>
+    </div>
+
+    <div>
+      <div class="sidebar-section-title">Contact</div>
+      <ul class="contact-list">
+        <li><span>Email</span>{{person.email}}</li>
+        <li><span>Phone</span>{{person.phone}}</li>
+        <li><span>Location</span>{{person.location}}</li>
+        <li><span>LinkedIn</span>{{person.linkedin}}</li>
+        <li><span>Website</span>{{person.website}}</li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="sidebar-section-title">Skills</div>
+      <div class="skills-list">
+        {{#each skills}}
+        <span class="skill-tag">{{this}}</span>
+        {{/each}}
+      </div>
+    </div>
+
+    <div>
+      <div class="sidebar-section-title">Languages</div>
+      <ul class="lang-list">
+        {{#each languages}}
+        <li>{{language}} <span class="proficiency">{{proficiency}}</span></li>
+        {{/each}}
+      </ul>
+    </div>
+
+    <div>
+      <div class="sidebar-section-title">Certifications</div>
+      <ul class="cert-list">
+        {{#each certifications}}
+        <li>
+          {{name}}
+          <div class="cert-issuer">{{issuer}} &mdash; {{date}}</div>
+        </li>
+        {{/each}}
+      </ul>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+
+    <div>
+      <div class="section-title">Professional Summary</div>
+      <p class="summary-text">{{summary}}</p>
+    </div>
+
+    <hr class="divider" />
+
+    <div>
+      <div class="section-title">Experience</div>
+      {{#each experience}}
+      <div class="experience-item">
+        <div class="exp-header">
+          <div class="exp-title">{{title}}</div>
+          <div class="exp-date">{{dateRange}}</div>
+        </div>
+        <div class="exp-company">{{company}}</div>
+        <div class="exp-description">{{description}}</div>
+        <ul class="achievements-list">
+          {{#each achievements}}
+          <li>{{this}}</li>
+          {{/each}}
+        </ul>
+      </div>
+      {{/each}}
+    </div>
+
+    <hr class="divider" />
+
+    <div>
+      <div class="section-title">Education</div>
+      {{#each education}}
+      <div class="edu-item">
+        <div class="edu-degree">{{degree}}</div>
+        <div class="edu-institution">{{institution}}</div>
+        <div class="edu-date">{{dateRange}}</div>
+        <div class="edu-details">{{details}}</div>
+      </div>
+      {{/each}}
+    </div>
+
+    <hr class="divider" />
+
+    <div>
+      <div class="section-title">Projects</div>
+      {{#each projects}}
+      <div class="project-item">
+        <div class="project-header">
+          <div class="project-title">{{title}}</div>
+          <div class="project-date">{{date}}</div>
+        </div>
+        <div class="project-description">{{description}}</div>
+        <div class="tech-tags">
+          {{#each technologies}}
+          <span class="tech-tag">{{this}}</span>
+          {{/each}}
+        </div>
+      </div>
+      {{/each}}
+    </div>
+
+    <hr class="divider" />
+
+    <div>
+      <div class="section-title">References</div>
+      <p class="references-text">{{references}}</p>
+    </div>
+
+  </div><!-- /main -->
+
+</div>
+</body>
+</html>

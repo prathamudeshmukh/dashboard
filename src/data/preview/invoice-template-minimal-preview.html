@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Georgia', serif; color: #111; line-height: 1.7; background: #fff; padding: 48px; }
+    .invoice-container { max-width: 720px; margin: 0 auto; }
+    .invoice-header { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 24px; border-bottom: 1px solid #111; margin-bottom: 40px; }
+    .invoice-title { font-size: 32px; font-weight: normal; letter-spacing: 4px; text-transform: uppercase; }
+    .invoice-details { text-align: right; font-size: 13px; color: #555; }
+    .invoice-id { font-weight: bold; color: #111; margin-bottom: 2px; }
+    .invoice-parties { display: flex; justify-content: space-between; margin-bottom: 48px; gap: 40px; }
+    .party-label { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #888; margin-bottom: 8px; }
+    .party-name { font-size: 14px; font-weight: bold; margin-bottom: 4px; }
+    .party-detail { font-size: 13px; color: #444; line-height: 1.8; }
+    .invoice-table { width: 100%; border-collapse: collapse; margin-bottom: 32px; font-size: 13px; }
+    .invoice-table th { text-align: left; padding: 8px 0; font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #888; border-bottom: 1px solid #ddd; font-weight: normal; }
+    .invoice-table th:nth-child(n+2) { text-align: right; }
+    .invoice-table td { padding: 12px 0; border-bottom: 1px solid #f0f0f0; color: #222; }
+    .invoice-table td:nth-child(n+2) { text-align: right; }
+    .invoice-totals { margin-left: auto; width: 240px; font-size: 13px; }
+    .total-row { display: flex; justify-content: space-between; padding: 6px 0; color: #555; border-bottom: 1px solid #f0f0f0; }
+    .total-row.grand { border-bottom: none; border-top: 1px solid #111; padding-top: 10px; margin-top: 4px; font-weight: bold; font-size: 15px; color: #111; }
+    .invoice-footer { margin-top: 56px; padding-top: 24px; border-top: 1px solid #ddd; font-size: 12px; color: #888; }
+    .invoice-footer p + p { margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <div class="invoice-container">
+    <div class="invoice-header">
+      <div class="invoice-title">Invoice</div>
+      <div class="invoice-details">
+        <div class="invoice-id">#INV-001</div>
+        <div>March 29, 2025</div>
+      </div>
+    </div>
+    <div class="invoice-parties">
+      <div>
+        <div class="party-label">From</div>
+        <div class="party-name">Acme Corporation</div>
+        <div class="party-detail">123 Business Street<br/>San Francisco, CA 94107<br/>billing@acmecorp.com</div>
+      </div>
+      <div>
+        <div class="party-label">Bill To</div>
+        <div class="party-name">Client Company Inc.</div>
+        <div class="party-detail">456 Client Avenue<br/>New York, NY 10001<br/>accounting@clientcompany.com</div>
+      </div>
+    </div>
+    <table class="invoice-table">
+      <thead><tr><th>Description</th><th>Quantity</th><th>Price</th><th>Total</th></tr></thead>
+      <tbody>
+        <tr><td>Web Development</td><td>40</td><td>$75.00</td><td>$3,000.00</td></tr>
+        <tr><td>Design Services</td><td>20</td><td>$85.00</td><td>$1,700.00</td></tr>
+        <tr><td>Consulting</td><td>10</td><td>$125.00</td><td>$1,250.00</td></tr>
+      </tbody>
+    </table>
+    <div class="invoice-totals">
+      <div class="total-row"><span>Subtotal</span><span>$5,950.00</span></div>
+      <div class="total-row"><span>Tax (8%)</span><span>$476.00</span></div>
+      <div class="total-row grand"><span>Total</span><span>$6,426.00</span></div>
+    </div>
+    <div class="invoice-footer">
+      <p>Thank you for your business!</p>
+      <p>Payment due within 30 days. Please make checks payable to Acme Corporation.</p>
+    </div>
+  </div>
+</body>
+</html>

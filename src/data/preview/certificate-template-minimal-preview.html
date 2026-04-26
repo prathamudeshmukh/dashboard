@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      color: #111111;
+      line-height: 1.7;
+      background-color: #ffffff;
+      padding: 64px 32px;
+    }
+    .certificate-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      text-align: center;
+      border: 1px solid #e8e8e8;
+      padding: 72px 80px;
+    }
+    .cert-eyebrow { font-size: 10px; font-weight: 400; text-transform: uppercase; letter-spacing: 5px; color: #888888; margin-bottom: 32px; }
+    .cert-title { font-size: 28px; font-weight: 700; color: #111111; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 40px; }
+    .thin-rule { width: 80px; height: 1px; background-color: #111111; margin: 0 auto 40px; }
+    .cert-present-text { font-size: 14px; color: #888888; margin-bottom: 16px; font-style: italic; }
+    .recipient-name { font-size: 36px; font-weight: 700; color: #111111; letter-spacing: -0.5px; margin-bottom: 32px; line-height: 1.2; }
+    .cert-description { font-size: 14px; color: #444444; margin-bottom: 14px; }
+    .cert-program { font-size: 20px; font-weight: 700; color: #111111; margin-bottom: 14px; }
+    .cert-additional { font-size: 13px; color: #888888; margin-bottom: 36px; font-style: italic; }
+    .cert-date-block { font-size: 13px; color: #444444; margin-bottom: 56px; }
+    .cert-date-label { font-size: 10px; text-transform: uppercase; letter-spacing: 3px; color: #888888; margin-bottom: 4px; }
+    .signature-section { display: flex; justify-content: center; gap: 80px; margin-bottom: 48px; }
+    .signature { width: 180px; text-align: center; }
+    .signature-line { height: 1px; background-color: #111111; margin-bottom: 8px; }
+    .signature-name { font-size: 13px; font-weight: 700; color: #111111; }
+    .signature-title { font-size: 11px; color: #888888; margin-top: 2px; letter-spacing: 0.5px; }
+    .thin-rule-bottom { width: 40px; height: 1px; background-color: #e8e8e8; margin: 0 auto 24px; }
+    .verification-id { font-size: 11px; font-family: monospace; color: #444444; margin-bottom: 4px; letter-spacing: 1px; }
+    .verification-text { font-size: 11px; color: #888888; }
+    .certificate-footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid #e8e8e8; font-size: 11px; color: #888888; }
+    .footer-org { font-weight: 700; color: #333333; font-size: 12px; margin-bottom: 4px; }
+  </style>
+</head>
+<body>
+  <div class="certificate-container">
+    <div class="cert-eyebrow">Professional Development</div>
+    <div class="cert-title">CERTIFICATE OF ACHIEVEMENT</div>
+    <div class="thin-rule"></div>
+
+    <div class="cert-present-text">This certifies that the above-named individual has successfully completed</div>
+    <div class="recipient-name">Ms. Sarah Elizabeth Chen</div>
+    <div class="cert-description">for successfully completing</div>
+    <div class="cert-program">Advanced Leadership &amp; Management Program</div>
+    <div class="cert-additional">with distinction and exemplary performance</div>
+
+    <div class="cert-date-block">
+      <div class="cert-date-label">Date of Completion</div>
+      April 25, 2025
+    </div>
+
+    <div class="signature-section">
+      <div class="signature">
+        <div class="signature-line"></div>
+        <div class="signature-name">Dr. Robert Miller</div>
+        <div class="signature-title">Program Director</div>
+      </div>
+      <div class="signature">
+        <div class="signature-line"></div>
+        <div class="signature-name">Dr. Amanda Foster</div>
+        <div class="signature-title">Dean of Studies</div>
+      </div>
+    </div>
+
+    <div class="thin-rule-bottom"></div>
+
+    <div class="verification-id">CERT-2025-0189</div>
+    <div class="verification-text">Verify at credentials.example.com/CERT-2025-0189</div>
+
+    <div class="certificate-footer">
+      <div class="footer-org">Excellence Academy</div>
+      <div>100 Learning Lane, Boston, MA 02134</div>
+      <div>credentials@excellence.edu | (617) 555-0100</div>
+    </div>
+  </div>
+</body>
+</html>

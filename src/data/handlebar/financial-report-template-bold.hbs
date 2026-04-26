@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{company.name}} — {{company.reportPeriod}} Financial Report</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #e2e8f0;
+      color: #0f172a;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .page {
+      max-width: 920px;
+      margin: 40px auto;
+      background: #ffffff;
+      border-left: 8px solid #f59e0b;
+      box-shadow: 0 8px 40px rgba(15, 23, 42, 0.18);
+    }
+
+    /* Header */
+    .report-header {
+      background: #0f172a;
+      padding: 48px 48px 40px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .header-left .company-name {
+      font-size: 30px;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: -0.5px;
+    }
+
+    .header-left .report-meta {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-top: 6px;
+    }
+
+    .header-right {
+      text-align: right;
+    }
+
+    .header-right .period {
+      font-size: 22px;
+      font-weight: 800;
+      color: #f59e0b;
+    }
+
+    .header-right .fiscal-year {
+      font-size: 11px;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    /* Body */
+    .report-body {
+      padding: 40px 48px;
+    }
+
+    /* Section */
+    .section {
+      margin-bottom: 44px;
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #0f172a;
+      border-left: 5px solid #f59e0b;
+      padding-left: 12px;
+      margin-bottom: 18px;
+    }
+
+    .section-subtitle {
+      font-size: 11px;
+      color: #64748b;
+      margin-top: -10px;
+      margin-bottom: 16px;
+      padding-left: 17px;
+    }
+
+    /* Highlights */
+    .highlights-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .highlights-list li {
+      background: #0f172a;
+      color: #f1f5f9;
+      padding: 12px 18px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .highlights-list li::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: #f59e0b;
+      flex-shrink: 0;
+    }
+
+    /* Metrics */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 2px;
+      background: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .metric-card {
+      background: #ffffff;
+      padding: 22px 20px;
+      border-bottom: 3px solid #f59e0b;
+    }
+
+    .metric-name {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #64748b;
+      margin-bottom: 8px;
+    }
+
+    .metric-value {
+      font-size: 26px;
+      font-weight: 900;
+      color: #0f172a;
+    }
+
+    .metric-change {
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .metric-change.up { color: #10b981; font-weight: 700; }
+    .metric-change.down { color: #ef4444; font-weight: 700; }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    thead th {
+      background: #0f172a;
+      color: #ffffff;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      padding: 10px 12px;
+      text-align: left;
+    }
+
+    thead th:not(:first-child) { text-align: right; }
+
+    tbody td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #f1f5f9;
+      color: #1e293b;
+    }
+
+    tbody td:not(:first-child) { text-align: right; }
+
+    tbody tr:last-child td { border-bottom: none; }
+
+    .row-subtotal td {
+      font-weight: 800;
+      color: #0f172a;
+      background: #fff8e7;
+      border-top: 2px solid #f59e0b;
+      border-bottom: 2px solid #f59e0b;
+    }
+
+    .change-positive { color: #10b981; font-weight: 700; }
+    .change-negative { color: #ef4444; font-weight: 700; }
+
+    /* Two-column for balance sheet */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    /* Outlook */
+    .outlook-body p {
+      margin-bottom: 12px;
+      color: #334155;
+      line-height: 1.7;
+    }
+
+    /* Footer */
+    .report-footer {
+      background: #0f172a;
+      padding: 24px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      color: #64748b;
+    }
+
+    .report-footer .disclaimer { max-width: 60%; }
+    .report-footer .contact { color: #f59e0b; font-weight: 700; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="report-header">
+    <div class="header-left">
+      {{#if company.logoUrl}}
+      <img src="{{company.logoUrl}}" alt="{{company.name}}" style="max-height:40px;margin-bottom:12px;display:block;filter:brightness(0) invert(1);" />
+      {{/if}}
+      <div class="company-name">{{company.name}}</div>
+      <div class="report-meta">Report Date: {{company.reportDate}}</div>
+    </div>
+    <div class="header-right">
+      <div class="fiscal-year">Fiscal Year {{company.fiscalYear}}</div>
+      <div class="period">{{company.reportPeriod}}</div>
+    </div>
+  </div>
+
+  <div class="report-body">
+
+    <!-- Executive Summary -->
+    <div class="section">
+      <div class="section-title">Executive Summary</div>
+      <ul class="highlights-list">
+        {{#each executiveSummary.highlights}}
+        <li>{{this}}</li>
+        {{/each}}
+      </ul>
+    </div>
+
+    <!-- Financial Highlights -->
+    <div class="section">
+      <div class="section-title">Financial Highlights</div>
+      <div class="metrics-grid">
+        {{#each financialHighlights.metrics}}
+        <div class="metric-card">
+          <div class="metric-name">{{name}}</div>
+          <div class="metric-value">{{current}}</div>
+          <div class="metric-change {{#if trendUp}}up{{else}}down{{/if}}">{{change}}</div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+
+    <!-- Income Statement -->
+    <div class="section">
+      <div class="section-title">{{incomeStatement.title}}</div>
+      <div class="section-subtitle">{{incomeStatement.subtitle}}</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Current Period</th>
+            <th>Prior Period</th>
+            <th>Change</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each incomeStatement.items}}
+          <tr class="{{#if isSubtotal}}row-subtotal{{/if}}">
+            <td>{{category}}</td>
+            <td>{{amount}}</td>
+            <td>{{previousAmount}}</td>
+            <td class="{{#if positiveChange}}change-positive{{else}}change-negative{{/if}}">{{percentChange}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Balance Sheet -->
+    <div class="section">
+      <div class="section-title">{{balanceSheet.title}}</div>
+      <div class="section-subtitle">{{balanceSheet.subtitle}}</div>
+      <div class="two-col">
+        <div>
+          <table>
+            <thead><tr><th>Assets</th><th>Current</th><th>Prior</th></tr></thead>
+            <tbody>
+              {{#each balanceSheet.assets}}
+              <tr class="{{#if isSubtotal}}row-subtotal{{/if}}">
+                <td>{{category}}</td><td>{{amount}}</td><td>{{previousAmount}}</td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <table>
+            <thead><tr><th>Liabilities &amp; Equity</th><th>Current</th><th>Prior</th></tr></thead>
+            <tbody>
+              {{#each balanceSheet.liabilities}}
+              <tr class="{{#if isSubtotal}}row-subtotal{{/if}}">
+                <td>{{category}}</td><td>{{amount}}</td><td>{{previousAmount}}</td>
+              </tr>
+              {{/each}}
+              {{#each balanceSheet.equity}}
+              <tr class="{{#if isSubtotal}}row-subtotal{{/if}}">
+                <td>{{category}}</td><td>{{amount}}</td><td>{{previousAmount}}</td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cash Flow -->
+    <div class="section">
+      <div class="section-title">{{cashFlow.title}}</div>
+      <div class="section-subtitle">{{cashFlow.subtitle}}</div>
+      <table>
+        <thead><tr><th>Category</th><th>Amount</th></tr></thead>
+        <tbody>
+          {{#each cashFlow.operations}}
+          <tr class="{{#if isSubtotal}}row-subtotal{{/if}}">
+            <td>{{category}}</td><td>{{amount}}</td>
+          </tr>
+          {{/each}}
+          {{#each cashFlow.investing}}
+          <tr class="{{#if isSubtotal}}row-subtotal{{/if}}">
+            <td>{{category}}</td><td>{{amount}}</td>
+          </tr>
+          {{/each}}
+          {{#each cashFlow.financing}}
+          <tr class="{{#if isSubtotal}}row-subtotal{{/if}}">
+            <td>{{category}}</td><td>{{amount}}</td>
+          </tr>
+          {{/each}}
+          {{#each cashFlow.summary}}
+          <tr class="{{#if isSubtotal}}row-subtotal{{/if}}">
+            <td>{{category}}</td><td>{{amount}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Segment Analysis -->
+    <div class="section">
+      <div class="section-title">{{segmentAnalysis.title}}</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Segment</th>
+            <th>Revenue</th>
+            <th>Growth</th>
+            <th>Operating Income</th>
+            <th>Margin</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each segmentAnalysis.segments}}
+          <tr>
+            <td><strong>{{name}}</strong></td>
+            <td>{{revenue}}</td>
+            <td class="change-positive">{{growth}}</td>
+            <td>{{operatingIncome}}</td>
+            <td>{{margin}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Outlook -->
+    <div class="section">
+      <div class="section-title">{{outlook.title}}</div>
+      <div class="outlook-body">
+        {{#each outlook.paragraphs}}
+        <p>{{this}}</p>
+        {{/each}}
+      </div>
+    </div>
+
+  </div><!-- /report-body -->
+
+  <!-- Footer -->
+  <div class="report-footer">
+    <div class="disclaimer">{{footer.disclaimer}}</div>
+    <div class="contact">{{footer.contactInfo}}</div>
+  </div>
+
+</div>
+</body>
+</html>

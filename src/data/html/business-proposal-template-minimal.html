@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{proposal.title}}</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Georgia, 'Times New Roman', Times, serif;
+      background: #ffffff;
+      color: #111111;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .page {
+      max-width: 840px;
+      margin: 60px auto;
+      padding: 0 60px;
+    }
+
+    /* Cover */
+    .cover {
+      min-height: 480px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding-bottom: 48px;
+      border-bottom: 1px solid #111;
+      margin-bottom: 60px;
+    }
+
+    .cover-top { margin-top: 80px; }
+
+    .proposal-number {
+      font-family: system-ui, sans-serif;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #888;
+      margin-bottom: 20px;
+    }
+
+    .cover-title {
+      font-size: 36px;
+      font-weight: normal;
+      letter-spacing: -1px;
+      line-height: 1.2;
+      color: #111;
+    }
+
+    .cover-subtitle {
+      font-size: 15px;
+      color: #555;
+      margin-top: 12px;
+    }
+
+    .cover-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px 48px;
+      padding-top: 32px;
+      border-top: 1px solid #ccc;
+    }
+
+    .meta-group .label {
+      font-family: system-ui, sans-serif;
+      font-size: 8px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #888;
+      margin-bottom: 4px;
+    }
+
+    .meta-group .value {
+      font-size: 13px;
+      font-weight: bold;
+      color: #111;
+    }
+
+    .meta-group .sub-value {
+      font-size: 11px;
+      color: #555;
+      font-style: italic;
+    }
+
+    /* Section */
+    .section {
+      margin-bottom: 48px;
+    }
+
+    .section-title {
+      font-family: system-ui, sans-serif;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #111;
+      border-bottom: 1px solid #111;
+      padding-bottom: 6px;
+      margin-bottom: 20px;
+    }
+
+    /* Body text */
+    .body-text p {
+      margin-bottom: 14px;
+      color: #333;
+    }
+
+    .body-text p:last-child { margin-bottom: 0; }
+
+    /* Situation */
+    .situation-item {
+      padding: 14px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .situation-item:last-child { border-bottom: none; }
+
+    .sit-title {
+      font-size: 13px;
+      font-weight: bold;
+      color: #111;
+      margin-bottom: 4px;
+    }
+
+    .sit-desc { font-size: 12px; color: #444; }
+
+    /* Solution */
+    .solution-overview {
+      font-size: 13px;
+      color: #333;
+      font-style: italic;
+      margin-bottom: 24px;
+    }
+
+    .phase-item {
+      padding: 16px 0;
+      border-top: 1px solid #eee;
+    }
+
+    .phase-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 10px;
+    }
+
+    .phase-name {
+      font-size: 13px;
+      font-weight: bold;
+      color: #111;
+    }
+
+    .phase-duration {
+      font-family: system-ui, sans-serif;
+      font-size: 11px;
+      color: #888;
+    }
+
+    .phase-two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .phase-col-title {
+      font-family: system-ui, sans-serif;
+      font-size: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #888;
+      margin-bottom: 6px;
+    }
+
+    .phase-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .phase-list li {
+      font-size: 12px;
+      color: #444;
+      padding-left: 14px;
+      position: relative;
+    }
+
+    .phase-list li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: #888;
+    }
+
+    /* Timeline */
+    .timeline-overview {
+      font-size: 13px;
+      color: #333;
+      font-style: italic;
+      margin-bottom: 16px;
+    }
+
+    .milestone-item {
+      display: flex;
+      gap: 24px;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .milestone-item:last-child { border-bottom: none; }
+
+    .ms-date {
+      min-width: 70px;
+      font-family: system-ui, sans-serif;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #888;
+      padding-top: 3px;
+    }
+
+    .ms-name {
+      font-size: 13px;
+      font-weight: bold;
+      color: #111;
+    }
+
+    .ms-desc { font-size: 12px; color: #555; margin-top: 2px; }
+
+    /* Investment */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    thead th {
+      font-family: system-ui, sans-serif;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #888;
+      padding: 8px 10px;
+      text-align: left;
+      border-bottom: 1px solid #111;
+    }
+
+    thead th:not(:first-child) { text-align: right; }
+
+    tbody td {
+      padding: 10px 10px;
+      border-bottom: 1px solid #eee;
+      color: #333;
+    }
+
+    tbody td:not(:first-child) { text-align: right; }
+
+    .total-row td {
+      font-weight: bold;
+      color: #111;
+      border-top: 1px solid #111;
+      border-bottom: 1px solid #111;
+    }
+
+    /* Next Steps */
+    .next-step-item {
+      display: flex;
+      gap: 20px;
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .next-step-item:last-child { border-bottom: none; }
+
+    .step-timeline {
+      min-width: 100px;
+      font-family: system-ui, sans-serif;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #888;
+      padding-top: 2px;
+    }
+
+    .step-action {
+      font-size: 13px;
+      font-weight: bold;
+      color: #111;
+    }
+
+    .step-desc { font-size: 12px; color: #555; margin-top: 2px; }
+
+    /* Footer */
+    .proposal-footer {
+      border-top: 1px solid #111;
+      padding-top: 20px;
+      margin-top: 60px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #888;
+      font-family: system-ui, sans-serif;
+    }
+
+    .footer-contact .contact-name {
+      font-size: 12px;
+      font-weight: bold;
+      color: #111;
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Cover -->
+  <div class="cover">
+    <div class="cover-top">
+      <div class="proposal-number">{{proposal.proposalNumber}}</div>
+      <div class="cover-title">{{proposal.title}}</div>
+      <div class="cover-subtitle">{{proposal.subtitle}}</div>
+    </div>
+    <div class="cover-meta">
+      <div class="meta-group">
+        <div class="label">Prepared For</div>
+        <div class="value">{{proposal.preparedFor.contactPerson}}</div>
+        <div class="sub-value">{{proposal.preparedFor.contactTitle}}, {{proposal.preparedFor.company}}</div>
+      </div>
+      <div class="meta-group">
+        <div class="label">Prepared By</div>
+        <div class="value">{{proposal.preparedBy.company}}</div>
+        <div class="sub-value">{{proposal.preparedBy.email}}</div>
+      </div>
+      <div class="meta-group">
+        <div class="label">Date</div>
+        <div class="value">{{proposal.date}}</div>
+      </div>
+      <div class="meta-group">
+        <div class="label">Valid Until</div>
+        <div class="value">{{proposal.validUntil}}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Executive Summary -->
+  <div class="section">
+    <div class="section-title">Executive Summary</div>
+    <div class="body-text">
+      {{#each executiveSummary}}
+      <p>{{this}}</p>
+      {{/each}}
+    </div>
+  </div>
+
+  <!-- Company Background -->
+  <div class="section">
+    <div class="section-title">About {{proposal.preparedBy.company}}</div>
+    <div class="body-text">
+      {{#each companyBackground}}
+      <p>{{this}}</p>
+      {{/each}}
+    </div>
+  </div>
+
+  <!-- Situation Analysis -->
+  <div class="section">
+    <div class="section-title">Situation Analysis</div>
+    {{#each situationAnalysis}}
+    <div class="situation-item">
+      <div class="sit-title">{{title}}</div>
+      <div class="sit-desc">{{description}}</div>
+    </div>
+    {{/each}}
+  </div>
+
+  <!-- Proposed Solution -->
+  <div class="section">
+    <div class="section-title">Proposed Solution</div>
+    <div class="solution-overview">{{proposedSolution.overview}}</div>
+    {{#each proposedSolution.phases}}
+    <div class="phase-item">
+      <div class="phase-header">
+        <div class="phase-name">{{name}}</div>
+        <div class="phase-duration">{{duration}}</div>
+      </div>
+      <div class="phase-two-col">
+        <div>
+          <div class="phase-col-title">Activities</div>
+          <ul class="phase-list">
+            {{#each activities}}
+            <li>{{this}}</li>
+            {{/each}}
+          </ul>
+        </div>
+        <div>
+          <div class="phase-col-title">Deliverables</div>
+          <ul class="phase-list">
+            {{#each deliverables}}
+            <li>{{this}}</li>
+            {{/each}}
+          </ul>
+        </div>
+      </div>
+    </div>
+    {{/each}}
+  </div>
+
+  <!-- Timeline -->
+  <div class="section">
+    <div class="section-title">Timeline</div>
+    <div class="timeline-overview">{{timeline.overview}}</div>
+    {{#each timeline.milestones}}
+    <div class="milestone-item">
+      <div class="ms-date">{{date}}</div>
+      <div>
+        <div class="ms-name">{{name}}</div>
+        <div class="ms-desc">{{description}}</div>
+      </div>
+    </div>
+    {{/each}}
+  </div>
+
+  <!-- Investment -->
+  <div class="section">
+    <div class="section-title">Investment</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Amount</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each investment.costBreakdown}}
+        <tr>
+          <td>{{category}}</td>
+          <td>{{amount}}</td>
+          <td>{{description}}</td>
+        </tr>
+        {{/each}}
+        <tr class="total-row">
+          <td>Total Investment</td>
+          <td>{{investment.totalInvestment}}</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Next Steps -->
+  <div class="section">
+    <div class="section-title">Next Steps</div>
+    {{#each nextSteps}}
+    <div class="next-step-item">
+      <div class="step-timeline">{{timeline}}</div>
+      <div>
+        <div class="step-action">{{action}}</div>
+        <div class="step-desc">{{description}}</div>
+      </div>
+    </div>
+    {{/each}}
+  </div>
+
+  <!-- Footer -->
+  <div class="proposal-footer">
+    <div class="footer-contact">
+      <div class="contact-name">{{contactInfo.primaryContact}}</div>
+      <div>{{contactInfo.title}}</div>
+      <div>{{proposal.preparedBy.phone}} &mdash; {{proposal.preparedBy.email}}</div>
+    </div>
+    <div style="text-align:right;">
+      <div>Valid Until: {{proposal.validUntil}}</div>
+      <div style="margin-top:2px;">{{proposal.preparedBy.website}}</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

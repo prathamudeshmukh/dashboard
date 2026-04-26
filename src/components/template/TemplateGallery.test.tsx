@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { fetchTemplatesFromGallery } from '@/libs/actions/templates';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 
 import TemplateGallery from './TemplateGallery';
@@ -19,6 +20,8 @@ vi.mock('@/libs/actions/templates', () => ({
       sampleData: { name: 'Acme' },
       style: null,
       previewHtmlContent: '<html><body><p>Invoice Preview</p></body></html>',
+      typeKey: 'invoice-template',
+      variantName: null,
     },
     {
       id: 'tpl-2',
@@ -32,9 +35,44 @@ vi.mock('@/libs/actions/templates', () => ({
       sampleData: { position: 'Engineer' },
       style: null,
       previewHtmlContent: null,
+      typeKey: 'resume-template',
+      variantName: null,
     },
   ]),
 }));
+
+const multiVariantMock = [
+  {
+    id: 'inv-classic',
+    title: 'Invoice',
+    description: 'An invoice',
+    category: 'Finance',
+    icon: 'FileText',
+    color: '#000',
+    htmlContent: '<p>classic</p>',
+    handlebarContent: '{{name}}',
+    sampleData: null,
+    style: null,
+    previewHtmlContent: null,
+    typeKey: 'invoice-template',
+    variantName: 'Classic',
+  },
+  {
+    id: 'inv-modern',
+    title: 'Invoice',
+    description: 'An invoice',
+    category: 'Finance',
+    icon: 'FileText',
+    color: '#000',
+    htmlContent: '<p>modern</p>',
+    handlebarContent: '{{name}}',
+    sampleData: null,
+    style: null,
+    previewHtmlContent: null,
+    typeKey: 'invoice-template',
+    variantName: 'Modern',
+  },
+];
 
 describe('TemplateGallery', () => {
   const onUseAsIs = vi.fn();
@@ -43,6 +81,7 @@ describe('TemplateGallery', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     useTemplateStore.getState().resetTemplate();
+    useTemplateStore.setState({ templateGallery: null });
   });
 
   function renderGallery() {
@@ -90,5 +129,72 @@ describe('TemplateGallery', () => {
     const placeholders = await screen.findAllByTestId('template-preview-placeholder');
 
     expect(placeholders).toHaveLength(1);
+  });
+
+  it('renders one card per distinct typeKey (grouping)', async () => {
+    renderGallery();
+    const cards = await screen.findAllByTestId('template-card');
+
+    expect(cards).toHaveLength(2);
+  });
+
+  it('does not render carousel arrows for single-variant groups', async () => {
+    renderGallery();
+    await screen.findAllByTestId('template-card');
+
+    expect(screen.queryByTestId('carousel-prev')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('carousel-next')).not.toBeInTheDocument();
+  });
+});
+
+describe('TemplateGallery — multi-variant carousel', () => {
+  const onUseAsIs = vi.fn();
+  const onCustomize = vi.fn();
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    useTemplateStore.getState().resetTemplate();
+    useTemplateStore.setState({ templateGallery: null });
+    vi.mocked(fetchTemplatesFromGallery).mockResolvedValue(multiVariantMock);
+  });
+
+  function renderGallery() {
+    return render(<TemplateGallery onUseAsIs={onUseAsIs} onCustomize={onCustomize} />);
+  }
+
+  it('renders one card for two rows with the same typeKey', async () => {
+    renderGallery();
+    const cards = await screen.findAllByTestId('template-card');
+
+    expect(cards).toHaveLength(1);
+  });
+
+  it('renders carousel arrows when a group has multiple variants', async () => {
+    renderGallery();
+    await screen.findAllByTestId('template-card');
+
+    expect(screen.getByTestId('carousel-prev')).toBeInTheDocument();
+    expect(screen.getByTestId('carousel-next')).toBeInTheDocument();
+  });
+
+  it('advances to the next variant on next arrow click and shows its variant name', async () => {
+    renderGallery();
+    await screen.findAllByTestId('template-card');
+
+    expect(screen.getByText('Classic')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByTestId('carousel-next'));
+
+    expect(screen.getByText('Modern')).toBeInTheDocument();
+  });
+
+  it('"Use as-is" uses the currently-active variant\'s htmlContent', async () => {
+    renderGallery();
+    await screen.findAllByTestId('template-card');
+
+    fireEvent.click(screen.getByTestId('carousel-next'));
+    fireEvent.click(screen.getByRole('button', { name: /use as-is/i }));
+
+    expect(useTemplateStore.getState().htmlContent).toBe('<p>modern</p>');
   });
 });

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Georgia', serif; color: #111; background: #fff; padding: 56px; line-height: 1.8; }
+    .resume { max-width: 720px; margin: 0 auto; }
+    .header { text-align: center; padding-bottom: 32px; border-bottom: 1px solid #111; margin-bottom: 40px; }
+    .name { font-size: 28px; font-weight: normal; text-transform: uppercase; letter-spacing: 6px; margin-bottom: 6px; }
+    .job-title { font-size: 14px; color: #555; margin-bottom: 10px; }
+    .contact { font-size: 12px; color: #888; }
+    .contact span { margin: 0 8px; }
+    .section { margin-bottom: 36px; }
+    .section-label { font-size: 10px; text-transform: uppercase; letter-spacing: 3px; color: #888; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid #ddd; }
+    p { font-size: 13px; color: #333; margin-bottom: 8px; }
+    .exp-item { margin-bottom: 20px; }
+    .exp-row { display: flex; justify-content: space-between; margin-bottom: 2px; }
+    .exp-title { font-size: 14px; font-weight: bold; }
+    .exp-company { font-size: 13px; color: #555; font-style: italic; }
+    .exp-date { font-size: 12px; color: #888; }
+    ul { padding-left: 18px; margin-top: 6px; }
+    li { font-size: 12px; color: #444; margin-bottom: 3px; }
+    .skills { display: flex; flex-wrap: wrap; gap: 8px; }
+    .skill { font-size: 12px; color: #333; }
+    .skill::after { content: "·"; margin-left: 8px; color: #ccc; }
+    .skill:last-child::after { content: ""; }
+    .cert-item { font-size: 13px; color: #333; margin-bottom: 4px; }
+    .ref { font-style: italic; color: #888; font-size: 12px; }
+  </style>
+</head>
+<body>
+<div class="resume">
+  <div class="header">
+    <div class="name">Alexandra Rivera</div>
+    <div class="job-title">Senior Software Engineer</div>
+    <div class="contact">
+      <span>a.rivera@email.com</span><span>·</span><span>(415) 555-0182</span><span>·</span><span>San Francisco, CA</span><span>·</span><span>arivera.dev</span>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-label">Summary</div>
+    <p>Experienced software engineer with 8+ years building scalable web applications. Passionate about clean code, developer experience, and mentoring junior engineers.</p>
+  </div>
+  <div class="section">
+    <div class="section-label">Experience</div>
+    <div class="exp-item">
+      <div class="exp-row"><span class="exp-title">Senior Software Engineer</span><span class="exp-date">Jan 2021 – Present</span></div>
+      <div class="exp-company">TechCorp Inc.</div>
+      <ul><li>Reduced API response time by 40%</li><li>Mentored 4 junior engineers</li><li>Shipped 3 major product features</li></ul>
+    </div>
+    <div class="exp-item">
+      <div class="exp-row"><span class="exp-title">Software Engineer</span><span class="exp-date">Jun 2018 – Dec 2020</span></div>
+      <div class="exp-company">StartupXYZ</div>
+      <ul><li>Built A/B testing framework</li><li>Improved test coverage from 40% to 85%</li></ul>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-label">Education</div>
+    <div class="exp-item">
+      <div class="exp-row"><span class="exp-title">B.S. Computer Science</span><span class="exp-date">2014 – 2018</span></div>
+      <div class="exp-company">UC Berkeley</div>
+      <p>GPA 3.8 | Dean's List | ACM Chapter President</p>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-label">Skills</div>
+    <div class="skills"><span class="skill">TypeScript</span><span class="skill">React</span><span class="skill">Node.js</span><span class="skill">PostgreSQL</span><span class="skill">AWS</span><span class="skill">Docker</span><span class="skill">GraphQL</span><span class="skill">Python</span></div>
+  </div>
+  <div class="section">
+    <div class="section-label">Certifications</div>
+    <div class="cert-item">AWS Solutions Architect — Amazon (2022)</div>
+    <div class="cert-item">CKA — CNCF (2023)</div>
+  </div>
+  <div class="ref">References available upon request.</div>
+</div>
+</body>
+</html>

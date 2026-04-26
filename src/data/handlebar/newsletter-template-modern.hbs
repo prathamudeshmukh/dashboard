@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: #1e293b;
+      line-height: 1.6;
+      background-color: #f8fafc;
+    }
+    .newsletter-container {
+      max-width: 620px;
+      margin: 32px auto;
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(79, 70, 229, 0.10);
+      overflow: hidden;
+    }
+    .header {
+      background-color: {{theme.primaryColor}};
+      padding: 36px 40px;
+      text-align: center;
+    }
+    .header-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.5px;
+    }
+    .header-date {
+      font-size: 13px;
+      color: rgba(255,255,255,0.75);
+      margin-top: 6px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .content {
+      padding: 36px 40px;
+    }
+    .section {
+      margin-bottom: 32px;
+    }
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: {{theme.primaryColor}};
+      margin-bottom: 10px;
+    }
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 14px;
+    }
+    .featured-article {
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+    }
+    .article-image {
+      width: 180px;
+      min-width: 180px;
+      height: 130px;
+      background-color: #e0e7ff;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6366f1;
+      font-size: 12px;
+      overflow: hidden;
+    }
+    .article-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .article-content { flex: 1; }
+    .article-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 8px;
+    }
+    .article-content p {
+      font-size: 14px;
+      color: #475569;
+      margin-bottom: 8px;
+    }
+    .separator {
+      height: 1px;
+      background: linear-gradient(to right, #e0e7ff, transparent);
+      margin: 28px 0;
+    }
+    .two-column {
+      display: flex;
+      gap: 24px;
+    }
+    .column { flex: 1; }
+    .column p {
+      font-size: 14px;
+      color: #475569;
+      margin-bottom: 8px;
+    }
+    .event-item {
+      margin-bottom: 12px;
+      padding: 10px 14px;
+      background: #f8fafc;
+      border-left: 3px solid {{theme.primaryColor}};
+      border-radius: 0 6px 6px 0;
+    }
+    .event-item strong {
+      display: block;
+      font-size: 14px;
+      color: #0f172a;
+    }
+    .event-item span {
+      font-size: 12px;
+      color: #64748b;
+    }
+    .spotlight {
+      background: #f0f4ff;
+      border-radius: 10px;
+      padding: 20px 24px;
+      border-left: 4px solid {{theme.primaryColor}};
+    }
+    .spotlight-quote {
+      font-size: 15px;
+      font-style: italic;
+      color: #334155;
+      margin-bottom: 10px;
+    }
+    .spotlight-author {
+      font-size: 13px;
+      font-weight: 600;
+      color: {{theme.primaryColor}};
+    }
+    .cta-button {
+      background-color: {{theme.primaryColor}};
+      color: #ffffff;
+      text-align: center;
+      padding: 14px 24px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 15px;
+      margin: 28px 0;
+      cursor: pointer;
+      letter-spacing: 0.2px;
+    }
+    .tips-box {
+      background: #fafafa;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px 20px;
+    }
+    .tips-box p {
+      font-size: 14px;
+      color: #475569;
+    }
+    .footer {
+      background-color: #f1f5f9;
+      padding: 24px 40px;
+      text-align: center;
+      font-size: 12px;
+      color: #64748b;
+      border-top: 1px solid #e2e8f0;
+    }
+    .footer p { margin-bottom: 6px; }
+    .footer a {
+      color: {{theme.primaryColor}};
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .social-links { margin-top: 14px; }
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      background-color: {{theme.primaryColor}};
+      color: #ffffff;
+      border-radius: 50%;
+      margin: 0 4px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="newsletter-container">
+    <div class="header">
+      <div class="header-title">{{header.title}}</div>
+      <div class="header-date">{{header.date}}</div>
+    </div>
+
+    <div class="content">
+      <div class="section">
+        <div class="section-label">{{featuredArticle.sectionTitle}}</div>
+        <div class="featured-article">
+          <div class="article-image">
+            {{#if featuredArticle.imageUrl}}
+              <img src="{{featuredArticle.imageUrl}}" alt="{{featuredArticle.title}}" />
+            {{else}}
+              Image
+            {{/if}}
+          </div>
+          <div class="article-content">
+            <div class="article-title">{{featuredArticle.title}}</div>
+            {{#each featuredArticle.paragraphs}}
+              <p>{{this}}</p>
+            {{/each}}
+          </div>
+        </div>
+      </div>
+
+      <div class="separator"></div>
+
+      <div class="section">
+        <div class="two-column">
+          <div class="column">
+            <div class="section-label">{{companyUpdates.title}}</div>
+            {{#each companyUpdates.paragraphs}}
+              <p>{{this}}</p>
+            {{/each}}
+          </div>
+          <div class="column">
+            <div class="section-label">{{upcomingEvents.title}}</div>
+            {{#each upcomingEvents.events}}
+              <div class="event-item">
+                <strong>{{title}}</strong>
+                <span>{{date}} &middot; {{location}}</span>
+              </div>
+            {{/each}}
+          </div>
+        </div>
+      </div>
+
+      <div class="separator"></div>
+
+      <div class="section">
+        <div class="section-label">{{customerSpotlight.title}}</div>
+        <div class="spotlight">
+          <div class="spotlight-quote">"{{customerSpotlight.quote}}"</div>
+          <div class="spotlight-author">
+            &mdash; {{customerSpotlight.author}}, {{customerSpotlight.position}}, {{customerSpotlight.company}}
+          </div>
+        </div>
+      </div>
+
+      <div class="cta-button">{{cta.text}}</div>
+
+      <div class="section">
+        <div class="section-label">{{quickTips.title}}</div>
+        <div class="tips-box">
+          <p>{{quickTips.content}}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>{{footer.copyright}}</p>
+      <p>{{footer.subscriptionInfo}}</p>
+      <p>
+        {{#each footer.links}}
+          <a href="{{url}}">{{text}}</a>{{#unless @last}} &nbsp;&middot;&nbsp; {{/unless}}
+        {{/each}}
+      </p>
+      <div class="social-links">
+        {{#each footer.socialLinks}}
+          <span class="social-link">{{icon}}</span>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+</body>
+</html>

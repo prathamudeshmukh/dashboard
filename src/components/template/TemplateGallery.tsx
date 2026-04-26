@@ -1,11 +1,12 @@
 import type * as Icons from 'lucide-react';
-import { Edit2, Search, Zap } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Edit2, Search, Zap } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 import { fetchTemplatesFromGallery } from '@/libs/actions/templates';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
-import type { TemplateGalleryProps } from '@/types/Template';
+import type { TemplateGalleryGroup, TemplateGalleryVariant } from '@/types/Template';
+import { groupTemplatesByTypeKey } from '@/utils/templateGallery';
 
 import { DynamicLucideIcon } from '../DynamicIcon';
 import { Button } from '../ui/button';
@@ -34,6 +35,14 @@ const TAILWIND_COLOR_MAP: Record<string, string> = {
 const getCategoryColor = (color: string | null): string =>
   color ? (TAILWIND_COLOR_MAP[color] ?? '#161676') : '#161676';
 
+function nextIndex(current: number, total: number): number {
+  return (current + 1) % total;
+}
+
+function prevIndex(current: number, total: number): number {
+  return (current - 1 + total) % total;
+}
+
 type TemplateGalleryCallbacks = {
   onUseAsIs: () => void;
   onCustomize: () => void;
@@ -42,7 +51,8 @@ type TemplateGalleryCallbacks = {
 export default function TemplateGallery({ onUseAsIs, onCustomize }: TemplateGalleryCallbacks) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [templates, setTemplates] = useState<TemplateGalleryProps[]>([]);
+  const [groups, setGroups] = useState<TemplateGalleryGroup[]>([]);
+  const [activeVariantIndex, setActiveVariantIndex] = useState<Record<string, number>>({});
   const {
     selectTemplate,
     templateGallery,
@@ -61,11 +71,11 @@ export default function TemplateGallery({ onUseAsIs, onCustomize }: TemplateGall
       setIsLoading(true);
       try {
         if (templateGallery) {
-          setTemplates(templateGallery);
+          setGroups(groupTemplatesByTypeKey(templateGallery));
         } else {
           const data = await fetchTemplatesFromGallery();
-          setTemplates(data);
           setTemplateGallery(data);
+          setGroups(groupTemplatesByTypeKey(data));
         }
       } finally {
         setIsLoading(false);
@@ -75,30 +85,44 @@ export default function TemplateGallery({ onUseAsIs, onCustomize }: TemplateGall
     loadTemplates();
   }, [templateGallery, setTemplateGallery]);
 
-  const categories = ['All', ...new Set(templates.map(template => template.category))];
+  const categories = useMemo(
+    () => ['All', ...new Set(groups.map(g => g.category).filter(Boolean))],
+    [groups],
+  );
 
-  const filteredTemplates = useMemo(() => {
-    return templates.filter((template) => {
+  const filteredGroups = useMemo(() => {
+    return groups.filter((group) => {
       const matchesSearch
         = searchTerm === ''
-        || template.title.toLowerCase().includes(searchTerm.toLowerCase())
-        || template?.description?.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory = selectedCategory === 'All' || template.category === selectedCategory;
+        || group.title.toLowerCase().includes(searchTerm.toLowerCase())
+        || group.description?.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = selectedCategory === 'All' || group.category === selectedCategory;
       return matchesSearch && matchesCategory;
     });
-  }, [templates, searchTerm, selectedCategory]);
+  }, [groups, searchTerm, selectedCategory]);
 
-  function handleTemplateSelect(template: TemplateGalleryProps) {
-    if (!template) {
-      return;
-    }
-    selectTemplate(template.id);
-    setTemplateName(template.title);
-    setTemplateDescription(template?.description as string);
-    setHtmlContent(template.htmlContent);
-    setHandlebarsCode(template.handlebarContent as string);
-    setHtmlTemplateJson(JSON.stringify(template.sampleData as string, null, 2));
-    setHandlebarTemplateJson(JSON.stringify(template.sampleData as string, null, 2));
+  function handleTemplateSelect(variant: TemplateGalleryVariant, group: TemplateGalleryGroup) {
+    selectTemplate(variant.id);
+    setTemplateName(group.title);
+    setTemplateDescription(group.description ?? '');
+    setHtmlContent(variant.htmlContent);
+    setHandlebarsCode(variant.handlebarContent ?? '');
+    setHtmlTemplateJson(JSON.stringify(variant.sampleData, null, 2));
+    setHandlebarTemplateJson(JSON.stringify(variant.sampleData, null, 2));
+  }
+
+  function handleNext(typeKey: string, total: number) {
+    setActiveVariantIndex(prev => ({
+      ...prev,
+      [typeKey]: nextIndex(prev[typeKey] ?? 0, total),
+    }));
+  }
+
+  function handlePrev(typeKey: string, total: number) {
+    setActiveVariantIndex(prev => ({
+      ...prev,
+      [typeKey]: prevIndex(prev[typeKey] ?? 0, total),
+    }));
   }
 
   const clearFilters = () => {
@@ -168,25 +192,33 @@ export default function TemplateGallery({ onUseAsIs, onCustomize }: TemplateGall
           : (
               <>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                  {filteredTemplates.map((template, index) => {
-                    const accentColor = getCategoryColor(template.color);
+                  {filteredGroups.map((group, index) => {
+                    const accentColor = getCategoryColor(group.color);
+                    const activeIdx = activeVariantIndex[group.typeKey] ?? 0;
+                    const currentVariant = group.variants[activeIdx] ?? group.variants[0];
+                    const hasMultiple = group.variants.length > 1;
+
+                    if (!currentVariant) {
+                      return null;
+                    }
+
                     return (
                       <div
                         data-testid="template-card"
-                        key={template.id}
+                        key={group.typeKey}
                         className="animate-slide-up-fade group relative flex flex-col overflow-hidden rounded-xl border bg-card transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-black/[0.06]"
                         style={{ animationDelay: `${index * 55}ms` }}
                       >
-                        {/* Preview area */}
+                        {/* Preview area with optional carousel controls */}
                         <div className="relative h-[200px] shrink-0 overflow-hidden bg-muted">
-                          {template.previewHtmlContent
+                          {currentVariant.previewHtmlContent
                             ? (
                                 <iframe
-                                  srcDoc={template.previewHtmlContent}
+                                  srcDoc={currentVariant.previewHtmlContent}
                                   sandbox="allow-same-origin"
                                   scrolling="no"
                                   tabIndex={-1}
-                                  title={`Preview: ${template.title}`}
+                                  title={`Preview: ${group.title}`}
                                   data-testid="template-preview-iframe"
                                   style={{
                                     width: '400%',
@@ -209,21 +241,70 @@ export default function TemplateGallery({ onUseAsIs, onCustomize }: TemplateGall
                           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
                           {/* Category badge */}
-                          {template.category && (
+                          {group.category && (
                             <div className="absolute right-3 top-3">
                               <span className="rounded-full bg-white/90 px-2.5 py-1 text-xs font-medium text-foreground/75 shadow-sm backdrop-blur-sm">
-                                {template.category}
+                                {group.category}
                               </span>
                             </div>
                           )}
+
+                          {/* Carousel arrows — only when multiple variants */}
+                          {hasMultiple && (
+                            <>
+                              <button
+                                type="button"
+                                data-testid="carousel-prev"
+                                aria-label="Previous variant"
+                                onClick={() => handlePrev(group.typeKey, group.variants.length)}
+                                className="absolute left-2 top-1/2 z-10 flex size-7 -translate-y-1/2 items-center justify-center rounded-full bg-black/40 text-white opacity-0 transition-opacity duration-200 hover:bg-black/60 group-hover:opacity-100"
+                              >
+                                <ChevronLeft className="size-4" />
+                              </button>
+                              <button
+                                type="button"
+                                data-testid="carousel-next"
+                                aria-label="Next variant"
+                                onClick={() => handleNext(group.typeKey, group.variants.length)}
+                                className="absolute right-2 top-1/2 z-10 flex size-7 -translate-y-1/2 items-center justify-center rounded-full bg-black/40 text-white opacity-0 transition-opacity duration-200 hover:bg-black/60 group-hover:opacity-100"
+                              >
+                                <ChevronRight className="size-4" />
+                              </button>
+                            </>
+                          )}
                         </div>
+
+                        {/* Variant indicator dots — only when multiple variants */}
+                        {hasMultiple && (
+                          <div className="flex items-center justify-center gap-1.5 border-b px-4 py-2">
+                            {group.variants.map((v, i) => (
+                              <button
+                                key={v.id}
+                                type="button"
+                                aria-label={`Select variant ${i + 1}`}
+                                onClick={() => setActiveVariantIndex(prev => ({ ...prev, [group.typeKey]: i }))}
+                                className={cn(
+                                  'size-1.5 rounded-full transition-all duration-200',
+                                  i === activeIdx
+                                    ? 'w-4 bg-primary'
+                                    : 'bg-muted-foreground/40 hover:bg-muted-foreground/60',
+                                )}
+                              />
+                            ))}
+                            {currentVariant.variantName && (
+                              <span className="ml-1 text-xs text-muted-foreground">
+                                {currentVariant.variantName}
+                              </span>
+                            )}
+                          </div>
+                        )}
 
                         {/* Card body */}
                         <div className="flex flex-1 flex-col p-4">
                           <div className="mb-2 flex items-center gap-2.5">
                             <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted">
                               <DynamicLucideIcon
-                                name={template.icon as keyof typeof Icons}
+                                name={group.icon as keyof typeof Icons}
                                 color={accentColor}
                               />
                             </div>
@@ -231,11 +312,11 @@ export default function TemplateGallery({ onUseAsIs, onCustomize }: TemplateGall
                               data-testid="template-name"
                               className="font-semibold leading-snug text-foreground"
                             >
-                              {template.title}
+                              {group.title}
                             </h3>
                           </div>
                           <p className="line-clamp-2 flex-1 text-sm text-muted-foreground">
-                            {template.description}
+                            {group.description}
                           </p>
                         </div>
 
@@ -246,7 +327,7 @@ export default function TemplateGallery({ onUseAsIs, onCustomize }: TemplateGall
                             size="sm"
                             className="flex-1 rounded-full text-sm font-medium"
                             onClick={() => {
-                              handleTemplateSelect(template);
+                              handleTemplateSelect(currentVariant, group);
                               onUseAsIs();
                             }}
                           >
@@ -258,7 +339,7 @@ export default function TemplateGallery({ onUseAsIs, onCustomize }: TemplateGall
                             size="sm"
                             className="flex-1 rounded-full text-sm font-medium"
                             onClick={() => {
-                              handleTemplateSelect(template);
+                              handleTemplateSelect(currentVariant, group);
                               onCustomize();
                             }}
                           >
@@ -272,7 +353,7 @@ export default function TemplateGallery({ onUseAsIs, onCustomize }: TemplateGall
                 </div>
 
                 {/* Empty state */}
-                {filteredTemplates.length === 0 && (searchTerm || selectedCategory !== 'All') && (
+                {filteredGroups.length === 0 && (searchTerm || selectedCategory !== 'All') && (
                   <div className="flex flex-col items-center gap-3 py-16 text-center">
                     <div className="flex size-16 items-center justify-center rounded-full bg-muted">
                       <Search className="size-7 text-muted-foreground" />

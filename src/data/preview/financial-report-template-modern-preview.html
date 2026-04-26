@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Acme Global Inc. — Q1 2025 Financial Report</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .page {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(79, 70, 229, 0.08);
+      overflow: hidden;
+    }
+
+    .report-header {
+      background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+      padding: 48px 48px 40px;
+      color: #ffffff;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .report-header .company-name { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+    .report-header .report-meta { font-size: 13px; opacity: 0.85; margin-top: 6px; }
+
+    .report-badge {
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 8px;
+      padding: 10px 16px;
+      text-align: right;
+    }
+
+    .report-badge .period { font-size: 18px; font-weight: 700; }
+    .report-badge .label { font-size: 11px; opacity: 0.75; text-transform: uppercase; letter-spacing: 1px; }
+
+    .report-body { padding: 40px 48px; }
+
+    .section { margin-bottom: 40px; }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #4f46e5;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      border-left: 4px solid #4f46e5;
+      padding-left: 10px;
+      margin-bottom: 16px;
+    }
+
+    .section-subtitle {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: -10px;
+      margin-bottom: 16px;
+      padding-left: 14px;
+    }
+
+    .highlights-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+
+    .highlights-list li {
+      background: #f1f5f9;
+      border-radius: 8px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: #1e293b;
+    }
+
+    .highlights-list li::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #4f46e5;
+      flex-shrink: 0;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+    }
+
+    .metric-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .metric-card .metric-name { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #64748b; margin-bottom: 6px; }
+    .metric-card .metric-value { font-size: 24px; font-weight: 700; color: #1e293b; }
+    .metric-card .metric-change { font-size: 12px; margin-top: 4px; }
+    .metric-card .metric-change.up { color: #10b981; }
+    .metric-card .metric-change.down { color: #ef4444; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+
+    thead th {
+      background: #f1f5f9;
+      color: #64748b;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    thead th:not(:first-child) { text-align: right; }
+
+    tbody td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #f1f5f9;
+      color: #334155;
+    }
+
+    tbody td:not(:first-child) { text-align: right; }
+    tbody tr:last-child td { border-bottom: none; }
+
+    .row-subtotal td { font-weight: 700; color: #1e293b; background: #f8fafc; }
+    .row-subtotal td:first-child { border-left: 3px solid #4f46e5; padding-left: 9px; }
+
+    .change-positive { color: #10b981; }
+    .change-negative { color: #ef4444; }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+    .outlook-body p { margin-bottom: 12px; color: #334155; }
+
+    .report-footer {
+      background: #f8fafc;
+      border-top: 1px solid #e2e8f0;
+      padding: 24px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    .report-footer .disclaimer { max-width: 60%; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <div class="report-header">
+    <div>
+      <div class="company-name">Acme Global Inc.</div>
+      <div class="report-meta">Fiscal Year FY2025 &nbsp;·&nbsp; Report Date: April 25, 2025</div>
+    </div>
+    <div class="report-badge">
+      <div class="label">Report Period</div>
+      <div class="period">Q1 2025</div>
+    </div>
+  </div>
+
+  <div class="report-body">
+
+    <div class="section">
+      <div class="section-title">Executive Summary</div>
+      <ul class="highlights-list">
+        <li>Revenue increased 18% YoY to $4.2M</li>
+        <li>Operating margin improved to 22%</li>
+        <li>Cash position remains strong at $8.1M</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Financial Highlights</div>
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-name">Revenue</div>
+          <div class="metric-value">$4.2M</div>
+          <div class="metric-change up">&#8593; 18% YoY</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-name">Net Income</div>
+          <div class="metric-value">$924K</div>
+          <div class="metric-change up">&#8593; 31% YoY</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-name">EBITDA</div>
+          <div class="metric-value">$1.1M</div>
+          <div class="metric-change up">&#8593; 25% YoY</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-name">EPS</div>
+          <div class="metric-value">$1.24</div>
+          <div class="metric-change up">&#8593; 28% YoY</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Income Statement</div>
+      <div class="section-subtitle">For the period ending March 31, 2025</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Current Period</th>
+            <th>Prior Period</th>
+            <th>Change</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Revenue</td>
+            <td>$4,200,000</td>
+            <td>$3,559,322</td>
+            <td class="change-positive">+18.0%</td>
+          </tr>
+          <tr>
+            <td>Cost of Revenue</td>
+            <td>$1,680,000</td>
+            <td>$1,566,102</td>
+            <td class="change-negative">+7.3%</td>
+          </tr>
+          <tr class="row-subtotal">
+            <td>Gross Profit</td>
+            <td>$2,520,000</td>
+            <td>$1,993,220</td>
+            <td class="change-positive">+26.4%</td>
+          </tr>
+          <tr>
+            <td>Operating Expenses</td>
+            <td>$1,596,000</td>
+            <td>$1,423,729</td>
+            <td class="change-negative">+12.1%</td>
+          </tr>
+          <tr class="row-subtotal">
+            <td>Net Income</td>
+            <td>$924,000</td>
+            <td>$569,491</td>
+            <td class="change-positive">+62.3%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Balance Sheet</div>
+      <div class="section-subtitle">As of March 31, 2025</div>
+      <div class="two-col">
+        <div>
+          <table>
+            <thead><tr><th>Assets</th><th>Current</th><th>Prior</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>Cash &amp; Equivalents</td><td>$8,100,000</td><td>$6,200,000</td>
+              </tr>
+              <tr>
+                <td>Accounts Receivable</td><td>$1,260,000</td><td>$980,000</td>
+              </tr>
+              <tr class="row-subtotal">
+                <td>Total Assets</td><td>$12,400,000</td><td>$10,100,000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <table>
+            <thead><tr><th>Liabilities &amp; Equity</th><th>Current</th><th>Prior</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>Accounts Payable</td><td>$840,000</td><td>$720,000</td>
+              </tr>
+              <tr class="row-subtotal">
+                <td>Total Liabilities</td><td>$3,720,000</td><td>$3,030,000</td>
+              </tr>
+              <tr class="row-subtotal">
+                <td>Total Equity</td><td>$8,680,000</td><td>$7,070,000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Cash Flow Statement</div>
+      <div class="section-subtitle">For the period ending March 31, 2025</div>
+      <table>
+        <thead><tr><th>Category</th><th>Amount</th></tr></thead>
+        <tbody>
+          <tr><td>Net Income</td><td>$924,000</td></tr>
+          <tr><td>Depreciation</td><td>$126,000</td></tr>
+          <tr class="row-subtotal"><td>Net Cash from Operations</td><td>$1,050,000</td></tr>
+          <tr><td>Capital Expenditure</td><td>-$210,000</td></tr>
+          <tr class="row-subtotal"><td>Net Cash from Investing</td><td>-$210,000</td></tr>
+          <tr><td>Debt Repayment</td><td>-$84,000</td></tr>
+          <tr class="row-subtotal"><td>Net Cash from Financing</td><td>-$84,000</td></tr>
+          <tr><td>Beginning Cash</td><td>$7,344,000</td></tr>
+          <tr><td>Net Change</td><td>$756,000</td></tr>
+          <tr class="row-subtotal"><td>Ending Cash</td><td>$8,100,000</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Segment Analysis</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Segment</th>
+            <th>Revenue</th>
+            <th>Growth</th>
+            <th>Operating Income</th>
+            <th>Margin</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>SaaS</strong></td>
+            <td>$2,520,000</td>
+            <td class="change-positive">+24%</td>
+            <td>$756,000</td>
+            <td>30%</td>
+          </tr>
+          <tr>
+            <td><strong>Professional Services</strong></td>
+            <td>$1,680,000</td>
+            <td class="change-positive">+10%</td>
+            <td>$168,000</td>
+            <td>10%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Outlook</div>
+      <div class="outlook-body">
+        <p>Management expects continued growth in Q2 2025 driven by new product launches and geographic expansion.</p>
+        <p>Full year revenue guidance is raised to $17&ndash;18M.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="report-footer">
+    <div class="disclaimer">This report contains forward-looking statements subject to risk.</div>
+    <div>investor.relations@acmeglobal.com | (415) 555-0100</div>
+  </div>
+
+</div>
+</body>
+</html>

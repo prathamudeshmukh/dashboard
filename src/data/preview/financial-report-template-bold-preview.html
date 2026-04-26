@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Helvetica Neue', Arial, sans-serif; color: #1e293b; background: #e2e8f0; padding: 24px; }
+    .container { max-width: 800px; margin: 0 auto; background: #fff; box-shadow: 0 4px 24px rgba(0,0,0,0.15); border-left: 8px solid #f59e0b; }
+    .header { background: #0f172a; color: #fff; padding: 40px; }
+    .co-name { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; color: #f59e0b; margin-bottom: 12px; }
+    .title { font-size: 26px; font-weight: 900; margin-bottom: 6px; }
+    .subtitle { font-size: 13px; opacity: 0.65; }
+    .body { padding: 40px; }
+    .section { margin-bottom: 32px; }
+    .section-title { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: #0f172a; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 3px solid #f59e0b; }
+    .highlights { display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+    .metric-card { flex: 1; min-width: 140px; background: #0f172a; color: #fff; padding: 18px; }
+    .metric-name { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.6; margin-bottom: 6px; }
+    .metric-value { font-size: 22px; font-weight: 900; color: #f59e0b; }
+    .metric-change { font-size: 12px; opacity: 0.7; margin-top: 4px; }
+    ul { padding-left: 20px; margin-bottom: 8px; }
+    li { margin-bottom: 6px; font-size: 14px; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+    thead tr { background: #0f172a; color: #fff; }
+    th { padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+    th:not(:first-child) { text-align: right; }
+    td { padding: 10px 14px; border-bottom: 1px solid #e2e8f0; font-size: 13px; }
+    td:not(:first-child) { text-align: right; }
+    .footer { background: #f8fafc; border-top: 3px solid #f59e0b; padding: 16px 40px; font-size: 12px; color: #64748b; text-align: center; }
+    p { font-size: 13px; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="co-name">Acme Global Inc.</div>
+    <div class="title">Financial Report — FY2025 Q1</div>
+    <div class="subtitle">For the period ending March 31, 2025 · Issued April 25, 2025</div>
+  </div>
+  <div class="body">
+    <div class="section">
+      <div class="section-title">Executive Summary</div>
+      <ul><li>Revenue increased 18% YoY to $4.2M</li><li>Operating margin improved to 22%</li><li>Cash position remains strong at $8.1M</li></ul>
+    </div>
+    <div class="section">
+      <div class="section-title">Financial Highlights</div>
+      <div class="highlights">
+        <div class="metric-card"><div class="metric-name">Revenue</div><div class="metric-value">$4.2M</div><div class="metric-change">↑ 18% YoY</div></div>
+        <div class="metric-card"><div class="metric-name">Net Income</div><div class="metric-value">$924K</div><div class="metric-change">↑ 31% YoY</div></div>
+        <div class="metric-card"><div class="metric-name">EBITDA</div><div class="metric-value">$1.1M</div><div class="metric-change">↑ 25% YoY</div></div>
+        <div class="metric-card"><div class="metric-name">EPS</div><div class="metric-value">$1.24</div><div class="metric-change">↑ 28% YoY</div></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Income Statement — Q1 2025</div>
+      <table>
+        <thead><tr><th>Item</th><th>Q1 2025</th><th>Prior Year</th><th>Change</th></tr></thead>
+        <tbody>
+          <tr><td>Revenue</td><td>$4,200,000</td><td>$3,559,322</td><td>+18.0%</td></tr>
+          <tr><td>Cost of Revenue</td><td>$1,680,000</td><td>$1,566,102</td><td>+7.3%</td></tr>
+          <tr style="font-weight:700"><td>Gross Profit</td><td>$2,520,000</td><td>$1,993,220</td><td>+26.4%</td></tr>
+          <tr><td>Operating Expenses</td><td>$1,596,000</td><td>$1,423,729</td><td>+12.1%</td></tr>
+          <tr style="font-weight:700"><td>Net Income</td><td>$924,000</td><td>$569,491</td><td>+62.3%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="section">
+      <div class="section-title">Outlook</div>
+      <p>Management expects continued growth in Q2 2025 driven by new product launches and geographic expansion.</p>
+      <p>Full year revenue guidance is raised to $17–18M.</p>
+    </div>
+  </div>
+  <div class="footer">This report contains forward-looking statements subject to risk. | investor.relations@acmeglobal.com | (415) 555-0100</div>
+</div>
+</body>
+</html>

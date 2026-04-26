@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{proposal.title}}</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f8fafc;
+      color: #1e293b;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .page {
+      max-width: 900px;
+      margin: 40px auto;
+    }
+
+    /* Cover Page */
+    .cover {
+      background: linear-gradient(140deg, #4f46e5 0%, #6366f1 60%, #818cf8 100%);
+      border-radius: 12px;
+      padding: 72px 64px;
+      color: #ffffff;
+      margin-bottom: 32px;
+      box-shadow: 0 8px 32px rgba(79, 70, 229, 0.2);
+      min-height: 480px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .cover-top .proposal-number {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      opacity: 0.7;
+      margin-bottom: 24px;
+      font-family: system-ui, sans-serif;
+    }
+
+    .cover-title {
+      font-size: 38px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1.15;
+    }
+
+    .cover-subtitle {
+      font-size: 16px;
+      opacity: 0.85;
+      margin-top: 12px;
+      font-weight: 400;
+    }
+
+    .cover-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,0.25);
+    }
+
+    .cover-meta-group .label {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      opacity: 0.6;
+      margin-bottom: 4px;
+    }
+
+    .cover-meta-group .value {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .cover-meta-group .sub-value {
+      font-size: 12px;
+      opacity: 0.75;
+    }
+
+    /* Body card */
+    .body-card {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(79, 70, 229, 0.07);
+      padding: 48px 56px;
+      margin-bottom: 24px;
+    }
+
+    /* Section */
+    .section {
+      margin-bottom: 40px;
+    }
+
+    .section:last-child { margin-bottom: 0; }
+
+    .section-title {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #4f46e5;
+      border-left: 4px solid #4f46e5;
+      padding-left: 10px;
+      margin-bottom: 16px;
+    }
+
+    /* Paragraphs */
+    .body-text p {
+      margin-bottom: 12px;
+      color: #334155;
+      line-height: 1.75;
+    }
+
+    .body-text p:last-child { margin-bottom: 0; }
+
+    /* Situation Analysis */
+    .situation-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .situation-card {
+      background: #f8fafc;
+      border-radius: 8px;
+      border-left: 3px solid #4f46e5;
+      padding: 16px 18px;
+    }
+
+    .situation-card .sit-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #4f46e5;
+      margin-bottom: 6px;
+    }
+
+    .situation-card .sit-desc {
+      font-size: 12px;
+      color: #475569;
+    }
+
+    /* Proposed Solution */
+    .solution-overview {
+      background: #ede9fe;
+      border-radius: 8px;
+      padding: 16px 20px;
+      font-size: 13px;
+      color: #3730a3;
+      font-weight: 500;
+      margin-bottom: 20px;
+    }
+
+    .phase-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 20px 22px;
+      margin-bottom: 12px;
+    }
+
+    .phase-card:last-child { margin-bottom: 0; }
+
+    .phase-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .phase-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .phase-duration {
+      font-size: 11px;
+      background: #ede9fe;
+      color: #4f46e5;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    .phase-two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .phase-col-title {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #64748b;
+      margin-bottom: 6px;
+    }
+
+    .phase-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .phase-list li {
+      font-size: 12px;
+      color: #475569;
+      padding-left: 14px;
+      position: relative;
+    }
+
+    .phase-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: #4f46e5;
+      font-size: 10px;
+    }
+
+    /* Timeline */
+    .milestone-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .milestone-item {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      padding: 16px 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .milestone-item:last-child { border-bottom: none; }
+
+    .milestone-date {
+      min-width: 70px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #4f46e5;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding-top: 2px;
+    }
+
+    .milestone-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #4f46e5;
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+
+    .milestone-content .ms-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .milestone-content .ms-desc {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    /* Investment */
+    table.investment-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .investment-table thead th {
+      background: #f1f5f9;
+      color: #64748b;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .investment-table thead th:not(:first-child) { text-align: right; }
+
+    .investment-table tbody td {
+      padding: 12px 14px;
+      border-bottom: 1px solid #f1f5f9;
+      color: #334155;
+    }
+
+    .investment-table tbody td:not(:first-child) { text-align: right; }
+
+    .investment-total {
+      background: #4f46e5;
+      color: #ffffff;
+    }
+
+    .investment-total td { border: none !important; font-weight: 700; }
+
+    /* Next Steps */
+    .next-steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .next-step-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      background: #f8fafc;
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+
+    .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #4f46e5;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .step-content .step-action {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .step-content .step-timeline {
+      font-size: 11px;
+      color: #4f46e5;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .step-content .step-desc {
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    /* Footer */
+    .proposal-footer {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 24px 56px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: #64748b;
+      box-shadow: 0 4px 16px rgba(79,70,229,0.06);
+    }
+
+    .footer-contact .contact-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .footer-contact .contact-title {
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    .footer-validity {
+      text-align: right;
+    }
+
+    .footer-validity .validity-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #94a3b8;
+    }
+
+    .footer-validity .validity-date {
+      font-size: 13px;
+      font-weight: 700;
+      color: #4f46e5;
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Cover -->
+  <div class="cover">
+    <div class="cover-top">
+      <div class="proposal-number">Proposal {{proposal.proposalNumber}}</div>
+      <div class="cover-title">{{proposal.title}}</div>
+      <div class="cover-subtitle">{{proposal.subtitle}}</div>
+    </div>
+    <div class="cover-meta">
+      <div class="cover-meta-group">
+        <div class="label">Prepared For</div>
+        <div class="value">{{proposal.preparedFor.contactPerson}}</div>
+        <div class="sub-value">{{proposal.preparedFor.contactTitle}}, {{proposal.preparedFor.company}}</div>
+      </div>
+      <div class="cover-meta-group">
+        <div class="label">Prepared By</div>
+        <div class="value">{{proposal.preparedBy.company}}</div>
+        <div class="sub-value">{{proposal.preparedBy.email}}</div>
+      </div>
+      <div class="cover-meta-group">
+        <div class="label">Date</div>
+        <div class="value">{{proposal.date}}</div>
+      </div>
+      <div class="cover-meta-group">
+        <div class="label">Valid Until</div>
+        <div class="value">{{proposal.validUntil}}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="body-card">
+
+    <div class="section">
+      <div class="section-title">Executive Summary</div>
+      <div class="body-text">
+        {{#each executiveSummary}}
+        <p>{{this}}</p>
+        {{/each}}
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">About {{proposal.preparedBy.company}}</div>
+      <div class="body-text">
+        {{#each companyBackground}}
+        <p>{{this}}</p>
+        {{/each}}
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Situation Analysis</div>
+      <div class="situation-grid">
+        {{#each situationAnalysis}}
+        <div class="situation-card">
+          <div class="sit-title">{{title}}</div>
+          <div class="sit-desc">{{description}}</div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Proposed Solution</div>
+      <div class="solution-overview">{{proposedSolution.overview}}</div>
+      {{#each proposedSolution.phases}}
+      <div class="phase-card">
+        <div class="phase-header">
+          <div class="phase-name">{{name}}</div>
+          <div class="phase-duration">{{duration}}</div>
+        </div>
+        <div class="phase-two-col">
+          <div>
+            <div class="phase-col-title">Activities</div>
+            <ul class="phase-list">
+              {{#each activities}}
+              <li>{{this}}</li>
+              {{/each}}
+            </ul>
+          </div>
+          <div>
+            <div class="phase-col-title">Deliverables</div>
+            <ul class="phase-list">
+              {{#each deliverables}}
+              <li>{{this}}</li>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+
+    <div class="section">
+      <div class="section-title">Timeline</div>
+      <p style="font-size:13px;color:#475569;margin-bottom:16px;">{{timeline.overview}}</p>
+      <div class="milestone-list">
+        {{#each timeline.milestones}}
+        <div class="milestone-item">
+          <div class="milestone-date">{{date}}</div>
+          <div class="milestone-dot"></div>
+          <div class="milestone-content">
+            <div class="ms-name">{{name}}</div>
+            <div class="ms-desc">{{description}}</div>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Investment</div>
+      <table class="investment-table">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Amount</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each investment.costBreakdown}}
+          <tr>
+            <td>{{category}}</td>
+            <td>{{amount}}</td>
+            <td>{{description}}</td>
+          </tr>
+          {{/each}}
+          <tr class="investment-total">
+            <td>Total Investment</td>
+            <td>{{investment.totalInvestment}}</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Next Steps</div>
+      <div class="next-steps-list">
+        {{#each nextSteps}}
+        <div class="next-step-item">
+          <div class="step-num">{{@index_plus_1}}</div>
+          <div class="step-content">
+            <div class="step-timeline">{{timeline}}</div>
+            <div class="step-action">{{action}}</div>
+            <div class="step-desc">{{description}}</div>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+
+  </div><!-- /body-card -->
+
+  <!-- Footer -->
+  <div class="proposal-footer">
+    <div class="footer-contact">
+      <div class="contact-name">{{contactInfo.primaryContact}}</div>
+      <div class="contact-title">{{contactInfo.title}}</div>
+      <div style="margin-top:4px;font-size:11px;">{{proposal.preparedBy.phone}} &nbsp;·&nbsp; {{proposal.preparedBy.email}}</div>
+    </div>
+    <div class="footer-validity">
+      <div class="validity-label">Valid Until</div>
+      <div class="validity-date">{{proposal.validUntil}}</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
