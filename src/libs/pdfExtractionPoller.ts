@@ -13,6 +13,7 @@ type StoreActions = {
 type PollCallbacks = {
   onCompleted: () => void;
   onFailed: () => void;
+  onProgress?: (pagesDone: number, pagesTotal: number) => void;
 };
 
 const MAX_POLL_MS = 5 * 60 * 1000;
@@ -30,6 +31,10 @@ export async function pollExtractionJob(
     while (Date.now() - extractionStart < MAX_POLL_MS) {
       await new Promise<void>(resolve => setTimeout(resolve, 3000));
       const result = await check(pdfId);
+
+      if (result.status === 'pending' && result.pagesTotal > 0 && callbacks.onProgress) {
+        callbacks.onProgress(result.pagesDone, result.pagesTotal);
+      }
 
       if (result.status === 'completed') {
         store.setHtmlContent(result.htmlContent);
