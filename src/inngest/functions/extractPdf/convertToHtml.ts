@@ -19,6 +19,7 @@ export async function convertToHTML(downloadUrl: string, logger: Logger): Promis
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
+        timeout: 55_000, // stay under Vercel Hobby 60s function limit
       },
     );
     logger.info('Conversion completed');
