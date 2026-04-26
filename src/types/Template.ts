@@ -82,6 +82,23 @@ export type TemplateGalleryProps = {
   handlebarContent: string | null;
   sampleData: unknown;
   previewHtmlContent: string | null;
+  typeKey: string;
+  variantName: string | null;
+};
+
+export type TemplateGalleryVariant = Pick<
+  TemplateGalleryProps,
+  'id' | 'variantName' | 'htmlContent' | 'handlebarContent' | 'sampleData' | 'style' | 'previewHtmlContent'
+>;
+
+export type TemplateGalleryGroup = {
+  typeKey: string;
+  title: string;
+  description: string | null;
+  icon: string | null;
+  color: string | null;
+  category: string | null;
+  variants: TemplateGalleryVariant[];
 };
 
 export type TemplateSuccessData = {

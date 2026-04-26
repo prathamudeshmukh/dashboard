@@ -82,7 +82,7 @@ export const creditTransactions = pgTable('credit_transactions', {
 
 export const templateGallery = pgTable('template_gallery', {
   id: uuid('id').primaryKey().defaultRandom(),
-  title: varchar('title', { length: 255 }).notNull().unique(),
+  title: varchar('title', { length: 255 }).notNull(),
   description: text('description'),
   icon: varchar('icon', { length: 255 }),
   color: varchar('color', { length: 255 }),
@@ -92,7 +92,11 @@ export const templateGallery = pgTable('template_gallery', {
   sampleData: jsonb('sample_data'),
   style: text('style'),
   previewHtmlContent: text('preview_html_content'),
-});
+  typeKey: varchar('type_key', { length: 255 }).notNull(),
+  variantName: varchar('variant_name', { length: 255 }),
+}, table => ({
+  typeVariantUnique: uniqueIndex('tg_type_variant_unique').on(table.typeKey, table.variantName),
+}));
 
 // Templates Table
 export const templates = pgTable('templates', {

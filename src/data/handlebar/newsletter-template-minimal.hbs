@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      color: #111111;
+      line-height: 1.7;
+      background-color: #ffffff;
+    }
+    .newsletter-container {
+      max-width: 600px;
+      margin: 48px auto;
+      background-color: #ffffff;
+    }
+    .header {
+      padding: 48px 0 32px;
+      border-bottom: 1px solid #111111;
+    }
+    .header-title {
+      font-size: 26px;
+      font-weight: 700;
+      color: #111111;
+      letter-spacing: -0.3px;
+    }
+    .header-date {
+      font-size: 11px;
+      color: #888888;
+      margin-top: 8px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    .content { padding: 40px 0; }
+    .section { margin-bottom: 40px; }
+    .section-label {
+      font-size: 10px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: #888888;
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #111111;
+      margin-bottom: 12px;
+    }
+    .featured-article {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    .article-image {
+      width: 160px;
+      min-width: 160px;
+      height: 120px;
+      background-color: #f4f4f4;
+      border: 1px solid #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #888888;
+      font-size: 11px;
+      overflow: hidden;
+      font-family: Georgia, serif;
+    }
+    .article-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .article-content { flex: 1; }
+    .article-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #111111;
+      margin-bottom: 8px;
+    }
+    .article-content p {
+      font-size: 14px;
+      color: #444444;
+      margin-bottom: 8px;
+    }
+    .separator {
+      height: 1px;
+      background-color: #e8e8e8;
+      margin: 36px 0;
+    }
+    .two-column {
+      display: flex;
+      gap: 32px;
+    }
+    .column { flex: 1; }
+    .column p {
+      font-size: 13px;
+      color: #444444;
+      margin-bottom: 8px;
+    }
+    .event-item {
+      margin-bottom: 14px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #eeeeee;
+    }
+    .event-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .event-item strong {
+      display: block;
+      font-size: 13px;
+      color: #111111;
+    }
+    .event-item span {
+      font-size: 12px;
+      color: #888888;
+    }
+    .spotlight {
+      padding: 20px 0;
+      border-top: 1px solid #e8e8e8;
+      border-bottom: 1px solid #e8e8e8;
+    }
+    .spotlight-quote {
+      font-size: 16px;
+      font-style: italic;
+      color: #333333;
+      margin-bottom: 10px;
+      line-height: 1.6;
+    }
+    .spotlight-author {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #888888;
+    }
+    .cta-button {
+      border: 1px solid #111111;
+      color: #111111;
+      background: transparent;
+      text-align: center;
+      padding: 12px 24px;
+      font-family: Georgia, serif;
+      font-size: 13px;
+      font-weight: 700;
+      margin: 32px 0;
+      cursor: pointer;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .tips-box {
+      padding: 16px 0;
+      border-top: 1px solid #e8e8e8;
+    }
+    .tips-box p {
+      font-size: 13px;
+      color: #444444;
+      font-style: italic;
+    }
+    .footer {
+      padding: 32px 0;
+      border-top: 1px solid #111111;
+      font-size: 11px;
+      color: #888888;
+    }
+    .footer p { margin-bottom: 4px; }
+    .footer a {
+      color: #111111;
+      text-decoration: none;
+      border-bottom: 1px solid #888888;
+    }
+    .social-links { margin-top: 16px; }
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border: 1px solid #888888;
+      color: #888888;
+      margin: 0 3px;
+      font-size: 11px;
+      font-weight: 400;
+      font-family: Georgia, serif;
+    }
+  </style>
+</head>
+<body>
+  <div class="newsletter-container">
+    <div class="header">
+      <div class="header-title">{{header.title}}</div>
+      <div class="header-date">{{header.date}}</div>
+    </div>
+
+    <div class="content">
+      <div class="section">
+        <div class="section-label">{{featuredArticle.sectionTitle}}</div>
+        <div class="featured-article">
+          <div class="article-image">
+            {{#if featuredArticle.imageUrl}}
+              <img src="{{featuredArticle.imageUrl}}" alt="{{featuredArticle.title}}" />
+            {{else}}
+              Image
+            {{/if}}
+          </div>
+          <div class="article-content">
+            <div class="article-title">{{featuredArticle.title}}</div>
+            {{#each featuredArticle.paragraphs}}
+              <p>{{this}}</p>
+            {{/each}}
+          </div>
+        </div>
+      </div>
+
+      <div class="separator"></div>
+
+      <div class="section">
+        <div class="two-column">
+          <div class="column">
+            <div class="section-label">{{companyUpdates.title}}</div>
+            {{#each companyUpdates.paragraphs}}
+              <p>{{this}}</p>
+            {{/each}}
+          </div>
+          <div class="column">
+            <div class="section-label">{{upcomingEvents.title}}</div>
+            {{#each upcomingEvents.events}}
+              <div class="event-item">
+                <strong>{{title}}</strong>
+                <span>{{date}} &middot; {{location}}</span>
+              </div>
+            {{/each}}
+          </div>
+        </div>
+      </div>
+
+      <div class="separator"></div>
+
+      <div class="section">
+        <div class="section-label">{{customerSpotlight.title}}</div>
+        <div class="spotlight">
+          <div class="spotlight-quote">"{{customerSpotlight.quote}}"</div>
+          <div class="spotlight-author">
+            &mdash; {{customerSpotlight.author}}, {{customerSpotlight.position}}, {{customerSpotlight.company}}
+          </div>
+        </div>
+      </div>
+
+      <div class="cta-button">{{cta.text}}</div>
+
+      <div class="section">
+        <div class="section-label">{{quickTips.title}}</div>
+        <div class="tips-box">
+          <p>{{quickTips.content}}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>{{footer.copyright}}</p>
+      <p>{{footer.subscriptionInfo}}</p>
+      <p>
+        {{#each footer.links}}
+          <a href="{{url}}">{{text}}</a>{{#unless @last}} &nbsp;&middot;&nbsp; {{/unless}}
+        {{/each}}
+      </p>
+      <div class="social-links">
+        {{#each footer.socialLinks}}
+          <span class="social-link">{{icon}}</span>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+</body>
+</html>

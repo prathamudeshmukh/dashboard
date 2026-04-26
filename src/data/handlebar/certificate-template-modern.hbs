@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: #1e293b;
+      line-height: 1.6;
+      background-color: #f8fafc;
+      padding: 40px 20px;
+    }
+    .certificate-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 40px rgba(79, 70, 229, 0.12);
+      overflow: hidden;
+      text-align: center;
+    }
+    .certificate-top-bar {
+      height: 8px;
+      background: linear-gradient(to right, #4f46e5, #818cf8);
+    }
+    .certificate-body { padding: 56px 72px 48px; }
+    .cert-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: #4f46e5;
+      margin-bottom: 20px;
+    }
+    .cert-title {
+      font-size: 34px;
+      font-weight: 700;
+      color: #0f172a;
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+    }
+    .cert-type {
+      font-size: 14px;
+      color: #64748b;
+      margin-bottom: 40px;
+    }
+    .geometric-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin: 0 auto 40px;
+      width: 60%;
+    }
+    .geo-line { flex: 1; height: 1px; background-color: #e0e7ff; }
+    .geo-diamond {
+      width: 10px;
+      height: 10px;
+      background-color: #4f46e5;
+      transform: rotate(45deg);
+    }
+    .cert-present-text { font-size: 15px; color: #475569; margin-bottom: 14px; }
+    .recipient-name {
+      font-size: 38px;
+      font-weight: 700;
+      color: #4f46e5;
+      letter-spacing: -1px;
+      margin-bottom: 28px;
+      line-height: 1.2;
+    }
+    .cert-description { font-size: 15px; color: #475569; margin-bottom: 12px; }
+    .cert-program {
+      font-size: 22px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 12px;
+    }
+    .cert-additional { font-size: 14px; color: #64748b; margin-bottom: 32px; font-style: italic; }
+    .cert-date-block {
+      display: inline-block;
+      background: #f0f4ff;
+      border-radius: 8px;
+      padding: 10px 24px;
+      font-size: 14px;
+      color: #4f46e5;
+      font-weight: 600;
+      margin-bottom: 48px;
+    }
+    .signature-section {
+      display: flex;
+      justify-content: center;
+      gap: 80px;
+      margin-bottom: 40px;
+    }
+    .signature {
+      width: 180px;
+      text-align: center;
+    }
+    .signature-line {
+      height: 1px;
+      background-color: #cbd5e1;
+      margin-bottom: 8px;
+    }
+    .signature-name { font-size: 14px; font-weight: 700; color: #0f172a; }
+    .signature-title { font-size: 12px; color: #64748b; margin-top: 2px; }
+    .cert-verification {
+      background: #f8fafc;
+      border-radius: 8px;
+      padding: 12px 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .verification-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #4f46e5;
+      flex-shrink: 0;
+    }
+    .verification-id { font-size: 12px; font-weight: 600; color: #4f46e5; font-family: monospace; }
+    .verification-text { font-size: 11px; color: #64748b; }
+    .certificate-footer {
+      background: #f8fafc;
+      padding: 20px 72px;
+      border-top: 1px solid #e2e8f0;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+    .footer-org { font-weight: 700; color: #475569; margin-bottom: 4px; }
+    .certificate-bottom-bar {
+      height: 4px;
+      background: linear-gradient(to right, #4f46e5, #818cf8);
+    }
+  </style>
+</head>
+<body>
+  <div class="certificate-container">
+    <div class="certificate-top-bar"></div>
+    <div class="certificate-body">
+      <div class="cert-eyebrow">{{certificate.type}}</div>
+      <div class="cert-title">{{certificate.title}}</div>
+
+      <div class="geometric-divider">
+        <div class="geo-line"></div>
+        <div class="geo-diamond"></div>
+        <div class="geo-line"></div>
+      </div>
+
+      <div class="cert-present-text">{{achievement.description}}</div>
+      <div class="recipient-name">{{recipient.prefix}} {{recipient.fullName}}</div>
+      <div class="cert-description">for successfully completing</div>
+      <div class="cert-program">{{achievement.programName}}</div>
+      <div class="cert-additional">{{achievement.additionalText}}</div>
+
+      <div class="cert-date-block">Completed: {{details.completionDate}}</div>
+
+      <div class="signature-section">
+        {{#each signatures}}
+        <div class="signature">
+          <div class="signature-line"></div>
+          <div class="signature-name">{{name}}</div>
+          <div class="signature-title">{{title}}</div>
+        </div>
+        {{/each}}
+      </div>
+
+      <div class="cert-verification">
+        <div class="verification-dot"></div>
+        <div>
+          <div class="verification-id">{{verification.id}}</div>
+          <div class="verification-text">{{verification.verificationText}}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="certificate-footer">
+      <div class="footer-org">{{issuer.organization}}</div>
+      <div>{{footer.address}}</div>
+      <div>{{footer.contact}}</div>
+    </div>
+    <div class="certificate-bottom-bar"></div>
+  </div>
+</body>
+</html>

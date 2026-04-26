@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Georgia', serif; color: #111; line-height: 1.8; background: #fff; padding: 56px; }
+    .contract-container { max-width: 720px; margin: 0 auto; }
+    .contract-header { text-align: center; padding-bottom: 32px; border-bottom: 1px solid #111; margin-bottom: 40px; }
+    .contract-title { font-size: 20px; font-weight: normal; text-transform: uppercase; letter-spacing: 6px; margin-bottom: 8px; }
+    .contract-subtitle { font-size: 13px; color: #666; }
+    .parties-label { font-size: 10px; text-transform: uppercase; letter-spacing: 3px; color: #888; margin-bottom: 16px; }
+    .party { margin-bottom: 14px; }
+    .party-name { font-weight: bold; font-size: 14px; margin-bottom: 2px; }
+    .party-desc { font-size: 13px; color: #444; }
+    .divider { height: 1px; background: #ddd; margin: 28px 0; }
+    .section { margin-bottom: 24px; }
+    .section-title { font-size: 13px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #333; margin-bottom: 10px; }
+    .section-content { font-size: 13px; color: #333; text-align: justify; }
+    .section-content p { margin-bottom: 8px; }
+    .signature-section { display: flex; justify-content: space-between; margin-top: 56px; gap: 40px; }
+    .signature-block { flex: 1; }
+    .sig-label { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #888; margin-bottom: 12px; }
+    .sig-line { border-bottom: 1px solid #333; height: 40px; margin-bottom: 6px; }
+    .sig-date { font-size: 11px; color: #888; margin-top: 16px; }
+  </style>
+</head>
+<body>
+  <div class="contract-container">
+    <div class="contract-header">
+      <div class="contract-title">Service Agreement</div>
+      <div class="contract-subtitle">This agreement is entered into as of the date of signing</div>
+    </div>
+    <div class="parties-label">1. Parties</div>
+    <div class="party">
+      <div class="party-name">Service Provider</div>
+      <div class="party-desc">Acme Professional Services, Inc., 123 Business Avenue, San Francisco, CA 94107 ("Provider").</div>
+    </div>
+    <div class="party">
+      <div class="party-name">Client</div>
+      <div class="party-desc">Client Corporation, 456 Client Street, New York, NY 10001 ("Client").</div>
+    </div>
+    <div class="divider"></div>
+    <div class="section">
+      <div class="section-title">2. Services</div>
+      <div class="section-content">
+        <p>Provider agrees to perform professional consulting services related to business strategy, operations optimization, and digital transformation in a professional and workmanlike manner.</p>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">3. Payment Terms</div>
+      <div class="section-content">
+        <p>Service Fee: $10,000 per month. Payment due on the first business day of each month. Late payments accrue interest at 1.5% per month after 15 days.</p>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">4. Term and Termination</div>
+      <div class="section-content">
+        <p>This Agreement commences on the date of signing and continues for 12 months. Either party may terminate upon 30 days written notice.</p>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">5. Confidentiality</div>
+      <div class="section-content">
+        <p>Each party agrees to maintain the confidentiality of information received and not to disclose it to any third party without prior written consent.</p>
+      </div>
+    </div>
+    <div class="signature-section">
+      <div class="signature-block">
+        <div class="sig-label">Client</div>
+        <div class="sig-line"></div>
+        <div class="sig-date">Date: ____________________</div>
+      </div>
+      <div class="signature-block">
+        <div class="sig-label">Provider</div>
+        <div class="sig-line"></div>
+        <div class="sig-date">Date: ____________________</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

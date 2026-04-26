@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Helvetica Neue', Arial, sans-serif; color: #1e293b; background: #e2e8f0; padding: 24px; }
+    .contract-container { max-width: 800px; margin: 0 auto; background: #fff; box-shadow: 0 4px 24px rgba(0,0,0,0.15); border-left: 8px solid #f59e0b; }
+    .contract-header { background: #0f172a; color: #fff; padding: 48px 40px; }
+    .contract-title { font-size: 28px; font-weight: 900; text-transform: uppercase; letter-spacing: -0.5px; margin-bottom: 8px; }
+    .contract-subtitle { font-size: 14px; opacity: 0.65; }
+    .contract-body { padding: 40px; }
+    .section-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: #94a3b8; margin-bottom: 16px; }
+    .parties-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 36px; }
+    .party-card { background: #f8fafc; border-left: 4px solid #0f172a; padding: 18px; }
+    .party-card.accent { border-left-color: #f59e0b; }
+    .party-title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; margin-bottom: 6px; }
+    .party-desc { font-size: 13px; color: #1e293b; font-weight: 500; }
+    .section { margin-bottom: 24px; }
+    .section-heading { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #0f172a; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 2px solid #f59e0b; }
+    .section-content { font-size: 13px; color: #334155; text-align: justify; line-height: 1.8; }
+    .section-content p { margin-bottom: 8px; }
+    .signature-section { display: flex; justify-content: space-between; margin-top: 48px; gap: 24px; }
+    .signature-block { flex: 1; }
+    .sig-label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: #94a3b8; margin-bottom: 10px; }
+    .sig-line { border-bottom: 2px solid #0f172a; height: 40px; margin-bottom: 8px; }
+    .sig-date { font-size: 11px; color: #94a3b8; margin-top: 12px; }
+  </style>
+</head>
+<body>
+  <div class="contract-container">
+    <div class="contract-header">
+      <div class="contract-title">Service Agreement</div>
+      <div class="contract-subtitle">This agreement is entered into as of the date of signing</div>
+    </div>
+    <div class="contract-body">
+      <div class="section-label">1. Parties</div>
+      <div class="parties-grid">
+        <div class="party-card">
+          <div class="party-title">Service Provider</div>
+          <div class="party-desc">Acme Professional Services, Inc., 123 Business Avenue, San Francisco, CA 94107 ("Provider").</div>
+        </div>
+        <div class="party-card accent">
+          <div class="party-title">Client</div>
+          <div class="party-desc">Client Corporation, 456 Client Street, New York, NY 10001 ("Client").</div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-heading">2. Services</div>
+        <div class="section-content">
+          <p>Provider agrees to perform professional consulting services related to business strategy, operations optimization, and digital transformation in a professional and workmanlike manner.</p>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-heading">3. Payment Terms</div>
+        <div class="section-content">
+          <p>Service Fee: $10,000 per month. Payment due on the first business day of each month. Late payments accrue interest at 1.5% per month after 15 days.</p>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-heading">4. Term and Termination</div>
+        <div class="section-content">
+          <p>This Agreement commences on the date of signing and continues for 12 months. Either party may terminate upon 30 days written notice.</p>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-heading">5. Confidentiality</div>
+        <div class="section-content">
+          <p>Each party agrees to maintain the confidentiality of information received and not to disclose it to any third party without prior written consent.</p>
+        </div>
+      </div>
+      <div class="signature-section">
+        <div class="signature-block">
+          <div class="sig-label">Client</div>
+          <div class="sig-line"></div>
+          <div class="sig-date">Date: ____________________</div>
+        </div>
+        <div class="signature-block">
+          <div class="sig-label">Provider</div>
+          <div class="sig-line"></div>
+          <div class="sig-date">Date: ____________________</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

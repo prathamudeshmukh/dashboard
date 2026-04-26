@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #e2e8f0; padding: 24px; color: #1e293b; }
+    .resume { max-width: 860px; margin: 0 auto; background: #fff; box-shadow: 0 4px 24px rgba(0,0,0,0.15); border-left: 8px solid #f59e0b; }
+    .header { background: #0f172a; color: #fff; padding: 48px 48px 36px; }
+    .name { font-size: 36px; font-weight: 900; letter-spacing: -1px; margin-bottom: 6px; }
+    .job-title { font-size: 15px; color: #f59e0b; font-weight: 600; margin-bottom: 16px; }
+    .contact-bar { display: flex; flex-wrap: wrap; gap: 20px; font-size: 12px; opacity: 0.65; }
+    .body { padding: 40px 48px; }
+    .section { margin-bottom: 32px; }
+    .section-title { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: #0f172a; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 3px solid #f59e0b; }
+    p { font-size: 13px; color: #475569; margin-bottom: 8px; }
+    .exp-item { margin-bottom: 20px; }
+    .exp-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
+    .exp-title { font-weight: 700; font-size: 14px; color: #0f172a; }
+    .exp-company { font-size: 12px; color: #f59e0b; font-weight: 600; margin-top: 1px; }
+    .exp-date { font-size: 11px; color: #94a3b8; background: #f8fafc; padding: 2px 8px; }
+    ul { padding-left: 18px; margin-top: 6px; }
+    li { font-size: 12px; color: #475569; margin-bottom: 3px; }
+    .skills { display: flex; flex-wrap: wrap; gap: 8px; }
+    .skill { background: #0f172a; color: #fff; padding: 4px 10px; font-size: 11px; font-weight: 600; }
+    .cert-item { font-size: 13px; color: #334155; margin-bottom: 4px; }
+    .lang-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
+    .ref { font-style: italic; color: #94a3b8; font-size: 12px; }
+  </style>
+</head>
+<body>
+<div class="resume">
+  <div class="header">
+    <div class="name">Alexandra Rivera</div>
+    <div class="job-title">Senior Software Engineer</div>
+    <div class="contact-bar">
+      <span>a.rivera@email.com</span><span>(415) 555-0182</span><span>San Francisco, CA</span><span>linkedin.com/in/arivera</span><span>arivera.dev</span>
+    </div>
+  </div>
+  <div class="body">
+    <div class="section">
+      <div class="section-title">Summary</div>
+      <p>Experienced software engineer with 8+ years building scalable web applications. Passionate about clean code, developer experience, and mentoring junior engineers.</p>
+    </div>
+    <div class="section">
+      <div class="section-title">Experience</div>
+      <div class="exp-item">
+        <div class="exp-header"><div><div class="exp-title">Senior Software Engineer</div><div class="exp-company">TechCorp Inc.</div></div><div class="exp-date">Jan 2021 – Present</div></div>
+        <ul><li>Reduced API response time by 40%</li><li>Mentored 4 junior engineers</li><li>Shipped 3 major product features</li></ul>
+      </div>
+      <div class="exp-item">
+        <div class="exp-header"><div><div class="exp-title">Software Engineer</div><div class="exp-company">StartupXYZ</div></div><div class="exp-date">Jun 2018 – Dec 2020</div></div>
+        <ul><li>Built A/B testing framework</li><li>Improved test coverage from 40% to 85%</li></ul>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Education</div>
+      <div class="exp-item">
+        <div class="exp-header"><div><div class="exp-title">B.S. Computer Science</div><div class="exp-company">UC Berkeley</div></div><div class="exp-date">2014 – 2018</div></div>
+        <p>GPA 3.8 | Dean's List | ACM Chapter President</p>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Skills</div>
+      <div class="skills"><span class="skill">TypeScript</span><span class="skill">React</span><span class="skill">Node.js</span><span class="skill">PostgreSQL</span><span class="skill">AWS</span><span class="skill">Docker</span><span class="skill">GraphQL</span><span class="skill">Python</span></div>
+    </div>
+    <div class="section">
+      <div class="section-title">Languages</div>
+      <div class="lang-row"><span>English</span><span>Native</span></div>
+      <div class="lang-row"><span>Spanish</span><span>Professional</span></div>
+    </div>
+    <div class="ref">References available upon request.</div>
+  </div>
+</div>
+</body>
+</html>

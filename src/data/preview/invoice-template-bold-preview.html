@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Helvetica Neue', Arial, sans-serif; color: #1e293b; background: #e2e8f0; padding: 24px; }
+    .invoice-container { max-width: 800px; margin: 0 auto; background: #fff; box-shadow: 0 4px 24px rgba(0,0,0,0.15); }
+    .invoice-header { background: #0f172a; color: #fff; padding: 48px 40px; position: relative; }
+    .header-accent { position: absolute; left: 0; top: 0; bottom: 0; width: 8px; background: #f59e0b; }
+    .invoice-title { font-size: 42px; font-weight: 900; letter-spacing: -1px; text-transform: uppercase; margin-bottom: 12px; }
+    .invoice-meta { display: flex; gap: 40px; font-size: 13px; opacity: 0.7; }
+    .invoice-meta span { font-weight: 600; color: #f59e0b; margin-right: 4px; }
+    .invoice-body { padding: 40px; }
+    .invoice-parties { display: flex; justify-content: space-between; margin-bottom: 40px; gap: 20px; }
+    .party-block { flex: 1; background: #f8fafc; border-left: 4px solid #0f172a; padding: 20px; }
+    .party-block.highlight { border-left-color: #f59e0b; }
+    .party-label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: #94a3b8; margin-bottom: 8px; }
+    .party-name { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 6px; }
+    .party-detail { font-size: 13px; color: #475569; line-height: 1.7; }
+    .invoice-table { width: 100%; border-collapse: collapse; margin-bottom: 32px; }
+    .invoice-table thead tr { background: #0f172a; color: #fff; }
+    .invoice-table th { padding: 14px 16px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+    .invoice-table th:nth-child(n+2) { text-align: right; }
+    .invoice-table td { padding: 14px 16px; font-size: 14px; border-bottom: 1px solid #e2e8f0; }
+    .invoice-table td:nth-child(n+2) { text-align: right; }
+    .invoice-totals { margin-left: auto; width: 300px; }
+    .total-row { display: flex; justify-content: space-between; padding: 8px 16px; font-size: 14px; color: #475569; background: #f8fafc; margin-bottom: 2px; }
+    .total-row.grand { background: #0f172a; color: #fff; font-weight: 800; font-size: 18px; padding: 16px; margin-top: 4px; }
+    .label-accent { color: #f59e0b; }
+    .invoice-footer { background: #f8fafc; border-top: 4px solid #f59e0b; padding: 24px 40px; font-size: 13px; color: #475569; }
+    .invoice-footer p + p { margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <div class="invoice-container">
+    <div class="invoice-header">
+      <div class="header-accent"></div>
+      <div class="invoice-title">Invoice</div>
+      <div class="invoice-meta">
+        <div><span>No.</span>#INV-001</div>
+        <div><span>Date</span>March 29, 2025</div>
+      </div>
+    </div>
+    <div class="invoice-body">
+      <div class="invoice-parties">
+        <div class="party-block">
+          <div class="party-label">From</div>
+          <div class="party-name">Acme Corporation</div>
+          <div class="party-detail">123 Business Street<br/>San Francisco, CA 94107<br/>billing@acmecorp.com</div>
+        </div>
+        <div class="party-block highlight">
+          <div class="party-label">Bill To</div>
+          <div class="party-name">Client Company Inc.</div>
+          <div class="party-detail">456 Client Avenue<br/>New York, NY 10001<br/>accounting@clientcompany.com</div>
+        </div>
+      </div>
+      <table class="invoice-table">
+        <thead><tr><th>Description</th><th>Qty</th><th>Price</th><th>Total</th></tr></thead>
+        <tbody>
+          <tr><td>Web Development</td><td>40</td><td>$75.00</td><td>$3,000.00</td></tr>
+          <tr><td>Design Services</td><td>20</td><td>$85.00</td><td>$1,700.00</td></tr>
+          <tr><td>Consulting</td><td>10</td><td>$125.00</td><td>$1,250.00</td></tr>
+        </tbody>
+      </table>
+      <div class="invoice-totals">
+        <div class="total-row"><span>Subtotal</span><span>$5,950.00</span></div>
+        <div class="total-row"><span>Tax (8%)</span><span>$476.00</span></div>
+        <div class="total-row grand"><span class="label-accent">Total Due</span><span>$6,426.00</span></div>
+      </div>
+    </div>
+    <div class="invoice-footer">
+      <p>Thank you for your business!</p>
+      <p>Payment due within 30 days. Please make checks payable to Acme Corporation.</p>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{company.name}} — Press Release</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      background: #ffffff;
+      color: #111111;
+      line-height: 1.8;
+    }
+
+    /* ── PAGE WRAPPER ── */
+    .page {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 72px 0 80px;
+    }
+
+    /* ── LETTERHEAD ── */
+    .letterhead {
+      text-align: center;
+      padding-bottom: 36px;
+      border-bottom: 1px solid #e5e5e5;
+      margin-bottom: 40px;
+    }
+    .letterhead img {
+      height: 44px;
+      width: auto;
+      margin-bottom: 10px;
+    }
+    .letterhead-name {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #111111;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+    .letterhead-tagline {
+      font-size: 0.88rem;
+      color: #888888;
+      font-style: italic;
+    }
+
+    /* ── RELEASE META ── */
+    .release-meta {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .release-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #888888;
+      margin-bottom: 8px;
+    }
+    .release-date {
+      font-size: 0.88rem;
+      color: #555555;
+    }
+    .embargo-note {
+      font-size: 0.82rem;
+      color: #111111;
+      font-weight: 700;
+      margin-top: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── HEADLINE ── */
+    .headline {
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: #111111;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    .subheadline {
+      font-size: 1.05rem;
+      color: #555555;
+      font-style: italic;
+      text-align: center;
+      margin-bottom: 48px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid #e5e5e5;
+    }
+
+    /* ── BODY ── */
+    .dateline {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #111111;
+      margin-bottom: 16px;
+    }
+    .body-paragraph {
+      font-size: 0.97rem;
+      color: #333333;
+      margin-bottom: 20px;
+    }
+
+    /* ── PULL QUOTE ── */
+    .pull-quote {
+      margin: 40px 0;
+      padding: 0 32px;
+      text-align: center;
+    }
+    .pull-quote p {
+      font-size: 1.2rem;
+      font-style: italic;
+      color: #111111;
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+    .pull-quote cite {
+      font-size: 0.82rem;
+      color: #888888;
+      font-style: normal;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* ── DIVIDER ── */
+    .thin-rule {
+      border: none;
+      border-top: 1px solid #e5e5e5;
+      margin: 36px 0;
+    }
+
+    /* ── BOILERPLATE ── */
+    .boilerplate-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #888888;
+      margin-bottom: 10px;
+    }
+    .boilerplate p {
+      font-size: 0.85rem;
+      color: #555555;
+    }
+
+    /* ── CONTACT ── */
+    .contact-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #888888;
+      margin-bottom: 10px;
+    }
+    .contact-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #111111;
+      margin-bottom: 2px;
+    }
+    .contact-title-text {
+      font-size: 0.85rem;
+      color: #555555;
+      font-style: italic;
+      margin-bottom: 10px;
+    }
+    .contact-detail {
+      font-size: 0.88rem;
+      color: #333333;
+      margin-bottom: 4px;
+    }
+    .contact-detail a {
+      color: #111111;
+      text-decoration: underline;
+    }
+    .contact-additional {
+      font-size: 0.82rem;
+      color: #888888;
+      margin-top: 8px;
+    }
+
+    /* ── END MARK ── */
+    .end-mark {
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #111111;
+      letter-spacing: 0.3em;
+      margin: 40px 0 0;
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      text-align: center;
+      padding: 32px 0 0;
+      border-top: 1px solid #e5e5e5;
+      margin-top: 40px;
+      font-size: 0.75rem;
+      color: #aaaaaa;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page">
+
+    <!-- LETTERHEAD -->
+    <header class="letterhead">
+      {{#if company.logoUrl}}
+        <img src="{{company.logoUrl}}" alt="{{company.name}} logo" /><br />
+      {{/if}}
+      <div class="letterhead-name">{{company.name}}</div>
+      {{#if company.tagline}}
+        <div class="letterhead-tagline">{{company.tagline}}</div>
+      {{/if}}
+    </header>
+
+    <!-- RELEASE META -->
+    <div class="release-meta">
+      <p class="release-label">Press Release</p>
+      <p class="release-date">{{releaseInfo.date}}</p>
+      {{#if releaseInfo.embargo}}
+        <p class="embargo-note">{{releaseInfo.embargo}}</p>
+      {{/if}}
+    </div>
+
+    <!-- HEADLINE -->
+    <h1 class="headline">{{headline}}</h1>
+    <p class="subheadline">{{subheadline}}</p>
+
+    <p class="dateline">{{dateline}}</p>
+
+    {{#each contentParagraphs}}
+    <p class="body-paragraph">{{this}}</p>
+    {{/each}}
+
+    <!-- PULL QUOTE -->
+    <blockquote class="pull-quote">
+      <p>{{quote.text}}</p>
+      <cite>{{quote.attribution}}</cite>
+    </blockquote>
+
+    {{#each additionalParagraphs}}
+    <p class="body-paragraph">{{this}}</p>
+    {{/each}}
+
+    <hr class="thin-rule" />
+
+    <!-- BOILERPLATE -->
+    <div class="boilerplate">
+      <p class="boilerplate-label">About {{company.name}}</p>
+      <p>{{companyDescription}}</p>
+    </div>
+
+    <hr class="thin-rule" />
+
+    <!-- CONTACT -->
+    <div>
+      <p class="contact-label">Media Contact</p>
+      <p class="contact-name">{{contact.name}}</p>
+      <p class="contact-title-text">{{contact.title}}</p>
+      <p class="contact-detail">{{contact.phone}}</p>
+      <p class="contact-detail"><a href="mailto:{{contact.email}}">{{contact.email}}</a></p>
+      {{#if contact.additionalInfo}}
+        <p class="contact-additional">{{contact.additionalInfo}}</p>
+      {{/if}}
+    </div>
+
+    <p class="end-mark">###</p>
+
+    <footer class="footer">
+      &copy; {{company.name}}. All rights reserved.
+    </footer>
+
+  </div>
+
+</body>
+</html>

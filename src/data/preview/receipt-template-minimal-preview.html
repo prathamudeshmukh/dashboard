@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      color: #111111;
+      line-height: 1.6;
+      background-color: #ffffff;
+      padding: 48px 16px;
+    }
+    .receipt-container { max-width: 400px; margin: 0 auto; background-color: #ffffff; }
+    .receipt-header { padding-bottom: 24px; border-bottom: 1px solid #111111; text-align: center; }
+    .receipt-title { font-size: 10px; font-weight: 400; letter-spacing: 4px; text-transform: uppercase; color: #888888; margin-bottom: 12px; }
+    .company-name { font-size: 22px; font-weight: 700; color: #111111; margin-bottom: 6px; }
+    .company-details { font-size: 12px; color: #888888; line-height: 1.6; }
+    .receipt-body { padding: 24px 0; }
+    .divider { height: 1px; background-color: #e8e8e8; margin: 20px 0; }
+    .meta-label { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #888888; display: block; margin-bottom: 2px; }
+    .meta-value { font-size: 13px; color: #111111; }
+    .meta-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+    .customer-block { margin: 20px 0; }
+    .customer-label { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #888888; margin-bottom: 4px; }
+    .customer-name { font-size: 14px; color: #111111; }
+    .customer-email { font-size: 12px; color: #888888; }
+    .items-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .items-table th { font-size: 10px; font-weight: 400; text-transform: uppercase; letter-spacing: 2px; color: #888888; padding: 6px 0 10px; border-bottom: 1px solid #111111; text-align: left; }
+    .items-table th:nth-child(2), .items-table th:nth-child(3) { text-align: center; }
+    .items-table th:nth-child(4) { text-align: right; }
+    .items-table td { padding: 10px 0; border-bottom: 1px solid #eeeeee; color: #111111; }
+    .items-table td:nth-child(2), .items-table td:nth-child(3) { text-align: center; color: #444444; }
+    .items-table td:nth-child(4) { text-align: right; }
+    .totals-block { margin-top: 16px; }
+    .total-row { display: flex; justify-content: space-between; font-size: 13px; padding: 5px 0; color: #444444; }
+    .grand-total { display: flex; justify-content: space-between; font-size: 16px; font-weight: 700; color: #111111; padding-top: 12px; margin-top: 8px; border-top: 1px solid #111111; }
+    .payment-block { margin-top: 20px; }
+    .payment-label { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #888888; margin-bottom: 4px; }
+    .payment-value { font-size: 13px; color: #111111; }
+    .barcode-block { text-align: center; margin-top: 24px; }
+    .barcode-visual { display: inline-block; padding: 8px 12px; font-size: 10px; color: #888888; letter-spacing: 2px; font-family: monospace; border: 1px solid #e8e8e8; }
+    .receipt-footer { padding-top: 24px; border-top: 1px solid #e8e8e8; text-align: center; font-size: 11px; color: #888888; }
+    .receipt-footer p { margin-bottom: 4px; }
+    .thank-you { font-size: 13px; font-style: italic; color: #333333; margin-bottom: 6px; }
+  </style>
+</head>
+<body>
+  <div class="receipt-container">
+    <div class="receipt-header">
+      <div class="receipt-title">RECEIPT</div>
+      <div class="company-name">The Coffee House</div>
+      <div class="company-details">789 Main St, Suite 100<br />Austin, TX 78701<br />Tel: (512) 555-0199</div>
+    </div>
+
+    <div class="receipt-body">
+      <div class="meta-row">
+        <div>
+          <span class="meta-label">Receipt No.</span>
+          <span class="meta-value">RCP-2025-0042</span>
+        </div>
+        <div style="text-align:right;">
+          <span class="meta-label">Date</span>
+          <span class="meta-value">April 25, 2025</span>
+        </div>
+      </div>
+
+      <div class="customer-block">
+        <div class="customer-label">Customer</div>
+        <div class="customer-name">Alex Johnson</div>
+        <div class="customer-email">alex@example.com</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <table class="items-table">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Latte</td><td>2</td><td>$5.50</td><td>$11.00</td></tr>
+          <tr><td>Croissant</td><td>1</td><td>$3.75</td><td>$3.75</td></tr>
+          <tr><td>Cold Brew</td><td>1</td><td>$6.00</td><td>$6.00</td></tr>
+        </tbody>
+      </table>
+
+      <div class="totals-block">
+        <div class="total-row"><span>Subtotal</span><span>$20.75</span></div>
+        <div class="total-row"><span>Tax (8.25%)</span><span>$1.71</span></div>
+        <div class="grand-total"><span>Total</span><span>$22.46</span></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="payment-block">
+        <div class="payment-label">Payment Method</div>
+        <div class="payment-value">Credit Card &mdash; ending in 4242</div>
+      </div>
+
+      <div class="barcode-block">
+        <div class="barcode-visual">RCP-2025-0042-BARCODE</div>
+      </div>
+    </div>
+
+    <div class="receipt-footer">
+      <p class="thank-you">Thank you for your visit!</p>
+      <p>Returns accepted within 24 hours with receipt.</p>
+    </div>
+  </div>
+</body>
+</html>

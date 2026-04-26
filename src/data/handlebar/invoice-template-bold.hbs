@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      color: #1e293b;
+      background: #e2e8f0;
+      padding: 24px;
+    }
+    .invoice-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+    }
+    .invoice-header {
+      background: #0f172a;
+      color: #fff;
+      padding: 48px 40px;
+      position: relative;
+    }
+    .header-accent {
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 8px;
+      background: #f59e0b;
+    }
+    .invoice-title {
+      font-size: 42px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .invoice-meta {
+      display: flex;
+      gap: 40px;
+      font-size: 13px;
+      opacity: 0.7;
+    }
+    .invoice-meta span { font-weight: 600; color: #f59e0b; margin-right: 4px; }
+    .invoice-body {
+      padding: 40px;
+    }
+    .invoice-parties {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 40px;
+      gap: 20px;
+    }
+    .party-block {
+      flex: 1;
+      background: #f8fafc;
+      border-left: 4px solid #0f172a;
+      padding: 20px;
+    }
+    .party-block.highlight {
+      border-left-color: #f59e0b;
+    }
+    .party-label {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #94a3b8;
+      margin-bottom: 8px;
+    }
+    .party-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 6px;
+    }
+    .party-detail {
+      font-size: 13px;
+      color: #475569;
+      line-height: 1.7;
+    }
+    .invoice-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 32px;
+    }
+    .invoice-table thead tr {
+      background: #0f172a;
+      color: #fff;
+    }
+    .invoice-table th {
+      padding: 14px 16px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .invoice-table th:nth-child(n+2) { text-align: right; }
+    .invoice-table td {
+      padding: 14px 16px;
+      font-size: 14px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .invoice-table td:nth-child(n+2) { text-align: right; }
+    .invoice-table tbody tr:hover { background: #f8fafc; }
+    .invoice-totals {
+      margin-left: auto;
+      width: 300px;
+    }
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 16px;
+      font-size: 14px;
+      color: #475569;
+      background: #f8fafc;
+      margin-bottom: 2px;
+    }
+    .total-row.grand {
+      background: #0f172a;
+      color: #fff;
+      font-weight: 800;
+      font-size: 18px;
+      padding: 16px;
+      margin-top: 4px;
+    }
+    .total-row.grand .label-accent { color: #f59e0b; }
+    .invoice-footer {
+      background: #f8fafc;
+      border-top: 4px solid #f59e0b;
+      padding: 24px 40px;
+      font-size: 13px;
+      color: #475569;
+    }
+    .invoice-footer p + p { margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <div class="invoice-container">
+    <div class="invoice-header">
+      <div class="header-accent"></div>
+      <div class="invoice-title">{{title}}</div>
+      <div class="invoice-meta">
+        <div><span>No.</span>{{invoiceNumber}}</div>
+        <div><span>Date</span>{{invoiceDate}}</div>
+      </div>
+    </div>
+
+    <div class="invoice-body">
+      <div class="invoice-parties">
+        <div class="party-block">
+          <div class="party-label">From</div>
+          <div class="party-name">{{from.company}}</div>
+          <div class="party-detail">{{from.address1}}<br/>{{from.address2}}<br/>{{from.email}}</div>
+        </div>
+        <div class="party-block highlight">
+          <div class="party-label">Bill To</div>
+          <div class="party-name">{{to.company}}</div>
+          <div class="party-detail">{{to.address1}}<br/>{{to.address2}}<br/>{{to.email}}</div>
+        </div>
+      </div>
+
+      <table class="invoice-table">
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each items}}
+          <tr>
+            <td>{{description}}</td>
+            <td>{{quantity}}</td>
+            <td>{{price}}</td>
+            <td>{{total}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+
+      <div class="invoice-totals">
+        <div class="total-row">
+          <span>Subtotal</span><span>{{totals.subtotal}}</span>
+        </div>
+        <div class="total-row">
+          <span>{{totals.taxLabel}}</span><span>{{totals.tax}}</span>
+        </div>
+        {{#if totals.discount}}
+        <div class="total-row">
+          <span>Discount</span><span>{{totals.discount}}</span>
+        </div>
+        {{/if}}
+        <div class="total-row grand">
+          <span class="label-accent">Total Due</span><span>{{totals.grandTotal}}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="invoice-footer">
+      <p>{{footer.thankYouMessage}}</p>
+      <p>{{footer.paymentTerms}}</p>
+    </div>
+  </div>
+</body>
+</html>

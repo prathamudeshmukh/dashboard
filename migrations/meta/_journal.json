@@ -134,6 +134,20 @@
       "when": 1777099509004,
       "tag": "0018_freezing_masque",
       "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1777126100197,
+      "tag": "0019_useful_metal_master",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1777137091228,
+      "tag": "0020_shiny_tony_stark",
+      "breakpoints": true
     }
   ]
 }
