@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #e2e8f0; color: #1e293b; font-size: 14px; line-height: 1.6; padding: 24px; }
+    .page { max-width: 900px; margin: 0 auto; background: #fff; box-shadow: 0 4px 24px rgba(0,0,0,0.15); border-left: 8px solid #f59e0b; }
+    .cover { background: #0f172a; color: #fff; padding: 64px 56px; }
+    .cover-logo { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; opacity: 0.5; margin-bottom: 40px; }
+    .cover-title { font-size: 36px; font-weight: 900; letter-spacing: -1px; line-height: 1.2; margin-bottom: 12px; }
+    .cover-subtitle { font-size: 16px; opacity: 0.65; margin-bottom: 48px; }
+    .cover-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 12px; }
+    .meta-item { background: rgba(255,255,255,0.06); padding: 12px 16px; }
+    .meta-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #f59e0b; margin-bottom: 4px; }
+    .meta-value { color: #e2e8f0; }
+    .body { padding: 48px 56px; }
+    .section { margin-bottom: 36px; }
+    .section-title { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: #0f172a; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 3px solid #f59e0b; }
+    p { margin-bottom: 10px; color: #334155; }
+    .situation-item { margin-bottom: 12px; padding-left: 16px; border-left: 3px solid #f59e0b; }
+    .situation-title { font-weight: 700; color: #0f172a; }
+    .phase-box { background: #0f172a; color: #fff; padding: 20px 24px; margin-bottom: 12px; }
+    .phase-title { font-weight: 700; font-size: 14px; color: #f59e0b; margin-bottom: 4px; }
+    .phase-sub { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin: 10px 0 4px; opacity: 0.6; }
+    .phase-box ul { padding-left: 20px; font-size: 13px; opacity: 0.85; }
+    .timeline-item { display: flex; gap: 16px; margin-bottom: 12px; }
+    .timeline-date { font-weight: 700; color: #f59e0b; width: 80px; flex-shrink: 0; font-size: 12px; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+    thead tr { background: #0f172a; color: #fff; }
+    th { padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    td { padding: 10px 14px; border-bottom: 1px solid #e2e8f0; font-size: 13px; }
+    tfoot tr { background: #f8fafc; font-weight: 700; }
+    .next-step { padding: 10px 0; border-bottom: 1px solid #e2e8f0; font-size: 13px; }
+    .sig-section { display: flex; gap: 40px; margin-top: 40px; }
+    .sig-block { flex: 1; }
+    .sig-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #94a3b8; margin-bottom: 8px; }
+    .sig-line { border-bottom: 2px solid #0f172a; height: 40px; margin-bottom: 6px; }
+    .sig-name { font-weight: 700; font-size: 13px; }
+    .sig-date { font-size: 12px; color: #94a3b8; margin-top: 10px; }
+    .footer { background: #f8fafc; border-top: 3px solid #f59e0b; padding: 20px 56px; font-size: 12px; color: #64748b; text-align: center; }
+    ol { padding-left: 20px; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="cover">
+    <div class="cover-logo">{{proposal.preparedBy.company}}</div>
+    <div class="cover-title">{{proposal.title}}</div>
+    <div class="cover-subtitle">{{proposal.subtitle}}</div>
+    <div class="cover-meta">
+      <div class="meta-item"><div class="meta-label">Prepared For</div><div class="meta-value">{{proposal.preparedFor.contactPerson}}, {{proposal.preparedFor.company}}</div></div>
+      <div class="meta-item"><div class="meta-label">Date</div><div class="meta-value">{{proposal.date}}</div></div>
+      <div class="meta-item"><div class="meta-label">Valid Until</div><div class="meta-value">{{proposal.validUntil}}</div></div>
+      <div class="meta-item"><div class="meta-label">Proposal #</div><div class="meta-value">{{proposal.proposalNumber}}</div></div>
+    </div>
+  </div>
+  <div class="body">
+    <div class="section">
+      <div class="section-title">Executive Summary</div>
+      {{#each executiveSummary}}<p>{{this}}</p>{{/each}}
+    </div>
+    <div class="section">
+      <div class="section-title">About {{proposal.preparedBy.company}}</div>
+      {{#each companyBackground}}<p>{{this}}</p>{{/each}}
+    </div>
+    <div class="section">
+      <div class="section-title">Situation Analysis</div>
+      {{#each situationAnalysis}}
+      <div class="situation-item">
+        <div class="situation-title">{{title}}</div>
+        <p>{{description}}</p>
+      </div>
+      {{/each}}
+    </div>
+    <div class="section">
+      <div class="section-title">Proposed Solution</div>
+      <p>{{proposedSolution.overview}}</p>
+      {{#each proposedSolution.phases}}
+      <div class="phase-box">
+        <div class="phase-title">{{name}} — {{duration}}</div>
+        <div class="phase-sub">Activities</div>
+        <ul>{{#each activities}}<li>{{this}}</li>{{/each}}</ul>
+        <div class="phase-sub">Deliverables</div>
+        <ul>{{#each deliverables}}<li>{{this}}</li>{{/each}}</ul>
+      </div>
+      {{/each}}
+    </div>
+    <div class="section">
+      <div class="section-title">Timeline</div>
+      <p>{{timeline.overview}}</p>
+      {{#each timeline.milestones}}
+      <div class="timeline-item">
+        <div class="timeline-date">{{date}}</div>
+        <div><strong>{{name}}</strong> — {{description}}</div>
+      </div>
+      {{/each}}
+    </div>
+    <div class="section">
+      <div class="section-title">Investment</div>
+      <table>
+        <thead><tr><th>Item</th><th>Investment</th><th>Details</th></tr></thead>
+        <tbody>
+          {{#each investment.costBreakdown}}
+          <tr><td>{{category}}</td><td>{{amount}}</td><td>{{description}}</td></tr>
+          {{/each}}
+        </tbody>
+        <tfoot><tr><td>Total Investment</td><td>{{investment.totalInvestment}}</td><td></td></tr></tfoot>
+      </table>
+    </div>
+    <div class="section">
+      <div class="section-title">Next Steps</div>
+      <ol>{{#each nextSteps}}<li class="next-step"><strong>{{action}}</strong> ({{timeline}}): {{description}}</li>{{/each}}</ol>
+    </div>
+    <div class="sig-section">
+      <div class="sig-block">
+        <div class="sig-label">{{proposal.preparedFor.contactPerson}}</div>
+        <div class="sig-line"></div>
+        <div class="sig-name">{{proposal.preparedFor.contactTitle}}</div>
+        <div class="sig-date">Date: ________________</div>
+      </div>
+      <div class="sig-block">
+        <div class="sig-label">{{contactInfo.primaryContact}}</div>
+        <div class="sig-line"></div>
+        <div class="sig-name">{{contactInfo.title}}</div>
+        <div class="sig-date">Date: ________________</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    <p>{{proposal.preparedBy.company}} | {{proposal.preparedBy.address}}</p>
+    <p>{{proposal.preparedBy.phone}} | {{proposal.preparedBy.email}} | {{proposal.preparedBy.website}}</p>
+  </div>
+</div>
+</body>
+</html>

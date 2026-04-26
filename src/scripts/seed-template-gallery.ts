@@ -45,7 +45,7 @@ export async function seedTemplateGallery() {
           'src',
           'data',
           'sampledata',
-          `${template.fileName}-sample.json`,
+          `${template.typeKey}-sample.json`,
         );
 
         try {
@@ -78,7 +78,7 @@ export async function seedTemplateGallery() {
           typeKey: template.typeKey,
           variantName: template.variantName,
         }).onConflictDoUpdate({
-          target: templateGallery.typeKey,
+          target: [templateGallery.typeKey, templateGallery.variantName],
           set: {
             title: template.title,
             description: template.description,

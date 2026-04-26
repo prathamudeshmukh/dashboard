@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Georgia', serif; color: #111; line-height: 1.8; background: #fff; padding: 56px; }
+    .report-container { max-width: 720px; margin: 0 auto; }
+    .report-header { text-align: center; padding-bottom: 32px; border-bottom: 1px solid #111; margin-bottom: 48px; }
+    .report-title { font-size: 22px; font-weight: normal; text-transform: uppercase; letter-spacing: 5px; margin-bottom: 8px; }
+    .report-subtitle { font-size: 15px; color: #555; margin-bottom: 4px; }
+    .report-date { font-size: 12px; color: #888; }
+    .section { margin-bottom: 40px; }
+    .section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 3px; color: #888; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid #e0e0e0; }
+    .chart-container { display: flex; gap: 6px; align-items: flex-end; height: 120px; margin-bottom: 20px; }
+    .chart-bar { flex: 1; display: flex; flex-direction: column; align-items: center; }
+    .bar { width: 100%; background: #111; }
+    .bar-label { font-size: 10px; color: #888; margin-top: 4px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { padding: 8px 0; text-align: left; font-size: 10px; font-weight: normal; text-transform: uppercase; letter-spacing: 1px; color: #888; border-bottom: 1px solid #ddd; }
+    td { padding: 10px 0; border-bottom: 1px solid #f0f0f0; color: #333; }
+    p { margin-bottom: 12px; font-size: 14px; }
+    .rec-list { list-style: none; }
+    .rec-list li { padding: 8px 0; border-bottom: 1px solid #f0f0f0; font-size: 13px; color: #333; }
+    .report-footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid #ddd; font-size: 11px; color: #999; text-align: center; }
+    .report-footer p + p { margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <div class="report-container">
+    <div class="report-header">
+      <div class="report-title">Quarterly Report</div>
+      <div class="report-subtitle">Q1 2025 Business Performance</div>
+      <div class="report-date">April 15, 2025</div>
+    </div>
+    <div class="section">
+      <div class="section-title">Executive Summary</div>
+      <p>This report provides an overview of our company's performance during Q1 2025. We have seen significant growth in revenue and customer acquisition.</p>
+      <p>Key highlights include a 15% increase in revenue, successful launch of two new product features, and expansion into two new market segments.</p>
+    </div>
+    <div class="section">
+      <div class="section-title">Financial Overview</div>
+      <div class="chart-container">
+        <div class="chart-bar"><div class="bar" style="height:40%;"></div><div class="bar-label">Q1 2024</div></div>
+        <div class="chart-bar"><div class="bar" style="height:55%;"></div><div class="bar-label">Q2 2024</div></div>
+        <div class="chart-bar"><div class="bar" style="height:65%;"></div><div class="bar-label">Q3 2024</div></div>
+        <div class="chart-bar"><div class="bar" style="height:75%;"></div><div class="bar-label">Q4 2024</div></div>
+        <div class="chart-bar"><div class="bar" style="height:90%;"></div><div class="bar-label">Q1 2025</div></div>
+      </div>
+      <table>
+        <thead><tr><th>Metric</th><th>Q4 2024</th><th>Q1 2025</th><th>Change</th></tr></thead>
+        <tbody>
+          <tr><td>Revenue</td><td>$1,245,000</td><td>$1,432,000</td><td>+15%</td></tr>
+          <tr><td>Operating Expenses</td><td>$876,000</td><td>$912,000</td><td>+4%</td></tr>
+          <tr><td>Net Profit</td><td>$369,000</td><td>$520,000</td><td>+41%</td></tr>
+          <tr><td>Customer Acquisition</td><td>1,250</td><td>1,780</td><td>+42%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="section">
+      <div class="section-title">Recommendations</div>
+      <ul class="rec-list">
+        <li>Increase marketing budget by 20% to capitalize on current growth momentum</li>
+        <li>Expand product line with three new offerings targeted at enterprise customers</li>
+        <li>Invest in additional customer success personnel to maintain high satisfaction rates</li>
+        <li>Explore partnership opportunities with complementary service providers</li>
+      </ul>
+    </div>
+    <div class="report-footer">
+      <p>Prepared by: Strategic Planning Team</p>
+      <p>For internal use only. Confidential.</p>
+    </div>
+  </div>
+</body>
+</html>

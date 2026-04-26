@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Digital Transformation Proposal</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .page { max-width: 900px; margin: 40px auto; padding: 0 24px; }
+
+    /* Cover */
+    .cover {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      border: 1px solid #334155;
+      border-top: 4px solid #f59e0b;
+      border-radius: 4px;
+      padding: 72px 64px;
+      margin-bottom: 32px;
+      min-height: 480px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .proposal-badge {
+      display: inline-block;
+      background: #f59e0b;
+      color: #0f172a;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      padding: 4px 12px;
+      border-radius: 2px;
+      margin-bottom: 24px;
+    }
+
+    .cover-title {
+      font-size: 42px;
+      font-weight: 900;
+      letter-spacing: -2px;
+      line-height: 1.1;
+      color: #ffffff;
+    }
+
+    .cover-subtitle {
+      font-size: 16px;
+      color: #94a3b8;
+      margin-top: 12px;
+    }
+
+    .cover-divider {
+      height: 2px;
+      background: linear-gradient(to right, #f59e0b, transparent);
+      margin: 32px 0;
+    }
+
+    .cover-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px 48px;
+    }
+
+    .meta-label {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #f59e0b;
+      margin-bottom: 4px;
+    }
+
+    .meta-value { font-size: 14px; font-weight: 700; color: #ffffff; }
+    .meta-sub { font-size: 12px; color: #94a3b8; }
+
+    /* Cards */
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 4px;
+      padding: 40px 48px;
+      margin-bottom: 24px;
+    }
+
+    .section { margin-bottom: 36px; }
+    .section:last-child { margin-bottom: 0; }
+
+    .section-title {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #f59e0b;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #334155;
+      margin-bottom: 20px;
+    }
+
+    .body-text p { color: #94a3b8; margin-bottom: 12px; line-height: 1.75; }
+    .body-text p:last-child { margin-bottom: 0; }
+
+    /* Situation grid */
+    .situation-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    .situation-card {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-left: 3px solid #f59e0b;
+      border-radius: 4px;
+      padding: 16px 18px;
+    }
+
+    .sit-title { font-size: 13px; font-weight: 700; color: #f59e0b; margin-bottom: 6px; }
+    .sit-desc { font-size: 12px; color: #94a3b8; }
+
+    /* Phases */
+    .solution-overview {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: 4px;
+      padding: 14px 18px;
+      font-size: 13px;
+      color: #fbbf24;
+      font-weight: 500;
+      margin-bottom: 20px;
+    }
+
+    .phase-card {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 4px;
+      padding: 20px 22px;
+      margin-bottom: 12px;
+    }
+
+    .phase-card:last-child { margin-bottom: 0; }
+
+    .phase-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .phase-name { font-size: 14px; font-weight: 800; color: #ffffff; }
+    .phase-badge {
+      background: #f59e0b;
+      color: #0f172a;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 2px;
+    }
+
+    .phase-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .phase-col-title { font-size: 9px; text-transform: uppercase; letter-spacing: 1.5px; color: #64748b; margin-bottom: 6px; }
+    .phase-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+    .phase-list li { font-size: 12px; color: #94a3b8; padding-left: 14px; position: relative; }
+    .phase-list li::before { content: '›'; position: absolute; left: 0; color: #f59e0b; font-weight: 700; }
+
+    /* Timeline */
+    .milestone-item {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      padding: 14px 0;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    .milestone-item:last-child { border-bottom: none; }
+
+    .ms-week {
+      min-width: 70px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #f59e0b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .ms-dot {
+      width: 10px;
+      height: 10px;
+      background: #f59e0b;
+      border-radius: 2px;
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+
+    .ms-name { font-size: 13px; font-weight: 700; color: #ffffff; }
+    .ms-desc { font-size: 12px; color: #64748b; margin-top: 2px; }
+
+    /* Investment table */
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+
+    thead th {
+      background: #0f172a;
+      color: #64748b;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 2px solid #334155;
+    }
+
+    thead th:not(:first-child) { text-align: right; }
+    tbody td { padding: 12px 14px; border-bottom: 1px solid #1e293b; color: #cbd5e1; }
+    tbody td:not(:first-child) { text-align: right; }
+
+    .total-row td {
+      background: #f59e0b;
+      color: #0f172a;
+      font-weight: 800;
+      border: none;
+    }
+
+    /* Next steps */
+    .next-step-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 4px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+    }
+
+    .next-step-item:last-child { margin-bottom: 0; }
+
+    .step-num {
+      width: 28px;
+      height: 28px;
+      background: #f59e0b;
+      color: #0f172a;
+      font-size: 12px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .step-timeline { font-size: 10px; font-weight: 700; color: #f59e0b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
+    .step-action { font-size: 13px; font-weight: 700; color: #ffffff; }
+    .step-desc { font-size: 12px; color: #64748b; margin-top: 2px; }
+
+    /* Footer */
+    .proposal-footer {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-top: 3px solid #f59e0b;
+      border-radius: 4px;
+      padding: 24px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .contact-name { font-size: 14px; font-weight: 800; color: #ffffff; }
+    .contact-title { font-size: 12px; color: #94a3b8; }
+    .contact-info { font-size: 11px; color: #64748b; margin-top: 4px; }
+
+    .validity-label { font-size: 9px; text-transform: uppercase; letter-spacing: 2px; color: #64748b; }
+    .validity-date { font-size: 16px; font-weight: 900; color: #f59e0b; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <div class="cover">
+    <div>
+      <div class="proposal-badge">PROP-2024-042</div>
+      <div class="cover-title">Digital Transformation Proposal</div>
+      <div class="cover-subtitle">Modernizing Your Customer Experience Platform</div>
+    </div>
+    <div>
+      <div class="cover-divider"></div>
+      <div class="cover-meta">
+        <div>
+          <div class="meta-label">Prepared For</div>
+          <div class="meta-value">Michael Chen</div>
+          <div class="meta-sub">Chief Digital Officer, RetailCo Ltd.</div>
+        </div>
+        <div>
+          <div class="meta-label">Prepared By</div>
+          <div class="meta-value">Nexus Consulting</div>
+          <div class="meta-sub">proposals@nexusconsulting.com</div>
+        </div>
+        <div>
+          <div class="meta-label">Date</div>
+          <div class="meta-value">April 25, 2024</div>
+        </div>
+        <div>
+          <div class="meta-label">Valid Until</div>
+          <div class="meta-value">May 25, 2024</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section">
+      <div class="section-title">Executive Summary</div>
+      <div class="body-text">
+        <p>RetailCo Ltd. stands at a pivotal moment in its digital journey. With customer expectations evolving rapidly and competitors investing heavily in technology, the time to act is now.</p>
+        <p>Nexus Consulting proposes a comprehensive digital transformation program that will modernize your customer experience platform, streamline internal operations, and position RetailCo for sustainable growth over the next decade.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">About Nexus Consulting</div>
+      <div class="body-text">
+        <p>Nexus Consulting is a leading digital transformation firm with over 15 years of experience helping mid-market and enterprise organizations navigate complex technology transitions.</p>
+        <p>Our team of 200+ specialists has delivered successful transformations for more than 300 clients across retail, financial services, and healthcare sectors.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Situation Analysis</div>
+      <div class="situation-grid">
+        <div class="situation-card">
+          <div class="sit-title">Legacy Technology Constraints</div>
+          <div class="sit-desc">Current systems are 8+ years old, creating integration bottlenecks and limiting rapid feature deployment.</div>
+        </div>
+        <div class="situation-card">
+          <div class="sit-title">Shifting Customer Expectations</div>
+          <div class="sit-desc">Customers expect seamless omnichannel experiences, real-time inventory visibility, and personalization.</div>
+        </div>
+        <div class="situation-card">
+          <div class="sit-title">Competitive Pressure</div>
+          <div class="sit-desc">Competitors have invested significantly in digital, creating a growing experience gap that risks attrition.</div>
+        </div>
+        <div class="situation-card">
+          <div class="sit-title">Operational Inefficiency</div>
+          <div class="sit-desc">Manual processes and siloed data create costly delays in fulfillment, returns, and customer service.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Proposed Solution</div>
+      <div class="solution-overview">A phased modernization approach that minimizes disruption while delivering rapid, measurable business value at each stage.</div>
+      <div class="phase-card">
+        <div class="phase-header">
+          <div class="phase-name">Phase 1: Discovery &amp; Architecture</div>
+          <div class="phase-badge">6 Weeks</div>
+        </div>
+        <div class="phase-two-col">
+          <div>
+            <div class="phase-col-title">Activities</div>
+            <ul class="phase-list">
+              <li>Current state assessment</li>
+              <li>Stakeholder interviews</li>
+              <li>Technical architecture design</li>
+            </ul>
+          </div>
+          <div>
+            <div class="phase-col-title">Deliverables</div>
+            <ul class="phase-list">
+              <li>Assessment report</li>
+              <li>Target architecture blueprint</li>
+              <li>Implementation roadmap</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="phase-card">
+        <div class="phase-header">
+          <div class="phase-name">Phase 2: Platform Build</div>
+          <div class="phase-badge">16 Weeks</div>
+        </div>
+        <div class="phase-two-col">
+          <div>
+            <div class="phase-col-title">Activities</div>
+            <ul class="phase-list">
+              <li>Core platform development</li>
+              <li>API integration layer</li>
+              <li>Data migration</li>
+            </ul>
+          </div>
+          <div>
+            <div class="phase-col-title">Deliverables</div>
+            <ul class="phase-list">
+              <li>Production-ready platform</li>
+              <li>Integrated data pipelines</li>
+              <li>Staff training materials</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Timeline</div>
+      <div class="milestone-item">
+        <div class="ms-week">Week 1</div>
+        <div class="ms-dot"></div>
+        <div>
+          <div class="ms-name">Project Kickoff</div>
+          <div class="ms-desc">Team onboarding, access provisioning, initial stakeholder sessions</div>
+        </div>
+      </div>
+      <div class="milestone-item">
+        <div class="ms-week">Week 6</div>
+        <div class="ms-dot"></div>
+        <div>
+          <div class="ms-name">Discovery Complete</div>
+          <div class="ms-desc">Architecture approved, roadmap finalized, build phase begins</div>
+        </div>
+      </div>
+      <div class="milestone-item">
+        <div class="ms-week">Week 22</div>
+        <div class="ms-dot"></div>
+        <div>
+          <div class="ms-name">UAT Launch</div>
+          <div class="ms-desc">User acceptance testing with selected staff and pilot customers</div>
+        </div>
+      </div>
+      <div class="milestone-item">
+        <div class="ms-week">Week 26</div>
+        <div class="ms-dot"></div>
+        <div>
+          <div class="ms-name">Go Live</div>
+          <div class="ms-desc">Full production deployment with hypercare support</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Investment</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Amount</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Discovery &amp; Architecture</td>
+            <td>$45,000</td>
+            <td>Assessment, design, and planning</td>
+          </tr>
+          <tr>
+            <td>Platform Development</td>
+            <td>$120,000</td>
+            <td>Build, integration, and data migration</td>
+          </tr>
+          <tr>
+            <td>Testing &amp; Launch</td>
+            <td>$35,000</td>
+            <td>QA, UAT support, and go-live assistance</td>
+          </tr>
+          <tr class="total-row">
+            <td>Total Investment</td>
+            <td>$200,000</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Next Steps</div>
+      <div class="next-step-item">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-timeline">Week 1</div>
+          <div class="step-action">Review &amp; Approve Proposal</div>
+          <div class="step-desc">Internal sign-off by executive sponsors and procurement</div>
+        </div>
+      </div>
+      <div class="next-step-item">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-timeline">Week 2</div>
+          <div class="step-action">Contract Execution</div>
+          <div class="step-desc">Finalize MSA and SOW, process initial payment</div>
+        </div>
+      </div>
+      <div class="next-step-item">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-timeline">Week 3</div>
+          <div class="step-action">Kickoff Meeting</div>
+          <div class="step-desc">Joint team introduction, project tooling setup, day-one priorities</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="proposal-footer">
+    <div>
+      <div class="contact-name">James Okafor</div>
+      <div class="contact-title">Managing Director</div>
+      <div class="contact-info">+1 (415) 555-0190 &nbsp;·&nbsp; proposals@nexusconsulting.com</div>
+    </div>
+    <div style="text-align:right;">
+      <div class="validity-label">Valid Until</div>
+      <div class="validity-date">May 25, 2024</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

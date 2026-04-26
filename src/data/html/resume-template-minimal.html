@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{person.name}} — Resume</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Georgia, 'Times New Roman', Times, serif;
+      background: #ffffff;
+      color: #111111;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .page {
+      max-width: 800px;
+      margin: 60px auto;
+      padding: 0 60px;
+    }
+
+    /* Header */
+    .resume-header {
+      padding-bottom: 28px;
+      border-bottom: 1px solid #111;
+      margin-bottom: 40px;
+    }
+
+    .person-name {
+      font-size: 32px;
+      font-weight: normal;
+      letter-spacing: -1px;
+      color: #111;
+    }
+
+    .person-title {
+      font-size: 14px;
+      color: #555;
+      margin-top: 4px;
+    }
+
+    .contact-row {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      font-size: 11px;
+      color: #555;
+      font-family: system-ui, sans-serif;
+    }
+
+    .contact-row span {
+      padding-right: 16px;
+      margin-right: 16px;
+      border-right: 1px solid #ccc;
+    }
+
+    .contact-row span:last-child {
+      border-right: none;
+      padding-right: 0;
+      margin-right: 0;
+    }
+
+    /* Section */
+    .section {
+      margin-bottom: 40px;
+    }
+
+    .section-title {
+      font-family: system-ui, sans-serif;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #111;
+      border-bottom: 1px solid #111;
+      padding-bottom: 5px;
+      margin-bottom: 20px;
+    }
+
+    /* Summary */
+    .summary-text { color: #333; }
+
+    /* Experience */
+    .experience-item { margin-bottom: 24px; }
+    .experience-item:last-child { margin-bottom: 0; }
+
+    .exp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .exp-title { font-size: 14px; font-weight: bold; color: #111; }
+
+    .exp-date {
+      font-family: system-ui, sans-serif;
+      font-size: 11px;
+      color: #888;
+    }
+
+    .exp-company {
+      font-size: 12px;
+      color: #555;
+      font-style: italic;
+      margin-bottom: 6px;
+    }
+
+    .exp-description {
+      color: #333;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .achievements-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .achievements-list li {
+      font-size: 12px;
+      color: #444;
+      padding-left: 16px;
+      position: relative;
+    }
+
+    .achievements-list li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: #888;
+    }
+
+    /* Education */
+    .edu-item { margin-bottom: 16px; }
+    .edu-item:last-child { margin-bottom: 0; }
+
+    .edu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .edu-degree { font-size: 13px; font-weight: bold; color: #111; }
+    .edu-date { font-family: system-ui, sans-serif; font-size: 11px; color: #888; }
+    .edu-institution { font-size: 12px; color: #555; font-style: italic; }
+    .edu-details { font-size: 12px; color: #555; }
+
+    /* Skills */
+    .skills-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      font-size: 12px;
+      color: #333;
+    }
+
+    .skills-row span {
+      padding-right: 14px;
+      margin-right: 14px;
+      border-right: 1px solid #ccc;
+    }
+
+    .skills-row span:last-child { border-right: none; padding-right: 0; margin-right: 0; }
+
+    /* Projects */
+    .project-item { margin-bottom: 16px; }
+    .project-item:last-child { margin-bottom: 0; }
+
+    .project-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .project-title { font-size: 13px; font-weight: bold; color: #111; }
+    .project-date { font-family: system-ui, sans-serif; font-size: 11px; color: #888; }
+    .project-description { font-size: 12px; color: #444; margin-top: 4px; }
+
+    .tech-row {
+      margin-top: 4px;
+      font-size: 10px;
+      color: #888;
+      font-family: system-ui, sans-serif;
+      font-style: italic;
+    }
+
+    /* Certifications */
+    .cert-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 6px 0;
+      border-bottom: 1px solid #eee;
+      font-size: 12px;
+      color: #333;
+    }
+
+    .cert-item:last-child { border-bottom: none; }
+    .cert-item .cert-right { font-size: 11px; color: #888; font-family: system-ui, sans-serif; text-align: right; }
+
+    /* Languages */
+    .lang-row {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+
+    .lang-item { font-size: 12px; color: #333; }
+    .lang-item .proficiency { color: #888; font-size: 11px; font-family: system-ui, sans-serif; }
+
+    /* References */
+    .references-text { font-size: 12px; color: #888; font-style: italic; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="resume-header">
+    <div class="person-name">{{person.name}}</div>
+    <div class="person-title">{{person.title}}</div>
+    <div class="contact-row">
+      <span>{{person.email}}</span>
+      <span>{{person.phone}}</span>
+      <span>{{person.location}}</span>
+      <span>{{person.linkedin}}</span>
+      <span>{{person.website}}</span>
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <div class="section">
+    <div class="section-title">Summary</div>
+    <p class="summary-text">{{summary}}</p>
+  </div>
+
+  <!-- Experience -->
+  <div class="section">
+    <div class="section-title">Experience</div>
+    {{#each experience}}
+    <div class="experience-item">
+      <div class="exp-header">
+        <div class="exp-title">{{title}}</div>
+        <div class="exp-date">{{dateRange}}</div>
+      </div>
+      <div class="exp-company">{{company}}</div>
+      <div class="exp-description">{{description}}</div>
+      <ul class="achievements-list">
+        {{#each achievements}}
+        <li>{{this}}</li>
+        {{/each}}
+      </ul>
+    </div>
+    {{/each}}
+  </div>
+
+  <!-- Education -->
+  <div class="section">
+    <div class="section-title">Education</div>
+    {{#each education}}
+    <div class="edu-item">
+      <div class="edu-header">
+        <div class="edu-degree">{{degree}}</div>
+        <div class="edu-date">{{dateRange}}</div>
+      </div>
+      <div class="edu-institution">{{institution}}</div>
+      <div class="edu-details">{{details}}</div>
+    </div>
+    {{/each}}
+  </div>
+
+  <!-- Skills -->
+  <div class="section">
+    <div class="section-title">Skills</div>
+    <div class="skills-row">
+      {{#each skills}}
+      <span>{{this}}</span>
+      {{/each}}
+    </div>
+  </div>
+
+  <!-- Projects -->
+  <div class="section">
+    <div class="section-title">Projects</div>
+    {{#each projects}}
+    <div class="project-item">
+      <div class="project-header">
+        <div class="project-title">{{title}}</div>
+        <div class="project-date">{{date}}</div>
+      </div>
+      <div class="project-description">{{description}}</div>
+      <div class="tech-row">{{#each technologies}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</div>
+    </div>
+    {{/each}}
+  </div>
+
+  <!-- Certifications -->
+  <div class="section">
+    <div class="section-title">Certifications</div>
+    {{#each certifications}}
+    <div class="cert-item">
+      <span>{{name}}</span>
+      <span class="cert-right">{{issuer}} &nbsp;&mdash;&nbsp; {{date}}</span>
+    </div>
+    {{/each}}
+  </div>
+
+  <!-- Languages -->
+  <div class="section">
+    <div class="section-title">Languages</div>
+    <div class="lang-row">
+      {{#each languages}}
+      <div class="lang-item">{{language}} <span class="proficiency">— {{proficiency}}</span></div>
+      {{/each}}
+    </div>
+  </div>
+
+  <!-- References -->
+  <div class="section">
+    <div class="section-title">References</div>
+    <p class="references-text">{{references}}</p>
+  </div>
+
+</div>
+</body>
+</html>

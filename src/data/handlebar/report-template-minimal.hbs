@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Georgia', serif; color: #111; line-height: 1.8; background: #fff; padding: 56px; }
+    .report-container { max-width: 720px; margin: 0 auto; }
+    .report-header { text-align: center; padding-bottom: 32px; border-bottom: 1px solid #111; margin-bottom: 48px; }
+    .report-title { font-size: 22px; font-weight: normal; text-transform: uppercase; letter-spacing: 5px; margin-bottom: 8px; }
+    .report-subtitle { font-size: 15px; color: #555; margin-bottom: 4px; }
+    .report-date { font-size: 12px; color: #888; }
+    .section { margin-bottom: 40px; }
+    .section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 3px; color: #888; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid #e0e0e0; }
+    .chart-container { display: flex; gap: 6px; align-items: flex-end; height: 120px; margin-bottom: 20px; }
+    .chart-bar { flex: 1; display: flex; flex-direction: column; align-items: center; }
+    .bar { width: 100%; background: #111; }
+    .bar-label { font-size: 10px; color: #888; margin-top: 4px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { padding: 8px 0; text-align: left; font-size: 10px; font-weight: normal; text-transform: uppercase; letter-spacing: 1px; color: #888; border-bottom: 1px solid #ddd; }
+    td { padding: 10px 0; border-bottom: 1px solid #f0f0f0; color: #333; }
+    p { margin-bottom: 12px; font-size: 14px; }
+    .recommendations-list { list-style: none; }
+    .recommendations-list li { padding: 8px 0; border-bottom: 1px solid #f0f0f0; font-size: 13px; color: #333; }
+    .report-footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid #ddd; font-size: 11px; color: #999; text-align: center; }
+    .report-footer p + p { margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <div class="report-container">
+    <div class="report-header">
+      <div class="report-title">{{header.title}}</div>
+      <div class="report-subtitle">{{header.subtitle}}</div>
+      <div class="report-date">{{header.date}}</div>
+    </div>
+    <div class="section">
+      <div class="section-title">{{executiveSummary.title}}</div>
+      {{#each executiveSummary.paragraphs}}<p>{{this}}</p>{{/each}}
+    </div>
+    <div class="section">
+      <div class="section-title">{{financialOverview.title}}</div>
+      <div class="chart-container">
+        {{#each financialOverview.chartData}}
+        <div class="chart-bar">
+          <div class="bar" style="height:{{percentage}};"></div>
+          <div class="bar-label">{{label}}</div>
+        </div>
+        {{/each}}
+      </div>
+      <table>
+        <thead><tr>{{#each financialOverview.tableHeaders}}<th>{{this}}</th>{{/each}}</tr></thead>
+        <tbody>
+          {{#each financialOverview.tableRows}}
+          <tr><td>{{metric}}</td><td>{{previousValue}}</td><td>{{currentValue}}</td><td>{{change}}</td></tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+    <div class="section">
+      <div class="section-title">{{recommendations.title}}</div>
+      <ul class="recommendations-list">
+        {{#each recommendations.items}}<li>{{this}}</li>{{/each}}
+      </ul>
+    </div>
+    <div class="report-footer">
+      <p>{{footer.preparedBy}}</p>
+      <p>{{footer.confidentiality}}</p>
+    </div>
+  </div>
+</body>
+</html>

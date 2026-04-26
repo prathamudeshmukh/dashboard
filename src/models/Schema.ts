@@ -95,7 +95,7 @@ export const templateGallery = pgTable('template_gallery', {
   typeKey: varchar('type_key', { length: 255 }).notNull(),
   variantName: varchar('variant_name', { length: 255 }),
 }, table => ({
-  typeKeyUnique: uniqueIndex('tg_type_key_unique').on(table.typeKey),
+  typeVariantUnique: uniqueIndex('tg_type_variant_unique').on(table.typeKey, table.variantName),
 }));
 
 // Templates Table

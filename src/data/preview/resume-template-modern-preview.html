@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: #f8fafc; padding: 24px; color: #1e293b; }
+    .resume { max-width: 860px; margin: 0 auto; display: grid; grid-template-columns: 260px 1fr; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .sidebar { background: #4f46e5; color: #fff; padding: 40px 28px; }
+    .name { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+    .job-title { font-size: 13px; opacity: 0.75; margin-bottom: 28px; }
+    .side-section { margin-bottom: 24px; }
+    .side-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; opacity: 0.6; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.2); }
+    .contact-item { font-size: 12px; margin-bottom: 6px; opacity: 0.85; }
+    .skill-tag { display: inline-block; background: rgba(255,255,255,0.15); border-radius: 4px; padding: 3px 8px; font-size: 11px; margin: 0 4px 6px 0; }
+    .lang-item { font-size: 12px; margin-bottom: 4px; opacity: 0.85; }
+    .main { padding: 40px 36px; }
+    .main-section { margin-bottom: 28px; }
+    .main-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #4f46e5; margin-bottom: 14px; padding-bottom: 6px; border-bottom: 2px solid #e0e7ff; }
+    .exp-item { margin-bottom: 18px; }
+    .exp-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
+    .exp-title { font-weight: 700; font-size: 14px; }
+    .exp-company { font-size: 13px; color: #4f46e5; }
+    .exp-date { font-size: 12px; color: #94a3b8; }
+    .exp-desc { font-size: 13px; color: #475569; margin-bottom: 6px; }
+    ul { padding-left: 18px; }
+    li { font-size: 12px; color: #475569; margin-bottom: 3px; }
+    .cert-item { font-size: 13px; margin-bottom: 4px; }
+    p { font-size: 13px; color: #475569; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+<div class="resume">
+  <div class="sidebar">
+    <div class="name">Alexandra Rivera</div>
+    <div class="job-title">Senior Software Engineer</div>
+    <div class="side-section">
+      <div class="side-label">Contact</div>
+      <div class="contact-item">a.rivera@email.com</div>
+      <div class="contact-item">(415) 555-0182</div>
+      <div class="contact-item">San Francisco, CA</div>
+      <div class="contact-item">linkedin.com/in/arivera</div>
+      <div class="contact-item">arivera.dev</div>
+    </div>
+    <div class="side-section">
+      <div class="side-label">Skills</div>
+      <span class="skill-tag">TypeScript</span><span class="skill-tag">React</span><span class="skill-tag">Node.js</span><span class="skill-tag">PostgreSQL</span><span class="skill-tag">AWS</span><span class="skill-tag">Docker</span><span class="skill-tag">GraphQL</span><span class="skill-tag">Python</span>
+    </div>
+    <div class="side-section">
+      <div class="side-label">Languages</div>
+      <div class="lang-item">English — Native</div>
+      <div class="lang-item">Spanish — Professional</div>
+    </div>
+    <div class="side-section">
+      <div class="side-label">Certifications</div>
+      <div class="lang-item">AWS Solutions Architect (2022)</div>
+      <div class="lang-item">CKA — CNCF (2023)</div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="main-section">
+      <div class="main-label">Summary</div>
+      <p>Experienced software engineer with 8+ years building scalable web applications. Passionate about clean code, developer experience, and mentoring junior engineers.</p>
+    </div>
+    <div class="main-section">
+      <div class="main-label">Experience</div>
+      <div class="exp-item">
+        <div class="exp-header"><div><div class="exp-title">Senior Software Engineer</div><div class="exp-company">TechCorp Inc.</div></div><div class="exp-date">Jan 2021 – Present</div></div>
+        <div class="exp-desc">Lead engineer for the core platform team.</div>
+        <ul><li>Reduced API response time by 40%</li><li>Mentored 4 junior engineers</li><li>Shipped 3 major product features</li></ul>
+      </div>
+      <div class="exp-item">
+        <div class="exp-header"><div><div class="exp-title">Software Engineer</div><div class="exp-company">StartupXYZ</div></div><div class="exp-date">Jun 2018 – Dec 2020</div></div>
+        <div class="exp-desc">Full-stack engineer on the growth team.</div>
+        <ul><li>Built A/B testing framework</li><li>Improved test coverage from 40% to 85%</li></ul>
+      </div>
+    </div>
+    <div class="main-section">
+      <div class="main-label">Education</div>
+      <div class="exp-item">
+        <div class="exp-header"><div><div class="exp-title">B.S. Computer Science</div><div class="exp-company">UC Berkeley</div></div><div class="exp-date">2014 – 2018</div></div>
+        <div class="exp-desc">GPA 3.8 | Dean's List | ACM Chapter President</div>
+      </div>
+    </div>
+    <div class="main-section">
+      <div class="main-label">Projects</div>
+      <div class="exp-item">
+        <div class="exp-header"><div class="exp-title">OpenMetrics</div><div class="exp-date">2023</div></div>
+        <div class="exp-desc">Open source observability library with 2K GitHub stars.</div>
+        <div><span class="skill-tag" style="background:#e0e7ff;color:#4f46e5;">Go</span><span class="skill-tag" style="background:#e0e7ff;color:#4f46e5;">Prometheus</span><span class="skill-tag" style="background:#e0e7ff;color:#4f46e5;">Grafana</span></div>
+      </div>
+    </div>
+    <p style="font-style:italic;color:#94a3b8;">References available upon request.</p>
+  </div>
+</div>
+</body>
+</html>

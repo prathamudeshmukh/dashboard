@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, -apple-system, sans-serif; color: #1e293b; line-height: 1.6; background: #f8fafc; padding: 24px; }
+    .report-container { max-width: 800px; margin: 0 auto; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .report-header { background: #4f46e5; color: #fff; padding: 40px; text-align: center; }
+    .report-title { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+    .report-subtitle { font-size: 15px; opacity: 0.85; margin-bottom: 4px; }
+    .report-date { font-size: 13px; opacity: 0.7; }
+    .report-body { padding: 40px; }
+    .section { margin-bottom: 36px; }
+    .section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #4f46e5; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #e0e7ff; }
+    .summary-card { background: #f0f4ff; border-left: 4px solid #4f46e5; padding: 16px 20px; border-radius: 0 8px 8px 0; }
+    .chart-container { display: flex; gap: 8px; align-items: flex-end; height: 140px; margin-bottom: 24px; }
+    .chart-bar { flex: 1; display: flex; flex-direction: column; align-items: center; }
+    .bar { width: 100%; background: linear-gradient(180deg, #6366f1, #4f46e5); border-radius: 4px 4px 0 0; }
+    .bar-label { font-size: 11px; color: #64748b; margin-top: 6px; }
+    table { width: 100%; border-collapse: collapse; }
+    th { padding: 10px 14px; text-align: left; font-size: 12px; font-weight: 600; color: #64748b; background: #f8fafc; }
+    td { padding: 10px 14px; font-size: 13px; border-bottom: 1px solid #f1f5f9; }
+    .rec-list { list-style: none; }
+    .rec-list li { padding: 10px 0; border-bottom: 1px solid #f1f5f9; font-size: 14px; display: flex; gap: 10px; }
+    .rec-list li::before { content: "→"; color: #4f46e5; font-weight: bold; }
+    .report-footer { padding: 24px 40px; border-top: 1px solid #f1f5f9; background: #fafafa; font-size: 12px; color: #94a3b8; text-align: center; }
+    p { margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+  <div class="report-container">
+    <div class="report-header">
+      <div class="report-title">QUARTERLY REPORT</div>
+      <div class="report-subtitle">Q1 2025 Business Performance</div>
+      <div class="report-date">April 15, 2025</div>
+    </div>
+    <div class="report-body">
+      <div class="section">
+        <div class="section-title">Executive Summary</div>
+        <div class="summary-card">
+          <p>This report provides an overview of our company's performance during Q1 2025. We have seen significant growth in revenue and customer acquisition.</p>
+          <p>Key highlights include a 15% increase in revenue, successful launch of two new product features, and expansion into two new market segments.</p>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">Financial Overview</div>
+        <div class="chart-container">
+          <div class="chart-bar"><div class="bar" style="height:40%;"></div><div class="bar-label">Q1 2024</div></div>
+          <div class="chart-bar"><div class="bar" style="height:55%;"></div><div class="bar-label">Q2 2024</div></div>
+          <div class="chart-bar"><div class="bar" style="height:65%;"></div><div class="bar-label">Q3 2024</div></div>
+          <div class="chart-bar"><div class="bar" style="height:75%;"></div><div class="bar-label">Q4 2024</div></div>
+          <div class="chart-bar"><div class="bar" style="height:90%;"></div><div class="bar-label">Q1 2025</div></div>
+        </div>
+        <table>
+          <thead><tr><th>Metric</th><th>Q4 2024</th><th>Q1 2025</th><th>Change</th></tr></thead>
+          <tbody>
+            <tr><td>Revenue</td><td>$1,245,000</td><td>$1,432,000</td><td>+15%</td></tr>
+            <tr><td>Operating Expenses</td><td>$876,000</td><td>$912,000</td><td>+4%</td></tr>
+            <tr><td>Net Profit</td><td>$369,000</td><td>$520,000</td><td>+41%</td></tr>
+            <tr><td>Customer Acquisition</td><td>1,250</td><td>1,780</td><td>+42%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="section">
+        <div class="section-title">Recommendations</div>
+        <ul class="rec-list">
+          <li>Increase marketing budget by 20% to capitalize on current growth momentum</li>
+          <li>Expand product line with three new offerings targeted at enterprise customers</li>
+          <li>Invest in additional customer success personnel to maintain high satisfaction rates</li>
+          <li>Explore partnership opportunities with complementary service providers</li>
+        </ul>
+      </div>
+    </div>
+    <div class="report-footer">
+      <p>Prepared by: Strategic Planning Team</p>
+      <p>For internal use only. Confidential.</p>
+    </div>
+  </div>
+</body>
+</html>
