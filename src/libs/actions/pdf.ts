@@ -31,19 +31,33 @@ export async function uploadPdf(formData: FormData) {
 
 export async function checkExtractionResult(pdfId: string): Promise<
   | { status: 'completed'; htmlContent: string; sampleJson: Record<string, string> | null }
-  | { status: 'pending' }
+  | { status: 'pending'; pagesDone: number; pagesTotal: number }
 > {
   try {
     const htmlBlob = await head(`uploads/${pdfId}/output/extracted.html`);
     const htmlResponse = await fetch(htmlBlob.url, { cache: 'no-store' });
     if (!htmlResponse.ok) {
-      return { status: 'pending' };
+      return { status: 'pending', ...(await fetchProgress(pdfId)) };
     }
     const htmlContent = await htmlResponse.text();
     const sampleJson = await fetchSampleJson(pdfId);
     return { status: 'completed', htmlContent, sampleJson };
   } catch {
-    return { status: 'pending' };
+    return { status: 'pending', ...(await fetchProgress(pdfId)) };
+  }
+}
+
+async function fetchProgress(pdfId: string): Promise<{ pagesDone: number; pagesTotal: number }> {
+  try {
+    const blob = await head(`uploads/${pdfId}/status/progress.json`);
+    const response = await fetch(blob.url, { cache: 'no-store' });
+    if (!response.ok) {
+      return { pagesDone: 0, pagesTotal: 0 };
+    }
+    const data = await response.json() as { pagesDone: number; pagesTotal: number };
+    return { pagesDone: data.pagesDone ?? 0, pagesTotal: data.pagesTotal ?? 0 };
+  } catch {
+    return { pagesDone: 0, pagesTotal: 0 };
   }
 }
 
