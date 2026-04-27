@@ -33,6 +33,7 @@ const PDFExtractor = () => {
   const [pdfUploadStatus, setPdfUploadStatus] = useState(PdfUploadStatusEnum.NOT_STARTED);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [pdfExtractionStatus, setpdfExtractionStatus] = useState<PdfExtractionStatusEnum>(PdfExtractionStatusEnum.NOT_STARTED);
+  const [extractionProgress, setExtractionProgress] = useState({ pagesDone: 0, pagesTotal: 0 });
   const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB
   const { setHtmlContent, setHandlebarsCode, setHandlebarTemplateJson } = useTemplateStore();
 
@@ -65,6 +66,8 @@ const PDFExtractor = () => {
         {
           onCompleted: () => setpdfExtractionStatus(PdfExtractionStatusEnum.COMPLETED),
           onFailed: () => setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED),
+          onProgress: (pagesDone, pagesTotal) =>
+            setExtractionProgress({ pagesDone, pagesTotal }),
         },
         checkExtractionResult,
         trackEvent,
@@ -170,10 +173,31 @@ const PDFExtractor = () => {
         {pdfExtractionStatus === PdfExtractionStatusEnum.IN_PROGRESS && (
           <div className="space-y-4">
             <div className="flex items-center justify-center p-4">
-              <div className="flex flex-col items-center space-y-2">
-                <Loader2 className="size-8 animate-spin text-primary" />
-                <p className="text-sm font-medium">Processing PDF...</p>
-                <p className="text-xs text-muted-foreground">Extracting styles and structure</p>
+              <div className="flex w-full max-w-sm flex-col items-center space-y-3">
+                {extractionProgress.pagesTotal === 0
+                  ? (
+                      <>
+                        <Loader2 className="size-8 animate-spin text-primary" />
+                        <p className="text-sm font-medium">Queued for processing...</p>
+                      </>
+                    )
+                  : (
+                      <>
+                        <p className="text-sm font-medium">
+                          Processing page
+                          {' '}
+                          {extractionProgress.pagesDone}
+                          {' '}
+                          of
+                          {' '}
+                          {extractionProgress.pagesTotal}
+                        </p>
+                        <Progress
+                          value={(extractionProgress.pagesDone / extractionProgress.pagesTotal) * 100}
+                          className="h-2 w-full"
+                        />
+                      </>
+                    )}
               </div>
             </div>
           </div>

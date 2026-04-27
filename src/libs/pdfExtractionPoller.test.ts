@@ -12,13 +12,15 @@ const setHandlebarsCode = vi.fn();
 const setHandlebarTemplateJson = vi.fn();
 const onCompleted = vi.fn();
 const onFailed = vi.fn();
+const onProgress = vi.fn();
 
 const store = { setHtmlContent, setHandlebarsCode, setHandlebarTemplateJson };
 const callbacks = { onCompleted, onFailed };
+const callbacksWithProgress = { onCompleted, onFailed, onProgress };
 const testFile = new File(['%PDF'], 'invoice.pdf', { type: 'application/pdf' });
 
-async function runPoll() {
-  const promise = pollExtractionJob('pdf-123', testFile, Date.now(), store, callbacks, mockCheck, mockTrack);
+async function runPoll(cbs = callbacks) {
+  const promise = pollExtractionJob('pdf-123', testFile, Date.now(), store, cbs, mockCheck, mockTrack);
   await vi.advanceTimersByTimeAsync(3100);
   return promise;
 }
@@ -68,7 +70,7 @@ describe('pollExtractionJob', () => {
   });
 
   it('calls onFailed and tracks event on timeout', async () => {
-    mockCheck.mockResolvedValue({ status: 'pending' });
+    mockCheck.mockResolvedValue({ status: 'pending', pagesDone: 0, pagesTotal: 0 });
 
     const promise = pollExtractionJob('pdf-123', testFile, Date.now() - 5 * 60 * 1000 - 1, store, callbacks, mockCheck, mockTrack);
     await vi.advanceTimersByTimeAsync(100);
@@ -91,5 +93,36 @@ describe('pollExtractionJob', () => {
       failure_stage: 'extraction',
       error_message: 'Network error',
     }));
+  });
+
+  it('calls onProgress when pending response includes pagesTotal > 0', async () => {
+    mockCheck
+      .mockResolvedValueOnce({ status: 'pending', pagesDone: 2, pagesTotal: 5 })
+      .mockResolvedValue({ status: 'completed', htmlContent: '<p>done</p>', sampleJson: null });
+
+    const promise = pollExtractionJob('pdf-123', testFile, Date.now(), store, callbacksWithProgress, mockCheck, mockTrack);
+    await vi.advanceTimersByTimeAsync(6200); // two ticks
+    await promise;
+
+    expect(onProgress).toHaveBeenCalledWith(2, 5);
+  });
+
+  it('does not call onProgress when pagesTotal is 0', async () => {
+    mockCheck.mockResolvedValue({ status: 'completed', htmlContent: '<p>done</p>', sampleJson: null });
+
+    await runPoll(callbacksWithProgress);
+
+    expect(onProgress).not.toHaveBeenCalled();
+  });
+
+  it('works when onProgress is not provided', async () => {
+    mockCheck.mockResolvedValue({ status: 'pending', pagesDone: 2, pagesTotal: 5 });
+
+    // Should not throw even without onProgress
+    const promise = pollExtractionJob('pdf-123', testFile, Date.now() - 5 * 60 * 1000 - 1, store, callbacks, mockCheck, mockTrack);
+    await vi.advanceTimersByTimeAsync(100);
+    await promise;
+
+    expect(onFailed).toHaveBeenCalledOnce();
   });
 });
