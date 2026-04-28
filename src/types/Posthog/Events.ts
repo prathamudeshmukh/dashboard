@@ -10,7 +10,8 @@ export type LandingPageEvents =
   | 'user_account_created'
   | 'live_example_section_viewed'
   | 'live_example_cta_clicked'
-  | 'pricing_cta_clicked';
+  | 'pricing_cta_clicked'
+  | 'playground_pdf_downloaded';
 
 export type InAppCoreEvents =
   | 'dashboard_viewed'
@@ -76,6 +77,10 @@ export type EventPayloads = {
   pricing_cta_clicked: {
     plan: string;
     button_text: string;
+  };
+  playground_pdf_downloaded: {
+    gallery_template_id: string;
+    template_name: string;
   };
   user_account_created: {
     user_id: string;
