@@ -1,6 +1,6 @@
 'use client';
 
-import { SignUpButton } from '@clerk/nextjs';
+import { useClerk } from '@clerk/nextjs';
 import { Download, Loader2 } from 'lucide-react';
 import { useLocale } from 'next-intl';
 import { useEffect, useState } from 'react';
@@ -18,6 +18,7 @@ const handlebarsService = new HandlebarsService();
 
 export default function Playground() {
   const locale = useLocale();
+  const { openSignUp } = useClerk();
 
   const {
     selectedTemplate,
@@ -217,14 +218,20 @@ export default function Playground() {
               {/* Soft sign-up CTA shown after first download */}
               {showCta && (
                 <div className="mt-2 flex flex-col items-center gap-2 text-center">
-                  <p className="text-sm text-gray-500">
+                  <button
+                    type="button"
+                    className="cursor-pointer text-sm text-gray-500 underline-offset-2 hover:underline"
+                    onClick={() => openSignUp({ afterSignUpUrl: '/dashboard' })}
+                  >
                     Want to use your own data and save templates?
-                  </p>
-                  <SignUpButton mode="modal" forceRedirectUrl="/dashboard">
-                    <Button variant="outline" className="rounded-full">
-                      Sign up free →
-                    </Button>
-                  </SignUpButton>
+                  </button>
+                  <Button
+                    variant="outline"
+                    className="rounded-full"
+                    onClick={() => openSignUp({ afterSignUpUrl: '/dashboard' })}
+                  >
+                    Sign up free →
+                  </Button>
                 </div>
               )}
             </div>
