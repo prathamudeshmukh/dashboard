@@ -42,6 +42,6 @@ export async function GenerateAnduploadPDF(templateId: string, logger: any) {
     return blob;
   } catch (error) {
     logger.error('Failed to upload PDF to blob', { templateId, error });
-    throw new Error(`Blob upload failed: ${error}`);
+    throw new Error(`Blob upload failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }

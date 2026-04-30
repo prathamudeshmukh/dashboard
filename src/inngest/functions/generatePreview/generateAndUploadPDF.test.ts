@@ -3,16 +3,24 @@ import { Buffer } from 'node:buffer';
 import { put } from '@vercel/blob';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { generatePdf } from '@/libs/actions/templates';
+import { fetchTemplateById } from '@/libs/actions/templates';
 
 import { GenerateAnduploadPDF } from './generateAndUploadPDF';
+import { generatePdfWorker } from './generatePdfWorker';
 
 vi.mock('@vercel/blob');
 vi.mock('@/libs/actions/templates');
+vi.mock('./generatePdfWorker');
 
 const mockLogger = {
   info: vi.fn(),
   error: vi.fn(),
+};
+
+const fakeTemplate = {
+  templateContent: '<p>Hello</p>',
+  templateStyle: '',
+  templateSampleData: {},
 };
 
 const fakeBlobResult = {
@@ -30,8 +38,9 @@ describe('GenerateAnduploadPDF', () => {
 
   it('passes a Buffer (not a raw ArrayBuffer) to put()', async () => {
     const rawArrayBuffer = new ArrayBuffer(8);
-    vi.mocked(generatePdf).mockResolvedValue({ pdf: rawArrayBuffer });
-    vi.mocked(put).mockResolvedValue(fakeBlobResult);
+    vi.mocked(fetchTemplateById).mockResolvedValue({ data: fakeTemplate as any });
+    vi.mocked(generatePdfWorker).mockResolvedValue({ pdf: rawArrayBuffer });
+    vi.mocked(put).mockResolvedValue(fakeBlobResult as any);
 
     await GenerateAnduploadPDF('tpl-123', mockLogger);
 
@@ -42,8 +51,9 @@ describe('GenerateAnduploadPDF', () => {
   });
 
   it('uses the templateId as the blob filename', async () => {
-    vi.mocked(generatePdf).mockResolvedValue({ pdf: new ArrayBuffer(4) });
-    vi.mocked(put).mockResolvedValue(fakeBlobResult);
+    vi.mocked(fetchTemplateById).mockResolvedValue({ data: fakeTemplate as any });
+    vi.mocked(generatePdfWorker).mockResolvedValue({ pdf: new ArrayBuffer(4) });
+    vi.mocked(put).mockResolvedValue(fakeBlobResult as any);
 
     await GenerateAnduploadPDF('tpl-abc', mockLogger);
 
@@ -53,16 +63,17 @@ describe('GenerateAnduploadPDF', () => {
   });
 
   it('returns the blob result on success', async () => {
-    vi.mocked(generatePdf).mockResolvedValue({ pdf: new ArrayBuffer(4) });
-    vi.mocked(put).mockResolvedValue(fakeBlobResult);
+    vi.mocked(fetchTemplateById).mockResolvedValue({ data: fakeTemplate as any });
+    vi.mocked(generatePdfWorker).mockResolvedValue({ pdf: new ArrayBuffer(4) });
+    vi.mocked(put).mockResolvedValue(fakeBlobResult as any);
 
     const result = await GenerateAnduploadPDF('tpl-123', mockLogger);
 
     expect(result).toEqual(fakeBlobResult);
   });
 
-  it('throws when generatePdf returns an error', async () => {
-    vi.mocked(generatePdf).mockResolvedValue({ error: { message: 'template not found', status: 404 } });
+  it('throws when fetchTemplateById returns an error', async () => {
+    vi.mocked(fetchTemplateById).mockResolvedValue({ error: { message: 'template not found', status: 404 } });
 
     await expect(GenerateAnduploadPDF('missing-id', mockLogger)).rejects.toThrow('Blob upload failed');
     expect(mockLogger.error).toHaveBeenCalledWith(
@@ -71,14 +82,16 @@ describe('GenerateAnduploadPDF', () => {
     );
   });
 
-  it('throws when generatePdf returns no pdf buffer', async () => {
-    vi.mocked(generatePdf).mockResolvedValue({});
+  it('throws when generatePdfWorker returns no pdf buffer', async () => {
+    vi.mocked(fetchTemplateById).mockResolvedValue({ data: fakeTemplate as any });
+    vi.mocked(generatePdfWorker).mockResolvedValue({} as any);
 
     await expect(GenerateAnduploadPDF('tpl-empty', mockLogger)).rejects.toThrow('Blob upload failed');
   });
 
   it('throws and logs when put() rejects', async () => {
-    vi.mocked(generatePdf).mockResolvedValue({ pdf: new ArrayBuffer(4) });
+    vi.mocked(fetchTemplateById).mockResolvedValue({ data: fakeTemplate as any });
+    vi.mocked(generatePdfWorker).mockResolvedValue({ pdf: new ArrayBuffer(4) });
     vi.mocked(put).mockRejectedValue(new Error('Blob service unavailable'));
 
     await expect(GenerateAnduploadPDF('tpl-err', mockLogger)).rejects.toThrow('Blob upload failed: Blob service unavailable');
