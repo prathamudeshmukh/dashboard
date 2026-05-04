@@ -10,6 +10,7 @@ import Features from '@/features/landing/Features';
 import { Footer } from '@/features/landing/Footer';
 import { Hero } from '@/features/landing/Hero';
 import { Navbar } from '@/features/landing/Navbar';
+import Playground from '@/features/landing/Playground';
 import Pricing from '@/features/landing/Pricing';
 import Showcase from '@/features/landing/Showcase';
 import Steps from '@/features/landing/Steps';
@@ -130,6 +131,7 @@ const IndexPage = (props: { params: { locale: string } }) => {
     { link: '#about', name: 'About' },
     { link: '#how-it-works', name: 'How it Works' },
     { link: '#examples', name: 'Examples' },
+    { link: '#playground', name: 'Try it' },
     { link: '#features', name: 'Feature' },
     { link: '#pricing', name: 'Pricing' },
     { link: '/docs', name: 'Docs' },
@@ -157,6 +159,7 @@ const IndexPage = (props: { params: { locale: string } }) => {
         <Features />
         <Steps />
         <Showcase />
+        <Playground />
         <Pricing />
         <FAQ />
         <CTA />
