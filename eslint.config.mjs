@@ -27,6 +27,8 @@ export default antfu({
     'next-env.d.ts',
     '.github/**/*',
     'stories/**/*',
+    'tasks/**/*',
+    'backlog/**/*',
   ],
 }, ...tailwind.configs['flat/recommended'], jsxA11y.flatConfigs.recommended, {
   plugins: {
