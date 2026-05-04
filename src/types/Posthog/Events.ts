@@ -11,7 +11,13 @@ export type LandingPageEvents =
   | 'live_example_section_viewed'
   | 'live_example_cta_clicked'
   | 'pricing_cta_clicked'
-  | 'playground_pdf_downloaded';
+  | 'playground_pdf_downloaded'
+  | 'playground_section_viewed'
+  | 'playground_template_switched'
+  | 'playground_preview_rendered'
+  | 'playground_data_editor_opened'
+  | 'playground_signup_cta_clicked'
+  | 'playground_pdf_download_failed';
 
 export type InAppCoreEvents =
   | 'dashboard_viewed'
@@ -81,6 +87,32 @@ export type EventPayloads = {
   playground_pdf_downloaded: {
     gallery_template_id: string;
     template_name: string;
+  };
+  playground_section_viewed: {
+    device_type?: string;
+  };
+  playground_template_switched: {
+    template_name: string;
+    gallery_template_id: string;
+    from_template_name?: string;
+  };
+  playground_preview_rendered: {
+    template_name: string;
+    gallery_template_id: string;
+    render_time_ms?: number;
+  };
+  playground_data_editor_opened: {
+    template_name: string;
+  };
+  playground_signup_cta_clicked: {
+    template_name: string;
+    gallery_template_id: string;
+    had_customized_data: boolean;
+  };
+  playground_pdf_download_failed: {
+    gallery_template_id: string;
+    template_name: string;
+    error_code: string;
   };
   user_account_created: {
     user_id: string;
