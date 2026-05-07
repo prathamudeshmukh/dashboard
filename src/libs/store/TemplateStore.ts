@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 
+import type { ExtractionQuality } from '@/libs/computeExtractionQuality';
 import { CreationMethodEnum, EditorTypeEnum } from '@/types/Enum';
 import type { TemplateGalleryProps, TemplateSuccessData } from '@/types/Template';
 
@@ -20,6 +21,7 @@ type TemplateStore = {
   activeTab: string;
 
   successData: TemplateSuccessData | null;
+  extractionQuality: ExtractionQuality | null;
   templateError: string;
   jsonError: string;
 
@@ -37,6 +39,7 @@ type TemplateStore = {
 
   setSuccessData: (data: TemplateSuccessData) => void;
   clearSuccessData: () => void;
+  setExtractionQuality: (quality: ExtractionQuality) => void;
   setTemplateError: (error: string) => void;
   setJsonError: (error: string) => void;
   clearErrors: () => void;
@@ -63,6 +66,7 @@ export const useTemplateStore = create<TemplateStore>((set, get) => ({
   creationMethod: CreationMethodEnum.TEMPLATE_GALLERY,
 
   successData: null,
+  extractionQuality: null,
   templateError: '',
   jsonError: '',
 
@@ -82,6 +86,7 @@ export const useTemplateStore = create<TemplateStore>((set, get) => ({
   setCreationMethod: method => set({ creationMethod: method }),
 
   setSuccessData: (data: TemplateSuccessData) => set({ successData: data }),
+  setExtractionQuality: (quality: ExtractionQuality) => set({ extractionQuality: quality }),
 
   setTemplateError: error => set({ templateError: error }),
   setJsonError: error => set({ jsonError: error }),
@@ -108,6 +113,7 @@ export const useTemplateStore = create<TemplateStore>((set, get) => ({
 
       activeTab: EditorTypeEnum.HANDLEBARS,
       creationMethod: CreationMethodEnum.TEMPLATE_GALLERY,
+      extractionQuality: null,
     }),
 
   clearSuccessData: () => set({ successData: null }),

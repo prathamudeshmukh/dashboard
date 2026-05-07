@@ -1,5 +1,7 @@
 import type { checkExtractionResult } from '@/libs/actions/pdf';
 import type { trackEvent } from '@/libs/analytics/trackEvent';
+import type { ExtractionQuality } from '@/libs/computeExtractionQuality';
+import { computeExtractionQuality } from '@/libs/computeExtractionQuality';
 
 type CheckFn = typeof checkExtractionResult;
 type TrackFn = typeof trackEvent;
@@ -8,6 +10,7 @@ type StoreActions = {
   setHtmlContent: (html: string) => void;
   setHandlebarsCode: (code: string) => void;
   setHandlebarTemplateJson: (json: string) => void;
+  setExtractionQuality?: (quality: ExtractionQuality) => void;
 };
 
 type PollCallbacks = {
@@ -44,6 +47,7 @@ export async function pollExtractionJob(
             ? JSON.stringify(result.sampleJson, null, 2)
             : '{}',
         );
+        store.setExtractionQuality?.(computeExtractionQuality(result.htmlContent, result.sampleJson));
         callbacks.onCompleted();
         track('template_imported_from_pdf', {
           pdf_id: pdfId,

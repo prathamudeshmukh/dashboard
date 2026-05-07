@@ -18,6 +18,8 @@ vi.mock('@/libs/store/TemplateStore', () => ({
     setHtmlContent: vi.fn(),
     setHandlebarsCode: vi.fn(),
     setHandlebarTemplateJson: vi.fn(),
+    setExtractionQuality: vi.fn(),
+    extractionQuality: null,
   }),
 }));
 
