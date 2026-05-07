@@ -34,7 +34,7 @@ const PDFExtractor = () => {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [pdfExtractionStatus, setpdfExtractionStatus] = useState<PdfExtractionStatusEnum>(PdfExtractionStatusEnum.NOT_STARTED);
   const [extractionProgress, setExtractionProgress] = useState({ pagesDone: 0, pagesTotal: 0 });
-  const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB
+  const MAX_FILE_SIZE = 15 * 1024 * 1024; // 15MB
   const { setHtmlContent, setHandlebarsCode, setHandlebarTemplateJson } = useTemplateStore();
 
   const uploadFile = async (file: File) => {
@@ -89,7 +89,7 @@ const PDFExtractor = () => {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > MAX_FILE_SIZE) {
-        setUploadError('File size should not exceed 4MB.');
+        setUploadError('File size should not exceed 15 MB.');
         return;
       }
       if (file.type === 'application/pdf') {
@@ -105,7 +105,7 @@ const PDFExtractor = () => {
     const file = e.dataTransfer.files?.[0];
     if (file) {
       if (file.size > MAX_FILE_SIZE) {
-        setUploadError('File size should not exceed 4MB.');
+        setUploadError('File size should not exceed 15 MB.');
         return;
       }
       if (file.type === 'application/pdf') {
@@ -149,7 +149,7 @@ const PDFExtractor = () => {
               <Upload className="mr-2 size-4" />
               Browse Files
             </Button>
-            <p className="text-base font-normal text-muted-foreground">Supported format: PDF (Max size: 4MB)</p>
+            <p className="text-base font-normal text-muted-foreground">Supported format: PDF (Max size: 15 MB)</p>
           </div>
 
           {pdfUploadStatus === PdfUploadStatusEnum.IN_PROGRESS && (
