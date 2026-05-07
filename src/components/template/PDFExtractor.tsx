@@ -1,11 +1,12 @@
 'use client';
 
 import axios from 'axios';
-import { Check, FileUp, Loader2, Upload } from 'lucide-react';
+import { AlertTriangle, Check, FileUp, Loader2, Upload } from 'lucide-react';
 import React, { useRef, useState } from 'react';
 
 import { checkExtractionResult } from '@/libs/actions/pdf';
 import { trackEvent } from '@/libs/analytics/trackEvent';
+import type { ExtractionQuality } from '@/libs/computeExtractionQuality';
 import { pollExtractionJob } from '@/libs/pdfExtractionPoller';
 import { useTemplateStore } from '@/libs/store/TemplateStore';
 
@@ -27,6 +28,32 @@ enum PdfUploadStatusEnum {
   FAILED,
 }
 
+function ExtractionQualityAlert({ quality }: { quality: ExtractionQuality }) {
+  if (quality.score === 'good') {
+    return (
+      <Alert className="border-green-200 bg-green-50">
+        <Check className="size-4 text-green-600" />
+        <AlertTitle className="text-green-800">{quality.label}</AlertTitle>
+        <AlertDescription className="text-green-700">
+          {quality.details}
+          . Continue to the next step to customize your template.
+        </AlertDescription>
+      </Alert>
+    );
+  }
+
+  return (
+    <Alert className="border-amber-200 bg-amber-50">
+      <AlertTriangle className="size-4 text-amber-600" />
+      <AlertTitle className="text-amber-800">{quality.label}</AlertTitle>
+      <AlertDescription className="text-amber-700">
+        {quality.details}
+        . You can refine the template in the editor.
+      </AlertDescription>
+    </Alert>
+  );
+}
+
 const PDFExtractor = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [progress, setProgress] = useState<number>(0);
@@ -35,7 +62,7 @@ const PDFExtractor = () => {
   const [pdfExtractionStatus, setpdfExtractionStatus] = useState<PdfExtractionStatusEnum>(PdfExtractionStatusEnum.NOT_STARTED);
   const [extractionProgress, setExtractionProgress] = useState({ pagesDone: 0, pagesTotal: 0 });
   const MAX_FILE_SIZE = 15 * 1024 * 1024; // 15MB
-  const { setHtmlContent, setHandlebarsCode, setHandlebarTemplateJson } = useTemplateStore();
+  const { setHtmlContent, setHandlebarsCode, setHandlebarTemplateJson, setExtractionQuality, extractionQuality } = useTemplateStore();
 
   const uploadFile = async (file: File) => {
     const formData = new FormData();
@@ -62,7 +89,7 @@ const PDFExtractor = () => {
         pdfId,
         file,
         Date.now(),
-        { setHtmlContent, setHandlebarsCode, setHandlebarTemplateJson },
+        { setHtmlContent, setHandlebarsCode, setHandlebarTemplateJson, setExtractionQuality },
         {
           onCompleted: () => setpdfExtractionStatus(PdfExtractionStatusEnum.COMPLETED),
           onFailed: () => setpdfExtractionStatus(PdfExtractionStatusEnum.FAILED),
@@ -215,13 +242,17 @@ const PDFExtractor = () => {
 
         {pdfExtractionStatus === PdfExtractionStatusEnum.COMPLETED && (
           <div className="space-y-4">
-            <Alert className="border-green-200 bg-green-50">
-              <Check className="size-4 text-green-600" />
-              <AlertTitle className="text-green-800">PDF Processed Successfully</AlertTitle>
-              <AlertDescription className="text-green-700">
-                We've extracted the template from your PDF. Continue to the next step to customize your template details.
-              </AlertDescription>
-            </Alert>
+            {extractionQuality
+              ? <ExtractionQualityAlert quality={extractionQuality} />
+              : (
+                  <Alert className="border-green-200 bg-green-50">
+                    <Check className="size-4 text-green-600" />
+                    <AlertTitle className="text-green-800">PDF Processed Successfully</AlertTitle>
+                    <AlertDescription className="text-green-700">
+                      We've extracted the template from your PDF. Continue to the next step to customize your template details.
+                    </AlertDescription>
+                  </Alert>
+                )}
 
             <div className="mt-4 border-t pt-4">
               <div className="mt-2 flex items-center text-sm text-muted-foreground">
