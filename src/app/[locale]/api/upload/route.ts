@@ -5,9 +5,18 @@ import { inngest } from '@/inngest/client';
 import { uploadPdf } from '@/libs/actions/pdf';
 import { logger } from '@/libs/Logger';
 
+const MAX_UPLOAD_BYTES = 15 * 1024 * 1024; // 15 MB
+
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
+    const file = formData.get('pdf');
+    if (file instanceof File && file.size > MAX_UPLOAD_BYTES) {
+      return NextResponse.json(
+        { error: 'File too large. Maximum size is 15 MB.' },
+        { status: 400 },
+      );
+    }
     const result = await uploadPdf(formData);
 
     const { ids } = await inngest.send({
