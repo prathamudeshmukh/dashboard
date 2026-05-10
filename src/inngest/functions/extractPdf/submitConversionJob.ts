@@ -8,7 +8,7 @@ export async function submitConversionJob(downloadUrl: string): Promise<SubmitRe
 
   const response = await axios.post(
     `${baseUrl}/convert/async`,
-    { pdf_url: downloadUrl, extract_variables: true },
+    { pdf_url: downloadUrl, extract_variables: true, model: 'gpt-4o' },
     {
       headers: {
         'Content-Type': 'application/json',
