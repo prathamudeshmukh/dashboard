@@ -28,7 +28,7 @@ describe('submitConversionJob', () => {
 
     expect(mockedAxios.post).toHaveBeenCalledWith(
       'http://pdf-service/convert/async',
-      { pdf_url: DOWNLOAD_URL, extract_variables: true },
+      { pdf_url: DOWNLOAD_URL, extract_variables: true, model: 'gpt-4o' },
       expect.objectContaining({
         headers: expect.objectContaining({ Authorization: 'Bearer test-token' }),
       }),
